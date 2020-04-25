@@ -1,8 +1,8 @@
 with import <nixpkgs> {};
-writeTextFile {
+substituteAllFiles {
   name = "home-website";
 
-  destination = "/index.html";
+  src = ./src;
 
-  text = "Hello NixOps World! at 10:22";
+  files = [ "index.html" ];
 }
