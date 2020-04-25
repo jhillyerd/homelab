@@ -2,10 +2,10 @@
   network.description = "Home Services";
 
   webserver =
-    { config, pkgs, ... }:
+    { config, pkgs, lib, ... }:
     let
-      mypkgs = pkgs.callPackage ./pkgs {};
-    in with pkgs // mypkgs;
+      mypkgs = import ./pkgs { nixpkgs = pkgs; lib = lib; };
+    in with mypkgs;
     {
       services.nginx.enable = true;
       services.nginx.virtualHosts."127.0.0.1" = {
