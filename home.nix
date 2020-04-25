@@ -4,8 +4,8 @@
   webserver =
     { config, pkgs, ... }:
     let
-      website = import ./pkgs/website;
-    in
+      mypkgs = pkgs.callPackage ./pkgs {};
+    in with pkgs // mypkgs;
     {
       services.nginx.enable = true;
       services.nginx.virtualHosts."127.0.0.1" = {

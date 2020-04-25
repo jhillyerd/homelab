@@ -1,4 +1,5 @@
-with import <nixpkgs> {};
+{ pkgs }:
+with pkgs;
 runCommand "open-sans-webfont" {} ''
   # woff2_compress only outputs to same dir as source font
   export HOME=$(mktemp -d)

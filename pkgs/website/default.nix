@@ -1,4 +1,5 @@
-with import <nixpkgs> {};
+{ pkgs }:
+with pkgs;
 substituteAllFiles {
   name = "home-website";
 
