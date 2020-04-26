@@ -20,18 +20,14 @@
 
       # HW config
       boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "ehci_pci" "sd_mod" "sr_mod" ];
-      boot.initrd.kernelModules = [ ];
       boot.kernelModules = [ "kvm-intel" ];
-      boot.extraModulePackages = [ ];
 
-      fileSystems."/" =
-        { device = "/dev/disk/by-uuid/2fe3422d-f18a-46d9-884f-f6f0251d7c99";
+      fileSystems."/" = {
+        device = "/dev/disk/by-label/nixos";
         fsType = "ext4";
       };
 
-      swapDevices =
-        [ { device = "/dev/disk/by-uuid/f5ed7fa7-8fe0-448d-98e1-3545f517100c"; }
-      ];
+      swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
       nix.maxJobs = lib.mkDefault 2;
     };
