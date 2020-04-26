@@ -10,11 +10,27 @@
   --fg-color: #ddd;
 }
 
+body, h1, h2, h3, h4 {
+  font-family: 'OpenSans';
+}
+
 body {
   background-color: var(--bg-color);
   background-image: var(--bg-grad);
   color: var(--fg-color);
-  font-family: 'OpenSans';
+}
+
+a {
+  color: #ff3030;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.debugInfo {
+  font-size: 9px;
 }
 </style>
 
@@ -22,4 +38,12 @@ body {
 
 <h1>Home</h1>
 
-<p>Hello from @src@ index.html! 19:16
+<h2>Services</h2>
+
+<ul>
+  <li><a href="http://octopi.skynet.local/">OctoPrint</a></li>
+  <li><a href="http://skynas.skynet.local/">SkyNAS</a></li>
+  <li><a href="https://unifi.skynet.local:8443/">UniFi Controller</a></li>
+</ul>
+
+<p class="debugInfo">derivation=@src@</p>
