@@ -1,12 +1,23 @@
-{ pkgs, open-sans-webfont }:
-let
-  webfont = open-sans-webfont;
-in with pkgs;
-substituteAllFiles {
+{ pkgs, stdenv, open-sans-webfont }:
+stdenv.mkDerivation {
   name = "home-website";
 
   src = ./src;
-  files = [ "index.html" ];
 
-  inherit webfont;
+  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+
+  buildPhase = ''
+    for f in *.html; do
+      echo "- substituting $f"
+      substituteAllInPlace $f
+    done
+  '';
+
+  installPhase = ''
+    mkdir $out
+    mv -v * $out/
+
+    mkdir $out/fonts
+    cp -v ${open-sans-webfont}/* $out/fonts
+  '';
 }
