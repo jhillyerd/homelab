@@ -4,7 +4,7 @@
   webserver =
     { config, pkgs, lib, ... }:
     let
-      mypkgs = import ./pkgs { nixpkgs = pkgs; lib = lib; };
+      mypkgs = import ./pkgs { nixpkgs = pkgs; };
     in with mypkgs;
     {
       services.nginx.enable = true;
