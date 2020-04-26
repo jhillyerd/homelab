@@ -1,9 +1,23 @@
 # Hardware templates
 { dnsDomain }:
-{
+rec {
+  # Baseline shared among all machines
+  baseline = {
+    services.openssh = {
+      enable = true;
+      permitRootLogin = "yes";
+    };
+
+    time.timeZone = "US/Pacific";
+
+    system.stateVersion = "20.03";
+  };
+
   # KVM/QEMU Guest Hardware
   kvmGuest = { name }: { config, pkgs, lib, ... }:
   {
+    imports = [ baseline ];
+
     # NixOps deployment info
     deployment.targetHost = name + "." + dnsDomain;
 
@@ -14,13 +28,6 @@
 
     networking.hostName = name;
     networking.interfaces.ens3.useDHCP = true;
-
-    services.openssh.enable = true;
-    services.openssh.permitRootLogin = "yes";
-
-    time.timeZone = "US/Pacific";
-
-    system.stateVersion = "20.03";
 
     boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "ehci_pci" "sd_mod" "sr_mod" ];
     boot.kernelModules = [ "kvm-intel" ];
