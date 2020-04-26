@@ -2,11 +2,13 @@ let
   grafanaPort = 3000;
   influxdbHost = "127.0.0.1";
   influxdbPort = 8086;
+  telegrafDbName = "telegraf";
   buildGrafanaInfluxSource = db: {
-    name = "Influx-${db} DB";
+    name = "${db}-influxdb";
     type = "influxdb";
     database = db;
     url = "http://${influxdbHost}:${toString influxdbPort}";
+    isDefault = db == telegrafDbName;
   };
 in
 {
@@ -25,7 +27,7 @@ in
         domain = "webserver.skynet.local";
         provision = {
           enable = true;
-          datasources = map buildGrafanaInfluxSource [ "home" ];
+          datasources = map buildGrafanaInfluxSource [ telegrafDbName ];
         };
       };
 
@@ -51,7 +53,7 @@ in
           };
 
           outputs.influxdb = {
-            database = "telegraf";
+            database = telegrafDbName;
             urls = [ "http://${influxdbHost}:${toString influxdbPort}" ];
           };
         };
