@@ -14,6 +14,10 @@ in
 {
   network.description = "Home Services";
 
+  defaults = {
+    imports = [ ./common.nix ];
+  };
+
   webserver =
     { config, pkgs, lib, ... }:
     let

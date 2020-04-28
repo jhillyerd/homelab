@@ -1,23 +1,9 @@
 # Hardware templates
 { dnsDomain }:
 rec {
-  # Baseline shared among all machines
-  baseline = {
-    services.openssh = {
-      enable = true;
-      permitRootLogin = "yes";
-    };
-
-    time.timeZone = "US/Pacific";
-
-    system.stateVersion = "20.03";
-  };
-
   # KVM/QEMU Guest Hardware
   kvmGuest = { name }: { config, pkgs, lib, ... }:
   {
-    imports = [ baseline ];
-
     # NixOps deployment info
     deployment.targetHost = name + "." + dnsDomain;
 
