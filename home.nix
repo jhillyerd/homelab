@@ -20,6 +20,8 @@ in
       mypkgs = import ./pkgs { nixpkgs = pkgs; };
     in with mypkgs;
     {
+      environment.systemPackages = [ pkgs.influxdb ];
+
       services.grafana = {
         enable = true;
         addr = "";
@@ -42,7 +44,7 @@ in
         enable = true;
         extraConfig = {
           inputs = {
-            cpu = {};
+            cpu = { percpu = true; };
             disk = {};
             kernel = {};
             mem = {};
