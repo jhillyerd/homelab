@@ -8,7 +8,13 @@
   nexus =
     { config, pkgs, lib, ... }:
     {
-      imports = [ ./roles/metrics-hub.nix ];
+      imports = [ ./roles/grafana.nix ];
+
+      environment.systemPackages = [ pkgs.influxdb ]; # for diagnostics
+
+      services.influxdb.enable = true;
+
+      networking.firewall.allowedTCPPorts = [ 8086 ];
     };
 
   webserver =

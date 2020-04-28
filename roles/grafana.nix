@@ -12,8 +12,6 @@ let
   };
 in
 {
-  environment.systemPackages = [ pkgs.influxdb ];
-
   services.grafana = {
     enable = true;
     addr = "";
@@ -25,7 +23,5 @@ in
     };
   };
 
-  services.influxdb.enable = true;
-
-  networking.firewall.allowedTCPPorts = [ influxdbPort config.services.grafana.port ];
+  networking.firewall.allowedTCPPorts = [ config.services.grafana.port ];
 }
