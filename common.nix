@@ -6,6 +6,4 @@
   };
 
   time.timeZone = "US/Pacific";
-
-  system.stateVersion = "20.03";
 }
