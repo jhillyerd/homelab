@@ -16,6 +16,9 @@
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";
+        datasources = [
+          { name = "telegraf-hosts"; type = "influxdb"; }
+        ];
       };
 
       roles.influxdb.enable = true;
