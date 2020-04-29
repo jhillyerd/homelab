@@ -5,7 +5,7 @@ let
 in
 {
   options.roles.influxdb = {
-    enable = mkEnableOption "Network InfluxDB host";
+    enable = mkEnableOption "Enable InfluxDB role";
 
     port = mkOption {
       type = types.port;

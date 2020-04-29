@@ -3,5 +3,6 @@
   imports = [
     ./grafana.nix
     ./influxdb.nix
+    ./telegraf.nix
   ];
 }
