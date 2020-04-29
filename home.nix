@@ -8,13 +8,17 @@
   nexus =
     { config, pkgs, lib, ... }:
     {
-      imports = [ ./roles/grafana.nix ];
+      imports = [
+        ./roles/grafana.nix
+        ./roles/influxdb.nix
+      ];
 
-      environment.systemPackages = [ pkgs.influxdb ]; # for diagnostics
+      roles.grafana = {
+        enable = true;
+        domain = "nexus.skynet.local";
+      };
 
-      services.influxdb.enable = true;
-
-      networking.firewall.allowedTCPPorts = [ 8086 ];
+      roles.influxdb.enable = true;
     };
 
   webserver =

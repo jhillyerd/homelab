@@ -1,27 +1,37 @@
 { config, pkgs, lib, ... }:
+with lib;
 let
-  influxdbHost = "127.0.0.1";
-  influxdbPort = 8086;
-  telegrafDbName = "telegraf";
-  buildGrafanaInfluxSource = db: {
-    name = "${db}-influxdb";
-    type = "influxdb";
-    database = db;
-    url = "http://${influxdbHost}:${toString influxdbPort}";
-    isDefault = db == telegrafDbName;
-  };
+  cfg = config.roles.grafana;
 in
 {
-  services.grafana = {
-    enable = true;
-    addr = "";
-    port = 3000;
-    domain = "webserver.skynet.local";
-    provision = {
-      enable = true;
-      datasources = map buildGrafanaInfluxSource [ telegrafDbName ];
+  options.roles.grafana = {
+    enable = mkEnableOption "Network Grafana host";
+
+    domain = mkOption {
+      type = types.str;
+      example = "example.com";
+      description = "Domain name";
+    };
+
+    port = mkOption {
+      type = types.port;
+      description = "Web interface port";
+      default = 3000;
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ config.services.grafana.port ];
+  config = mkIf cfg.enable {
+    services.grafana = {
+      enable = true;
+      addr = "";
+      port = cfg.port;
+      domain = cfg.domain;
+      # provision = {
+      #   enable = true;
+      #   datasources = map buildGrafanaInfluxSource [ telegrafDbName ];
+      # };
+    };
+
+    networking.firewall.allowedTCPPorts = [ cfg.port ];
+  };
 }
