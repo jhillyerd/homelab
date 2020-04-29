@@ -2,17 +2,12 @@
   network.description = "Home Services";
 
   defaults = {
-    imports = [ ./common.nix ];
+    imports = [ ./common.nix ./roles ];
   };
 
   nexus =
     { config, pkgs, lib, ... }:
     {
-      imports = [
-        ./roles/grafana.nix
-        ./roles/influxdb.nix
-      ];
-
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";
