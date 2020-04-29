@@ -1,6 +1,3 @@
-let
-  telegrafHostsDb = "telegraf-hosts";
-in
 {
   network.description = "Home Services";
 
@@ -16,7 +13,7 @@ in
       roles.telegraf = {
         enable = true;
         influxDbUrl = "http://${influxHost}:${toString influxPort}";
-        influxDbName = telegrafHostsDb;
+        influxDbName = "telegraf-hosts";
       };
   };
 
@@ -27,7 +24,7 @@ in
         enable = true;
         domain = "nexus.skynet.local";
         datasources = [
-          { name = telegrafHostsDb; type = "influxdb"; }
+          { name = config.roles.telegraf.influxDbName; type = "influxdb"; }
         ];
       };
 
