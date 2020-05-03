@@ -14,11 +14,40 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.influxdb ]; # for diagnostics
+  config =
+    let
+      init-sql = pkgs.writeText "influxdb-init.sql"
+        ''
+          CREATE USER admin WITH PASSWORD 'foobar' WITH ALL PRIVILEGES;
+        '';
+    in
+    mkIf cfg.enable {
+      environment.systemPackages = [ pkgs.influxdb ]; # for diagnostics
 
-    services.influxdb.enable = true;
+      services.influxdb.enable = true;
 
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
-  };
+      systemd.services.influxdb-init = {
+        enable = true;
+        description = "Configure influxdb at first boot";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "influxdb.service" ];
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = ''
+          lockfile=/var/db/influxdb-init-completed
+          set -eo pipefail
+
+          if [ ! -f "$lockfile" ]; then
+            touch "$lockfile"
+            ${pkgs.influxdb}/bin/influx < ${init-sql}
+          fi
+        '';
+      };
+
+      networking.firewall.allowedTCPPorts = [ cfg.port ];
+    };
 }

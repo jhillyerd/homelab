@@ -1,3 +1,6 @@
+let
+  lowsec = import ./lowsec.nix;
+in
 {
   network.description = "Home Services";
 
