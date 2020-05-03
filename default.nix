@@ -9,6 +9,10 @@
     in
     {
       imports = [ ./common.nix ./roles ];
+      nixpkgs.overlays = [ (super: self: {
+        website = super.callPackage ./pkgs/website {};
+        open-sans-webfont = super.callPackage ./pkgs/open-sans-webfont {};
+      }) ];
 
       roles.telegraf = {
         enable = true;
@@ -33,13 +37,10 @@
 
   webserver =
     { nodes, config, pkgs, lib, ... }:
-    let
-      mypkgs = import ./pkgs { nixpkgs = pkgs; };
-    in with mypkgs;
     {
       services.nginx.enable = true;
       services.nginx.virtualHosts."127.0.0.1" = {
-        root = "${website}";
+        root = "${pkgs.website}";
       };
 
       networking.firewall.allowedTCPPorts = [ 80 ];
