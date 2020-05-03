@@ -32,7 +32,12 @@ in
         ];
       };
 
-      roles.influxdb.enable = true;
+      roles.influxdb = {
+        enable = true;
+        databases = {
+          telegraf-hosts = { user = "telegraf"; password = "telegraf"; };
+        };
+      };
 
       # webserver
       services.nginx.enable = true;
