@@ -2,7 +2,7 @@
   network.description = "Home Services";
 
   defaults =
-    { config, pkgs, lib, nodes, ... }:
+    { pkgs, nodes, ... }:
     let
       influxHost = "nexus";
       influxPort = nodes.nexus.config.roles.influxdb.port;
@@ -19,7 +19,7 @@
   };
 
   nexus =
-    { config, pkgs, lib, ... }:
+    { config, pkgs, ... }:
     {
       roles.grafana = {
         enable = true;
@@ -30,11 +30,8 @@
       };
 
       roles.influxdb.enable = true;
-    };
 
-  webserver =
-    { nodes, config, pkgs, lib, ... }:
-    {
+      # webserver
       services.nginx.enable = true;
       services.nginx.virtualHosts."127.0.0.1" = {
         root = "${pkgs.website}";
