@@ -3,4 +3,4 @@ nix-build in this (pkgs) directory.
 
 Example:
 
-    nix-build -A website
+    nix-shell -A website

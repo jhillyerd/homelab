@@ -9,10 +9,7 @@
     in
     {
       imports = [ ./common.nix ./roles ];
-      nixpkgs.overlays = [ (super: self: {
-        website = super.callPackage ./pkgs/website {};
-        open-sans-webfont = super.callPackage ./pkgs/open-sans-webfont {};
-      }) ];
+      nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
       roles.telegraf = {
         enable = true;
