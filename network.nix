@@ -1,4 +1,5 @@
 let
+  # Import low security credentials.
   lowsec = import ./lowsec.nix;
 in
 {
@@ -34,8 +35,14 @@ in
 
       roles.influxdb = {
         enable = true;
+        adminUser = lowsec.influxdb.admin.user;
+        adminPassword = lowsec.influxdb.admin.password;
+
         databases = {
-          telegraf-hosts = { user = "telegraf"; password = "telegraf"; };
+          telegraf-hosts = {
+            user = lowsec.influxdb.telegraf.user;
+            password = lowsec.influxdb.telegraf.password;
+          };
         };
       };
 
