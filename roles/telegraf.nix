@@ -7,24 +7,9 @@ in
   options.roles.telegraf = {
     enable = mkEnableOption "Telegraf node";
 
-    influxDbUrl = mkOption {
-      type = types.str;
-      description = "InfluxDB URL";
-    };
-
-    influxDbName = mkOption {
-      type = types.str;
-      description = "InfluxDB Database Name";
-    };
-
-    influxDbUser = mkOption {
-      type = types.str;
-      description = "InfluxDB User";
-    };
-
-    influxDbPassword = mkOption {
-      type = types.str;
-      description = "InfluxDB Password";
+    influxdb = mkOption {
+      type = types.attrs;
+      description = "Influxdb output options";
     };
   };
 
@@ -43,12 +28,7 @@ in
           system = {};
         };
 
-        outputs.influxdb = {
-          database = cfg.influxDbName;
-          urls = [ cfg.influxDbUrl ];
-          username = cfg.influxDbUser;
-          password = cfg.influxDbPassword;
-        };
+        outputs.influxdb = cfg.influxdb;
       };
     };
   };

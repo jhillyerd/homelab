@@ -15,15 +15,16 @@ in
       imports = [ ./common.nix ./roles ];
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
-      # TODO this role may not be necessary if default telegraf is good enough.
       roles.telegraf = {
         enable = true;
-        influxDbUrl = "http://${influxHost}:${toString influxPort}";
-        influxDbName = "telegraf-hosts";
-        influxDbUser = lowsec.influxdb.telegraf.user;
-        influxDbPassword = lowsec.influxdb.telegraf.password;
+        influxdb = {
+          urls = [ "http://${influxHost}:${toString influxPort}" ];
+          database = "telegraf-hosts";
+          username = lowsec.influxdb.telegraf.user;
+          password = lowsec.influxdb.telegraf.password;
+        };
       };
-  };
+    };
 
   nexus =
     { config, pkgs, lib, ... }:
