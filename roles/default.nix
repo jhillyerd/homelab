@@ -4,5 +4,6 @@
     ./grafana.nix
     ./influxdb.nix
     ./telegraf.nix
+    ./website.nix
   ];
 }
