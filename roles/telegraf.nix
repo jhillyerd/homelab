@@ -16,6 +16,16 @@ in
       type = types.str;
       description = "InfluxDB Database Name";
     };
+
+    influxDbUser = mkOption {
+      type = types.str;
+      description = "InfluxDB User";
+    };
+
+    influxDbPassword = mkOption {
+      type = types.str;
+      description = "InfluxDB Password";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -36,6 +46,8 @@ in
         outputs.influxdb = {
           database = cfg.influxDbName;
           urls = [ cfg.influxDbUrl ];
+          username = cfg.influxDbUser;
+          password = cfg.influxDbPassword;
         };
       };
     };

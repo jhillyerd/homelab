@@ -27,16 +27,8 @@ in
     };
 
     datasources = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          name = mkOption {
-            type = str;
-          };
-          type = mkOption {
-            type = enum [ "influxdb" ];
-          };
-        };
-      });
+      # TODO use services.grafana.provision.datasources if possible.
+      type = types.listOf types.attrs;
       description = "Grafana datasources";
       default = [];
     };
@@ -50,7 +42,7 @@ in
       domain = cfg.domain;
       provision = mkIf ((builtins.length cfg.datasources) > 0) {
         enable = true;
-        datasources = map mkGrafanaSource cfg.datasources;
+        datasources = cfg.datasources;
       };
     };
 

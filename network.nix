@@ -15,22 +15,35 @@ in
       imports = [ ./common.nix ./roles ];
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
+      # TODO this role may not be necessary if default telegraf is good enough.
       roles.telegraf = {
         enable = true;
         influxDbUrl = "http://${influxHost}:${toString influxPort}";
         influxDbName = "telegraf-hosts";
+        influxDbUser = lowsec.influxdb.telegraf.user;
+        influxDbPassword = lowsec.influxdb.telegraf.password;
       };
   };
 
   nexus =
-    { config, pkgs, ... }:
+    { config, pkgs, lib, ... }:
+    let
+      # Construct a grafana datasource from our influxdb database.
+      mkGrafanaInfluxSource = name: db: {
+        name = "${name} influxdb";
+        type = "influxdb";
+        database = name;
+        # TODO don't use localhost.
+        url = "http://localhost:${toString config.roles.influxdb.port}";
+        user = db.user;
+        password = db.password;
+      };
+    in
     {
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";
-        datasources = [
-          { name = config.roles.telegraf.influxDbName; type = "influxdb"; }
-        ];
+        datasources = lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases;
       };
 
       roles.influxdb = {
