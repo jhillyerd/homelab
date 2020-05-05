@@ -1,6 +1,6 @@
-To work within or build one of these packages, you should run nix-shell or
-nix-build in this (pkgs) directory.
+To build one of these packages, you should run nix-build in this (pkgs)
+directory.
 
 Example:
 
-    nix-shell -A website
+    nix-build -A website

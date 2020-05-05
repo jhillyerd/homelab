@@ -1,4 +1,4 @@
-# bootstrap nixpkgs for nix-shell
+# Bootstrap the overlay.
 { pkgsPath ? <nixpkgs> }:
 import pkgsPath {
   overlays = [ (import ./overlay.nix) ];
