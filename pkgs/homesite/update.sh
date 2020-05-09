@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq nodePackages.node2nix
+#!nix-shell -i bash -p curl gnused jq yarn2nix
 
 set -eu -o pipefail
 
@@ -35,15 +35,6 @@ if [ -z "$storePath" ]; then
   exit 1
 fi
 
-for f in package.json package-lock.json; do
-  fp="$storePath/$f"
-  if [ ! -f "$fp" ]; then
-    echo "$fp missing!"
-    exit 1
-  fi
-  cp -f "$fp" "$f"
-done
-
 # Update default.nix.
 echo "Updating rev to $latestSha"
 sed -E -i -e 's/^(\s*rev\s*=\s*")[^"]+(".*)$/\1'$latestSha'\2/' default.nix
@@ -51,5 +42,4 @@ sed -E -i -e 's/^(\s*rev\s*=\s*")[^"]+(".*)$/\1'$latestSha'\2/' default.nix
 echo "Updating sha256 to $latestSum"
 sed -E -i -e 's/^(\s*sha256\s*=\s*")[^"]+(".*)$/\1'$latestSum'\2/' default.nix
 
-# Generate node dependency derivations.
-node2nix --lock package-lock.json --composition node-composition.nix
+yarn2nix --lockfile="$storePath/yarn.lock" > yarn.nix

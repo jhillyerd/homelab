@@ -1,27 +1,31 @@
-{ pkgs, stdenv, nodejs-12_x, nodePackages, utillinux }:
-stdenv.mkDerivation {
+{ pkgs, mkYarnPackage, utillinux }:
+mkYarnPackage {
   name = "homesite";
 
   src = pkgs.fetchFromGitHub {
     owner = "jhillyerd";
     repo = "homesite";
-    rev = "373891da91bfd73275e25697477dfa31b8b39787";
-    sha256 = "1zfvpf17nwcl9qm3sx9l4w2qy6dzrdv4jmp94fkva88k6s3xvz12";
+    rev = "28f8e977b8514632304fe2347a06ff18045cdbc4";
+    sha256 = "0q1jcfb7y6h4qg5qr4vaa9m1f2b1z26mdpv2f0ldx0g4qgl0jbhb";
   };
 
-  buildInputs = [ nodejs-12_x nodePackages.node2nix utillinux ];
+  yarNix = ./yarn.nix;
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  extraBuildInputs = [ utillinux ];
+
+  phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
-    export HOME="$(mktemp -d)"
-    npm ci
-    npm run build
+    yarn run build
   '';
 
   installPhase = ''
+    cd "deps/$pname/dist"
+    echo ======
+    pwd
+    find . -name index.html
+    echo ======
     mkdir $out
-    cd dist
-    mv -v * $out/
+    cp -v * $out/
   '';
 }
