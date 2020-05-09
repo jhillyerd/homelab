@@ -69,6 +69,15 @@ in
             host = "nexus";
             port = nodes.nexus.config.roles.grafana.port;
             proto = "http";
+            icon = "chart-area";
+          }
+          {
+            name = "OctoPrint";
+            host = "octopi.skynet.local";
+            port = 80;
+            path = "/";
+            proto = "http";
+            icon = "cube";
           }
         ];
       };

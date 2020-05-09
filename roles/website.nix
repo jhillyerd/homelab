@@ -27,6 +27,9 @@ in
             type = enum [ "http" "https" ];
             default = "https";
           };
+          icon = mkOption {
+            type = str;
+          };
         };
       });
       description = "Service links";
