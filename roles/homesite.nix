@@ -1,11 +1,11 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  cfg = config.roles.website;
+  cfg = config.roles.homesite;
 in
 {
-  options.roles.website = {
-    enable = mkEnableOption "Enable website";
+  options.roles.homesite = {
+    enable = mkEnableOption "Enable home website";
 
     services = mkOption {
       type = with types; listOf (submodule {

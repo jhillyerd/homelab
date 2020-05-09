@@ -2,8 +2,8 @@
 {
   imports = [
     ./grafana.nix
+    ./homesite.nix
     ./influxdb.nix
     ./telegraf.nix
-    ./website.nix
   ];
 }

@@ -27,7 +27,7 @@ in
     };
 
   nexus =
-    { config, pkgs, lib, nodes, ... }:
+    { config, pkgs, lib, nodes, resources, ... }:
     let
       # Construct a grafana datasource from our influxdb database.
       mkGrafanaInfluxSource = name: db: {
@@ -60,12 +60,12 @@ in
         };
       };
 
-      roles.website = {
+      roles.homesite = {
         enable = true;
-
         services = [
           {
             name = "Grafana";
+            # host = resources.machines.nexus.networking.privateIPv4;
             host = "nexus";
             port = nodes.nexus.config.roles.grafana.port;
             proto = "http";
