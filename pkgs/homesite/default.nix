@@ -5,8 +5,8 @@ stdenv.mkDerivation {
   src = pkgs.fetchFromGitHub {
     owner = "jhillyerd";
     repo = "homesite";
-    rev = "f0ded6ae77eed970374872c1a605b86b4cf7aca7";
-    sha256 = "0dx1rng8sqinka87rgy6mwr4zr5a1v5scrb6b5j91h6x3vfdg38r";
+    rev = "7af300e05b5fa236342d9323d2813513eeececb9";
+    sha256 = "0ylsx3gp1lq84d6h7zx0hmqag5xvgsxxl935nv6a9z6k666k7h2q";
   };
 
   buildInputs = [ nodejs-12_x ];
