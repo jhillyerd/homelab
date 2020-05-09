@@ -47,7 +47,7 @@ in
       services.nginx = {
         enable = true;
         virtualHosts."127.0.0.1" = {
-          root = "${pkgs.website}";
+          root = "${pkgs.homesite}";
 
           locations."/config/" = {
             alias = "${configDir}/";
