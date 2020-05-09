@@ -79,6 +79,38 @@ in
             proto = "http";
             icon = "cube";
           }
+          {
+            name = "SkyNAS";
+            host = "192.168.1.20";
+            port = 5000;
+            path = "/";
+            proto = "http";
+            icon = "hdd";
+          }
+          {
+            name = "UniFi";
+            host = "192.168.1.20";
+            port = 8443;
+            path = "/";
+            proto = "https";
+            icon = "network-wired";
+          }
+          {
+            name = "Cable Modem";
+            host = "192.168.100.1";
+            port = 80;
+            path = "/";
+            proto = "http";
+            icon = "satellite-dish";
+          }
+          {
+            name = "Dell 2716 Switch";
+            host = "192.168.1.2";
+            port = 80;
+            path = "/";
+            proto = "http";
+            icon = "ethernet";
+          }
         ];
       };
     };
