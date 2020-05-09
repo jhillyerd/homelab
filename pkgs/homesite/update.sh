@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq
+#!nix-shell -i bash -p curl gnused jq nodePackages.node2nix
 
 set -eu -o pipefail
 
@@ -21,12 +21,28 @@ fi
 
 # Determine commit checksum.
 tgzUrl="https://github.com/$OWNER/$REPO/archive/$latestSha.tar.gz"
-latestSum="$(nix-prefetch-url --unpack --type sha256 "$tgzUrl")"
+mapfile -t < <(nix-prefetch-url --print-path --unpack --type sha256 "$tgzUrl")
+latestSum="${MAPFILE[0]}"
+storePath="${MAPFILE[1]}"
 
 if [ -z "$latestSum" ]; then
-  echo "Update failed, sum was empty"
+  echo "Update failed, latestSum was empty"
   exit 1
 fi
+
+if [ -z "$storePath" ]; then
+  echo "Update failed, storePath was empty"
+  exit 1
+fi
+
+for f in package.json package-lock.json; do
+  fp="$storePath/$f"
+  if [ ! -f "$fp" ]; then
+    echo "$fp missing!"
+    exit 1
+  fi
+  cp -f "$fp" "$f"
+done
 
 # Update default.nix.
 echo "Updating rev to $latestSha"
@@ -34,3 +50,6 @@ sed -E -i -e 's/^(\s*rev\s*=\s*")[^"]+(".*)$/\1'$latestSha'\2/' default.nix
 
 echo "Updating sha256 to $latestSum"
 sed -E -i -e 's/^(\s*sha256\s*=\s*")[^"]+(".*)$/\1'$latestSum'\2/' default.nix
+
+# Generate node dependency derivations.
+node2nix --lock package-lock.json --composition node-composition.nix

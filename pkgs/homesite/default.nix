@@ -1,15 +1,15 @@
-{ pkgs, stdenv, nodejs-12_x, utillinux }:
+{ pkgs, stdenv, nodejs-12_x, nodePackages, utillinux }:
 stdenv.mkDerivation {
   name = "homesite";
 
   src = pkgs.fetchFromGitHub {
     owner = "jhillyerd";
     repo = "homesite";
-    rev = "7af300e05b5fa236342d9323d2813513eeececb9";
-    sha256 = "0ylsx3gp1lq84d6h7zx0hmqag5xvgsxxl935nv6a9z6k666k7h2q";
+    rev = "373891da91bfd73275e25697477dfa31b8b39787";
+    sha256 = "1zfvpf17nwcl9qm3sx9l4w2qy6dzrdv4jmp94fkva88k6s3xvz12";
   };
 
-  buildInputs = [ nodejs-12_x utillinux ];
+  buildInputs = [ nodejs-12_x nodePackages.node2nix utillinux ];
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
