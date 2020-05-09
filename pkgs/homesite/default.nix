@@ -1,4 +1,4 @@
-{ pkgs, stdenv, nodejs-12_x }:
+{ pkgs, stdenv, nodejs-12_x, utillinux }:
 stdenv.mkDerivation {
   name = "homesite";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0ylsx3gp1lq84d6h7zx0hmqag5xvgsxxl935nv6a9z6k666k7h2q";
   };
 
-  buildInputs = [ nodejs-12_x ];
+  buildInputs = [ nodejs-12_x utillinux ];
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
