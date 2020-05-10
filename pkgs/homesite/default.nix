@@ -5,8 +5,8 @@ mkYarnPackage {
   src = pkgs.fetchFromGitHub {
     owner = "jhillyerd";
     repo = "homesite";
-    rev = "28f8e977b8514632304fe2347a06ff18045cdbc4";
-    sha256 = "0q1jcfb7y6h4qg5qr4vaa9m1f2b1z26mdpv2f0ldx0g4qgl0jbhb";
+    rev = "ac0a33d7d2a8e3a71aef8148436a907f9ddb1662";
+    sha256 = "02mfkq2j32h8xksdbpl79bri5z8wpnlfsixxki9kpy4j4zsi68ks";
   };
 
   yarNix = ./yarn.nix;

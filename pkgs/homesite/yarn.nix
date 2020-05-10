@@ -5330,6 +5330,14 @@
       };
     }
     {
+      name = "typescript___typescript_3.8.3.tgz";
+      path = fetchurl {
+        name = "typescript___typescript_3.8.3.tgz";
+        url  = "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz";
+        sha1 = "409eb8544ea0335711205869ec458ab109ee1061";
+      };
+    }
+    {
       name = "uncss___uncss_0.17.3.tgz";
       path = fetchurl {
         name = "uncss___uncss_0.17.3.tgz";
