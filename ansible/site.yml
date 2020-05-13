@@ -1,0 +1,4 @@
+---
+- hosts: octopis
+  roles:
+    - dj-wasabi.telegraf
