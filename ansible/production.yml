@@ -1,8 +1,10 @@
 all:
   children:
+    # OctoPi nodes
     octopis:
       hosts:
         octopi.skynet.local:
+    # Pis running Raspbian
     raspbian:
       children:
         octopis:
@@ -10,9 +12,7 @@ all:
         ansible_user: pi
         telegraf_agent_version: "1.14.2"
         telegraf_agent_package_method: repo
-        telegraf_agent_hostname: "{{ ansible_hostname }}"
-        telegraf_agent_output:
-          - type: influxdb
-            config:
-              - urls = [ "http://nexus:8086" ]
-                database = "telegraf-hosts"
+    # Nodes monitored with telegraf
+    telegraf:
+      children:
+        raspbian:
