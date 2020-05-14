@@ -1,4 +1,7 @@
----
+- hosts: all
+  roles: [ common ]
+  tags: [ common ]
+
 - hosts: octopis
   roles:
     - dj-wasabi.telegraf

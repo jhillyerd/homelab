@@ -1,0 +1,26 @@
+- name: ansible group account
+  group:
+    name: ansible
+  become: yes
+
+- name: ansible user account
+  user:
+    name: ansible
+    comment: "Ansible Deployer"
+    password: "*"
+    group: ansible
+  become: yes
+
+- name: sudo without password for ansible
+  copy:
+    content: "ansible ALL=(ALL:ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/050_ansible-nopasswd
+    mode: 0440
+    validate: /usr/sbin/visudo -csf %s
+  become: yes
+
+- name: setup authorized keys for ansible user
+  authorized_key:
+    user: ansible
+    key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDzElugkH5ShQgeP5hQ4rZSDxyutpcLpbHStsBvSuzN7KDDNDN1z8bZeUEMihxAsxF760LtL7H6kzPRXl9dAOwtaOyAZWFRVm7tyPEmQq27Jro54ET/aojyvovyypJFFNtVT6ODXbAycB5YRXYbLQW7jzLgvG/eDi8BEWrVcU23lflzuFnZk3u6oHvl9cHT5Cg2DkOLm3g55kpEGloELnzvys7+LnRAfD/jS6rmfBnBidkqBxgOoHovR31hYvHSX2XP8ETgDgP+UUb8IEnR/9FGk1k6SM/Wnj4JmEI3JQP7zxEYmVn+9wRj/e9Xn2UKK0Mxb9ubrskgzFd9W+saHn97smgi/+Vg9SMw16LfnScrGL/Z9HO9CL2nujUuzsjaymvkprromsoQDEbb7h+JYWHcrY0rIOcXjcvDN/w91Y7RB5QpJns0orvnYsNFIHPnqsvUOnitTq3UOZoa+6ElyVTmUm1In3YcaqEcLcWCt0IYgHp4KWqcJoL3JH0Y0bckT6E= james@ryzen"
+  become: yes
