@@ -8,10 +8,6 @@ all:
     raspbian:
       children:
         octopis:
-      vars:
-        ansible_user: pi
-        telegraf_agent_version: "1.14.2"
-        telegraf_agent_package_method: repo
     # Nodes monitored with telegraf
     telegraf:
       children:
