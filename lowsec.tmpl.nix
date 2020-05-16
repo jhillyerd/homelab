@@ -1,9 +1,9 @@
 {
   influxdb = {
     admin.user = "admin";
-    admin.password = "@PASSWORD@";
+    admin.password = "@influx_admin";
 
     telegraf.user = "telegraf";
-    telegraf.password = "@PASSWORD@";
+    telegraf.password = "@influx_telegraf";
   };
 }
