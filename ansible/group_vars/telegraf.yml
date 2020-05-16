@@ -4,5 +4,5 @@ telegraf_agent_output:
     config:
       - urls = [ "http://nexus:8086" ]
         database = "telegraf-hosts"
-        username = "telegraf"
-        password = "@PASSWORD@"
+        username = "{{ lowsec.influxdb.telegraf.user }}"
+        password = "{{ lowsec.influxdb.telegraf.password }}"

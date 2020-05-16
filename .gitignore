@@ -1,5 +1,6 @@
+# Password files
 /lowsec.nix
+/ansible/lowsec.yml
+
 /.vim
-
 result
-

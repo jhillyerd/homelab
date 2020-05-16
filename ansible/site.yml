@@ -3,5 +3,7 @@
   tags: [ common ]
 
 - hosts: octopis
+  vars_files:
+    - lowsec.yml
   roles:
     - dj-wasabi.telegraf
