@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     ansible
     ansible-lint
     kubectl
+    kube-prompt
     pythonEnv
   ];
   shellHook = ''
