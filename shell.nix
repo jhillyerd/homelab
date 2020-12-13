@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ansible
     ansible-lint
+    kubectl
     pythonEnv
   ];
+  shellHook = ''
+    export KUBECONFIG="$(pwd)/rke/kube_config_cluster.yml"
+  '';
 }
