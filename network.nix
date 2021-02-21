@@ -60,6 +60,21 @@ in
         };
       };
 
+      roles.mosquitto = {
+        enable = true;
+
+        users = {
+          admin = {
+            password = lowsec.mqtt.admin.password;
+            acl = [];
+          };
+          sensor = {
+            password = lowsec.mqtt.sensor.password;
+            acl = [];
+          };
+        };
+      };
+
       roles.homesite = {
         enable = true;
         services = [
