@@ -1,4 +1,5 @@
 # Password files
+/gen_passwords.json
 /lowsec.nix
 /ansible/lowsec.yml
 
