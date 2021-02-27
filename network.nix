@@ -29,7 +29,7 @@ in
   nexus =
     { config, pkgs, lib, nodes, resources, ... }:
     let
-      # Construct a grafana datasource from our influxdb database.
+      # Construct a grafana datasource from our influxdb database definition.
       mkGrafanaInfluxSource = name: db: {
         name = "${name} influxdb";
         type = "influxdb";
@@ -53,6 +53,11 @@ in
         adminPassword = lowsec.influxdb.admin.password;
 
         databases = {
+          homeassistant = {
+            user = lowsec.influxdb.homeassistant.user;
+            password = lowsec.influxdb.homeassistant.password;
+          };
+
           telegraf-hosts = {
             user = lowsec.influxdb.telegraf.user;
             password = lowsec.influxdb.telegraf.password;
