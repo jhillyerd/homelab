@@ -1,0 +1,53 @@
+esphome:
+  name: office_esp32
+  platform: ESP32
+  board: mhetesp32devkit
+
+wifi:
+  ssid: !secret 'wifi_ssid'
+  password: !secret 'wifi_pass'
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Office Esp32 Fallback Hotspot"
+    password: !secret 'wifi_pass'
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret 'api_pass'
+
+ota:
+  password: !secret 'ota_pass'
+
+esp32_ble_tracker:
+
+sensor:
+  - platform: uptime
+    name: "office_esp32 Uptime Sensor"
+
+  - platform: wifi_signal
+    name: "office_esp32 WiFi Signal"
+    update_interval: 60s
+
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:0F:5D:64"
+    temperature:
+      name: "Master Mi Temperature"
+    humidity:
+      name: "Master Mi Humidity"
+    battery_level:
+      name: "Master Mi Battery Level"
+
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:1B:55:C5"
+    temperature:
+      name: "Dining Mi Temperature"
+    humidity:
+      name: "Dining Mi Humidity"
+    battery_level:
+      name: "Dining Mi Battery Level"
