@@ -1,11 +1,15 @@
+substitutions:
+  device_name: office_esp32
+
 esphome:
-  name: office_esp32
+  name: ${device_name}
   platform: ESP32
   board: mhetesp32devkit
 
 wifi:
   ssid: !secret 'wifi_ssid'
   password: !secret 'wifi_pass'
+  domain: .skynet.local
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -28,10 +32,10 @@ esp32_ble_tracker:
 
 sensor:
   - platform: uptime
-    name: "office_esp32 Uptime Sensor"
+    name: "${device_name} Uptime Sensor"
 
   - platform: wifi_signal
-    name: "office_esp32 WiFi Signal"
+    name: "${device_name} WiFi Signal"
     update_interval: 60s
 
   - platform: atc_mithermometer
@@ -51,3 +55,12 @@ sensor:
       name: "Dining Mi Humidity"
     battery_level:
       name: "Dining Mi Battery Level"
+
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:C2:FA:A2"
+    temperature:
+      name: "Garage Mi Temperature"
+    humidity:
+      name: "Garage Mi Humidity"
+    battery_level:
+      name: "Garage Mi Battery Level"
