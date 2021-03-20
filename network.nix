@@ -65,6 +65,10 @@ in
         };
       };
 
+      roles.loki = {
+        enable = true;
+      };
+
       roles.mosquitto = {
         enable = true;
 
