@@ -15,7 +15,8 @@ in
       syslogPort = nodes.nexus.config.roles.loki.promtail_syslog_port;
     in
     {
-      imports = [ ./common.nix ./roles ];
+      imports = [ ./common.nix ./roles ./modules/promtail.nix ];
+
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
       # Configure telegraf agent.

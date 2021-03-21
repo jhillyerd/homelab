@@ -26,35 +26,7 @@ in
     };
   };
 
-  config = let
-    promtailConfig = pkgs.writeText "promtail.yaml"
-      ''
-        server:
-          http_listen_port: ${toString cfg.promtail_http_port}
-          grpc_listen_port: 0
-
-        positions:
-          filename: /tmp/positions.yaml
-
-        clients:
-          - url: http://localhost:${toString cfg.loki_http_port}/loki/api/v1/push
-
-        scrape_configs:
-          - job_name: syslog
-            syslog:
-              listen_address: 0.0.0.0:${toString cfg.promtail_syslog_port}
-              idle_timeout: 60s
-              label_structured_data: yes
-              labels:
-                job: "syslog"
-            relabel_configs:
-              - source_labels: ['__syslog_message_hostname']
-                target_label: 'host'
-              - source_labels: ['__syslog_message_app_name']
-                target_label: 'app_name'
-      '';
-  in
-  mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services.loki = {
       enable = true;
 
@@ -96,16 +68,43 @@ in
       };
     };
 
-    systemd.services.promtail = {
-      description = "Promtail service for Loki";
-      wantedBy = [ "multi-user.target" ];
+    services.promtail = {
+      enable = true;
 
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.grafana-loki}/bin/promtail -config.file ${promtailConfig}
-        '';
-        DynamicUser = true;
-      };
+      configuration = {
+          server = {
+            http_listen_port = cfg.promtail_http_port;
+            grpc_listen_port = 0;
+          };
+
+          clients = [
+            { url = "http://localhost:${toString cfg.loki_http_port}/loki/api/v1/push"; }
+          ];
+
+          scrape_configs = [
+            {
+              job_name = "syslog";
+              syslog = {
+                listen_address = "0.0.0.0:${toString cfg.promtail_syslog_port}";
+                idle_timeout = "60s";
+                label_structured_data = true;
+                labels = {
+                  job = "syslog";
+                };
+              };
+              relabel_configs = [
+                {
+                  source_labels = [ "__syslog_message_hostname" ];
+                  target_label = "host";
+                }
+                {
+                  source_labels = [ "__syslog_message_app_name" ];
+                  target_label = "app_name";
+                }
+              ];
+            }
+          ];
+        };
     };
 
     networking.firewall.allowedTCPPorts = [ cfg.loki_http_port cfg.promtail_http_port ];
