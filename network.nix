@@ -10,11 +10,15 @@ in
     let
       influxHost = "nexus";
       influxPort = nodes.nexus.config.roles.influxdb.port;
+
+      syslogHost = "nexus";
+      syslogPort = nodes.nexus.config.roles.loki.promtail_syslog_port;
     in
     {
       imports = [ ./common.nix ./roles ];
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
+      # Configure telegraf agent.
       roles.telegraf = {
         enable = true;
         influxdb = {
@@ -23,6 +27,12 @@ in
           username = lowsec.influxdb.telegraf.user;
           password = lowsec.influxdb.telegraf.password;
         };
+      };
+
+      # Forward syslogs to promtail/loki.
+      roles.log-forwarder = {
+        enable = true;
+        inherit syslogHost syslogPort;
       };
     };
 
@@ -44,7 +54,15 @@ in
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";
-        datasources = lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases;
+        datasources = (lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases) ++ [
+          {
+            name = "syslogs loki";
+            type = "loki";
+            access = "proxy";
+            url = "http://localhost:${toString config.roles.loki.loki_http_port}";
+            jsonData.maxLines = 1000;
+          }
+        ];
       };
 
       roles.influxdb = {
@@ -63,6 +81,10 @@ in
             password = lowsec.influxdb.telegraf.password;
           };
         };
+      };
+
+      roles.loki = {
+        enable = true;
       };
 
       roles.mosquitto = {
