@@ -54,7 +54,15 @@ in
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";
-        datasources = lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases;
+        datasources = (lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases) ++ [
+          {
+            name = "syslogs loki";
+            type = "loki";
+            access = "proxy";
+            url = "http://localhost:${toString config.roles.loki.loki_http_port}";
+            jsonData.maxLines = 1000;
+          }
+        ];
       };
 
       roles.influxdb = {
