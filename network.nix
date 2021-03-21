@@ -10,11 +10,15 @@ in
     let
       influxHost = "nexus";
       influxPort = nodes.nexus.config.roles.influxdb.port;
+
+      syslogHost = "nexus";
+      syslogPort = nodes.nexus.config.roles.loki.promtail_syslog_port;
     in
     {
       imports = [ ./common.nix ./roles ];
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
+      # Configure telegraf agent.
       roles.telegraf = {
         enable = true;
         influxdb = {
@@ -23,6 +27,26 @@ in
           username = lowsec.influxdb.telegraf.user;
           password = lowsec.influxdb.telegraf.password;
         };
+      };
+
+      # Forward syslogs to promtail/loki.
+      services.syslog-ng = {
+        enable = true;
+        extraConfig = ''
+          source s_local {
+            system();
+            internal();
+          };
+
+          destination d_loki {
+            syslog("${syslogHost}" transport("tcp") port(${toString syslogPort}));
+          };
+
+          log {
+            source(s_local);
+            destination(d_loki);
+          };
+        '';
       };
     };
 

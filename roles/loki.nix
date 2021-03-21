@@ -15,8 +15,14 @@ in
 
     promtail_http_port = mkOption {
       type = types.port;
-      description = "Loki HTTP listen port";
+      description = "Promtail HTTP listen port";
       default = 9080;
+    };
+
+    promtail_syslog_port = mkOption {
+      type = types.port;
+      description = "Promtail syslog listen port";
+      default = 1514;
     };
   };
 
@@ -31,12 +37,12 @@ in
           filename: /tmp/positions.yaml
 
         clients:
-          - url: http://localhost:3100/loki/api/v1/push
+          - url: http://localhost:${toString cfg.loki_http_port}/loki/api/v1/push
 
         scrape_configs:
           - job_name: syslog
             syslog:
-              listen_address: 0.0.0.0:1514
+              listen_address: 0.0.0.0:${toString cfg.promtail_syslog_port}
               idle_timeout: 60s
               label_structured_data: yes
               labels:
