@@ -30,23 +30,9 @@ in
       };
 
       # Forward syslogs to promtail/loki.
-      services.syslog-ng = {
+      roles.log-forwarder = {
         enable = true;
-        extraConfig = ''
-          source s_local {
-            system();
-            internal();
-          };
-
-          destination d_loki {
-            syslog("${syslogHost}" transport("tcp") port(${toString syslogPort}));
-          };
-
-          log {
-            source(s_local);
-            destination(d_loki);
-          };
-        '';
+        inherit syslogHost syslogPort;
       };
     };
 
