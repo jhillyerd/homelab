@@ -9,4 +9,5 @@
 **/platformio.ini
 /secrets.yaml
 
+family_esp32
 office_esp32

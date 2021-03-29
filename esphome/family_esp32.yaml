@@ -1,5 +1,5 @@
 substitutions:
-  device_name: office_esp32
+  device_name: family_esp32
 
 esphome:
   name: ${device_name}
@@ -39,10 +39,19 @@ sensor:
     update_interval: 60s
 
   - platform: atc_mithermometer
-    mac_address: "A4:C1:38:0F:5D:64"
+    mac_address: "A4:C1:38:1B:55:C5"
     temperature:
-      name: "Master Mi Temperature"
+      name: "Dining Mi Temperature"
     humidity:
-      name: "Master Mi Humidity"
+      name: "Dining Mi Humidity"
     battery_level:
-      name: "Master Mi Battery Level"
+      name: "Dining Mi Battery Level"
+
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:C2:FA:A2"
+    temperature:
+      name: "Garage Mi Temperature"
+    humidity:
+      name: "Garage Mi Humidity"
+    battery_level:
+      name: "Garage Mi Battery Level"
