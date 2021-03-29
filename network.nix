@@ -52,6 +52,15 @@ in
       };
     in
     {
+      roles.nfs-bind = {
+        binds."grafana" = {
+          path = "/var/lib/grafana";
+          user = "grafana";
+          group = "grafana";
+          mode = "0700";
+        };
+      };
+
       roles.grafana = {
         enable = true;
         domain = "nexus.skynet.local";

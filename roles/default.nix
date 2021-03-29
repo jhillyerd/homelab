@@ -7,6 +7,7 @@
     ./log-forwarder.nix
     ./loki.nix
     ./mosquitto.nix
+    ./nfs-bind.nix
     ./telegraf.nix
   ];
 }
