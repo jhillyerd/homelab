@@ -5,6 +5,12 @@ let
 in
 {
   options.roles.nfs-bind = {
+    nfsPath = mkOption {
+      type = types.str;
+      description = "Remote NFS device/path";
+      example = "nfs.example.com:/exports/files";
+    };
+
     mountPoint = mkOption {
       type = types.path;
       description = "Where to mount NFS filesystem";
@@ -54,10 +60,20 @@ in
       };
     in
     mkIf (length (attrNames cfg.binds) > 0) {
-      system.activationScripts.nfs-bind =
-        lib.concatStringsSep "\n" (mapAttrsToList setupDir cfg.binds);
+      systemd.services.nfs-bind-init = {
+        script = lib.concatStringsSep "\n" (mapAttrsToList setupDir cfg.binds);
+        wantedBy = [ "remote-fs.target" ];
+        after = [ "remote-fs.target" ];
+      };
 
       # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
-      fileSystems = mapAttrs' fsBindEntry cfg.binds;
+      fileSystems = (mapAttrs' fsBindEntry cfg.binds)
+        // {
+          # Mount NFS volume
+          "${cfg.mountPoint}" = {
+            device = cfg.nfsPath;
+            fsType = "nfs";
+          };
+        };
     };
 }

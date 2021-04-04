@@ -2,6 +2,7 @@ let
   # Import low security credentials.
   lowsec = import ./lowsec.nix;
 in
+{ environment ? "test" }:
 {
   network.description = "Home Services";
 
@@ -53,6 +54,8 @@ in
     in
     {
       roles.nfs-bind = {
+        nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
+
         binds."grafana" = {
           path = "/var/lib/grafana";
           user = "grafana";
