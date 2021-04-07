@@ -1,0 +1,4 @@
+---
+roles:
+- name: dj-wasabi.telegraf
+  version: "0.13.0"
