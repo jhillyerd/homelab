@@ -15,7 +15,7 @@
         {
           devShell = pkgs.mkShell {
             buildInputs = with pkgs; [
-              ansible
+              ansible_2_9
               esphome
               hello.defaultPackage.${system}
               nixops-flake.defaultPackage.${system}
