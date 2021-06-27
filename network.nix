@@ -121,7 +121,7 @@ in
           {
             name = "Grafana";
             # host = resources.machines.nexus.networking.privateIPv4;
-            host = "nexus";
+            host = "nexus.skynet.local";
             port = nodes.nexus.config.roles.grafana.port;
             proto = "http";
             icon = "chart-area";
@@ -157,14 +157,6 @@ in
             path = "/";
             proto = "http";
             icon = "satellite-dish";
-          }
-          {
-            name = "Dell 2716 Switch";
-            host = "192.168.1.2";
-            port = 80;
-            path = "/";
-            proto = "http";
-            icon = "ethernet";
           }
         ];
       };
