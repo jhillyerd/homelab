@@ -46,3 +46,12 @@ sensor:
       name: "Master Mi Humidity"
     battery_level:
       name: "Master Mi Battery Level"
+
+  - platform: atc_mithermometer
+    mac_address: "A4:C1:38:F0:22:38"
+    temperature:
+      name: "Office Mi Temperature"
+    humidity:
+      name: "Office Mi Humidity"
+    battery_level:
+      name: "Office Mi Battery Level"
