@@ -2,3 +2,5 @@
 roles:
 - name: dj-wasabi.telegraf
   version: "0.13.0"
+- name: robertdebock.rsyslog
+  version: "3.2.0"

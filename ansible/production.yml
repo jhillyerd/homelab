@@ -12,3 +12,7 @@ all:
     telegraf:
       children:
         raspbian:
+    # Nodes forwarding syslogs
+    rsyslog_fwd:
+      children:
+        raspbian:

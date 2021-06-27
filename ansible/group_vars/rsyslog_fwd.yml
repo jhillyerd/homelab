@@ -1,0 +1,10 @@
+rsyslog_remote: nexus.skynet.local
+rsyslog_remote_port: 514
+
+rsyslog_forward_rule_name: nexus_fwd
+
+rsyslog_mods:
+  - imuxsock
+  - imklog
+
+rsyslog_deploy_default_config: false

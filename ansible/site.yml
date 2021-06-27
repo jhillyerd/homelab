@@ -7,3 +7,4 @@
     - lowsec.yml
   roles:
     - dj-wasabi.telegraf
+    - { role: robertdebock.rsyslog, become: yes }
