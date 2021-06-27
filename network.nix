@@ -168,5 +168,10 @@ in
           }
         ];
       };
+
+      roles.log-forwarder = {
+        # Forward remote syslogs as well.
+        enableTcpListener = true;
+      };
     };
 }
