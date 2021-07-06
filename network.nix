@@ -36,6 +36,10 @@ in
         enable = true;
         inherit syslogHost syslogPort;
       };
+
+      services = {
+        tailscale.enable = true;
+      };
     };
 
   nexus =
