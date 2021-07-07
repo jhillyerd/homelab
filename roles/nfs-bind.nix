@@ -56,7 +56,7 @@ in
 
       fsBindEntry = name: bind: nameValuePair bind.path {
         device = "${cfg.mountPoint}/${name}";
-        options = [ "bind" ];
+        options = [ "bind" "_netdev" ];
       };
     in
     mkIf (length (attrNames cfg.binds) > 0) {
