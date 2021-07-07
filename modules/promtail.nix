@@ -91,6 +91,9 @@ in {
       description = "Promtail Service Daemon";
       wantedBy = [ "multi-user.target" ];
 
+      # Forces promtail to be stopped before loki, preventing retry hang.
+      after = [ "loki.service" ];
+
       serviceConfig = let
         conf = if cfg.configFile == null
                then prettyJSON cfg.configuration
