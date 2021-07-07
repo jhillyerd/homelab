@@ -62,6 +62,8 @@ in
           group = "grafana";
           mode = "0700";
         };
+
+        before = [ "grafana.service" ];
       };
 
       roles.grafana = {

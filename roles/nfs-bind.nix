@@ -1,3 +1,10 @@
+# nfs-bind allows the top-level directories of a single remote NFS volume to
+# be mounted to various portions of the local filesystem.  nfs-bind will
+# create the top-level directories after the NFS volume is mounted.
+#
+# Example:
+#   nfs.example.com:/exports/files is mounted to /data;
+#   /data/grafana is then bind-mounted to /var/lib/grafana
 { config, pkgs, lib, ... }:
 with lib;
 let
@@ -44,6 +51,12 @@ in
       description = "Bound directories";
       default = {};
     };
+
+    before = mkOption {
+      type = types.listOf types.str;
+      description = "Delay these systemd units until the binds are configured.";
+      default = [];
+    };
   };
 
   config =
@@ -62,8 +75,12 @@ in
     mkIf (length (attrNames cfg.binds) > 0) {
       systemd.services.nfs-bind-init = {
         script = lib.concatStringsSep "\n" (mapAttrsToList setupDir cfg.binds);
-        wantedBy = [ "remote-fs.target" ];
+        wantedBy = [ "multi-user.target" ];
         after = [ "remote-fs.target" ];
+        before = cfg.before;
+        serviceConfig = {
+          Type = "oneshot";
+        };
       };
 
       # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
