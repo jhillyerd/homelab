@@ -9,5 +9,6 @@
     ./mosquitto.nix
     ./nfs-bind.nix
     ./telegraf.nix
+    ./traefik.nix
   ];
 }

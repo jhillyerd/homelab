@@ -122,7 +122,7 @@ in
       };
 
       roles.homesite = {
-        enable = true;
+        enable = false;
         services = [
           {
             name = "Grafana";
@@ -165,6 +165,39 @@ in
             icon = "satellite-dish";
           }
         ];
+      };
+
+      roles.traefik = {
+        enable = true;
+        certificateEmail = "james@hillyerd.com";
+        cloudflareDnsApiToken = lowsec.cloudflare.dnsApi.token;
+
+        services = {
+          grafana = {
+            domainName = "grafana.bytemonkey.org";
+            backendUrls = [ "http://127.0.0.1:3000" ];
+          };
+
+          homeassistant = {
+            domainName = "homeassistant.bytemonkey.org";
+            backendUrls = [ "http://192.168.1.30:8123" ];
+          };
+
+          octopi = {
+            domainName = "octopi.bytemonkey.org";
+            backendUrls = [ "http://192.168.1.21" ];
+          };
+
+          skynas = {
+            domainName = "skynas.bytemonkey.org";
+            backendUrls = [ "https://192.168.1.20:5001" ];
+          };
+
+          unifi = {
+            domainName = "unifi.bytemonkey.org";
+            backendUrls = [ "https://192.168.1.20:8443" ];
+          };
+        };
       };
 
       roles.log-forwarder = {
