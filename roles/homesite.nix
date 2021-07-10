@@ -17,7 +17,8 @@ in
             type = str;
           };
           port = mkOption {
-            type = port;
+            type = nullOr port;
+            default = null;
           };
           path = mkOption {
             type = path;
@@ -66,6 +67,6 @@ in
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking.firewall.allowedTCPPorts = [ 12701 ];
     };
 }

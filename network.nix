@@ -126,40 +126,27 @@ in
         services = [
           {
             name = "Grafana";
-            # host = resources.machines.nexus.networking.privateIPv4;
-            host = "nexus.skynet.local";
-            port = nodes.nexus.config.roles.grafana.port;
-            proto = "http";
+            host = "grafana.bytemonkey.org";
             icon = "chart-area";
           }
           {
             name = "OctoPrint";
-            host = "octopi.skynet.local";
-            port = 80;
-            path = "/";
-            proto = "http";
+            host = "octopi.bytemonkey.org";
             icon = "cube";
           }
           {
             name = "SkyNAS";
-            host = "192.168.1.20";
-            port = 5000;
-            path = "/";
-            proto = "http";
+            host = "skynas.bytemonkey.org";
             icon = "hdd";
           }
           {
             name = "UniFi";
-            host = "192.168.1.20";
-            port = 8443;
-            path = "/";
-            proto = "https";
+            host = "unifi.bytemonkey.org";
             icon = "network-wired";
           }
           {
             name = "Cable Modem";
             host = "192.168.100.1";
-            port = 80;
             path = "/";
             proto = "http";
             icon = "satellite-dish";
