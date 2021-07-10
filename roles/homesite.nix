@@ -49,12 +49,20 @@ in
     mkIf cfg.enable {
       services.nginx = {
         enable = true;
-        virtualHosts."127.0.0.1" = {
+        virtualHosts."homesite" = {
           root = "${pkgs.homesite}";
 
           locations."/config/" = {
             alias = "${configDir}/";
           };
+
+          listen = [
+            {
+              addr = "0.0.0.0";
+              port = 12701;
+              ssl = false;
+            }
+          ];
         };
       };
 

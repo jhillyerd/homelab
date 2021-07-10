@@ -122,7 +122,7 @@ in
       };
 
       roles.homesite = {
-        enable = false;
+        enable = true;
         services = [
           {
             name = "Grafana";
@@ -176,6 +176,11 @@ in
           grafana = {
             domainName = "grafana.bytemonkey.org";
             backendUrls = [ "http://127.0.0.1:3000" ];
+          };
+
+          home = {
+            domainName = "bytemonkey.org";
+            backendUrls = [ "http://127.0.0.1:12701" ];
           };
 
           homeassistant = {
