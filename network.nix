@@ -123,7 +123,14 @@ in
 
       roles.homesite = {
         enable = true;
+
+        # Service icons come from fontawesome-free.
         services = [
+          {
+            name = "Home Assistant";
+            host = "homeassistant.bytemonkey.org";
+            icon = "home";
+          }
           {
             name = "Grafana";
             host = "grafana.bytemonkey.org";
