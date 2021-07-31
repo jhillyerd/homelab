@@ -16,7 +16,7 @@ in
       syslogPort = nodes.nexus.config.roles.loki.promtail_syslog_port;
     in
     {
-      imports = [ ./common.nix ./roles ./modules/promtail.nix ];
+      imports = [ ./common.nix ./roles ];
 
       nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 

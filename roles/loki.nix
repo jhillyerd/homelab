@@ -107,6 +107,11 @@ in
         };
     };
 
+    systemd.services.promtail = {
+      # Forces promtail to be stopped before loki, preventing retry hang.
+      after = [ "loki.service" ];
+    };
+
     networking.firewall.allowedTCPPorts = [ cfg.loki_http_port cfg.promtail_http_port cfg.promtail_syslog_port ];
   };
 }
