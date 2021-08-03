@@ -60,11 +60,19 @@ in
       roles.nfs-bind = {
         nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
 
-        binds."grafana" = {
-          path = "/var/lib/grafana";
-          user = "grafana";
-          group = "grafana";
-          mode = "0700";
+        binds = {
+          "grafana" = {
+            path = "/var/lib/grafana";
+            user = "grafana";
+            group = "grafana";
+            mode = "0700";
+          };
+          
+          "nodered" = {
+            user = "1000";
+            group = "1000";
+            mode = "0700";
+          };
         };
 
         before = [ "grafana.service" ];
@@ -202,6 +210,14 @@ in
       roles.log-forwarder = {
         # Forward remote syslogs as well.
         enableTcpListener = true;
+      };
+
+      virtualisation.oci-containers.containers = {
+        nodered = {
+          image = "nodered/node-red";
+          ports = [ "1880:1880" ];
+          volumes = [ "/data/nodered:/data" ];
+        };
       };
     };
 }
