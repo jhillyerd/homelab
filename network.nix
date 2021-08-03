@@ -67,7 +67,7 @@ in
             group = "grafana";
             mode = "0700";
           };
-          
+
           "nodered" = {
             user = "1000";
             group = "1000";
@@ -217,6 +217,9 @@ in
           image = "nodered/node-red";
           ports = [ "1880:1880" ];
           volumes = [ "/data/nodered:/data" ];
+          environment = {
+            NODE_RED_CREDENTIAL_SECRET = lowsec.nodered.credentialSecret;
+          };
         };
       };
     };
