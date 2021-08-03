@@ -145,6 +145,11 @@ in
             icon = "chart-area";
           }
           {
+            name = "Node-RED";
+            host = "nodered.bytemonkey.org";
+            icon = "project-diagram";
+          }
+          {
             name = "OctoPrint";
             host = "octopi.bytemonkey.org";
             icon = "cube";
@@ -190,6 +195,11 @@ in
             backendUrls = [ "http://192.168.1.30:8123" ];
           };
 
+          nodered = {
+            domainName = "nodered.bytemonkey.org";
+            backendUrls = [ "http://127.0.0.1:1880" ];
+          };
+
           octopi = {
             domainName = "octopi.bytemonkey.org";
             backendUrls = [ "http://192.168.1.21" ];
@@ -214,7 +224,7 @@ in
 
       virtualisation.oci-containers.containers = {
         nodered = {
-          image = "nodered/node-red";
+          image = "nodered/node-red:2.0.5";
           ports = [ "1880:1880" ];
           volumes = [ "/data/nodered:/data" ];
           environment = {
