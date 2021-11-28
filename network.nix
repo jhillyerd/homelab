@@ -60,11 +60,19 @@ in
       roles.nfs-bind = {
         nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
 
-        binds."grafana" = {
-          path = "/var/lib/grafana";
-          user = "grafana";
-          group = "grafana";
-          mode = "0700";
+        binds = {
+          "grafana" = {
+            path = "/var/lib/grafana";
+            user = "grafana";
+            group = "grafana";
+            mode = "0700";
+          };
+
+          "nodered" = {
+            user = "1000";
+            group = "1000";
+            mode = "0700";
+          };
         };
 
         before = [ "grafana.service" ];
@@ -137,6 +145,11 @@ in
             icon = "chart-area";
           }
           {
+            name = "Node-RED";
+            host = "nodered.bytemonkey.org";
+            icon = "project-diagram";
+          }
+          {
             name = "OctoPrint";
             host = "octopi.bytemonkey.org";
             icon = "cube";
@@ -182,6 +195,11 @@ in
             backendUrls = [ "http://192.168.1.30:8123" ];
           };
 
+          nodered = {
+            domainName = "nodered.bytemonkey.org";
+            backendUrls = [ "http://127.0.0.1:1880" ];
+          };
+
           octopi = {
             domainName = "octopi.bytemonkey.org";
             backendUrls = [ "http://192.168.1.21" ];
@@ -202,6 +220,17 @@ in
       roles.log-forwarder = {
         # Forward remote syslogs as well.
         enableTcpListener = true;
+      };
+
+      virtualisation.oci-containers.containers = {
+        nodered = {
+          image = "nodered/node-red:2.0.5";
+          ports = [ "1880:1880" ];
+          volumes = [ "/data/nodered:/data" ];
+          environment = {
+            NODE_RED_CREDENTIAL_SECRET = lowsec.nodered.credentialSecret;
+          };
+        };
       };
     };
 }

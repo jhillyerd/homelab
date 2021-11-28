@@ -28,7 +28,9 @@ in
       type = with types; attrsOf (submodule {
         options = {
           path = mkOption {
-            type = path;
+            type = nullOr path;
+            description = "Where to mount this binding, or null";
+            default = null;
             example = "/var/lib/grafana";
           };
 
@@ -84,7 +86,8 @@ in
       };
 
       # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
-      fileSystems = (mapAttrs' fsBindEntry cfg.binds)
+      fileSystems = (mapAttrs' fsBindEntry 
+        (filterAttrs (name: bind: bind.path != null) cfg.binds))
         // {
           # Mount NFS volume
           "${cfg.mountPoint}" = {
