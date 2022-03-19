@@ -224,7 +224,7 @@ in
 
       virtualisation.oci-containers.containers = {
         nodered = {
-          image = "nodered/node-red:2.0.5";
+          image = "nodered/node-red:2.1.6";
           ports = [ "1880:1880" ];
           volumes = [ "/data/nodered:/data" ];
           environment = {
