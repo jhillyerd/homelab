@@ -72,6 +72,7 @@ in
       fsBindEntry = name: bind: nameValuePair bind.path {
         device = "${cfg.mountPoint}/${name}";
         options = [ "bind" "_netdev" ];
+        noCheck = true;
       };
     in
     mkIf (length (attrNames cfg.binds) > 0) {
@@ -86,7 +87,7 @@ in
       };
 
       # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
-      fileSystems = (mapAttrs' fsBindEntry 
+      fileSystems = (mapAttrs' fsBindEntry
         (filterAttrs (name: bind: bind.path != null) cfg.binds))
         // {
           # Mount NFS volume
