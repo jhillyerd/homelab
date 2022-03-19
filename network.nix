@@ -120,7 +120,7 @@ in
         users = {
           admin = {
             password = lowsec.mqtt.admin.password;
-            acl = [ "topic $SYS/#" "topic #" ];
+            acl = [ "readwrite $SYS/#" "readwrite #" ];
           };
           sensor = {
             password = lowsec.mqtt.sensor.password;

@@ -37,14 +37,14 @@ in
 
           acl = mkOption {
             type = types.listOf types.str;
-            example = [ "topic read A/B" "topic A/#" ];
+            example = [ "read A/B" "topic A/#" ];
             description = ''
                 Control client access to topics on the broker.
             '';
           };
         };
       });
-      example = { john = { password = "123456"; acl = [ "topic readwrite john/#" ]; }; };
+      example = { john = { password = "123456"; acl = [ "readwrite john/#" ]; }; };
       description = ''
           A set of users and their passwords and ACLs.
       '';
@@ -54,10 +54,9 @@ in
   config = mkIf cfg.enable {
     services.mosquitto = {
       enable = true;
-      host = "0.0.0.0";
-      port = cfg.port;
-      checkPasswords = true;
-      users = cfg.users;
+      listeners = [ 
+        { port = cfg.port; users = cfg.users; }
+      ];
     };
 
     networking.firewall.allowedTCPPorts = [ cfg.port ];
