@@ -1,7 +1,7 @@
 # Password files
 /gen_passwords.json
-/lowsec.nix
 /ansible/lowsec.yml
+/nixops/lowsec.nix
 
 /.vim
 result
