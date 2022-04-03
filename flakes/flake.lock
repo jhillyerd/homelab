@@ -1,5 +1,84 @@
 {
   "nodes": {
+    "faasd": {
+      "inputs": {
+        "faasd-src": "faasd-src",
+        "flake-compat": "flake-compat",
+        "nixos-shell": "nixos-shell",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1645747209,
+        "narHash": "sha256-oQaFcqXIsoaQ4PKMwROHCnQmqzj3Dc4ObgN0Juad44Q=",
+        "owner": "welteki",
+        "repo": "faasd-nix",
+        "rev": "f0d3574aed3b8d5389cfc394f331d565d293b957",
+        "type": "github"
+      },
+      "original": {
+        "owner": "welteki",
+        "repo": "faasd-nix",
+        "type": "github"
+      }
+    },
+    "faasd-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636880332,
+        "narHash": "sha256-bRvlnbpVe76UsE4BDNiyoE7SB8Q3opPj/Fx5oU2REOM=",
+        "owner": "openfaas",
+        "repo": "faasd",
+        "rev": "8fbdd1a461196520de75fe35ac0b5bdda6403ac7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openfaas",
+        "ref": "0.14.4",
+        "repo": "faasd",
+        "type": "github"
+      }
+    },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1627557337,
+        "narHash": "sha256-S/Aab7AcDS+MopcnkEWu0j3qOGLLaMw1E8VWWQOD+Q8=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "c6f3b635321160c629b74fefc88c807b59a51646",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "nixos-shell": {
+      "inputs": {
+        "nixpkgs": [
+          "faasd",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1638785136,
+        "narHash": "sha256-B1M3PVZEg9HIHSjbYSae6+u2w++Xt3oXoodIvG61zzg=",
+        "owner": "welteki",
+        "repo": "nixos-shell",
+        "rev": "32a8bd8ba3df60863d1bd66868c10e721c9928d5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "welteki",
+        "ref": "improve-flake-support",
+        "repo": "nixos-shell",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1648965846,
@@ -18,7 +97,23 @@
     },
     "root": {
       "inputs": {
+        "faasd": "faasd",
         "nixpkgs": "nixpkgs"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1623875721,
+        "narHash": "sha256-A8BU7bjS5GirpAUv4QA+QnJ4CceLHkcXdRp4xITDB0s=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     }
   },

@@ -1,9 +1,16 @@
 {
   description = "Build Raspberry Pi network";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
 
-  outputs = { self, nixpkgs }:
+    faasd = {
+      url = "github:welteki/faasd-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { self, nixpkgs, faasd }@attrs:
     # List of hosts we wish to build, each should have a corresponding .nix
     # file in the hosts directory.
     let hosts = [ "faas" ];
@@ -13,6 +20,7 @@
       nixosConfigurations = attrsets.genAttrs hosts (host:
         nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
+          specialArgs = attrs;
           modules = [
             ./sd-image-pi3.nix
             ./common.nix
