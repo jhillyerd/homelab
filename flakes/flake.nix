@@ -1,12 +1,12 @@
 {
-  description = "Build Raspberry Pi 3 image";
+  description = "Build Raspberry Pi network";
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
 
   outputs = { self, nixpkgs }:
     # List of hosts we wish to build, each should have a corresponding .nix
     # file in the hosts directory.
-    let hosts = [ "mypi3" ];
+    let hosts = [ "faas" ];
 
     in with nixpkgs.lib; rec {
       # Convert the list of hosts into a nixosConfigurations attribute set.
