@@ -4,6 +4,8 @@
   # SSH is required to deploy updates over the network.
   services.openssh.enable = true;
 
+  time.timeZone = "US/Pacific";
+
   users.users.root.openssh.authorizedKeys.keys =
     lib.splitString "\n" (builtins.readFile ./authorized_keys.txt);
 }
