@@ -13,9 +13,11 @@
   outputs = { self, nixpkgs, faasd }@attrs:
     # List of hosts we wish to build, each should have a corresponding .nix
     # file in the hosts directory.
-    let hosts = [ "faas" ];
+    let
+      inherit (nixpkgs.lib) attrsets;
 
-    in with nixpkgs.lib; rec {
+      hosts = [ "faas" ];
+    in rec {
       # Convert the list of hosts into a nixosConfigurations attribute set.
       nixosConfigurations = attrsets.genAttrs hosts (host:
         nixpkgs.lib.nixosSystem {
