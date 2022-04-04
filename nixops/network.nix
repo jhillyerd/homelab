@@ -165,6 +165,11 @@ in
             icon = "network-wired";
           }
           {
+            name = "Docker Registry";
+            host = "dockreg.bytemonkey.org/v2/_catalog";
+            icon = "brands fa-docker";
+          }
+          {
             name = "Cable Modem";
             host = "192.168.100.1";
             path = "/";
@@ -180,6 +185,11 @@ in
         cloudflareDnsApiToken = lowsec.cloudflare.dnsApi.token;
 
         services = {
+          dockreg = {
+            domainName = "dockreg.bytemonkey.org";
+            backendUrls = [ "http://192.168.1.20:5050" ];
+          };
+
           grafana = {
             domainName = "grafana.bytemonkey.org";
             backendUrls = [ "http://127.0.0.1:3000" ];
