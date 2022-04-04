@@ -6,7 +6,7 @@ set -eu -o pipefail
 PKG="homesite"
 OWNER="jhillyerd"
 REPO="$PKG"
-BRANCH="master"
+BRANCH="main"
 
 GITHUBAPI="Accept: application/vnd.github.v3+json"
 
