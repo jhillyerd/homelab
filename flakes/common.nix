@@ -1,8 +1,9 @@
 { pkgs, lib, ... }: {
   boot.supportedFilesystems = [ "vfat" "f2fs" "ntfs" "cifs" ];
 
-  # SSH is required to deploy updates over the network.
   services.openssh.enable = true;
+
+  services.tailscale.enable = true;
 
   time.timeZone = "US/Pacific";
 
