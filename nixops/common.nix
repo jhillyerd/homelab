@@ -1,5 +1,38 @@
 # Common config shared among all machines
-{
+{ pkgs, nodes, ... }:
+let
+  # Import low security credentials.
+  lowsec = import ./lowsec.nix;
+
+  influxHost = "nexus";
+  influxPort = nodes.nexus.config.roles.influxdb.port;
+
+  syslogHost = "nexus";
+  syslogPort = nodes.nexus.config.roles.loki.promtail_syslog_port;
+in {
+  imports = [ ./roles ];
+
+  nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
+
+  # Configure telegraf agent.
+  roles.telegraf = {
+    enable = true;
+    influxdb = {
+      urls = [ "http://${influxHost}:${toString influxPort}" ];
+      database = "telegraf-hosts";
+      username = lowsec.influxdb.telegraf.user;
+      password = lowsec.influxdb.telegraf.password;
+    };
+  };
+
+  # Forward syslogs to promtail/loki.
+  roles.log-forwarder = {
+    enable = true;
+    inherit syslogHost syslogPort;
+  };
+
+  services.tailscale.enable = true;
+
   services.openssh = {
     enable = true;
     permitRootLogin = "yes";
