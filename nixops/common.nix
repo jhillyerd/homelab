@@ -1,5 +1,5 @@
 # Common config shared among all machines
-{ pkgs, nodes, ... }:
+{ pkgs, nodes, hostName, environment, ... }:
 let
   # Import low security credentials.
   lowsec = import ./lowsec.nix;
@@ -13,6 +13,8 @@ in {
   imports = [ ./roles ];
 
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
+
+  networking.hostName = hostName;
 
   # Configure telegraf agent.
   roles.telegraf = {
@@ -30,6 +32,8 @@ in {
     enable = true;
     inherit syslogHost syslogPort;
   };
+
+  services.getty.helpLine = ">>> Flake node: ${hostName}, environment: ${environment}";
 
   services.tailscale.enable = true;
 
