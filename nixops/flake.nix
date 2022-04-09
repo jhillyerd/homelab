@@ -7,6 +7,8 @@
     let
       inherit (nixpkgs.lib) mapAttrs mapAttrs' nixosSystem;
 
+      catalog = import ./catalog.nix;
+
       # List of hosts available to build.
       nodes = { nexus = { hw = ./hw/cubi.nix; }; };
 
@@ -35,6 +37,7 @@
         value = nixosSystem {
           system = "x86_64-linux";
           specialArgs = attrs // {
+            inherit catalog;
             nodes = nixosConfigurations;
             hostName = node.hostName;
             environment = node.env;
