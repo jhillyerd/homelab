@@ -1,6 +1,6 @@
 ---
 roles:
 - name: dj-wasabi.telegraf
-  version: "0.13.0"
+  version: "0.13.2"
 - name: robertdebock.rsyslog
-  version: "3.2.0"
+  version: "4.6.0"
