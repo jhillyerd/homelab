@@ -18,9 +18,8 @@
       };
     in rec {
       # Convert nodes into a set of nixos configs.
-      nixosConfigurations = mapAttrs' (host: node: {
-        name = host;
-        value = nixosSystem {
+      nixosConfigurations = mapAttrs (host: node:
+        nixosSystem {
           inherit (node) system;
           specialArgs = attrs // {
             inherit catalog;
@@ -28,21 +27,22 @@
             environment = "prod";
           };
           modules = [ (./hosts + "/${host}.nix") node.hw ];
-        };
-      }) nodes;
+        }) nodes;
 
       # Generate VM build packages to test each host.
-      packages."x86_64-linux" = mapAttrs' (host: node: {
-        name = "${host}";
-        value = (nixosSystem {
-          inherit (node) system;
-          specialArgs = attrs // {
-            inherit catalog;
-            hostName = host;
-            environment = "test";
-          };
-          modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
-        }).config.system.build.vm;
+      packages = mapAttrs' (host: node: {
+        name = node.system;
+        value = {
+          ${host} = (nixosSystem {
+            inherit (node) system;
+            specialArgs = attrs // {
+              inherit catalog;
+              hostName = host;
+              environment = "test";
+            };
+            modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
+          }).config.system.build.vm;
+        };
       }) nodes;
     };
 }
