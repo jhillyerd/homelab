@@ -42,7 +42,7 @@ in {
   time.timeZone = "US/Pacific";
 
   users.users.root.openssh.authorizedKeys.keys =
-    lib.splitString "\n" (builtins.readFile ./authorized_keys.txt);
+    lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
 
   users.users.james = {
     uid = 1001;
@@ -51,6 +51,6 @@ in {
     description = "James Hillyerd";
     extraGroups = [ "docker" "wheel" ];
     openssh.authorizedKeys.keys =
-      lib.splitString "\n" (builtins.readFile ./authorized_keys.txt);
+      lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
   };
 }
