@@ -9,46 +9,35 @@
 
       catalog = import ./catalog.nix;
 
-      # List of hosts available to build.
+      # Set of hosts available to build.
       nodes = { nexus = { hw = ./hw/cubi.nix; }; };
-
-      # Build prod node set.
-      prodNodes = mapAttrs (host: node:
-        node // {
-          hostName = host;
-          config = ./hosts + "/${host}.nix";
-          env = "prod";
-        }) nodes;
-
-      # Build test node set for virtual hardware.
-      testNodes = mapAttrs' (host: node: {
-        name = "test-${host}";
-        value = node // {
-          hostName = host;
-          config = ./hosts + "/${host}.nix";
-          hw = ./hw/qemu.nix;
-          env = "test";
-        };
-      }) nodes;
     in rec {
-      # Convert prod & test hosts into a set of output attrs.
+      # Convert nodes into a set of nixos configs.
       nixosConfigurations = mapAttrs' (host: node: {
         name = host;
         value = nixosSystem {
           system = "x86_64-linux";
           specialArgs = attrs // {
             inherit catalog;
-            hostName = node.hostName;
-            environment = node.env;
+            hostName = host;
+            environment = "prod";
           };
-          modules = [ node.hw node.config ];
+          modules = [(./hosts + "/${host}.nix") node.hw  ];
         };
-      }) (prodNodes // testNodes);
+      }) nodes;
 
       # Generate VM build packages to test each host.
       packages."x86_64-linux" = mapAttrs' (host: sys: {
         name = "${host}";
-        value = sys.config.system.build.vm;
-      }) self.nixosConfigurations;
+        value = (nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = attrs // {
+            inherit catalog;
+            hostName = host;
+            environment = "test";
+          };
+          modules = [(./hosts + "/${host}.nix") ./hw/qemu.nix ];
+        }).config.system.build.vm;
+      }) nodes;
     };
 }
