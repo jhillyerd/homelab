@@ -10,33 +10,38 @@
       catalog = import ./catalog.nix;
 
       # Set of hosts available to build.
-      nodes = { nexus = { hw = ./hw/cubi.nix; }; };
+      nodes = {
+        nexus = {
+          system = "x86_64-linux";
+          hw = ./hw/cubi.nix;
+        };
+      };
     in rec {
       # Convert nodes into a set of nixos configs.
       nixosConfigurations = mapAttrs' (host: node: {
         name = host;
         value = nixosSystem {
-          system = "x86_64-linux";
+          inherit (node) system;
           specialArgs = attrs // {
             inherit catalog;
             hostName = host;
             environment = "prod";
           };
-          modules = [(./hosts + "/${host}.nix") node.hw  ];
+          modules = [ (./hosts + "/${host}.nix") node.hw ];
         };
       }) nodes;
 
       # Generate VM build packages to test each host.
-      packages."x86_64-linux" = mapAttrs' (host: sys: {
+      packages."x86_64-linux" = mapAttrs' (host: node: {
         name = "${host}";
         value = (nixosSystem {
-          system = "x86_64-linux";
+          inherit (node) system;
           specialArgs = attrs // {
             inherit catalog;
             hostName = host;
             environment = "test";
           };
-          modules = [(./hosts + "/${host}.nix") ./hw/qemu.nix ];
+          modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
         }).config.system.build.vm;
       }) nodes;
     };
