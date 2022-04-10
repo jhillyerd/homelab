@@ -18,16 +18,33 @@
       };
     in rec {
       # Convert nodes into a set of nixos configs.
-      nixosConfigurations = mapAttrs (host: node:
-        nixosSystem {
-          inherit (node) system;
-          specialArgs = attrs // {
-            inherit catalog;
-            hostName = host;
-            environment = "prod";
+      nixosConfigurations = let
+        # Bare metal systems.
+        metalSystems = mapAttrs (host: node:
+          nixosSystem {
+            inherit (node) system;
+            specialArgs = attrs // {
+              inherit catalog;
+              hostName = host;
+              environment = "prod";
+            };
+            modules = [ (./hosts + "/${host}.nix") node.hw ];
+          }) nodes;
+
+        # Hyper-V systems, name prefixed with "hyper-"; in test environment.
+        hypervSystems = mapAttrs' (host: node: {
+          name = "hyper-${host}";
+          value = nixosSystem {
+            inherit (node) system;
+            specialArgs = attrs // {
+              inherit catalog;
+              hostName = host;
+              environment = "test";
+            };
+            modules = [ (./hosts + "/${host}.nix") ./hw/hyperv.nix ];
           };
-          modules = [ (./hosts + "/${host}.nix") node.hw ];
         }) nodes;
+      in metalSystems // hypervSystems;
 
       # Generate VM build packages to test each host.
       packages = mapAttrs' (host: node: {
