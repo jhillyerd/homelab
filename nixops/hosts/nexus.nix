@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nodes, environment, ... }:
+{ config, pkgs, lib, environment, ... }:
 let
   # Import low security credentials.
   lowsec = import ../lowsec.nix;

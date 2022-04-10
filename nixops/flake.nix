@@ -38,7 +38,6 @@
           system = "x86_64-linux";
           specialArgs = attrs // {
             inherit catalog;
-            nodes = nixosConfigurations;
             hostName = node.hostName;
             environment = node.env;
           };

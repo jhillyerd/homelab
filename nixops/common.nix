@@ -1,5 +1,5 @@
 # Common config shared among all machines
-{ pkgs, nodes, hostName, environment, lib, catalog, ... }:
+{ pkgs, hostName, environment, lib, catalog, ... }:
 let
   # Import low security credentials.
   lowsec = import ./lowsec.nix;
