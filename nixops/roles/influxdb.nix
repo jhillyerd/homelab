@@ -17,10 +17,9 @@ in {
       default = "admin";
     };
 
-    adminPassword = mkOption {
-      type = types.str;
-      description = "Database admin password";
-      default = "admin";
+    adminPasswordFile = mkOption {
+      type = types.path;
+      description = "Database admin password file";
     };
 
     databases = mkOption {
@@ -28,7 +27,7 @@ in {
         attrsOf (submodule {
           options = {
             user = mkOption { type = str; };
-            password = mkOption { type = str; };
+            passwordFile = mkOption { type = str; };
           };
         });
       description = "Influx databases";
@@ -37,18 +36,13 @@ in {
   };
 
   config = let
-    createAdmin = pkgs.writeText "influxdb-admin.sql" ''
-      CREATE USER "${cfg.adminUser}" WITH PASSWORD '${cfg.adminPassword}' WITH ALL PRIVILEGES;
-    '';
-
     createDb = name: db: ''
       CREATE DATABASE "${name}";
-      CREATE USER "${db.user}" WITH PASSWORD '${db.password}';
+      CREATE USER "${db.user}" WITH PASSWORD '$(< ${db.passwordFile})';
       GRANT ALL ON "${name}" TO "${db.user}";
     '';
 
-    initSql = pkgs.writeText "influxdb-init.sql"
-      (lib.concatStringsSep "\n" (mapAttrsToList createDb cfg.databases));
+    initSql = lib.concatStringsSep "\n" (mapAttrsToList createDb cfg.databases);
   in mkIf cfg.enable {
     environment.systemPackages = [ pkgs.influxdb ]; # for diagnostics
 
@@ -70,15 +64,22 @@ in {
 
       script = ''
         export INFLUX_USERNAME=${lib.escapeShellArg cfg.adminUser}
-        export INFLUX_PASSWORD=${lib.escapeShellArg cfg.adminPassword}
+        export INFLUX_PASSWORD="$(< ${cfg.adminPasswordFile})"
         lockfile=/var/db/influxdb-init-completed
         set -eo pipefail
 
-        if [ ! -f "$lockfile" ]; then
-          touch "$lockfile"
-          ${pkgs.influxdb}/bin/influx < ${createAdmin}
-          ${pkgs.influxdb}/bin/influx < ${initSql}
+        if [ -f "$lockfile" ]; then
+          exit
         fi
+
+        touch "$lockfile"
+        ${pkgs.influxdb}/bin/influx <<ENDCREATEADMIN
+        CREATE USER "$INFLUX_USERNAME" WITH PASSWORD '$INFLUX_PASSWORD' WITH ALL PRIVILEGES;
+        ENDCREATEADMIN
+
+        ${pkgs.influxdb}/bin/influx <<ENDCREATEUSERDATABASES
+        ${initSql}
+        ENDCREATEUSERDATABASES
       '';
     };
 

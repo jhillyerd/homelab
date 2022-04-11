@@ -26,7 +26,21 @@ in {
           system = { };
         };
 
-        outputs.influxdb = cfg.influxdb;
+        outputs.influxdb = with cfg.influxdb; {
+          inherit urls database;
+          username = user;
+          password = "$PASSWORD";
+        };
+      };
+
+      environmentFiles = [ "/run/envfile/telegraf-influx.env" ];
+    };
+
+    # Create an environment file containing the influxdb password.
+    roles.envfile = {
+      files."telegraf-influx.env" = {
+        secretPath = cfg.influxdb.passwordFile;
+        varName = "PASSWORD";
       };
     };
   };

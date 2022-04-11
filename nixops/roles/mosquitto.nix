@@ -22,14 +22,11 @@ in {
             '';
           };
 
-          hashedPassword = mkOption {
-            type = with types; uniq (nullOr str);
+          passwordFile = mkOption {
+            type = with types; uniq (nullOr path);
             default = null;
             description = ''
-              Specifies the hashed password for the MQTT User.
-              <option>hashedPassword</option> overrides <option>password</option>.
-              To generate hashed password install <literal>mosquitto</literal>
-              package and use <literal>mosquitto_passwd</literal>.
+              Path to clear text password for the MQTT user.
             '';
           };
 

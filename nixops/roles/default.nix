@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }: {
   imports = [
+    ./envfile.nix
     ./grafana.nix
     ./homesite.nix
     ./influxdb.nix

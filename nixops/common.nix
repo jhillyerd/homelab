@@ -1,9 +1,5 @@
 # Common config shared among all machines
-{ pkgs, hostName, environment, lib, catalog, ... }:
-let
-  # Import low security credentials.
-  lowsec = import ./lowsec.nix;
-in {
+{ config, pkgs, hostName, environment, lib, catalog, ... }: {
   imports = [ ./roles ];
 
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
@@ -14,11 +10,10 @@ in {
   roles.telegraf = {
     enable = true;
     influxdb = {
-      urls =
-        [ "http://${catalog.influxdb.host}:${toString catalog.influxdb.port}" ];
-      database = "telegraf-hosts";
-      username = lowsec.influxdb.telegraf.user;
-      password = lowsec.influxdb.telegraf.password;
+      urls = catalog.influxdb.urls;
+      database = catalog.influxdb.telegraf.database;
+      user = catalog.influxdb.telegraf.user;
+      passwordFile = config.age.secrets.influxdb-telegraf.path;
     };
   };
 
@@ -52,5 +47,20 @@ in {
     extraGroups = [ "docker" "wheel" ];
     openssh.authorizedKeys.keys =
       lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
+  };
+
+  age.secrets = {
+    cloudflare-dns-api.file = ./secrets/cloudflare-dns-api.age;
+
+    influxdb-admin.file = ./secrets/influxdb-admin.age;
+    influxdb-homeassistant.file = ./secrets/influxdb-homeassistant.age;
+    influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
+
+    mqtt-admin.file = ./secrets/mqtt-admin.age;
+    mqtt-admin.owner = "mosquitto";
+    mqtt-sensor.file = ./secrets/mqtt-sensor.age;
+    mqtt-sensor.owner = "mosquitto";
+
+    nodered.file = ./secrets/nodered.age;
   };
 }

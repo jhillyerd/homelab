@@ -22,9 +22,9 @@ in {
       description = "Email passed to Let's Encrypt";
     };
 
-    cloudflareDnsApiToken = mkOption {
-      type = types.str;
-      description = "API token with DNS:Edit permission";
+    cloudflareDnsApiTokenFile = mkOption {
+      type = types.path;
+      description = "File containing API token with DNS:Edit permission";
     };
   };
 
@@ -94,9 +94,15 @@ in {
       };
     };
 
-    systemd.services.traefik = {
-      environment = { CF_DNS_API_TOKEN = cfg.cloudflareDnsApiToken; };
+    # Setup Cloudflare secret.
+    roles.envfile = {
+      files."cloudflare-dns-api.env" = {
+        secretPath = cfg.cloudflareDnsApiTokenFile;
+        varName = "CF_DNS_API_TOKEN";
+      };
     };
+    systemd.services.traefik.serviceConfig.EnvironmentFile =
+      "/run/envfile/cloudflare-dns-api.env";
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
   };

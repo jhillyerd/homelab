@@ -1,8 +1,5 @@
 { config, pkgs, lib, environment, ... }:
 let
-  # Import low security credentials.
-  lowsec = import ../lowsec.nix;
-
   # Construct a grafana datasource from our influxdb database definition.
   mkGrafanaInfluxSource = name: db: {
     name = "${name} influxdb";
@@ -11,7 +8,7 @@ let
     # TODO don't use localhost.
     url = "http://localhost:${toString config.roles.influxdb.port}";
     user = db.user;
-    password = db.password;
+    password = "TODO BROKEN";
   };
 in {
   imports = [ ../common.nix ];
@@ -53,18 +50,18 @@ in {
 
   roles.influxdb = {
     enable = true;
-    adminUser = lowsec.influxdb.admin.user;
-    adminPassword = lowsec.influxdb.admin.password;
+    adminUser = "admin";
+    adminPasswordFile = config.age.secrets.influxdb-admin.path;
 
     databases = {
       homeassistant = {
-        user = lowsec.influxdb.homeassistant.user;
-        password = lowsec.influxdb.homeassistant.password;
+        user = "homeassistant";
+        passwordFile = config.age.secrets.influxdb-homeassistant.path;
       };
 
       telegraf-hosts = {
-        user = lowsec.influxdb.telegraf.user;
-        password = lowsec.influxdb.telegraf.password;
+        user = "telegraf";
+        passwordFile = config.age.secrets.influxdb-telegraf.path;
       };
     };
   };
@@ -76,11 +73,11 @@ in {
 
     users = {
       admin = {
-        password = lowsec.mqtt.admin.password;
+        passwordFile = config.age.secrets.mqtt-admin.path;
         acl = [ "readwrite $SYS/#" "readwrite #" ];
       };
       sensor = {
-        password = lowsec.mqtt.sensor.password;
+        passwordFile = config.age.secrets.mqtt-sensor.path;
         acl = [ ];
       };
     };
@@ -139,7 +136,7 @@ in {
   roles.traefik = {
     enable = true;
     certificateEmail = "james@hillyerd.com";
-    cloudflareDnsApiToken = lowsec.cloudflare.dnsApi.token;
+    cloudflareDnsApiTokenFile = config.age.secrets.cloudflare-dns-api.path;
 
     services = {
       dockreg = {
@@ -194,9 +191,15 @@ in {
       image = "nodered/node-red:2.2.2";
       ports = [ "1880:1880" ];
       volumes = [ "/data/nodered:/data" ];
-      environment = {
-        NODE_RED_CREDENTIAL_SECRET = lowsec.nodered.credentialSecret;
-      };
+      environmentFiles = [ "/run/envfile/nodered-container.env" ];
+    };
+  };
+
+  # Create an environment file containing the nodered secret.
+  roles.envfile = {
+    files."nodered-container.env" = {
+      secretPath = config.age.secrets.nodered.path;
+      varName = "NODE_RED_CREDENTIAL_SECRET";
     };
   };
 }

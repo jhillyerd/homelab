@@ -1,9 +1,14 @@
 {
   description = "Home Services";
 
-  inputs = { nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11"; };
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
 
-  outputs = { self, nixpkgs }@attrs:
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  outputs = { self, nixpkgs, agenix }@attrs:
     let
       inherit (nixpkgs.lib) mapAttrs mapAttrs' nixosSystem;
 
@@ -28,7 +33,7 @@
               hostName = host;
               environment = "prod";
             };
-            modules = [ (./hosts + "/${host}.nix") node.hw ];
+            modules = [ (./hosts + "/${host}.nix") node.hw agenix.nixosModule ];
           }) nodes;
 
         # Hyper-V systems, name prefixed with "hyper-"; in test environment.
@@ -41,7 +46,8 @@
               hostName = host;
               environment = "test";
             };
-            modules = [ (./hosts + "/${host}.nix") ./hw/hyperv.nix ];
+            modules =
+              [ (./hosts + "/${host}.nix") ./hw/hyperv.nix agenix.nixosModule ];
           };
         }) nodes;
 
@@ -55,7 +61,8 @@
               hostName = host;
               environment = "test";
             };
-            modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
+            modules =
+              [ (./hosts + "/${host}.nix") ./hw/qemu.nix agenix.nixosModule ];
           };
         }) nodes;
       in metalSystems // hypervSystems // libvirtSystems;
@@ -71,7 +78,8 @@
               hostName = host;
               environment = "test";
             };
-            modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
+            modules =
+              [ (./hosts + "/${host}.nix") ./hw/qemu.nix agenix.nixosModule ];
           }).config.system.build.vm;
         };
       }) nodes;
