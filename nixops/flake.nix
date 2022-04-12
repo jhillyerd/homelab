@@ -44,7 +44,21 @@
             modules = [ (./hosts + "/${host}.nix") ./hw/hyperv.nix ];
           };
         }) nodes;
-      in metalSystems // hypervSystems;
+
+        # libvirtd systems, name prefixed with "virt-"; in test environment.
+        libvirtSystems = mapAttrs' (host: node: {
+          name = "virt-${host}";
+          value = nixosSystem {
+            inherit (node) system;
+            specialArgs = attrs // {
+              inherit catalog;
+              hostName = host;
+              environment = "test";
+            };
+            modules = [ (./hosts + "/${host}.nix") ./hw/qemu.nix ];
+          };
+        }) nodes;
+      in metalSystems // hypervSystems // libvirtSystems;
 
       # Generate VM build packages to test each host.
       packages = mapAttrs' (host: node: {

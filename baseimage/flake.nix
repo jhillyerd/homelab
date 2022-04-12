@@ -31,6 +31,12 @@
           modules = [ baseModule ];
           format = "hyperv";
         };
+
+        libvirt = nixos-generators.nixosGenerate {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ baseModule { services.qemuGuest.enable = true; } ];
+          format = "qcow";
+        };
       };
     };
 }
