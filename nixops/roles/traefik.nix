@@ -1,25 +1,20 @@
 { config, pkgs, lib, ... }:
 with lib;
-let
-  cfg = config.roles.traefik;
-in
-{
+let cfg = config.roles.traefik;
+in {
   options.roles.traefik = {
     enable = mkEnableOption "Enable traefik daemon";
 
     services = mkOption {
-      type = with types; attrsOf (submodule {
-        options = {
-          domainName = mkOption {
-            type = str;
+      type = with types;
+        attrsOf (submodule {
+          options = {
+            domainName = mkOption { type = str; };
+            backendUrls = mkOption { type = listOf str; };
           };
-          backendUrls = mkOption {
-            type = listOf str;
-          };
-        };
-      });
+        });
       description = "Services to proxy";
-      default = {};
+      default = { };
     };
 
     certificateEmail = mkOption {
@@ -33,83 +28,76 @@ in
     };
   };
 
-  config =
-    mkIf cfg.enable {
-      services.traefik = {
-        enable = true;
+  config = mkIf cfg.enable {
+    services.traefik = {
+      enable = true;
 
-        staticConfigOptions = {
-          # Dashboard is not part of the nix package.
-          api.dashboard = false;
+      staticConfigOptions = {
+        # Dashboard is not part of the nix package.
+        api.dashboard = false;
 
-          entryPoints = {
-            web = {
-              address = ":80/tcp";
+        entryPoints = {
+          web = {
+            address = ":80/tcp";
 
-              # Always redirect to HTTPS.
-              http.redirections.entryPoint.to = "websecure";
-            };
-
-            websecure.address = ":443/tcp";
+            # Always redirect to HTTPS.
+            http.redirections.entryPoint.to = "websecure";
           };
 
-          certificatesResolvers.letsencrypt.acme = {
-            email = cfg.certificateEmail;
-            storage = "/var/lib/traefik/letsencrypt-certs.json";
-            caServer = "https://acme-v02.api.letsencrypt.org/directory";
-            dnsChallenge = {
-              provider = "cloudflare";
-              delayBeforeCheck = "0";
-              resolvers = [ "1.1.1.1:53" ];
-            };
-          };
-
-          serversTransport = {
-            # Disable backend certificate verification.
-            insecureSkipVerify = true;
-          };
-
-          log.level = "INFO";
+          websecure.address = ":443/tcp";
         };
 
-        dynamicConfigOptions =
-          let
-            routerEntry = name: opt:
-              {
-                rule = "Host(`" + opt.domainName + "`)";
-                service = name;
-                tls.certresolver = "letsencrypt";
-              };
-
-            serviceEntry = name: opt:
-              {
-                loadBalancer = {
-                  # Map list of urls to individual url= attributes.
-                  servers = map (url: { url = url; }) opt.backendUrls;
-                };
-              };
-          in
-          {
-            http = {
-              # Combine static routes with cfg.services entries.
-              routers = {
-                api = {
-                  rule = "Host(`traefik.bytemonkey.org`)";
-                  service = "api@internal";
-                };
-              } // mapAttrs routerEntry cfg.services;
-
-              services = mapAttrs serviceEntry cfg.services;
-            };
+        certificatesResolvers.letsencrypt.acme = {
+          email = cfg.certificateEmail;
+          storage = "/var/lib/traefik/letsencrypt-certs.json";
+          caServer = "https://acme-v02.api.letsencrypt.org/directory";
+          dnsChallenge = {
+            provider = "cloudflare";
+            delayBeforeCheck = "0";
+            resolvers = [ "1.1.1.1:53" ];
           };
+        };
+
+        serversTransport = {
+          # Disable backend certificate verification.
+          insecureSkipVerify = true;
+        };
+
+        log.level = "INFO";
       };
 
-      systemd.services.traefik = {
-        environment = {
-          CF_DNS_API_TOKEN = cfg.cloudflareDnsApiToken;
+      dynamicConfigOptions = let
+        routerEntry = name: opt: {
+          rule = "Host(`" + opt.domainName + "`)";
+          service = name;
+          tls.certresolver = "letsencrypt";
+        };
+
+        serviceEntry = name: opt: {
+          loadBalancer = {
+            # Map list of urls to individual url= attributes.
+            servers = map (url: { url = url; }) opt.backendUrls;
+          };
+        };
+      in {
+        http = {
+          # Combine static routes with cfg.services entries.
+          routers = {
+            api = {
+              rule = "Host(`traefik.bytemonkey.org`)";
+              service = "api@internal";
+            };
+          } // mapAttrs routerEntry cfg.services;
+
+          services = mapAttrs serviceEntry cfg.services;
         };
       };
-
-      networking.firewall.allowedTCPPorts = [ 80 443 ];
     };
+
+    systemd.services.traefik = {
+      environment = { CF_DNS_API_TOKEN = cfg.cloudflareDnsApiToken; };
+    };
+
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
+  };
 }

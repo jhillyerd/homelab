@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
-let
-  cfg = config.roles.telegraf;
-in
-{
+let cfg = config.roles.telegraf;
+in {
   options.roles.telegraf = {
     enable = mkEnableOption "Telegraf node";
 
@@ -19,13 +17,13 @@ in
       extraConfig = {
         inputs = {
           cpu = { percpu = true; };
-          disk = {};
-          kernel = {};
-          mem = {};
-          net = {};
-          netstat = {};
-          swap = {};
-          system = {};
+          disk = { };
+          kernel = { };
+          mem = { };
+          net = { };
+          netstat = { };
+          swap = { };
+          system = { };
         };
 
         outputs.influxdb = cfg.influxdb;

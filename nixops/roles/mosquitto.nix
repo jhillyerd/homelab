@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 with lib;
-let
-  cfg = config.roles.mosquitto;
-in
-{
+let cfg = config.roles.mosquitto;
+in {
   options.roles.mosquitto = {
     enable = mkEnableOption "Network Mosquitto host";
 
@@ -20,7 +18,7 @@ in
             type = with types; uniq (nullOr str);
             default = null;
             description = ''
-                Specifies the (clear text) password for the MQTT User.
+              Specifies the (clear text) password for the MQTT User.
             '';
           };
 
@@ -28,10 +26,10 @@ in
             type = with types; uniq (nullOr str);
             default = null;
             description = ''
-                Specifies the hashed password for the MQTT User.
-                <option>hashedPassword</option> overrides <option>password</option>.
-                To generate hashed password install <literal>mosquitto</literal>
-                package and use <literal>mosquitto_passwd</literal>.
+              Specifies the hashed password for the MQTT User.
+              <option>hashedPassword</option> overrides <option>password</option>.
+              To generate hashed password install <literal>mosquitto</literal>
+              package and use <literal>mosquitto_passwd</literal>.
             '';
           };
 
@@ -39,14 +37,19 @@ in
             type = types.listOf types.str;
             example = [ "read A/B" "topic A/#" ];
             description = ''
-                Control client access to topics on the broker.
+              Control client access to topics on the broker.
             '';
           };
         };
       });
-      example = { john = { password = "123456"; acl = [ "readwrite john/#" ]; }; };
+      example = {
+        john = {
+          password = "123456";
+          acl = [ "readwrite john/#" ];
+        };
+      };
       description = ''
-          A set of users and their passwords and ACLs.
+        A set of users and their passwords and ACLs.
       '';
     };
   };
@@ -54,9 +57,10 @@ in
   config = mkIf cfg.enable {
     services.mosquitto = {
       enable = true;
-      listeners = [ 
-        { port = cfg.port; users = cfg.users; }
-      ];
+      listeners = [{
+        port = cfg.port;
+        users = cfg.users;
+      }];
     };
 
     networking.firewall.allowedTCPPorts = [ cfg.port ];

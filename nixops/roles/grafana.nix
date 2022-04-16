@@ -9,8 +9,7 @@ let
     database = ds.name;
     url = "http://localhost:${toString config.roles.influxdb.port}";
   };
-in
-{
+in {
   options.roles.grafana = {
     enable = mkEnableOption "Network Grafana host";
 
@@ -30,7 +29,7 @@ in
       # TODO use services.grafana.provision.datasources if possible.
       type = types.listOf types.attrs;
       description = "Grafana datasources";
-      default = [];
+      default = [ ];
     };
   };
 
