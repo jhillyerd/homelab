@@ -6,28 +6,34 @@
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, agenix }@attrs:
+  outputs = { self, nixpkgs, agenix, flake-utils }@attrs:
     let
-      inherit (nixpkgs.lib) mapAttrs mapAttrs' nixosSystem;
+      inherit (nixpkgs.lib)
+        mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem;
+
+      inherit (flake-utils.lib) eachSystemMap system;
 
       catalog = import ./catalog.nix;
 
       # Set of hosts available to build.
       nodes = {
         fractal = {
-          system = "x86_64-linux";
+          system = system.x86_64-linux;
           hw = ./hw/asus-b350.nix;
         };
 
         nexus = {
-          system = "x86_64-linux";
+          system = system.x86_64-linux;
           hw = ./hw/cubi.nix;
         };
 
         nixpi3 = {
-          system = "aarch64-linux";
+          system = system.aarch64-linux;
           hw = ./hw/sd-image-pi3.nix;
         };
       };
@@ -82,12 +88,15 @@
         (host: node: nixosConfigurations.${host}.config.system.build.sdImage)
         nodes;
 
-      # Generate VM build packages to test each host.
-      packages = mapAttrs' (host: node: {
-        name = node.system;
-        value = {
-          ${host} = (nixosSystem {
-            inherit (node) system;
+      # Generate VM build packages to quick test each host.  Note that these
+      # will will be x86-64 VMs, and will have a new host key, thus will be
+      # unable to decrypt agenix secrets.
+      packages = let
+        # Converts node entry into a virtual machine package.
+        vmPackage = sys: host: node: {
+          name = host;
+          value = (nixosSystem {
+            system = sys;
             specialArgs = attrs // {
               inherit catalog;
               hostName = host;
@@ -97,6 +106,7 @@
               [ (./hosts + "/${host}.nix") ./hw/qemu.nix agenix.nixosModule ];
           }).config.system.build.vm;
         };
-      }) nodes;
+      in eachSystemMap [ system.x86_64-linux ]
+      (sys: mapAttrs' (vmPackage sys) nodes);
     };
 }

@@ -202,4 +202,13 @@
       quoteValue = false;
     };
   };
+
+  # Allow common.nix secrets to be read by correct services.
+  age.secrets = {
+    influxdb-homeassistant.owner = "grafana";
+    influxdb-telegraf.owner = "grafana";
+
+    mqtt-admin.owner = "mosquitto";
+    mqtt-sensor.owner = "mosquitto";
+  };
 }
