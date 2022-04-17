@@ -18,6 +18,15 @@ in {
               default = "SECRET";
             };
 
+            quoteValue = mkOption {
+              type = bool;
+              description = ''
+                Surround the value with double-quotes if true.
+                Should be false for docker.
+              '';
+              default = true;
+            };
+
             targetDirectory = mkOption {
               type = str;
               description = "Directory to store generated envfile into";
@@ -51,14 +60,16 @@ in {
   config = mkIf (cfg.files != { }) {
     # Create an environment file during activation for each entry.
     system.activationScripts = attrsets.mapAttrs' (name: file:
-      let envFile = file.targetDirectory + "/" + name;
+      let
+        envFile = file.targetDirectory + "/" + name;
+        quote = if file.quoteValue then ''"'' else "";
       in {
         name = "envfile-" + name;
         value = stringAfter [ "etc" "agenix" "agenixRoot" ] ''
           mkdir -p "${file.targetDirectory}"
           chmod 700 "${file.targetDirectory}"
           cat > "${envFile}" <<EOT
-          ${file.varName}="$(< ${file.secretPath})"
+          ${file.varName}=${quote}$(< ${file.secretPath})${quote}
           EOT
           chmod ${file.mode} "${envFile}"
           chown ${file.owner}:${file.group} "${envFile}"

@@ -199,6 +199,7 @@
     files."nodered-container.env" = {
       secretPath = config.age.secrets.nodered.path;
       varName = "NODE_RED_CREDENTIAL_SECRET";
+      quoteValue = false;
     };
   };
 }
