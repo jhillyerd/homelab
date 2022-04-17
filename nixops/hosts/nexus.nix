@@ -203,12 +203,22 @@
     };
   };
 
-  # Allow common.nix secrets to be read by correct services.
   age.secrets = {
+    cloudflare-dns-api.file = ../secrets/cloudflare-dns-api.age;
+
+    influxdb-admin.file = ../secrets/influxdb-admin.age;
+    influxdb-homeassistant.file = ../secrets/influxdb-homeassistant.age;
     influxdb-homeassistant.owner = "grafana";
+
+    # Secret file defined in common.nix.
     influxdb-telegraf.owner = "grafana";
 
+    mqtt-admin.file = ../secrets/mqtt-admin.age;
     mqtt-admin.owner = "mosquitto";
+
+    # Secret file defined in common.nix.
     mqtt-sensor.owner = "mosquitto";
+
+    nodered.file = ../secrets/nodered.age;
   };
 }

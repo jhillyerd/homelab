@@ -54,15 +54,8 @@
   };
 
   age.secrets = {
-    cloudflare-dns-api.file = ./secrets/cloudflare-dns-api.age;
-
-    influxdb-admin.file = ./secrets/influxdb-admin.age;
-    influxdb-homeassistant.file = ./secrets/influxdb-homeassistant.age;
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
 
-    mqtt-admin.file = ./secrets/mqtt-admin.age;
     mqtt-sensor.file = ./secrets/mqtt-sensor.age;
-
-    nodered.file = ./secrets/nodered.age;
   };
 }
