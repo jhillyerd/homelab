@@ -10,5 +10,6 @@
     ./nfs-bind.nix
     ./telegraf.nix
     ./traefik.nix
+    ./workstation.nix
   ];
 }

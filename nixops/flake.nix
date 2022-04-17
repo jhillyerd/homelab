@@ -16,6 +16,11 @@
 
       # Set of hosts available to build.
       nodes = {
+        fractal = {
+          system = "x86_64-linux";
+          hw = ./hw/asus-b350.nix;
+        };
+
         nexus = {
           system = "x86_64-linux";
           hw = ./hw/cubi.nix;

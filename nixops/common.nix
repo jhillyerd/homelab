@@ -1,10 +1,14 @@
 # Common config shared among all machines
 { config, pkgs, hostName, environment, lib, catalog, ... }: {
+  system.stateVersion = "21.11";
+
   imports = [ ./roles ];
 
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
 
   networking.hostName = hostName;
+
+  nixpkgs.config.allowUnfree = true;
 
   # Configure telegraf agent.
   roles.telegraf = {
