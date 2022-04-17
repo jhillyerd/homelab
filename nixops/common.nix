@@ -10,6 +10,26 @@
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.systemPackages = with pkgs;
+    let
+      vim-is-neovim = pkgs.writeShellScriptBin "vim" ''
+        exec ${pkgs.neovim}/bin/nvim "$@"
+      '';
+    in [
+      bind
+      file
+      git
+      htop
+      jq
+      lsof
+      ncat
+      neovim
+      psmisc
+      tree
+      vim-is-neovim
+      wget
+    ];
+
   # Configure telegraf agent.
   roles.telegraf = {
     enable = true;

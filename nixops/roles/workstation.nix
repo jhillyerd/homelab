@@ -18,45 +18,32 @@ in {
           '';
         in [
           bat
-          bind
           chezmoi
           docker
-          file
           fzf
-          git
           gitAndTools.gh
           gitAndTools.git-absorb
           gitAndTools.gitflow
           gcc
           gnumake
-          htop
-          jq
           lazygit
-          lsof
           lynx
-          ncat
           nixfmt
           nodejs
           patchelf
-          psmisc
           python3
           ripgrep
           starship
           tmux
-          tree
           universal-ctags
           unzip
           usbutils
           weechat
-          wget
           zip
         ];
 
       # Programs and Services
       programs.fish.enable = true;
-
-      programs.neovim.enable = true;
-      programs.neovim.vimAlias = true;
 
       # Setup ST-Link MCU probe.
       services.udev.extraRules = ''
