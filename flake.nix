@@ -1,13 +1,14 @@
 {
-  description = "my nixops & ansible configruation";
+  description = "my nixos & ansible configuration";
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    flake-utils.inputs.nixpkgs.follows = "nixpkgs";
+
     flake-utils.url = "github:numtide/flake-utils";
-    hello.url = "github:ihsanturk/hello-world-nix?rev=03ec3abd2def85a97425660a96aa31565cc77821"; 
-    nixops-flake.url = "github:input-output-hk/nixops-flake";
   };
 
-  outputs = { self, nixpkgs, flake-utils, hello, nixops-flake }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem
       (system: let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -17,8 +18,6 @@
             buildInputs = with pkgs; [
               ansible_2_9
               esphome
-              hello.defaultPackage.${system}
-              nixops-flake.defaultPackage.${system}
             ];
           };
         }
