@@ -54,7 +54,9 @@
 
     influxdb-admin.file = ./secrets/influxdb-admin.age;
     influxdb-homeassistant.file = ./secrets/influxdb-homeassistant.age;
+    influxdb-homeassistant.owner = "grafana";
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
+    influxdb-telegraf.owner = "grafana";
 
     mqtt-admin.file = ./secrets/mqtt-admin.age;
     mqtt-admin.owner = "mosquitto";

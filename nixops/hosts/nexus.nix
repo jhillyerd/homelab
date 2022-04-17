@@ -1,16 +1,4 @@
-{ config, pkgs, lib, environment, ... }:
-let
-  # Construct a grafana datasource from our influxdb database definition.
-  mkGrafanaInfluxSource = name: db: {
-    name = "${name} influxdb";
-    type = "influxdb";
-    database = name;
-    # TODO don't use localhost.
-    url = "http://localhost:${toString config.roles.influxdb.port}";
-    user = db.user;
-    password = "TODO BROKEN";
-  };
-in {
+{ config, pkgs, lib, environment, ... }: {
   imports = [ ../common.nix ];
 
   roles.nfs-bind = {
@@ -34,7 +22,18 @@ in {
     before = [ "grafana.service" ];
   };
 
-  roles.grafana = {
+  roles.grafana = let
+    # Construct a grafana datasource from our influxdb database definition.
+    mkGrafanaInfluxSource = name: db: {
+      name = "${name} influxdb";
+      type = "influxdb";
+      database = name;
+      # TODO don't use localhost.
+      url = "http://localhost:${toString config.roles.influxdb.port}";
+      user = db.user;
+      secureJsonData.password = "$__file{${db.passwordFile}}";
+    };
+  in {
     enable = true;
     domain = "nexus.skynet.local";
     datasources =
