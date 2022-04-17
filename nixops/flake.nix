@@ -20,6 +20,11 @@
           system = "x86_64-linux";
           hw = ./hw/cubi.nix;
         };
+
+        nixpi3 = {
+          system = "aarch64-linux";
+          hw = ./hw/sd-image-pi3.nix;
+        };
       };
     in rec {
       # Convert nodes into a set of nixos configs.
@@ -66,6 +71,11 @@
           };
         }) nodes;
       in metalSystems // hypervSystems // libvirtSystems;
+
+      # Generate an SD card image for each host.
+      images = mapAttrs
+        (host: node: nixosConfigurations.${host}.config.system.build.sdImage)
+        nodes;
 
       # Generate VM build packages to test each host.
       packages = mapAttrs' (host: node: {

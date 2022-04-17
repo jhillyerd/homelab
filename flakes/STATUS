@@ -1,1 +1,0 @@
-flakes are nice, but qemu user static aarch64 builds are slow and seem to lock up often.

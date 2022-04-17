@@ -1,5 +1,5 @@
 #!/bin/sh
-# deploy.sh <host-name> root@<target-host>:
+# deploy <host-name> root@<target-host>:
 #  Builds the flake for host-name locally and deploys to target-host
 
 host="$1"

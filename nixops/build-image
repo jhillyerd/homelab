@@ -1,5 +1,5 @@
 #!/bin/sh
-# build.sh <host-name>:
+# build-image <host-name>:
 #  Builds the image for the specified host name.
 #
 
