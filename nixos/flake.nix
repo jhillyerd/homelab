@@ -7,11 +7,14 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
+    homesite.url = "github:jhillyerd/homesite";
+    homesite.inputs.nixpkgs.follows = "nixpkgs";
+
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, agenix, flake-utils }@attrs:
+  outputs = { self, nixpkgs, agenix, flake-utils, ... }@attrs:
     let
       inherit (nixpkgs.lib)
         mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem;

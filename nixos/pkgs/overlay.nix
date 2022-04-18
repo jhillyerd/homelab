@@ -1,3 +1,1 @@
-super: self: {
-  homesite = super.callPackage ./homesite {};
-}
+super: self: { }

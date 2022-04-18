@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, homesite, ... }:
 with lib;
 let cfg = config.roles.homesite;
 in {
@@ -39,7 +39,7 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."homesite" = {
-        root = "${pkgs.homesite}";
+        root = "${homesite.defaultPackage.x86_64-linux}"; # From flake
 
         locations."/config/" = { alias = "${configDir}/"; };
 
