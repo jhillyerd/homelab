@@ -3,4 +3,4 @@ directory.
 
 Example:
 
-    nix-build -A website
+    nix-build -A homesite
