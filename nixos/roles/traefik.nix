@@ -102,7 +102,7 @@ in {
       };
     };
     systemd.services.traefik.serviceConfig.EnvironmentFile =
-      "/run/envfile/cloudflare-dns-api.env";
+      config.roles.envfile.files."cloudflare-dns-api.env".file;
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
   };

@@ -33,7 +33,8 @@ in {
         };
       };
 
-      environmentFiles = [ "/run/envfile/telegraf-influx.env" ];
+      environmentFiles =
+        [ config.roles.envfile.files."telegraf-influx.env".file ];
     };
 
     # Create an environment file containing the influxdb password.

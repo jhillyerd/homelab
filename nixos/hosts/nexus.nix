@@ -190,7 +190,8 @@
       image = "nodered/node-red:2.2.2";
       ports = [ "1880:1880" ];
       volumes = [ "/data/nodered:/data" ];
-      environmentFiles = [ "/run/envfile/nodered-container.env" ];
+      environmentFiles =
+        [ config.roles.envfile.files."nodered-container.env".file ];
     };
   };
 
