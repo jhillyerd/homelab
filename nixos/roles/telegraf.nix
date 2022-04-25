@@ -22,6 +22,7 @@ in {
           mem = { };
           net = { };
           netstat = { };
+          processes = { };
           swap = { };
           system = { };
         };
