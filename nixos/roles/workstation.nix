@@ -19,7 +19,7 @@ in {
         in [
           bat
           chezmoi
-          docker
+          exa
           fzf
           gitAndTools.gh
           gitAndTools.git-absorb
