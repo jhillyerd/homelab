@@ -119,6 +119,7 @@ in {
         enable = true;
         layout = "us";
         windowManager.i3.enable = true;
+        windowManager.awesome.enable = true;
       };
 
       fonts.fonts = with pkgs; [
