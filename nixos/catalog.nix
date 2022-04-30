@@ -9,4 +9,6 @@
 
   syslog.host = "nexus";
   syslog.port = 1514;
+
+  smtp.host = "nexus";
 }

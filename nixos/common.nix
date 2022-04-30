@@ -22,6 +22,7 @@
       htop
       jq
       lsof
+      mailutils
       ncat
       neovim
       psmisc
@@ -51,12 +52,18 @@
   services.getty.helpLine =
     ">>> Flake node: ${hostName}, environment: ${environment}";
 
-  services.tailscale.enable = true;
+  services.ssmtp = {
+    enable = true;
+    hostName = catalog.smtp.host;
+    root = "root@skynet.local";
+  };
 
   services.openssh = {
     enable = true;
     permitRootLogin = "yes";
   };
+
+  services.tailscale.enable = true;
 
   time.timeZone = "US/Pacific";
 
