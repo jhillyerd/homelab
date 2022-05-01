@@ -100,11 +100,11 @@ in {
           google-chrome
           imwheel
           kitty
+          maim
           pantheon.elementary-icon-theme
           polybarFull
           rxvt_unicode-with-plugins
           virt-manager
-          scrot
           sxhkd
           x-www-browser
           xorg.xdpyinfo
