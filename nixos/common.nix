@@ -85,4 +85,9 @@
 
     mqtt-sensor.file = ./secrets/mqtt-sensor.age;
   };
+
+  environment.etc."issue.d/ip.issue".text = ''
+    IPv4: \4
+  '';
+  networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
 }
