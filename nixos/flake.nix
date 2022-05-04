@@ -39,6 +39,11 @@
           system = system.aarch64-linux;
           hw = ./hw/sd-image-pi3.nix;
         };
+
+        nomad = {
+          system = system.x86_64-linux;
+          hw = ./hw/hyperv.nix;
+        };
       };
     in rec {
       # Convert nodes into a set of nixos configs.
