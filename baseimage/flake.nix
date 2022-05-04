@@ -13,6 +13,11 @@
   outputs = { self, nixpkgs, nixos-generators }:
     let
       inherit (nixpkgs) lib;
+
+      system = "x86_64-linux";
+
+      pkgs = nixpkgs.legacyPackages.${system};
+
       baseModule = { ... }: {
         services.openssh = {
           enable = true;
@@ -23,17 +28,23 @@
 
         users.users.root.openssh.authorizedKeys.keys =
           lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
+
+        # Display the IP address at the login prompt.
+        environment.etc."issue.d/ip.issue".text = ''
+          IPv4: \4
+        '';
+        networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
       };
     in {
-      packages."x86_64-linux" = {
+      packages.${system} = {
         hyperv = nixos-generators.nixosGenerate {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          inherit pkgs;
           modules = [ baseModule ];
           format = "hyperv";
         };
 
         libvirt = nixos-generators.nixosGenerate {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          inherit pkgs;
           modules = [ baseModule { services.qemuGuest.enable = true; } ];
           format = "qcow";
         };
