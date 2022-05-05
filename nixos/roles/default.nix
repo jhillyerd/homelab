@@ -7,6 +7,7 @@
     ./log-forwarder.nix
     ./loki.nix
     ./mosquitto.nix
+    ./nomad.nix
     ./nfs-bind.nix
     ./tailscale.nix
     ./telegraf.nix
