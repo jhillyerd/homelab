@@ -1,51 +1,68 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  nserver = config.roles.nomad-server;
-  nclient = config.roles.nomad-client;
+  cfg = config.roles.nomad;
+  datacenter = "skynet";
 in {
-  options.roles.nomad-server = with types; {
-    enable = mkEnableOption "Enable Nomad Server (Coordinator)";
+  options.roles.nomad = with types; {
+    enableServer = mkEnableOption "Enable Nomad Server (Coordinator)";
+    enableClient = mkEnableOption "Enable Nomad Client (Worker)";
 
     retryJoin = mkOption {
       type = listOf str;
       description = "List of server host or IPs to join to datacenter";
     };
-  };
 
-  options.roles.nomad-client = {
-    enable = mkEnableOption "Enable Nomad Client (Worker)";
+    consulBind = mkOption {
+      type = nullOr str;
+      description = "The name of the interfaace to pull consul bind addr from";
+      default = null;
+    };
   };
 
   config = mkMerge [
     # Configure if either client or server is enabled.
-    (mkIf (nserver.enable || nclient.enable) {
-      services.nomad = {
+    (mkIf (cfg.enableServer || cfg.enableClient) {
+      services.consul = {
         enable = true;
 
-        settings.datacenter = "skynet";
+        interface.bind = cfg.consulBind;
+
+        extraConfig = {
+          retry_join = cfg.retryJoin;
+          retry_interval = "15s";
+          inherit datacenter;
+        };
+      };
+
+      services.nomad = {
+        enable = true;
+        settings.datacenter = datacenter;
       };
     })
 
     # Nomad server config.
-    (mkIf nserver.enable {
+    (mkIf cfg.enableServer {
+      services.consul = {
+        webUi = true;
+
+        extraConfig = {
+          server = true;
+          bootstrap_expect = 3;
+          client_addr = "0.0.0.0";
+        };
+      };
+
       services.nomad.settings.server = {
         enabled = true;
         bootstrap_expect = 3;
-
-        server_join = {
-          retry_join = nserver.retryJoin;
-          retry_interval = "15s";
-          retry_max = 40;
-        };
       };
     })
 
     # Nomad client config.
-    (mkIf nclient.enable {
+    (mkIf cfg.enableClient {
       services.nomad = {
         enableDocker = true;
-
         settings.client.enabled = true;
       };
     })
