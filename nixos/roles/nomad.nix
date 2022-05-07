@@ -15,7 +15,7 @@ in {
 
     consulBind = mkOption {
       type = nullOr str;
-      description = "The name of the interfaace to pull consul bind addr from";
+      description = "The name of the interface to pull consul bind addr from";
       default = null;
     };
   };
