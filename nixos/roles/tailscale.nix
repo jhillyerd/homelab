@@ -44,5 +44,13 @@ in {
         $ts up -authkey "$(< ${cfg.authkeyPath})"
       '';
     };
+
+    networking.firewall = {
+      # Trust inbound tailnet traffic.
+      trustedInterfaces = [ catalog.tailscale.interface ];
+
+      # Allow tailscale through firewall.
+      allowedUDPPorts = [ config.services.tailscale.port ];
+    };
   };
 }
