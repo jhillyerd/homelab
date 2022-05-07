@@ -18,11 +18,25 @@ in {
       description = "The name of the interface to pull consul bind addr from";
       default = null;
     };
+
+    consulEncryptPath = mkOption {
+      type = nullOr path;
+      description = "Path to encryption key for consul";
+      default = null;
+    };
   };
 
   config = mkMerge [
     # Configure if either client or server is enabled.
     (mkIf (cfg.enableServer || cfg.enableClient) {
+      roles.envfile.files."consul-encrypt.hcl" =
+        mkIf (cfg.consulEncryptPath != null) {
+          secretPath = cfg.consulEncryptPath;
+          varName = "encrypt";
+          quoteValue = true;
+          owner = "consul";
+        };
+
       services.consul = {
         enable = true;
 
@@ -33,6 +47,9 @@ in {
           retry_interval = "15s";
           inherit datacenter;
         };
+
+        extraConfigFiles = mkIf (cfg.consulEncryptPath != null)
+          [ config.roles.envfile.files."consul-encrypt.hcl".file ];
       };
 
       services.nomad = {

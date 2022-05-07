@@ -26,6 +26,8 @@ let
 in {
   "cloudflare-dns-api.age".publicKeys = users ++ systems;
 
+  "consul-encrypt.age".publicKeys = users ++ test-nomads;
+
   "influxdb-admin.age".publicKeys = users ++ systems;
   "influxdb-homeassistant.age".publicKeys = users ++ systems;
   "influxdb-telegraf.age".publicKeys = users ++ systems;
