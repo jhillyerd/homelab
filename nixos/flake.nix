@@ -27,17 +27,26 @@
       nodes = {
         fractal = {
           system = system.x86_64-linux;
+          config = ./hosts/fractal.nix;
           hw = ./hw/asus-b350.nix;
         };
 
         nexus = {
           system = system.x86_64-linux;
+          config = ./hosts/nexus.nix;
           hw = ./hw/cubi.nix;
         };
 
         nixpi3 = {
           system = system.aarch64-linux;
+          config = ./hosts/nixpi3.nix;
           hw = ./hw/sd-image-pi3.nix;
+        };
+
+        nc-um350-1 = {
+          system = system.x86_64-linux;
+          config = ./hosts/nc-um350.nix;
+          hw = ./hw/minis-um350.nix;
         };
       };
     in rec {
@@ -52,7 +61,7 @@
               hostName = host;
               environment = "prod";
             };
-            modules = [ (./hosts + "/${host}.nix") node.hw agenix.nixosModule ];
+            modules = [ node.config node.hw agenix.nixosModule ];
           }) nodes;
 
         # Hyper-V systems, name prefixed with "hyper-"; in test environment.
@@ -65,8 +74,7 @@
               hostName = host;
               environment = "test";
             };
-            modules =
-              [ (./hosts + "/${host}.nix") ./hw/hyperv.nix agenix.nixosModule ];
+            modules = [ node.config ./hw/hyperv.nix agenix.nixosModule ];
           };
         }) nodes;
 
@@ -80,8 +88,7 @@
               hostName = host;
               environment = "test";
             };
-            modules =
-              [ (./hosts + "/${host}.nix") ./hw/qemu.nix agenix.nixosModule ];
+            modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
           };
         }) nodes;
       in metalSystems // hypervSystems // libvirtSystems;
@@ -105,8 +112,7 @@
               hostName = host;
               environment = "test";
             };
-            modules =
-              [ (./hosts + "/${host}.nix") ./hw/qemu.nix agenix.nixosModule ];
+            modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
           }).config.system.build.vm;
         };
       in eachSystemMap [ system.x86_64-linux ]

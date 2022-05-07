@@ -85,7 +85,6 @@
 
   age.secrets = {
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
-    mqtt-sensor.file = ./secrets/mqtt-sensor.age;
     tailscale.file = ./secrets/tailscale.age;
   };
 

@@ -30,6 +30,7 @@ in {
           lynx
           nixfmt
           nodejs
+          nomad
           patchelf
           python3
           ripgrep

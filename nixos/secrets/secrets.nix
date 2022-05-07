@@ -15,25 +15,25 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiU0B1BYTeGojG+uo2siv2tpl7PEj3iV0CL8EHyM42e";
   nixtarget1-virtd =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILozTQNcPY2BNQZNW+F29M2euRzD7wZ1XtsKsWFjzpeJ";
+  home-systems = [ fractal nexus nixtarget1-hyperv nixtarget1-virtd ];
 
-  test-nomads = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCXKdnyRuIWjhbHkh++ikDb3/UPiJucio+8CsZWIucE"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhwG7j+ysnXGXpXnUdUOIXO4m4LuWDdcmY0CTvPiRsp"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBmAxdrs5LhX835OMNUNqrlIXnIqTaLw35XMR9M8yR6A"
-  ];
-
-  systems = [ fractal nexus nixtarget1-hyperv nixtarget1-virtd ];
+  nc-um350-1 =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
+  nomad-cluster = [ nexus nc-um350-1 fractal ];
 in {
-  "cloudflare-dns-api.age".publicKeys = users ++ systems;
+  # Common
+  "influxdb-telegraf.age".publicKeys = users ++ home-systems ++ nomad-cluster;
+  "tailscale.age".publicKeys = users ++ home-systems ++ nomad-cluster;
 
-  "influxdb-admin.age".publicKeys = users ++ systems;
-  "influxdb-homeassistant.age".publicKeys = users ++ systems;
-  "influxdb-telegraf.age".publicKeys = users ++ systems;
+  # Home
+  "cloudflare-dns-api.age".publicKeys = users ++ home-systems;
+  "influxdb-admin.age".publicKeys = users ++ home-systems;
+  "influxdb-homeassistant.age".publicKeys = users ++ home-systems;
+  "mqtt-admin.age".publicKeys = users ++ home-systems;
+  "mqtt-sensor.age".publicKeys = users ++ home-systems;
+  "nodered.age".publicKeys = users ++ home-systems;
 
-  "mqtt-admin.age".publicKeys = users ++ systems;
-  "mqtt-sensor.age".publicKeys = users ++ systems;
-
-  "nodered.age".publicKeys = users ++ systems;
-
-  "tailscale.age".publicKeys = users ++ systems ++ test-nomads;
+  # Nomad cluster
+  "consul-encrypt.age".publicKeys = users ++ nomad-cluster;
+  "nomad-encrypt.age".publicKeys = users ++ nomad-cluster;
 }
