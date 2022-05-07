@@ -15,6 +15,13 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiU0B1BYTeGojG+uo2siv2tpl7PEj3iV0CL8EHyM42e";
   nixtarget1-virtd =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILozTQNcPY2BNQZNW+F29M2euRzD7wZ1XtsKsWFjzpeJ";
+
+  test-nomads = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCXKdnyRuIWjhbHkh++ikDb3/UPiJucio+8CsZWIucE"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILhwG7j+ysnXGXpXnUdUOIXO4m4LuWDdcmY0CTvPiRsp"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBmAxdrs5LhX835OMNUNqrlIXnIqTaLw35XMR9M8yR6A"
+  ];
+
   systems = [ fractal nexus nixtarget1-hyperv nixtarget1-virtd ];
 in {
   "cloudflare-dns-api.age".publicKeys = users ++ systems;
@@ -27,4 +34,6 @@ in {
   "mqtt-sensor.age".publicKeys = users ++ systems;
 
   "nodered.age".publicKeys = users ++ systems;
+
+  "tailscale.age".publicKeys = users ++ systems ++ test-nomads;
 }

@@ -63,7 +63,10 @@
     permitRootLogin = "yes";
   };
 
-  services.tailscale.enable = true;
+  roles.tailscale = {
+    enable = true;
+    authkeyPath = config.age.secrets.tailscale.path;
+  };
 
   time.timeZone = "US/Pacific";
 
@@ -82,8 +85,8 @@
 
   age.secrets = {
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
-
     mqtt-sensor.file = ./secrets/mqtt-sensor.age;
+    tailscale.file = ./secrets/tailscale.age;
   };
 
   environment.etc."issue.d/ip.issue".text = ''

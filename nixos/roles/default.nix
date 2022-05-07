@@ -8,6 +8,7 @@
     ./loki.nix
     ./mosquitto.nix
     ./nfs-bind.nix
+    ./tailscale.nix
     ./telegraf.nix
     ./traefik.nix
     ./workstation.nix

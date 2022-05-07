@@ -11,4 +11,6 @@
   syslog.port = 1514;
 
   smtp.host = "nexus";
+
+  tailscale.interface = "tailscale0";
 }
