@@ -43,22 +43,10 @@
           hw = ./hw/sd-image-pi3.nix;
         };
 
-        nomad1 = {
+        nc-um350-1 = {
           system = system.x86_64-linux;
-          config = ./hosts/nomad.nix;
-          hw = ./hw/hyperv.nix;
-        };
-
-        nomad2 = {
-          system = system.x86_64-linux;
-          config = ./hosts/nomad.nix;
-          hw = ./hw/hyperv.nix;
-        };
-
-        nomad3 = {
-          system = system.x86_64-linux;
-          config = ./hosts/nomad.nix;
-          hw = ./hw/hyperv.nix;
+          config = ./hosts/nc-um350.nix;
+          hw = ./hw/minis-um350.nix;
         };
       };
     in rec {

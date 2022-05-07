@@ -30,6 +30,12 @@ in {
       description = "Path to encryption key for nomad";
       default = null;
     };
+
+    dataDir = mkOption {
+      type = str;
+      description = "Where nomad stores its state";
+      default = "/var/lib/nomad";
+    };
   };
 
   config = mkMerge [
@@ -73,9 +79,13 @@ in {
 
       services.nomad = {
         enable = true;
-        settings.datacenter = datacenter;
-        settings.bind_addr =
-          ''{{ GetInterfaceIP "${catalog.tailscale.interface}" }}'';
+        dropPrivileges = false;
+
+        settings = {
+          datacenter = datacenter;
+          data_dir = cfg.dataDir;
+          bind_addr = ''{{ GetInterfaceIP "${catalog.tailscale.interface}" }}'';
+        };
       };
     })
 
