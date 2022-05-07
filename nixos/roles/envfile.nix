@@ -19,8 +19,18 @@ let
 
         varName = mkOption {
           type = str;
-          description = "Environment variable name to populate with secret";
+          description = ''
+            Variable name to populate or replace with secret.
+            Ignored if `content` is specified.
+          '';
           default = "SECRET";
+        };
+
+        content = mkOption {
+          type = nullOr str;
+          description =
+            "Content of envfile.  If null, content will be <varName>=<secret>";
+          default = null;
         };
 
         quoteValue = mkOption {
@@ -77,18 +87,42 @@ in {
     system.activationScripts = attrsets.mapAttrs' (name: entry:
       let
         entryDir = dirOf entry.file;
+
         quote = if entry.quoteValue then ''"'' else "";
-      in {
-        name = "envfile-" + name;
-        value = stringAfter [ "etc" "agenix" "agenixRoot" ] ''
+
+        prefix = ''
           mkdir -p "${entryDir}"
-          chmod 700 "${entryDir}"
-          cat > "${entry.file}" <<EOT
-          ${entry.varName}=${quote}$(< ${entry.secretPath})${quote}
-          EOT
+          chmod 701 "${entryDir}"
+        '';
+
+        postfix = ''
           chmod ${entry.mode} "${entry.file}"
           chown ${entry.owner}:${entry.group} "${entry.file}"
         '';
+
+        fname = "envfile-" + name;
+
+        contentFile = pkgs.writeText fname entry.content;
+      in {
+        name = fname;
+
+        value = stringAfter [ "etc" "agenix" "agenixRoot" ]
+          (if entry.content == null then
+          # Generate single line envfile.
+          ''
+            ${prefix}
+            cat > "${entry.file}" <<EOT
+            ${entry.varName}=${quote}$(< ${entry.secretPath})${quote}
+            EOT
+            ${postfix}
+          '' else
+          # Replace SECRET in provided content.
+          ''
+            ${prefix}
+            ${entry.varName}="$(< ${entry.secretPath})" ${pkgs.envsubst}/bin/envsubst \
+              -i "${contentFile}" -o "${entry.file}"
+            ${postfix}
+          '');
       }) cfg.files;
   };
 }
