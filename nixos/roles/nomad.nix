@@ -24,18 +24,36 @@ in {
       description = "Path to encryption key for consul";
       default = null;
     };
+
+    nomadEncryptPath = mkOption {
+      type = nullOr path;
+      description = "Path to encryption key for nomad";
+      default = null;
+    };
   };
 
   config = mkMerge [
     # Configure if either client or server is enabled.
     (mkIf (cfg.enableServer || cfg.enableClient) {
-      roles.envfile.files."consul-encrypt.hcl" =
-        mkIf (cfg.consulEncryptPath != null) {
+      # Create envfiles containing encryption keys when available.
+      roles.envfile.files = {
+        "consul-encrypt.hcl" = mkIf (cfg.consulEncryptPath != null) {
           secretPath = cfg.consulEncryptPath;
           varName = "encrypt";
           quoteValue = true;
           owner = "consul";
         };
+
+        "nomad-encrypt.hcl" = mkIf (cfg.nomadEncryptPath != null) {
+          secretPath = cfg.nomadEncryptPath;
+          content = ''
+            server {
+              encrypt = "$SECRET"
+            }
+          '';
+          mode = "0444";
+        };
+      };
 
       services.consul = {
         enable = true;
@@ -48,6 +66,7 @@ in {
           inherit datacenter;
         };
 
+        # Install extra HCL file to hold encryption key.
         extraConfigFiles = mkIf (cfg.consulEncryptPath != null)
           [ config.roles.envfile.files."consul-encrypt.hcl".file ];
       };
@@ -72,9 +91,15 @@ in {
         };
       };
 
-      services.nomad.settings.server = {
-        enabled = true;
-        bootstrap_expect = 3;
+      services.nomad = {
+        settings.server = {
+          enabled = true;
+          bootstrap_expect = 3;
+        };
+
+        # Install extra HCL file to hold encryption key.
+        extraSettingsPaths = mkIf (cfg.nomadEncryptPath != null)
+          [ config.roles.envfile.files."nomad-encrypt.hcl".file ];
       };
     })
 

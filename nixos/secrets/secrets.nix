@@ -35,6 +35,8 @@ in {
   "mqtt-admin.age".publicKeys = users ++ systems;
   "mqtt-sensor.age".publicKeys = users ++ systems;
 
+  "nomad-encrypt.age".publicKeys = users ++ test-nomads;
+
   "nodered.age".publicKeys = users ++ systems;
 
   "tailscale.age".publicKeys = users ++ systems ++ test-nomads;
