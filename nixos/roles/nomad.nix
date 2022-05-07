@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, catalog, ... }:
 with lib;
 let
   cfg = config.roles.nomad;
@@ -38,6 +38,8 @@ in {
       services.nomad = {
         enable = true;
         settings.datacenter = datacenter;
+        settings.bind_addr =
+          ''{{ GetInterfaceIP "${catalog.tailscale.interface}" }}'';
       };
     })
 
