@@ -104,9 +104,10 @@ in {
           maim
           pantheon.elementary-icon-theme
           polybarFull
+          rofi
           rxvt_unicode-with-plugins
-          virt-manager
           sxhkd
+          virt-manager
           x-www-browser
           xorg.xdpyinfo
           xorg.xev
