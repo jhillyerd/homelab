@@ -21,34 +21,8 @@
 
       inherit (flake-utils.lib) eachSystemMap system;
 
-      catalog = import ./catalog.nix;
-
-      # Set of hosts available to build.
-      nodes = {
-        fractal = {
-          system = system.x86_64-linux;
-          config = ./hosts/fractal.nix;
-          hw = ./hw/asus-b350.nix;
-        };
-
-        nexus = {
-          system = system.x86_64-linux;
-          config = ./hosts/nexus.nix;
-          hw = ./hw/cubi.nix;
-        };
-
-        nixpi3 = {
-          system = system.aarch64-linux;
-          config = ./hosts/nixpi3.nix;
-          hw = ./hw/sd-image-pi3.nix;
-        };
-
-        nc-um350-1 = {
-          system = system.x86_64-linux;
-          config = ./hosts/nc-um350.nix;
-          hw = ./hw/minis-um350.nix;
-        };
-      };
+      # catalog.nodes defines the systems available in this flake.
+      catalog = import ./catalog.nix { inherit system; };
     in rec {
       # Convert nodes into a set of nixos configs.
       nixosConfigurations = let
@@ -62,7 +36,7 @@
               environment = "prod";
             };
             modules = [ node.config node.hw agenix.nixosModule ];
-          }) nodes;
+          }) catalog.nodes;
 
         # Hyper-V systems, name prefixed with "hyper-"; in test environment.
         hypervSystems = mapAttrs' (host: node: {
@@ -76,7 +50,7 @@
             };
             modules = [ node.config ./hw/hyperv.nix agenix.nixosModule ];
           };
-        }) nodes;
+        }) catalog.nodes;
 
         # libvirtd systems, name prefixed with "virt-"; in test environment.
         libvirtSystems = mapAttrs' (host: node: {
@@ -90,13 +64,13 @@
             };
             modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
           };
-        }) nodes;
+        }) catalog.nodes;
       in metalSystems // hypervSystems // libvirtSystems;
 
       # Generate an SD card image for each host.
       images = mapAttrs
         (host: node: nixosConfigurations.${host}.config.system.build.sdImage)
-        nodes;
+        catalog.nodes;
 
       # Generate VM build packages to quick test each host.  Note that these
       # will will be x86-64 VMs, and will have a new host key, thus will be
@@ -116,6 +90,6 @@
           }).config.system.build.vm;
         };
       in eachSystemMap [ system.x86_64-linux ]
-      (sys: mapAttrs' (vmPackage sys) nodes);
+      (sys: mapAttrs' (vmPackage sys) catalog.nodes);
     };
 }
