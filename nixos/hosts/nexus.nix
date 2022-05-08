@@ -133,6 +133,20 @@
         icon = "network-wired";
       }
       {
+        name = "Consul";
+        host = catalog.nodes.nexus.ip;
+        proto = "http";
+        port = 8500;
+        icon = "address-book";
+      }
+      {
+        name = "Nomad";
+        host = catalog.nodes.nexus.ip;
+        proto = "http";
+        port = 4646;
+        icon = "server";
+      }
+      {
         name = "Docker Registry";
         host = "dockreg.bytemonkey.org/v2/_catalog";
         icon = "brands fa-docker";
