@@ -45,6 +45,10 @@ in {
           };
 
           websecure.address = ":443/tcp";
+
+          smtp = {
+            address = ":2500/tcp";
+          };
         };
 
         certificatesResolvers.letsencrypt.acme = {
@@ -63,11 +67,22 @@ in {
           insecureSkipVerify = true;
         };
 
+        providers.consulCatalog = {
+          prefix = "traefik";
+          exposedByDefault = false;
+          endpoint = {
+            address = catalog.nodes.nexus.ip + ":8500";
+            scheme = "http";
+            datacenter = "skynet";
+          };
+        };
+
         log.level = "INFO";
       };
 
       dynamicConfigOptions = let
         routerEntry = name: opt: {
+          entryPoints = [ "web" "websecure" ];
           rule = "Host(`" + opt.domainName + "`)";
           service = name;
           tls.certresolver = "letsencrypt";
@@ -85,6 +100,7 @@ in {
           routers = {
             # Router for built-in traefik API.
             api = {
+              entryPoints = [ "web" "websecure" ];
               rule = "Host(`traefik.bytemonkey.org`)";
               service = "api@internal";
               tls.certresolver = "letsencrypt";

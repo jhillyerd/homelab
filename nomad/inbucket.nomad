@@ -5,22 +5,31 @@ job "inbucket" {
   group "backend" {
     count = 1
 
+    # Canary is not compatible with sticky storage.
+    # update {
+    #   canary = 1
+    #   auto_promote = true
+    # }
+
     network {
-      port "http" {
-        static = 9000
-      }
-      port "smtp" {
-        static = 2500
-      }
+      port "http" { to = 9000 }
+      port "smtp" { to = 2500 }
     }
 
     service {
       name = "inbucket-http"
       port = "http"
-      tags = ["http"]
+
+      tags = [
+        "http",
+        "traefik.enable=true",
+        "traefik.http.routers.nomad-http.entrypoints=websecure",
+        "traefik.http.routers.nomad-http.rule=Host(`nomad.bytemonkey.org`) && PathPrefix(`/inbucket`)",
+        "traefik.http.routers.nomad-http.tls.certresolver=letsencrypt",
+      ]
 
       check {
-        name = "alive"
+        name = "Inbucket HTTP Check"
         type = "http"
         path = "/"
         interval = "10s"
@@ -31,13 +40,19 @@ job "inbucket" {
     service {
       name = "inbucket-smtp"
       port = "smtp"
-      tags = ["smtp"]
+
+      tags = [
+        "smtp",
+        "traefik.enable=true",
+        "traefik.tcp.routers.nomad-smtp.rule=HostSNI(`*`)",
+        "traefik.tcp.routers.nomad-smtp.entrypoints=smtp",
+      ]
 
       check {
-        name = "alive"
+        name = "Inbucket SMTP Check"
         type = "tcp"
         port = "smtp"
-        interval = "10s"
+        interval = "30s"
         timeout = "2s"
       }
     }
@@ -53,12 +68,17 @@ job "inbucket" {
 
       config {
         image = "inbucket/inbucket:latest"
-
         ports = ["http", "smtp"]
 
         volumes = [
           "../alloc/data/inbucket_storage:/storage"
         ]
+      }
+
+      env {
+        INBUCKET_LOGLEVEL = "warn"
+        INBUCKET_WEB_BASEPATH = "/inbucket"
+        INBUCKET_STORAGE_RETENTIONPERIOD = "168h"
       }
 
       resources {
