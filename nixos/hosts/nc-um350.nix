@@ -4,7 +4,7 @@
   roles.nomad = {
     enableClient = true;
     enableServer = true;
-    dataDir = "/data/nomad";
+    allocDir = "/data/nomad-alloc";
 
     consulBind = catalog.tailscale.interface;
     consulEncryptPath = config.age.secrets.consul-encrypt.path;

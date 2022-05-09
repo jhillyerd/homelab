@@ -31,6 +31,12 @@ in {
       default = null;
     };
 
+    allocDir = mkOption {
+      type = nullOr str;
+      description = "Where nomad client stores alloc data";
+      default = null;
+    };
+
     dataDir = mkOption {
       type = str;
       description = "Where nomad stores its state";
@@ -118,6 +124,7 @@ in {
       services.nomad = {
         enableDocker = true;
         settings.client.enabled = true;
+        settings.client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
       };
     })
   ];
