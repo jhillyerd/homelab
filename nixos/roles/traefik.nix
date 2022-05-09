@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, catalog, ... }:
 with lib;
 let cfg = config.roles.traefik;
 in {
@@ -83,9 +83,11 @@ in {
         http = {
           # Combine static routes with cfg.services entries.
           routers = {
+            # Router for built-in traefik API.
             api = {
               rule = "Host(`traefik.bytemonkey.org`)";
               service = "api@internal";
+              tls.certresolver = "letsencrypt";
             };
           } // mapAttrs routerEntry cfg.services;
 
