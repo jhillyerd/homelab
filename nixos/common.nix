@@ -3,12 +3,17 @@
   system.stateVersion = "21.11";
 
   imports = [ ./roles ];
-
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
+  nixpkgs.config.allowUnfree = true;
+
+  # Garbage collect & optimize /nix/store daily.
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 7d";
+  };
+  nix.optimise.automatic = true;
 
   networking.hostName = hostName;
-
-  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs;
     let
