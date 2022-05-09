@@ -47,7 +47,7 @@ in {
           websecure.address = ":443/tcp";
 
           smtp = {
-            address = ":2500/tcp";
+            address = ":25/tcp";
           };
         };
 
@@ -122,6 +122,6 @@ in {
     systemd.services.traefik.serviceConfig.EnvironmentFile =
       config.roles.envfile.files."cloudflare-dns-api.env".file;
 
-    networking.firewall.allowedTCPPorts = [ 80 443 ];
+    networking.firewall.allowedTCPPorts = [ 25 80 443 ];
   };
 }

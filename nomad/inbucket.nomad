@@ -5,11 +5,14 @@ job "inbucket" {
   group "backend" {
     count = 1
 
-    # Canary is not compatible with sticky storage.
-    # update {
-    #   canary = 1
-    #   auto_promote = true
-    # }
+    update {
+      # Canary is not compatible with sticky ephemeral_disk.
+      canary = 0
+      auto_promote = false
+      auto_revert = true
+      healthy_deadline = "2m"
+      progress_deadline = "5m"
+    }
 
     network {
       port "http" { to = 9000 }
@@ -31,7 +34,7 @@ job "inbucket" {
       check {
         name = "Inbucket HTTP Check"
         type = "http"
-        path = "/"
+        path = "/inbucket/status"
         interval = "10s"
         timeout = "2s"
       }
@@ -67,6 +70,7 @@ job "inbucket" {
       driver = "docker"
 
       config {
+        # :latest for stable releases, :edge to track development.
         image = "inbucket/inbucket:latest"
         ports = ["http", "smtp"]
 

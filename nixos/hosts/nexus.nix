@@ -124,7 +124,7 @@
       }
       {
         name = "Inbucket";
-        host = "inbucket.bytemonkey.org";
+        host = "nomad.bytemonkey.org/inbucket";
         icon = "at";
       }
       {
@@ -177,11 +177,6 @@
         backendUrls = [ "http://127.0.0.1:3000" ];
       };
 
-      inbucket = {
-        domainName = "inbucket.bytemonkey.org";
-        backendUrls = [ "http://127.0.0.1:9000" ];
-      };
-
       home = {
         domainName = "bytemonkey.org";
         backendUrls = [ "http://127.0.0.1:12701" ];
@@ -220,16 +215,6 @@
   };
 
   virtualisation.oci-containers.containers = {
-    inbucket = {
-      image = "inbucket/inbucket:3.0.1-rc2";
-      ports = [ "25:2500" "9000:9000" ];
-      environment = {
-        INBUCKET_STORAGE_TYPE = "memory";
-        INBUCKET_STORAGE_PARAMS = "maxkb:102400";
-        INBUCKET_STORAGE_RETENTIONPERIOD = "168h";
-      };
-    };
-
     nodered = {
       image = "nodered/node-red:2.2.2";
       ports = [ "1880:1880" ];
