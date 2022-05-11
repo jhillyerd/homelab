@@ -4,8 +4,8 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
 
-  networking.useDHCP = false;
-  networking.interfaces.enp1s0.useDHCP = true;
+  # We don't always know the interface name on QEMU.
+  networking.useDHCP = true;
 
   # Hardware configuration
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];

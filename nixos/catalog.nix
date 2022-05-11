@@ -27,6 +27,12 @@
       hw = ./hw/sd-image-pi3.nix;
       system = system.aarch64-linux;
     };
+
+    scratch = {
+      config = ./hosts/scratch.nix;
+      hw = ./hw/qemu.nix;
+      system = system.x86_64-linux;
+    };
   };
 
   influxdb = rec {
