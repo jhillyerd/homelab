@@ -86,10 +86,7 @@
     enableServer = true;
 
     consulBind = catalog.tailscale.interface;
-    consulEncryptPath = config.age.secrets.consul-encrypt.path;
     retryJoin = with catalog.nodes; [ nexus.ip nc-um350-1.ip ];
-
-    nomadEncryptPath = config.age.secrets.nomad-encrypt.path;
   };
 
   roles.homesite = {
@@ -250,8 +247,5 @@
     mqtt-sensor.owner = "mosquitto";
 
     nodered.file = ../secrets/nodered.age;
-
-    consul-encrypt.file = ../secrets/consul-encrypt.age;
-    nomad-encrypt.file = ../secrets/nomad-encrypt.age;
   };
 }

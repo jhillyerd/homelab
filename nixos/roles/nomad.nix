@@ -19,18 +19,6 @@ in {
       default = null;
     };
 
-    consulEncryptPath = mkOption {
-      type = nullOr path;
-      description = "Path to encryption key for consul";
-      default = null;
-    };
-
-    nomadEncryptPath = mkOption {
-      type = nullOr path;
-      description = "Path to encryption key for nomad";
-      default = null;
-    };
-
     allocDir = mkOption {
       type = nullOr str;
       description = "Where nomad client stores alloc data";
@@ -47,17 +35,22 @@ in {
   config = mkMerge [
     # Configure if either client or server is enabled.
     (mkIf (cfg.enableServer || cfg.enableClient) {
+      age.secrets = {
+        consul-encrypt.file = ../secrets/consul-encrypt.age;
+        nomad-encrypt.file = ../secrets/nomad-encrypt.age;
+      };
+
       # Create envfiles containing encryption keys when available.
       roles.envfile.files = {
-        "consul-encrypt.hcl" = mkIf (cfg.consulEncryptPath != null) {
-          secretPath = cfg.consulEncryptPath;
+        "consul-encrypt.hcl" = {
+          secretPath = config.age.secrets.consul-encrypt.path;
           varName = "encrypt";
           quoteValue = true;
           owner = "consul";
         };
 
-        "nomad-encrypt.hcl" = mkIf (cfg.nomadEncryptPath != null) {
-          secretPath = cfg.nomadEncryptPath;
+        "nomad-encrypt.hcl" = {
+          secretPath = config.age.secrets.nomad-encrypt.path;
           content = ''
             server {
               encrypt = "$SECRET"
@@ -79,7 +72,7 @@ in {
         };
 
         # Install extra HCL file to hold encryption key.
-        extraConfigFiles = mkIf (cfg.consulEncryptPath != null)
+        extraConfigFiles =
           [ config.roles.envfile.files."consul-encrypt.hcl".file ];
       };
 
@@ -114,7 +107,7 @@ in {
         };
 
         # Install extra HCL file to hold encryption key.
-        extraSettingsPaths = mkIf (cfg.nomadEncryptPath != null)
+        extraSettingsPaths =
           [ config.roles.envfile.files."nomad-encrypt.hcl".file ];
       };
     })
