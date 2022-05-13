@@ -86,7 +86,7 @@
     enableServer = true;
 
     consulBind = catalog.tailscale.interface;
-    retryJoin = with catalog.nodes; [ nexus.ip nc-um350-1.ip ];
+    retryJoin = with catalog.nodes; [ nexus.ip nc-um350-1.ip nc-um350-2.ip ];
   };
 
   roles.homesite = {
