@@ -15,6 +15,13 @@
       system = system.x86_64-linux;
     };
 
+    nc-um350-2 = {
+      ip = "100.97.169.111";
+      config = ./hosts/nc-um350.nix;
+      hw = ./hw/minis-um350.nix;
+      system = system.x86_64-linux;
+    };
+
     nexus = {
       ip = "100.80.202.97";
       config = ./hosts/nexus.nix;
