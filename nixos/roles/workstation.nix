@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 with lib;
 let cfg = config.roles.workstation;
-in {
+in
+{
   options.roles.workstation = {
     enable = mkEnableOption "Base CLI workstation";
 
@@ -16,7 +17,8 @@ in {
           x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
             exec ${pkgs.google-chrome}/bin/google-chrome-stable "$@"
           '';
-        in [
+        in
+        [
           bat
           chezmoi
           exa
@@ -94,7 +96,8 @@ in {
             exec ${pkgs.google-chrome}/bin/google-chrome-stable "$@"
           '';
           noxorg = [ rxvt_unicode.terminfo ];
-        in [
+        in
+        [
           dmenu
           firefox
           gnome3.gedit

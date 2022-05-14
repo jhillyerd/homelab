@@ -1,7 +1,8 @@
 { config, pkgs, lib, catalog, ... }:
 with lib;
 let cfg = config.roles.tailscale;
-in {
+in
+{
   options.roles.tailscale = with types; {
     enable = mkEnableOption "Enable Tailscale daemon + autojoin";
 

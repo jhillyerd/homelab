@@ -9,7 +9,8 @@ let
     database = ds.name;
     url = "http://localhost:${toString config.roles.influxdb.port}";
   };
-in {
+in
+{
   options.roles.grafana = {
     enable = mkEnableOption "Network Grafana host";
 

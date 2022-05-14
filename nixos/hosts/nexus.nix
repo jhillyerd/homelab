@@ -22,30 +22,32 @@
     before = [ "grafana.service" ];
   };
 
-  roles.grafana = let
-    # Construct a grafana datasource from our influxdb database definition.
-    mkGrafanaInfluxSource = name: db: {
-      name = "${name} influxdb";
-      type = "influxdb";
-      database = name;
-      # TODO don't use localhost.
-      url = "http://localhost:${toString config.roles.influxdb.port}";
-      user = db.user;
-      secureJsonData.password = "$__file{${db.passwordFile}}";
+  roles.grafana =
+    let
+      # Construct a grafana datasource from our influxdb database definition.
+      mkGrafanaInfluxSource = name: db: {
+        name = "${name} influxdb";
+        type = "influxdb";
+        database = name;
+        # TODO don't use localhost.
+        url = "http://localhost:${toString config.roles.influxdb.port}";
+        user = db.user;
+        secureJsonData.password = "$__file{${db.passwordFile}}";
+      };
+    in
+    {
+      enable = true;
+      domain = "nexus.skynet.local";
+      datasources =
+        (lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases)
+        ++ [{
+          name = "syslogs loki";
+          type = "loki";
+          access = "proxy";
+          url = "http://localhost:${toString config.roles.loki.loki_http_port}";
+          jsonData.maxLines = 1000;
+        }];
     };
-  in {
-    enable = true;
-    domain = "nexus.skynet.local";
-    datasources =
-      (lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases)
-      ++ [{
-        name = "syslogs loki";
-        type = "loki";
-        access = "proxy";
-        url = "http://localhost:${toString config.roles.loki.loki_http_port}";
-        jsonData.maxLines = 1000;
-      }];
-  };
 
   roles.influxdb = {
     enable = true;

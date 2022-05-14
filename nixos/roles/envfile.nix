@@ -67,7 +67,8 @@ let
         };
       };
     });
-in {
+in
+{
   options.roles.envfile = {
     directory = mkOption {
       type = types.path;
@@ -84,45 +85,48 @@ in {
 
   config = mkIf (cfg.files != { }) {
     # Create an environment file during activation for each entry.
-    system.activationScripts = attrsets.mapAttrs' (name: entry:
-      let
-        entryDir = dirOf entry.file;
+    system.activationScripts = attrsets.mapAttrs'
+      (name: entry:
+        let
+          entryDir = dirOf entry.file;
 
-        quote = if entry.quoteValue then ''"'' else "";
+          quote = if entry.quoteValue then ''"'' else "";
 
-        prefix = ''
-          mkdir -p "${entryDir}"
-          chmod 701 "${entryDir}"
-        '';
+          prefix = ''
+            mkdir -p "${entryDir}"
+            chmod 701 "${entryDir}"
+          '';
 
-        postfix = ''
-          chmod ${entry.mode} "${entry.file}"
-          chown ${entry.owner}:${entry.group} "${entry.file}"
-        '';
+          postfix = ''
+            chmod ${entry.mode} "${entry.file}"
+            chown ${entry.owner}:${entry.group} "${entry.file}"
+          '';
 
-        fname = "envfile-" + name;
+          fname = "envfile-" + name;
 
-        contentFile = pkgs.writeText fname entry.content;
-      in {
-        name = fname;
+          contentFile = pkgs.writeText fname entry.content;
+        in
+        {
+          name = fname;
 
-        value = stringAfter [ "etc" "agenix" "agenixRoot" ]
-          (if entry.content == null then
-          # Generate single line envfile.
-          ''
-            ${prefix}
-            cat > "${entry.file}" <<EOT
-            ${entry.varName}=${quote}$(< ${entry.secretPath})${quote}
-            EOT
-            ${postfix}
-          '' else
-          # Replace SECRET in provided content.
-          ''
-            ${prefix}
-            ${entry.varName}="$(< ${entry.secretPath})" ${pkgs.envsubst}/bin/envsubst \
-              -i "${contentFile}" -o "${entry.file}"
-            ${postfix}
-          '');
-      }) cfg.files;
+          value = stringAfter [ "etc" "agenix" "agenixRoot" ]
+            (if entry.content == null then
+            # Generate single line envfile.
+              ''
+                ${prefix}
+                cat > "${entry.file}" <<EOT
+                ${entry.varName}=${quote}$(< ${entry.secretPath})${quote}
+                EOT
+                ${postfix}
+              '' else
+            # Replace SECRET in provided content.
+              ''
+                ${prefix}
+                ${entry.varName}="$(< ${entry.secretPath})" ${pkgs.envsubst}/bin/envsubst \
+                  -i "${contentFile}" -o "${entry.file}"
+                ${postfix}
+              '');
+        })
+      cfg.files;
   };
 }

@@ -1,7 +1,8 @@
 { config, pkgs, lib, catalog, ... }:
 with lib;
 let cfg = config.roles.traefik;
-in {
+in
+{
   options.roles.traefik = {
     enable = mkEnableOption "Enable traefik daemon";
 
@@ -80,36 +81,38 @@ in {
         log.level = "INFO";
       };
 
-      dynamicConfigOptions = let
-        routerEntry = name: opt: {
-          entryPoints = [ "web" "websecure" ];
-          rule = "Host(`" + opt.domainName + "`)";
-          service = name;
-          tls.certresolver = "letsencrypt";
-        };
+      dynamicConfigOptions =
+        let
+          routerEntry = name: opt: {
+            entryPoints = [ "web" "websecure" ];
+            rule = "Host(`" + opt.domainName + "`)";
+            service = name;
+            tls.certresolver = "letsencrypt";
+          };
 
-        serviceEntry = name: opt: {
-          loadBalancer = {
-            # Map list of urls to individual url= attributes.
-            servers = map (url: { url = url; }) opt.backendUrls;
+          serviceEntry = name: opt: {
+            loadBalancer = {
+              # Map list of urls to individual url= attributes.
+              servers = map (url: { url = url; }) opt.backendUrls;
+            };
+          };
+        in
+        {
+          http = {
+            # Combine static routes with cfg.services entries.
+            routers = {
+              # Router for built-in traefik API.
+              api = {
+                entryPoints = [ "web" "websecure" ];
+                rule = "Host(`traefik.bytemonkey.org`)";
+                service = "api@internal";
+                tls.certresolver = "letsencrypt";
+              };
+            } // mapAttrs routerEntry cfg.services;
+
+            services = mapAttrs serviceEntry cfg.services;
           };
         };
-      in {
-        http = {
-          # Combine static routes with cfg.services entries.
-          routers = {
-            # Router for built-in traefik API.
-            api = {
-              entryPoints = [ "web" "websecure" ];
-              rule = "Host(`traefik.bytemonkey.org`)";
-              service = "api@internal";
-              tls.certresolver = "letsencrypt";
-            };
-          } // mapAttrs routerEntry cfg.services;
-
-          services = mapAttrs serviceEntry cfg.services;
-        };
-      };
     };
 
     # Setup Cloudflare secret.

@@ -3,7 +3,8 @@ with lib;
 let
   cfg = config.roles.nomad;
   datacenter = "skynet";
-in {
+in
+{
   options.roles.nomad = with types; {
     enableServer = mkEnableOption "Enable Nomad Server (Coordinator)";
     enableClient = mkEnableOption "Enable Nomad Client (Worker)";

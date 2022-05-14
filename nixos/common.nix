@@ -23,7 +23,8 @@
       vim-is-neovim = pkgs.writeShellScriptBin "vim" ''
         exec ${neovim}/bin/nvim "$@"
       '';
-    in [
+    in
+    [
       bind
       file
       git

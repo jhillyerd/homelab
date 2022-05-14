@@ -23,7 +23,8 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
 
   nomad-cluster = [ nexus nc-um350-1 nc-um350-2 fractal ];
-in {
+in
+{
   # Common
   "influxdb-telegraf.age".publicKeys = users ++ home-systems ++ nomad-cluster;
   "tailscale.age".publicKeys = users ++ home-systems ++ nomad-cluster;

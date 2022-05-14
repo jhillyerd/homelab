@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 let cfg = config.roles.loki;
-in {
+in
+{
   options.roles.loki = {
     enable = mkEnableOption "Network Loki host";
 

@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 let cfg = config.roles.mosquitto;
-in {
+in
+{
   options.roles.mosquitto = {
     enable = mkEnableOption "Network Mosquitto host";
 

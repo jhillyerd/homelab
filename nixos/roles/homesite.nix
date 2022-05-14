@@ -1,7 +1,8 @@
 { config, pkgs, lib, homesite, ... }:
 with lib;
 let cfg = config.roles.homesite;
-in {
+in
+{
   options.roles.homesite = {
     enable = mkEnableOption "Enable home website";
 
@@ -31,26 +32,28 @@ in {
     };
   };
 
-  config = let
-    data = { services = cfg.services; };
+  config =
+    let
+      data = { services = cfg.services; };
 
-    configDir = pkgs.writeTextDir "data.json" (builtins.toJSON data);
-  in mkIf cfg.enable {
-    services.nginx = {
-      enable = true;
-      virtualHosts."homesite" = {
-        root = "${homesite.defaultPackage.x86_64-linux}"; # From flake
+      configDir = pkgs.writeTextDir "data.json" (builtins.toJSON data);
+    in
+    mkIf cfg.enable {
+      services.nginx = {
+        enable = true;
+        virtualHosts."homesite" = {
+          root = "${homesite.defaultPackage.x86_64-linux}"; # From flake
 
-        locations."/config/" = { alias = "${configDir}/"; };
+          locations."/config/" = { alias = "${configDir}/"; };
 
-        listen = [{
-          addr = "0.0.0.0";
-          port = 12701;
-          ssl = false;
-        }];
+          listen = [{
+            addr = "0.0.0.0";
+            port = 12701;
+            ssl = false;
+          }];
+        };
       };
-    };
 
-    networking.firewall.allowedTCPPorts = [ 12701 ];
-  };
+      networking.firewall.allowedTCPPorts = [ 12701 ];
+    };
 }

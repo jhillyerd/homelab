@@ -8,7 +8,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 let cfg = config.roles.nfs-bind;
-in {
+in
+{
   options.roles.nfs-bind = {
     nfsPath = mkOption {
       type = types.str;
@@ -60,36 +61,38 @@ in {
     };
   };
 
-  config = let
-    setupDir = name: bind: ''
-      mkdir -p "${cfg.mountPoint}/${name}"
-      chown ${bind.user}:${bind.group} "${cfg.mountPoint}/${name}"
-      chmod ${bind.mode} "${cfg.mountPoint}/${name}"
-    '';
+  config =
+    let
+      setupDir = name: bind: ''
+        mkdir -p "${cfg.mountPoint}/${name}"
+        chown ${bind.user}:${bind.group} "${cfg.mountPoint}/${name}"
+        chmod ${bind.mode} "${cfg.mountPoint}/${name}"
+      '';
 
-    fsBindEntry = name: bind:
-      nameValuePair bind.path {
-        device = "${cfg.mountPoint}/${name}";
-        options = [ "bind" "_netdev" ];
-        noCheck = true;
+      fsBindEntry = name: bind:
+        nameValuePair bind.path {
+          device = "${cfg.mountPoint}/${name}";
+          options = [ "bind" "_netdev" ];
+          noCheck = true;
+        };
+    in
+    mkIf (length (attrNames cfg.binds) > 0) {
+      systemd.services.nfs-bind-init = {
+        script = lib.concatStringsSep "\n" (mapAttrsToList setupDir cfg.binds);
+        wantedBy = [ "multi-user.target" ];
+        after = [ "remote-fs.target" ];
+        before = cfg.before;
+        serviceConfig = { Type = "oneshot"; };
       };
-  in mkIf (length (attrNames cfg.binds) > 0) {
-    systemd.services.nfs-bind-init = {
-      script = lib.concatStringsSep "\n" (mapAttrsToList setupDir cfg.binds);
-      wantedBy = [ "multi-user.target" ];
-      after = [ "remote-fs.target" ];
-      before = cfg.before;
-      serviceConfig = { Type = "oneshot"; };
-    };
 
-    # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
-    fileSystems = (mapAttrs' fsBindEntry
-      (filterAttrs (name: bind: bind.path != null) cfg.binds)) // {
+      # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
+      fileSystems = (mapAttrs' fsBindEntry
+        (filterAttrs (name: bind: bind.path != null) cfg.binds)) // {
         # Mount NFS volume
         "${cfg.mountPoint}" = {
           device = cfg.nfsPath;
           fsType = "nfs";
         };
       };
-  };
+    };
 }

@@ -24,49 +24,58 @@
 
       # catalog.nodes defines the systems available in this flake.
       catalog = import ./catalog.nix { inherit system; };
-    in rec {
+    in
+    rec {
       # Convert nodes into a set of nixos configs.
-      nixosConfigurations = let
-        # Bare metal systems.
-        metalSystems = mapAttrs (host: node:
-          nixosSystem {
-            inherit (node) system;
-            specialArgs = attrs // {
-              inherit catalog;
-              hostName = host;
-              environment = "prod";
-            };
-            modules = [ node.config node.hw agenix.nixosModule ];
-          }) catalog.nodes;
+      nixosConfigurations =
+        let
+          # Bare metal systems.
+          metalSystems = mapAttrs
+            (host: node:
+              nixosSystem {
+                inherit (node) system;
+                specialArgs = attrs // {
+                  inherit catalog;
+                  hostName = host;
+                  environment = "prod";
+                };
+                modules = [ node.config node.hw agenix.nixosModule ];
+              })
+            catalog.nodes;
 
-        # Hyper-V systems, name prefixed with "hyper-"; in test environment.
-        hypervSystems = mapAttrs' (host: node: {
-          name = "hyper-${host}";
-          value = nixosSystem {
-            inherit (node) system;
-            specialArgs = attrs // {
-              inherit catalog;
-              hostName = host;
-              environment = "test";
-            };
-            modules = [ node.config ./hw/hyperv.nix agenix.nixosModule ];
-          };
-        }) catalog.nodes;
+          # Hyper-V systems, name prefixed with "hyper-"; in test environment.
+          hypervSystems = mapAttrs'
+            (host: node: {
+              name = "hyper-${host}";
+              value = nixosSystem {
+                inherit (node) system;
+                specialArgs = attrs // {
+                  inherit catalog;
+                  hostName = host;
+                  environment = "test";
+                };
+                modules = [ node.config ./hw/hyperv.nix agenix.nixosModule ];
+              };
+            })
+            catalog.nodes;
 
-        # libvirtd systems, name prefixed with "virt-"; in test environment.
-        libvirtSystems = mapAttrs' (host: node: {
-          name = "virt-${host}";
-          value = nixosSystem {
-            inherit (node) system;
-            specialArgs = attrs // {
-              inherit catalog;
-              hostName = host;
-              environment = "test";
-            };
-            modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
-          };
-        }) catalog.nodes;
-      in metalSystems // hypervSystems // libvirtSystems;
+          # libvirtd systems, name prefixed with "virt-"; in test environment.
+          libvirtSystems = mapAttrs'
+            (host: node: {
+              name = "virt-${host}";
+              value = nixosSystem {
+                inherit (node) system;
+                specialArgs = attrs // {
+                  inherit catalog;
+                  hostName = host;
+                  environment = "test";
+                };
+                modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
+              };
+            })
+            catalog.nodes;
+        in
+        metalSystems // hypervSystems // libvirtSystems;
 
       # Generate an SD card image for each host.
       images = mapAttrs
@@ -76,21 +85,23 @@
       # Generate VM build packages to quick test each host.  Note that these
       # will will be x86-64 VMs, and will have a new host key, thus will be
       # unable to decrypt agenix secrets.
-      packages = let
-        # Converts node entry into a virtual machine package.
-        vmPackage = sys: host: node: {
-          name = host;
-          value = (nixosSystem {
-            system = sys;
-            specialArgs = attrs // {
-              inherit catalog;
-              hostName = host;
-              environment = "test";
-            };
-            modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
-          }).config.system.build.vm;
-        };
-      in eachSystemMap [ system.x86_64-linux ]
-      (sys: mapAttrs' (vmPackage sys) catalog.nodes);
+      packages =
+        let
+          # Converts node entry into a virtual machine package.
+          vmPackage = sys: host: node: {
+            name = host;
+            value = (nixosSystem {
+              system = sys;
+              specialArgs = attrs // {
+                inherit catalog;
+                hostName = host;
+                environment = "test";
+              };
+              modules = [ node.config ./hw/qemu.nix agenix.nixosModule ];
+            }).config.system.build.vm;
+          };
+        in
+        eachSystemMap [ system.x86_64-linux ]
+          (sys: mapAttrs' (vmPackage sys) catalog.nodes);
     };
 }

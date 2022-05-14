@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 with lib;
 let cfg = config.roles.telegraf;
-in {
+in
+{
   options.roles.telegraf = {
     enable = mkEnableOption "Telegraf node";
 
