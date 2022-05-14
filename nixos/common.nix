@@ -1,5 +1,5 @@
 # Common config shared among all machines
-{ config, pkgs, hostName, environment, lib, catalog, ... }: {
+{ config, pkgs, hostName, environment, lib, catalog, nixpkgs-unstable, ... }: {
   system.stateVersion = "21.11";
 
   imports = [ ./roles ];
@@ -17,8 +17,11 @@
 
   environment.systemPackages = with pkgs;
     let
+      # Use unstable neovim.
+      neovim = nixpkgs-unstable.legacyPackages.${system}.neovim;
+
       vim-is-neovim = pkgs.writeShellScriptBin "vim" ''
-        exec ${pkgs.neovim}/bin/nvim "$@"
+        exec ${neovim}/bin/nvim "$@"
       '';
     in [
       bind

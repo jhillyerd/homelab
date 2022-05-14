@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +15,7 @@
     flake-utils.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, agenix, flake-utils, ... }@attrs:
+  outputs = { self, nixpkgs, agenix, flake-utils, nixpkgs-unstable, ... }@attrs:
     let
       inherit (nixpkgs.lib)
         mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem;
