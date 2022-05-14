@@ -31,6 +31,25 @@ in
       description = "Where nomad stores its state";
       default = "/var/lib/nomad";
     };
+
+    hostVolumes = mkOption {
+      type = attrsOf (submodule {
+        options = {
+          path = mkOption {
+            type = path;
+            description = "Path on host filesystem";
+          };
+
+          readOnly = mkOption {
+            type = bool;
+            description = "Prevents writes to volume";
+            default = true;
+          };
+        };
+      });
+      description = "Host volumes";
+      default = { };
+    };
   };
 
   config = mkMerge [
@@ -119,6 +138,11 @@ in
         enableDocker = true;
         settings.client.enabled = true;
         settings.client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
+        settings.client.host_volume = mkIf (cfg.hostVolumes != { }) cfg.hostVolumes;
+      };
+
+      systemd.services.nomad = {
+        after = [ "remote-fs.target" ];
       };
     })
   ];
