@@ -28,7 +28,7 @@ in {
           gnumake
           lazygit
           lynx
-          nixfmt
+          nixpkgs-fmt
           nodejs
           nomad
           patchelf
