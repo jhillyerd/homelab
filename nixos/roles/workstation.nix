@@ -34,7 +34,6 @@ in
           lynx
           nixpkgs-fmt
           nodejs
-          nomad
           patchelf
           python3
           ripgrep

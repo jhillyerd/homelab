@@ -17,7 +17,9 @@
           devShell = pkgs.mkShell {
             buildInputs = with pkgs; [
               ansible_2_9
+              consul
               esphome
+              nomad
             ];
           };
         }
