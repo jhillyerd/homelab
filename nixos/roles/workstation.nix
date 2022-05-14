@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, nixpkgs-unstable, ... }:
 with lib;
 let cfg = config.roles.workstation;
 in
@@ -14,6 +14,8 @@ in
     (mkIf cfg.enable {
       environment.systemPackages = with pkgs;
         let
+          inherit (nixpkgs-unstable.legacyPackages.${system}) rnix-lsp rust-analyzer;
+
           x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
             exec ${pkgs.google-chrome}/bin/google-chrome-stable "$@"
           '';
@@ -36,6 +38,8 @@ in
           patchelf
           python3
           ripgrep
+          rnix-lsp
+          rust-analyzer
           starship
           tmux
           universal-ctags
