@@ -70,6 +70,14 @@ job "grafana" {
         data = <<EOT
 apiVersion: 1
 datasources:
+  - name: homeassistant influxdb
+    type: influxdb
+    database: homeassistant
+    url: http://100.80.202.97:8086
+    user: homeassistant
+    secureJsonData:
+      password: "{{key "secrets/influxdb/homeassistant"}}"
+
   - name: telegraf-hosts influxdb
     type: influxdb
     database: telegraf-hosts
@@ -77,6 +85,13 @@ datasources:
     user: telegraf
     secureJsonData:
       password: "{{key "secrets/influxdb/telegraf"}}"
+
+  - name: "syslogs loki"
+    type: loki
+    access: proxy
+    url: "http://100.80.202.97:3100"
+    jsonData:
+      maxLines: 1000
 EOT
 
         destination = "/local/grafana/provisioning/datasources/datasources.yml"
