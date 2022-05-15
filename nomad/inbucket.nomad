@@ -26,9 +26,9 @@ job "inbucket" {
       tags = [
         "http",
         "traefik.enable=true",
-        "traefik.http.routers.nomad-http.entrypoints=websecure",
-        "traefik.http.routers.nomad-http.rule=Host(`nomad.bytemonkey.org`) && PathPrefix(`/inbucket`)",
-        "traefik.http.routers.nomad-http.tls.certresolver=letsencrypt",
+        "traefik.http.routers.inbucket-http.entrypoints=websecure",
+        "traefik.http.routers.inbucket-http.rule=Host(`nomad.bytemonkey.org`) && PathPrefix(`/inbucket`)",
+        "traefik.http.routers.inbucket-http.tls.certresolver=letsencrypt",
       ]
 
       check {

@@ -27,6 +27,14 @@ job "grafana" {
       name = "grafana"
       port = "http"
 
+      tags = [
+        "http",
+        "traefik.enable=true",
+        "traefik.http.routers.grafana-http.entrypoints=websecure",
+        "traefik.http.routers.grafana-http.rule=Host(`grafana.bytemonkey.org`)",
+        "traefik.http.routers.grafana-http.tls.certresolver=letsencrypt",
+      ]
+
       check {
         name = "Grafana HTTP Check"
         type = "http"
