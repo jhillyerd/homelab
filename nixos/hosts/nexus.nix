@@ -1,6 +1,9 @@
 { config, pkgs, lib, environment, catalog, ... }: {
   imports = [ ../common.nix ];
 
+  roles.dns.enable = true;
+  roles.dns.serveLocalZones = true;
+
   roles.nfs-bind = {
     nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
 
