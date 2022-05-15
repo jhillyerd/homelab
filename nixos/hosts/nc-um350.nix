@@ -6,7 +6,8 @@
     enableServer = true;
     allocDir = "/data/nomad-alloc";
 
-    retryJoin = with catalog.nodes; [ nexus.ip nc-um350-1.ip nc-um350-2.ip ];
+    retryJoin = with catalog.nodes;
+      [ nexus.ip.priv nc-um350-1.ip.priv nc-um350-2.ip.priv ];
 
     hostVolumes = {
       grafana-storage = {

@@ -72,7 +72,7 @@ in
           prefix = "traefik";
           exposedByDefault = false;
           endpoint = {
-            address = catalog.nodes.nexus.ip + ":8500";
+            address = catalog.nodes.nexus.ip.priv + ":8500";
             scheme = "http";
             datacenter = "skynet";
           };

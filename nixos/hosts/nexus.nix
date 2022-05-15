@@ -51,7 +51,7 @@
   roles.nomad = {
     enableServer = true;
 
-    retryJoin = with catalog.nodes; [ nexus.ip nc-um350-1.ip nc-um350-2.ip ];
+    retryJoin = with catalog.nodes; [ nexus.ip.priv nc-um350-1.ip.priv nc-um350-2.ip.priv ];
   };
 
   roles.homesite = {
@@ -96,14 +96,14 @@
       }
       {
         name = "Consul";
-        host = catalog.nodes.nexus.ip;
+        host = catalog.nodes.nexus.ip.priv;
         proto = "http";
         port = 8500;
         icon = "address-book";
       }
       {
         name = "Nomad";
-        host = catalog.nodes.nexus.ip;
+        host = catalog.nodes.nexus.ip.priv;
         proto = "http";
         port = 4646;
         icon = "server";
