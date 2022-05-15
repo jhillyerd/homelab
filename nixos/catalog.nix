@@ -2,28 +2,32 @@
 { system }: {
   nodes = {
     fractal = {
-      ip = "100.112.232.73";
+      ip = "192.168.1.12";
+      tail-ip = "100.112.232.73";
       config = ./hosts/fractal.nix;
       hw = ./hw/asus-b350.nix;
       system = system.x86_64-linux;
     };
 
     nc-um350-1 = {
-      ip = "100.109.33.10";
+      ip = "192.168.128.36";
+      tail-ip = "100.109.33.10";
       config = ./hosts/nc-um350.nix;
       hw = ./hw/minis-um350.nix;
       system = system.x86_64-linux;
     };
 
     nc-um350-2 = {
-      ip = "100.97.169.111";
+      ip = "192.168.128.37";
+      tail-ip = "100.97.169.111";
       config = ./hosts/nc-um350.nix;
       hw = ./hw/minis-um350.nix;
       system = system.x86_64-linux;
     };
 
     nexus = {
-      ip = "100.80.202.97";
+      ip = "192.168.1.10";
+      tail-ip = "100.80.202.97";
       config = ./hosts/nexus.nix;
       hw = ./hw/cubi.nix;
       system = system.x86_64-linux;

@@ -14,12 +14,6 @@ in
       description = "List of server host or IPs to join to datacenter";
     };
 
-    consulBind = mkOption {
-      type = nullOr str;
-      description = "The name of the interface to pull consul bind addr from";
-      default = null;
-    };
-
     allocDir = mkOption {
       type = nullOr str;
       description = "Where nomad client stores alloc data";
@@ -80,12 +74,19 @@ in
         };
       };
 
+      systemd.services.consul = {
+        after = [ "network-online.target" ];
+      };
+
+      systemd.services.nomad = {
+        after = [ "network-online.target" ];
+      };
+
       services.consul = {
         enable = true;
 
-        interface.bind = cfg.consulBind;
-
         extraConfig = {
+          bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
           retry_join = cfg.retryJoin;
           retry_interval = "15s";
           inherit datacenter;
@@ -103,7 +104,7 @@ in
         settings = {
           datacenter = datacenter;
           data_dir = cfg.dataDir;
-          bind_addr = ''{{ GetInterfaceIP "${catalog.tailscale.interface}" }}'';
+          bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
         };
       };
     })
@@ -130,6 +131,9 @@ in
         extraSettingsPaths =
           [ config.roles.envfile.files."nomad-encrypt.hcl".file ];
       };
+
+      networking.firewall.allowedTCPPorts = [ 4646 4647 4648 8300 8301 8302 8500 8501 8502 8600 ];
+      networking.firewall.allowedUDPPorts = [ 4648 8301 8302 8600 ];
     })
 
     # Nomad client config.
