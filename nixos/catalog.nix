@@ -1,5 +1,5 @@
 # Catalog defines the systems & services on my network.
-{ system }: {
+{ system }: rec {
   nodes = {
     fractal = {
       ip = "192.168.1.12";
@@ -47,17 +47,17 @@
   };
 
   influxdb = rec {
-    host = "nexus";
+    host = nodes.nexus.ip;
     port = 8086;
     telegraf.user = "telegraf";
     telegraf.database = "telegraf-hosts";
     urls = [ "http://${host}:${toString port}" ];
   };
 
-  syslog.host = "nexus";
+  syslog.host = nodes.nexus.ip;
   syslog.port = 1514;
 
-  smtp.host = "nexus";
+  smtp.host = nodes.nexus.ip;
 
   tailscale.interface = "tailscale0";
 }
