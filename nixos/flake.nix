@@ -36,8 +36,12 @@
         }:
         nixosSystem {
           system = sys;
+          # `specialArgs` allows access to catalog, environment, etc with
+          # hosts and roles.  `self` lets a host reference aspects of
+          # itself.
           specialArgs = attrs // {
             inherit catalog environment hostName;
+            self = node;
           };
           modules = [ node.config hardware agenix.nixosModule ];
         };
