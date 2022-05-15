@@ -5,49 +5,13 @@
     nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
 
     binds = {
-      "grafana" = {
-        path = "/var/lib/grafana";
-        user = "grafana";
-        group = "grafana";
-        mode = "0700";
-      };
-
       "nodered" = {
         user = "1000";
         group = "1000";
         mode = "0700";
       };
     };
-
-    before = [ "grafana.service" ];
   };
-
-  roles.grafana =
-    let
-      # Construct a grafana datasource from our influxdb database definition.
-      mkGrafanaInfluxSource = name: db: {
-        name = "${name} influxdb";
-        type = "influxdb";
-        database = name;
-        # TODO don't use localhost.
-        url = "http://localhost:${toString config.roles.influxdb.port}";
-        user = db.user;
-        secureJsonData.password = "$__file{${db.passwordFile}}";
-      };
-    in
-    {
-      enable = true;
-      domain = "nexus.skynet.local";
-      datasources =
-        (lib.mapAttrsToList mkGrafanaInfluxSource config.roles.influxdb.databases)
-        ++ [{
-          name = "syslogs loki";
-          type = "loki";
-          access = "proxy";
-          url = "http://localhost:${toString config.roles.loki.loki_http_port}";
-          jsonData.maxLines = 1000;
-        }];
-    };
 
   roles.influxdb = {
     enable = true;
@@ -170,11 +134,6 @@
         backendUrls = [ "http://192.168.1.20:5050" ];
       };
 
-      grafana = {
-        domainName = "grafana.bytemonkey.org";
-        backendUrls = [ "http://127.0.0.1:3000" ];
-      };
-
       home = {
         domainName = "bytemonkey.org";
         backendUrls = [ "http://127.0.0.1:12701" ];
@@ -236,10 +195,6 @@
 
     influxdb-admin.file = ../secrets/influxdb-admin.age;
     influxdb-homeassistant.file = ../secrets/influxdb-homeassistant.age;
-    influxdb-homeassistant.owner = "grafana";
-
-    # Secret file defined in common.nix.
-    influxdb-telegraf.owner = "grafana";
 
     mqtt-admin.file = ../secrets/mqtt-admin.age;
     mqtt-admin.owner = "mosquitto";
