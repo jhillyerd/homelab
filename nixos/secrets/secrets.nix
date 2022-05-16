@@ -38,6 +38,7 @@ in
   "nodered.age".publicKeys = users ++ home-systems;
 
   # Nomad cluster
+  "skynet-server-consul-0-key.pem.age".publicKeys = users ++ nomad-cluster;
   "consul-encrypt.age".publicKeys = users ++ nomad-cluster;
   "nomad-encrypt.age".publicKeys = users ++ nomad-cluster;
 }
