@@ -98,6 +98,12 @@ in
           auto_encrypt.allow_tls = true;
 
           ca_file = ./files/nomad/consul-agent-ca.pem;
+
+          acl = {
+            enabled = true;
+            default_policy = "allow";
+            enable_token_persistence = true;
+          };
         };
 
         # Install extra HCL file to hold encryption key.

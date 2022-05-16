@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+domain="skynet.local"
+server="$1"
+agent="$2"
+
+if [ -z "$CONSUL_HTTP_TOKEN" ]; then
+  echo "\$CONSUL_HTTP_TOKEN must be set"
+  exit 128
+fi
+
+if [ -z "$server" ]; then
+  echo "No server specified"
+  exit 128
+fi
+
+if [ -z "$agent" ]; then
+  echo "No agent specified"
+  exit 128
+fi
+
+# Create ACL policy for agent.
+consul acl policy create -name "$agent" -http-addr "$server.$domain:8500" \
+  -rules - <<EOT
+node "$agent" {
+  policy = "write"
+}
+EOT
+
+# Create token for agent.
+consul acl token create -http-addr "$server.$domain:8500" \
+  -description "$agent agent token" -policy-name "$agent"
+
+echo -e "\nnext:"
+echo "consul acl set-agent-token -http-addr \"$agent.$domain:8500\" agent <SecretID>"
