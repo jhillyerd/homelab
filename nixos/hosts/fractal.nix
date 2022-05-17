@@ -19,9 +19,4 @@
   # routing to the outer virtual network, due to using the same IP range.
   virtualisation.libvirtd.enable = environment == "prod";
   virtualisation.docker.extraOptions = "--data-root /data/docker";
-
-  fileSystems."/data" = {
-    device = "/dev/disk/by-label/data";
-    fsType = "ext4";
-  };
 }

@@ -22,6 +22,12 @@
 
   services.fstrim.enable = true;
 
+  # nvidia graphics card setup.
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
+  hardware.nvidia.package =
+    config.boot.kernelPackages.nvidiaPackages.stable;
+
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
@@ -30,6 +36,11 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/boot";
     fsType = "vfat";
+  };
+
+  fileSystems."/data" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "ext4";
   };
 
   swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
