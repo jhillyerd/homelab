@@ -107,6 +107,7 @@ in
           google-chrome
           imwheel
           kitty
+          lxappearance
           maim
           pantheon.elementary-icon-theme
           polybarFull

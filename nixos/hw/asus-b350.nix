@@ -23,6 +23,7 @@
   services.fstrim.enable = true;
 
   # nvidia graphics card setup.
+  services.xserver.dpi = 96;
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
   hardware.nvidia.package =
