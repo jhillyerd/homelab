@@ -11,6 +11,7 @@
     ./nfs-bind.nix
     ./tailscale.nix
     ./telegraf.nix
+    ./template.nix
     ./traefik.nix
     ./workstation.nix
   ];
