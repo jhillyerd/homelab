@@ -22,7 +22,7 @@ let
   nc-um350-2 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
 
-  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 fractal ];
+  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 ];
 in
 {
   # Common
@@ -38,7 +38,8 @@ in
   "nodered.age".publicKeys = users ++ home-systems;
 
   # Nomad cluster
-  "skynet-server-consul-0-key.pem.age".publicKeys = users ++ nomad-cluster;
   "consul-encrypt.age".publicKeys = users ++ nomad-cluster;
   "nomad-encrypt.age".publicKeys = users ++ nomad-cluster;
+  "nomad-consul-token.age".publicKeys = users ++ nomad-cluster;
+  "skynet-server-consul-0-key.pem.age".publicKeys = users ++ nomad-cluster;
 }

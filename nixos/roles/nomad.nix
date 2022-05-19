@@ -51,25 +51,32 @@ in
     (mkIf (cfg.enableServer || cfg.enableClient) {
       age.secrets = {
         consul-encrypt.file = ../secrets/consul-encrypt.age;
+        nomad-consul-token.file = ../secrets/nomad-consul-token.age;
         nomad-encrypt.file = ../secrets/nomad-encrypt.age;
       };
 
-      # Create envfiles containing encryption keys when available.
-      roles.envfile.files = {
+      # Create envfiles containing encryption keys.
+      roles.template.files = {
         "consul-encrypt.hcl" = {
-          secretPath = config.age.secrets.consul-encrypt.path;
-          varName = "encrypt";
-          quoteValue = true;
+          vars.encrypt = config.age.secrets.consul-encrypt.path;
+          content = ''encrypt = "$encrypt"'';
           owner = "consul";
         };
 
-        "nomad-encrypt.hcl" = {
-          secretPath = config.age.secrets.nomad-encrypt.path;
+        "nomad-secrets.hcl" = {
+          vars = {
+            consulToken = config.age.secrets.nomad-consul-token.path;
+            encrypt = config.age.secrets.nomad-encrypt.path;
+          };
           content = ''
+            consul {
+              token = "$consulToken"
+            }
             server {
-              encrypt = "$SECRET"
+              encrypt = "$encrypt"
             }
           '';
+          # Required for systemd drop privileges.
           mode = "0444";
         };
       };
@@ -79,7 +86,7 @@ in
       };
 
       systemd.services.nomad = {
-        after = [ "network-online.target" ];
+        after = [ "network-online.target" "consul.service" ];
       };
 
       services.consul = {
@@ -101,14 +108,14 @@ in
 
           acl = {
             enabled = true;
-            default_policy = "allow";
+            default_policy = "deny";
             enable_token_persistence = true;
           };
         };
 
         # Install extra HCL file to hold encryption key.
         extraConfigFiles =
-          [ config.roles.envfile.files."consul-encrypt.hcl".file ];
+          [ config.roles.template.files."consul-encrypt.hcl".path ];
       };
 
       services.nomad = {
@@ -152,9 +159,9 @@ in
           bootstrap_expect = 3;
         };
 
-        # Install extra HCL file to hold encryption key.
+        # Install extra HCL file to hold secrets.
         extraSettingsPaths =
-          [ config.roles.envfile.files."nomad-encrypt.hcl".file ];
+          [ config.roles.template.files."nomad-secrets.hcl".path ];
       };
 
       networking.firewall.allowedTCPPorts = [ 4646 4647 4648 8300 8301 8302 8500 8501 8502 8600 ];
