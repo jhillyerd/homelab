@@ -76,6 +76,7 @@ in
               encrypt = "$encrypt"
             }
           '';
+          # TODO: look into systemd LoadCredentials to fix this.
           # Required for systemd drop privileges.
           mode = "0444";
         };

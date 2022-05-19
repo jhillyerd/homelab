@@ -115,15 +115,24 @@ in
         };
     };
 
-    # Setup Cloudflare secret.
-    roles.envfile = {
-      files."cloudflare-dns-api.env" = {
-        secretPath = cfg.cloudflareDnsApiTokenFile;
-        varName = "CF_DNS_API_TOKEN";
-      };
+    # Setup secrets.
+    age.secrets = {
+      traefik-consul-token.file = ../secrets/traefik-consul-token.age;
     };
+
+    roles.template.files."traefik.env" = {
+      vars = {
+        cfDnsToken = cfg.cloudflareDnsApiTokenFile;
+        consulToken = config.age.secrets.traefik-consul-token.path;
+      };
+      content = ''
+        CF_DNS_API_TOKEN=$cfDnsToken
+        CONSUL_HTTP_TOKEN=$consulToken
+      '';
+    };
+
     systemd.services.traefik.serviceConfig.EnvironmentFile =
-      config.roles.envfile.files."cloudflare-dns-api.env".file;
+      config.roles.template.files."traefik.env".path;
 
     networking.firewall.allowedTCPPorts = [ 25 80 443 ];
   };
