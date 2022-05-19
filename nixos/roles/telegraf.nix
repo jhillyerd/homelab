@@ -36,15 +36,13 @@ in
       };
 
       environmentFiles =
-        [ config.roles.envfile.files."telegraf-influx.env".file ];
+        [ config.roles.template.files."telegraf-influx.env".path ];
     };
 
     # Create an environment file containing the influxdb password.
-    roles.envfile = {
-      files."telegraf-influx.env" = {
-        secretPath = cfg.influxdb.passwordFile;
-        varName = "PASSWORD";
-      };
+    roles.template.files."telegraf-influx.env" = {
+      vars.password = cfg.influxdb.passwordFile;
+      content = ''PASSWORD=$password'';
     };
   };
 }
