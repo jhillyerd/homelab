@@ -111,6 +111,7 @@ in
           maim
           pantheon.elementary-icon-theme
           polybarFull
+          pavucontrol
           rofi
           rxvt_unicode-with-plugins
           sxhkd
