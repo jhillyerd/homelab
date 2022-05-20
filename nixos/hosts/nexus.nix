@@ -180,17 +180,14 @@
       ports = [ "1880:1880" ];
       volumes = [ "/data/nodered:/data" ];
       environmentFiles =
-        [ config.roles.envfile.files."nodered-container.env".file ];
+        [ config.roles.template.files."nodered-container.env".path ];
     };
   };
 
   # Create an environment file containing the nodered secret.
-  roles.envfile = {
-    files."nodered-container.env" = {
-      secretPath = config.age.secrets.nodered.path;
-      varName = "NODE_RED_CREDENTIAL_SECRET";
-      quoteValue = false;
-    };
+  roles.template.files."nodered-container.env" = {
+    vars.secret = config.age.secrets.nodered.path;
+    content = "NODE_RED_CREDENTIAL_SECRET=$secret";
   };
 
   age.secrets = {

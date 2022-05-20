@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }: {
   imports = [
     ./dns.nix
-    ./envfile.nix
     ./homesite.nix
     ./influxdb.nix
     ./log-forwarder.nix
