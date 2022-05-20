@@ -21,9 +21,11 @@
             buildInputs = with pkgs; [
               agenix.defaultPackage.${system}
               ansible_2_9
+              cfssl
               consul
               esphome
               nomad
+              openssl
             ];
           };
         }
