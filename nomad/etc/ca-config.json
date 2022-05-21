@@ -1,0 +1,17 @@
+{
+  "CN": "nomad-cfssl-ca.skynet.local",
+  "hosts": [
+    "nomad-cfssl-ca.skynet.local"
+    ],
+    "key": {
+      "algo": "ecdsa",
+      "size": 256
+    },
+    "names": [
+      {
+        "C": "US",
+        "ST": "WA",
+        "L": "Redmond"
+      }
+    ]
+}

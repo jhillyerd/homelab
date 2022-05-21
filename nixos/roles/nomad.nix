@@ -53,6 +53,7 @@ in
         consul-encrypt.file = ../secrets/consul-encrypt.age;
         nomad-consul-token.file = ../secrets/nomad-consul-token.age;
         nomad-encrypt.file = ../secrets/nomad-encrypt.age;
+        nomad-server-client-key.file = ../secrets/nomad-server-client-key.age;
       };
 
       # Create envfiles containing encryption keys.
@@ -127,6 +128,21 @@ in
           datacenter = datacenter;
           data_dir = cfg.dataDir;
           bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
+
+          tls = {
+            http = true;
+            rpc = true;
+
+            ca_file = "${./files/nomad/nomad-ca.pem}";
+            cert_file = "${./files/nomad/nomad-server-client.pem}";
+            key_file = config.age.secrets.nomad-server-client-key.path;
+
+            verify_server_hostname = true;
+            verify_https_client = true;
+
+            # TODO: remove after TLS deployed
+            rpc_upgrade_mode = true;
+          };
         };
       };
     })

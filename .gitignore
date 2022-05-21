@@ -2,6 +2,12 @@
 /gen_passwords.json
 /ansible/lowsec.yml
 
+# Certificates
+/nomad/etc/ca
+/nomad/etc/*.csr
+/nomad/etc/*.pem
+/nomad/etc/*.pfx
+
 /baseimage/flake.lock
 
 /.vim
