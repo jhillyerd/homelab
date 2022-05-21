@@ -139,9 +139,6 @@ in
 
             verify_server_hostname = true;
             verify_https_client = true;
-
-            # TODO: remove after TLS deployed
-            rpc_upgrade_mode = true;
           };
         };
       };
