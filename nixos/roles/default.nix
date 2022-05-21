@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }: {
   imports = [
     ./dns.nix
+    ./gateway-online.nix
     ./homesite.nix
     ./influxdb.nix
     ./log-forwarder.nix

@@ -174,6 +174,8 @@
     enableTcpListener = true;
   };
 
+  roles.gateway-online.addr = "192.168.1.1";
+
   virtualisation.oci-containers.containers = {
     nodered = {
       image = "nodered/node-red:2.2.2";
