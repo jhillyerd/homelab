@@ -21,6 +21,7 @@
     "/mnt/skynas" = {
       device = "192.168.1.20:/volume1/cluster_${environment}";
       fsType = "nfs";
+      options = [ "x-systemd.automount" "noauto" ];
     };
   };
 
