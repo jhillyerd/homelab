@@ -107,7 +107,7 @@
       {
         name = "Nomad";
         host = catalog.nodes.nexus.ip.priv;
-        proto = "http";
+        proto = "https";
         port = 4646;
         icon = "server";
       }
