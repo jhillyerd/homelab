@@ -5,8 +5,9 @@ in
 {
   options.roles.gateway-online = {
     addr = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       description = "Name or address of gateway to ping";
+      default = null;
     };
   };
 
