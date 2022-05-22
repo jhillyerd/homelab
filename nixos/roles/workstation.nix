@@ -35,6 +35,7 @@ in
           nixpkgs-fmt
           nodejs
           patchelf
+          postgresql_14
           python3
           ripgrep
           rnix-lsp
