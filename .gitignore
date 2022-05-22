@@ -4,9 +4,7 @@
 
 # Certificates
 /nomad/etc/ca
-/nomad/etc/*.csr
-/nomad/etc/*.pem
-/nomad/etc/*.pfx
+/nomad/etc/certs
 
 /baseimage/flake.lock
 
