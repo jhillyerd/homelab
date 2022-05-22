@@ -9,7 +9,13 @@
     retryJoin = with catalog.nodes;
       [ nexus.ip.priv nc-um350-1.ip.priv nc-um350-2.ip.priv ];
 
+    # TODO: mapify, and create dir if missing.
     hostVolumes = {
+      gitea-storage = {
+        path = "/mnt/skynas/gitea-storage";
+        readOnly = false;
+      };
+
       grafana-storage = {
         path = "/mnt/skynas/grafana-storage";
         readOnly = false;
