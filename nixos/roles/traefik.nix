@@ -50,6 +50,10 @@ in
           smtp = {
             address = ":25/tcp";
           };
+
+          ssh = {
+            address = ":222/tcp";
+          };
         };
 
         certificatesResolvers.letsencrypt.acme = {
