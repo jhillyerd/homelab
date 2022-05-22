@@ -47,9 +47,10 @@ in
             access-control = "192.168.0.0/16 allow";
 
             qname-minimisation = true;
+            do-not-query-localhost = false; # for consul.
 
             # Local domains w/o DNSSEC.
-            domain-insecure = unifi-zones;
+            domain-insecure = unifi-zones ++ [ "consul" ];
           };
 
           # Configure a forward-zone for each unifi zone.
@@ -59,6 +60,11 @@ in
               forward-addr = "192.168.1.1";
             })
             unifi-zones;
+
+          # Forward consul zone to local instance.
+          stub-zone = [
+            { name = "consul"; stub-addr = "127.0.0.1@8600"; }
+          ];
 
           auth-zone = mkIf cfg.serveLocalZones {
             name = "skynet.local.";
