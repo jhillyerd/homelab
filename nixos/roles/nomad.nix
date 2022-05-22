@@ -127,7 +127,9 @@ in
         settings = {
           datacenter = datacenter;
           data_dir = cfg.dataDir;
-          bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
+          bind_addr = "0.0.0.0";
+
+          acl.enabled = true;
 
           tls = {
             http = true;
