@@ -4,6 +4,11 @@
 
 host="$1"
 target="$2"
+domain="skynet.local"
+
+if [ -z "$target" ]; then
+  target="root@$host.$domain"
+fi
 
 nixos-rebuild --flake ".#$host" --target-host "$target" \
   --build-host localhost switch
