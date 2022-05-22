@@ -45,6 +45,9 @@ job "drone" {
           DRONE_GITEA_CLIENT_ID={{key "secrets/drone/gitea-client-id"}}
           DRONE_GITEA_CLIENT_SECRET={{key "secrets/drone/gitea-client-secret"}}
           DRONE_USER_CREATE=username:admin,machine:false,admin:true
+          DRONE_DATABASE_DRIVER=postgres
+          DRONE_DATABASE_DATASOURCE={{key "secrets/drone/datasource"}}
+          DRONE_DATABASE_SECRET={{key "secrets/drone/encryption-key"}}
           DRONE_SERVER_HOST=drone.bytemonkey.org
           DRONE_SERVER_PROTO=https
           DRONE_RPC_SECRET={{key "secrets/drone/rpc-secret"}}
@@ -74,6 +77,7 @@ job "drone" {
           DRONE_RPC_PROTO=http
           DRONE_RPC_SECRET={{key "secrets/drone/rpc-secret"}}
           NOMAD_ADDR=http://nomad.service.consul:4646
+          NOMAD_TOKEN={{key "secrets/drone/runner-nomad-token"}}
         EOH
 
         destination = "local/env"
