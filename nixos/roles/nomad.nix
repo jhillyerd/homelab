@@ -85,10 +85,12 @@ in
 
       systemd.services.consul = {
         after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
       };
 
       systemd.services.nomad = {
-        after = [ "network-online.target" "consul.service" ];
+        after = [ "consul.service" ];
+        wants = [ "consul.service" ];
       };
 
       services.consul = {
@@ -143,6 +145,8 @@ in
             verify_https_client = true;
           };
         };
+
+        extraPackages = [ pkgs.cni-plugins ];
       };
     })
 
