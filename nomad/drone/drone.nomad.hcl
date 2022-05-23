@@ -73,15 +73,27 @@ job "drone" {
       template {
         data = <<EOH
           DRONE_JOB_DATACENTER=skynet
-          DRONE_RPC_HOST=drone.service.consul
-          DRONE_RPC_PROTO=http
+          DRONE_RPC_HOST={{env "NOMAD_ADDR_drone_http"}}
           DRONE_RPC_SECRET={{key "secrets/drone/rpc-secret"}}
-          NOMAD_ADDR=http://nomad.service.consul:4646
+          NOMAD_ADDR=https://nomad.service.consul:4646
           NOMAD_TOKEN={{key "secrets/drone/runner-nomad-token"}}
+          NOMAD_CLIENT_CERT=secrets/cli_cert.pem
+          NOMAD_CLIENT_KEY=secrets/cli_key.pem
+          NOMAD_SKIP_VERIFY=true
         EOH
 
         destination = "local/env"
         env = true
+      }
+
+      template {
+        data = "{{key \"secrets/nomad/cli_cert\"}}"
+        destination = "secrets/cli_cert.pem"
+      }
+
+      template {
+        data = "{{key \"secrets/nomad/cli_key\"}}"
+        destination = "secrets/cli_key.pem"
       }
 
       resources {
