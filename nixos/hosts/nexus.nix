@@ -68,6 +68,11 @@
         icon = "home";
       }
       {
+        name = "Gitea";
+        host = "gitea.bytemonkey.org";
+        icon = "code-branch";
+      }
+      {
         name = "Grafana";
         host = "grafana.bytemonkey.org";
         icon = "chart-area";
