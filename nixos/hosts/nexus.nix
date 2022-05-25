@@ -117,6 +117,13 @@
         icon = "server";
       }
       {
+        name = "Traefik";
+        host = "traefik.bytemonkey.org";
+        path = "/dashboard/";
+        proto = "https";
+        icon = "traffic-light";
+      }
+      {
         name = "Docker Registry";
         host = "dockreg.bytemonkey.org/v2/_catalog";
         icon = "brands fa-docker";

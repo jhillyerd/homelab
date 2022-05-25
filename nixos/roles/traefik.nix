@@ -34,8 +34,7 @@ in
       enable = true;
 
       staticConfigOptions = {
-        # Dashboard is not part of the nix package.
-        api.dashboard = false;
+        api.dashboard = true;
 
         entryPoints = {
           web = {
