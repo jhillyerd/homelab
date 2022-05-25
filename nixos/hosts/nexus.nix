@@ -94,7 +94,8 @@
       }
       {
         name = "Inbucket";
-        host = "nomad.bytemonkey.org/inbucket";
+        host = "nomad.bytemonkey.org";
+        path = "/inbucket/";
         icon = "at";
       }
       {
@@ -125,7 +126,8 @@
       }
       {
         name = "Docker Registry";
-        host = "dockreg.bytemonkey.org/v2/_catalog";
+        host = "dockreg.bytemonkey.org";
+        path = "/v2/_catalog";
         icon = "brands fa-docker";
       }
       {
