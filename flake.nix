@@ -26,6 +26,7 @@
               esphome
               nomad
               openssl
+              platformio
             ];
           };
         }
