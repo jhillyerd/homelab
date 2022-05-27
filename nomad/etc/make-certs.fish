@@ -1,3 +1,4 @@
+set local_wildcard "*.home.arpa"
 set config cfssl-config.json
 set ca_crt ca/nomad-ca.pem
 set ca_key ca/nomad-ca-key.pem
@@ -10,7 +11,7 @@ function gencert
 
   echo '{}' | cfssl gencert \
     -ca=$ca_crt -ca-key=$ca_key -config=$config \
-    -hostname="$host_names,*.skynet.local,localhost,127.0.0.1" - \
+    -hostname="$host_names,$local_wildcard,localhost,127.0.0.1" - \
     | cfssljson -bare $output/$short_name
 end
 

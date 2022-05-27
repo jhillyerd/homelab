@@ -138,7 +138,7 @@ in
             rpc = true;
 
             ca_file = "${./files/nomad/nomad-ca.pem}";
-            cert_file = "${./files/nomad/nomad-server-client.pem}";
+            cert_file = "${./files/nomad/server-client.pem}";
             key_file = config.age.secrets.nomad-server-client-key.path;
 
             verify_server_hostname = true;
