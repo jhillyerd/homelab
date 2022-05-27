@@ -4,7 +4,7 @@
 
 host="$1"
 target="$2"
-domain="skynet.local"
+domain="home.arpa"
 
 if [ -z "$target" ]; then
   target="root@$host.$domain"

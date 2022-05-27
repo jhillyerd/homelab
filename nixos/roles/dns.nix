@@ -13,10 +13,10 @@ in
     let
       unifi-zones = [ "dyn.skynet.local" "cluster.skynet.local" ];
 
-      skynet-zone-file = pkgs.writeText "skynet.local.zone" ''
-        $ORIGIN skynet.local.
-        @ 3600 SOA nexus.skynet.local. (
-          zone-admin.skynet.local.
+      skynet-zone-file = pkgs.writeText "home.arpa.zone" ''
+        $ORIGIN home.arpa.
+        @ 3600 SOA nexus.home.arpa. (
+          zone-admin.home.arpa.
           2022051501 ; serial number
           3600       ; refresh period
           600        ; retry period
@@ -52,7 +52,7 @@ in
             do-not-query-localhost = false; # for consul.
 
             # Local domains w/o DNSSEC.
-            domain-insecure = unifi-zones ++ [ "consul" ];
+            domain-insecure = unifi-zones ++ [ "consul" "home.arpa" ];
           };
 
           # Configure a forward-zone for each unifi zone.
@@ -69,7 +69,7 @@ in
           ];
 
           auth-zone = mkIf cfg.serveLocalZones {
-            name = "skynet.local.";
+            name = "home.arpa.";
             zonefile = "${skynet-zone-file}";
           };
         };

@@ -15,6 +15,7 @@
   nix.optimise.automatic = true;
 
   networking.hostName = hostName;
+  networking.search = [ "home.arpa" "dyn.skynet.local" ];
 
   environment.systemPackages = with pkgs;
     let
