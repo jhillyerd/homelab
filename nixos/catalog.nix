@@ -55,6 +55,8 @@
     urls = [ "http://${host}:${toString port}" ];
   };
 
+  dns.host = nodes.nexus.ip.priv;
+
   syslog.host = nodes.nexus.ip.priv;
   syslog.port = 1514;
 

@@ -1,6 +1,9 @@
 { config, pkgs, environment, catalog, ... }: {
   imports = [ ../common.nix ];
 
+  roles.dns.enable = true;
+  roles.dns.serveLocalZones = true;
+
   roles.nomad = {
     enableClient = true;
     enableServer = true;
