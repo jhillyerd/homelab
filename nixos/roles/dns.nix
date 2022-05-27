@@ -24,17 +24,19 @@ in
           1800       ; min TTL
         )
 
-        gateway     600 IN A     192.168.1.1
-        nexus       600 IN A     192.168.1.10
-        fractal     600 IN A     192.168.1.12
-        skynas      600 IN A     192.168.1.20
-        octopi      600 IN A     192.168.1.21
-        ryzen       600 IN A     192.168.1.50
+        gateway        600 IN A     192.168.1.1
+        printer        600 IN A     192.168.1.5
+        nexus          600 IN A     192.168.1.10
+        fractal        600 IN A     192.168.1.12
+        skynas         600 IN A     192.168.1.20
+        octopi         600 IN A     192.168.1.21
+        homeassistant  600 IN A     192.168.1.30
+        ryzen          600 IN A     192.168.1.50
 
-        nc-um350-1  600 IN A     192.168.128.36
-        nc-um350-2  600 IN A     192.168.128.37
+        nc-um350-1     600 IN A     192.168.128.36
+        nc-um350-2     600 IN A     192.168.128.37
 
-        modem       600 IN A     192.168.100.1
+        modem          600 IN A     192.168.100.1
       '';
     in
     mkIf cfg.enable {
