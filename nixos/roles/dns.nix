@@ -1,10 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, self, catalog, ... }:
 with lib;
 let cfg = config.roles.dns;
 in
 {
   options.roles.dns = {
-    enable = mkEnableOption "Forward system logs";
+    enable = mkEnableOption "Run unbound recursive resolver";
 
     serveLocalZones = mkEnableOption "Serve local zone files";
   };
@@ -40,6 +40,15 @@ in
       '';
     in
     mkIf cfg.enable {
+      networking.resolvconf = {
+        # 127.0.0.1 is not useful in containers, instead we will use our
+        # private IP.
+        useLocalResolver = false;
+        extraConfig = ''
+          name_servers='${self.ip.priv} ${catalog.dns.host}'
+        '';
+      };
+
       services.unbound = {
         enable = true;
 
