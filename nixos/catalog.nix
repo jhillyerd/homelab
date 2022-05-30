@@ -55,6 +55,12 @@
     urls = [ "http://${host}:${toString port}" ];
   };
 
+  skynas-nomad-host-volumes = [
+    "gitea-storage"
+    "grafana-storage"
+    "waypoint-storage"
+  ];
+
   dns.host = nodes.nexus.ip.priv;
 
   syslog.host = nodes.nexus.ip.priv;

@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
@@ -11,10 +12,11 @@
     flake-utils.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, flake-utils, agenix }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, agenix }:
     flake-utils.lib.eachDefaultSystem
       (system: let
         pkgs = nixpkgs.legacyPackages.${system};
+        unstable = nixpkgs-unstable.legacyPackages.${system};
       in
         {
           devShell = pkgs.mkShell {
@@ -27,6 +29,7 @@
               nomad
               openssl
               platformio
+              unstable.waypoint
             ];
           };
         }
