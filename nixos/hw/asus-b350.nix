@@ -23,11 +23,19 @@
   services.fstrim.enable = true;
 
   # nvidia graphics card setup.
-  services.xserver.dpi = 96;
-  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
   hardware.nvidia.package =
     config.boot.kernelPackages.nvidiaPackages.stable;
+  services.xserver = {
+    dpi = 96;
+    videoDrivers = [ "nvidia" ];
+    # Pipeline prevents screen tearing.
+    screenSection = ''
+      Option "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+      Option "AllowIndirectGLXProtocol" "off"
+      Option "TripleBuffer" "on"
+    '';
+  };
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
