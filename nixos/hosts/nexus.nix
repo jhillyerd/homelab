@@ -94,8 +94,7 @@
       }
       {
         name = "Inbucket";
-        host = "nomad.bytemonkey.org";
-        path = "/inbucket/";
+        host = "inbucket.bytemonkey.org";
         icon = "at";
       }
       {

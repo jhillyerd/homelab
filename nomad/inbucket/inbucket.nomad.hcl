@@ -2,7 +2,7 @@ job "inbucket" {
   datacenters = ["skynet"]
   type = "service"
 
-  group "backend" {
+  group "inbucket" {
     count = 1
 
     update {
@@ -27,14 +27,14 @@ job "inbucket" {
         "http",
         "traefik.enable=true",
         "traefik.http.routers.inbucket-http.entrypoints=websecure",
-        "traefik.http.routers.inbucket-http.rule=Host(`nomad.bytemonkey.org`) && PathPrefix(`/inbucket`)",
+        "traefik.http.routers.inbucket-http.rule=Host(`inbucket.bytemonkey.org`)",
         "traefik.http.routers.inbucket-http.tls.certresolver=letsencrypt",
       ]
 
       check {
         name = "Inbucket HTTP Check"
         type = "http"
-        path = "/inbucket/status"
+        path = "/status"
         interval = "10s"
         timeout = "2s"
       }
@@ -81,7 +81,6 @@ job "inbucket" {
 
       env {
         INBUCKET_LOGLEVEL = "warn"
-        INBUCKET_WEB_BASEPATH = "/inbucket"
         INBUCKET_STORAGE_RETENTIONPERIOD = "168h"
       }
 
