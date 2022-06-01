@@ -142,7 +142,6 @@ in
             key_file = config.age.secrets.nomad-server-client-key.path;
 
             verify_server_hostname = true;
-            verify_https_client = true;
           };
         };
 
@@ -174,9 +173,12 @@ in
       };
 
       services.nomad = {
-        settings.server = {
-          enabled = true;
-          bootstrap_expect = 3;
+        settings = {
+          server.enabled = true;
+          server.bootstrap_expect = 3;
+
+          # Allow CLI, loadbalancers, browsers without client certs.
+          tls.verify_https_client = false;
         };
 
         # Install extra HCL file to hold secrets.
@@ -192,9 +194,15 @@ in
     (mkIf cfg.enableClient {
       services.nomad = {
         enableDocker = true;
-        settings.client.enabled = true;
-        settings.client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
-        settings.client.host_volume = mkIf (cfg.hostVolumes != { }) cfg.hostVolumes;
+
+        settings = {
+          client.enabled = true;
+          client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
+          client.host_volume = mkIf (cfg.hostVolumes != { }) cfg.hostVolumes;
+
+          # Nomad client requires client cert if not also a server.
+          tls.verify_https_client = mkDefault true;
+        };
       };
 
       systemd.services.nomad = {

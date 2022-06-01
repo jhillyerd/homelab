@@ -55,6 +55,12 @@
     urls = [ "http://${host}:${toString port}" ];
   };
 
+  nomad.servers = with nodes; [
+    nexus.ip.priv
+    nc-um350-1.ip.priv
+    nc-um350-2.ip.priv
+  ];
+
   skynas-nomad-host-volumes = [
     "gitea-storage"
     "grafana-storage"

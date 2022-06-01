@@ -34,7 +34,7 @@
     };
   };
 
-  roles.loki = { enable = true; };
+  roles.loki.enable = true;
 
   roles.mosquitto = {
     enable = true;
@@ -53,8 +53,7 @@
 
   roles.nomad = {
     enableServer = true;
-
-    retryJoin = with catalog.nodes; [ nexus.ip.priv nc-um350-1.ip.priv nc-um350-2.ip.priv ];
+    retryJoin = catalog.nomad.servers;
   };
 
   roles.homesite = {
@@ -111,9 +110,8 @@
       }
       {
         name = "Nomad";
-        host = catalog.nodes.nexus.ip.priv;
+        host = "nomad.bytemonkey.org";
         proto = "https";
-        port = 4646;
         icon = "server";
       }
       {
@@ -163,6 +161,11 @@
       nodered = {
         domainName = "nodered.bytemonkey.org";
         backendUrls = [ "http://127.0.0.1:1880" ];
+      };
+
+      nomad = {
+        domainName = "nomad.bytemonkey.org";
+        backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
       };
 
       octopi = {

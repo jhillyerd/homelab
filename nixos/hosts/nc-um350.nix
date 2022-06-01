@@ -9,8 +9,7 @@
     enableServer = true;
     allocDir = "/data/nomad-alloc";
 
-    retryJoin = with catalog.nodes;
-      [ nexus.ip.priv nc-um350-1.ip.priv nc-um350-2.ip.priv ];
+    retryJoin = catalog.nomad.servers;
 
     hostVolumes = lib.genAttrs catalog.skynas-nomad-host-volumes
       (name: {
