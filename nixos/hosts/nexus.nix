@@ -166,6 +166,7 @@
       nomad = {
         domainName = "nomad.bytemonkey.org";
         backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
+        sticky = true;
       };
 
       octopi = {

@@ -12,6 +12,7 @@ in
           options = {
             domainName = mkOption { type = str; };
             backendUrls = mkOption { type = listOf str; };
+            sticky = mkOption { type = bool; default = false; };
           };
         });
       description = "Services to proxy";
@@ -97,6 +98,7 @@ in
             loadBalancer = {
               # Map list of urls to individual url= attributes.
               servers = map (url: { url = url; }) opt.backendUrls;
+              sticky = mkIf opt.sticky { cookie = { }; };
             };
           };
         in
