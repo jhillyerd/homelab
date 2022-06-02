@@ -2,7 +2,7 @@
   description = "VM deployment target base images";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";

@@ -34,8 +34,8 @@
       jq
       lsof
       mailutils
-      ncat
       neovim
+      nmap
       psmisc
       tree
       vim-is-neovim
@@ -63,12 +63,6 @@
   services.getty.helpLine =
     ">>> Flake node: ${hostName}, environment: ${environment}";
 
-  services.ssmtp = {
-    enable = true;
-    hostName = catalog.smtp.host;
-    root = "root@skynet.local";
-  };
-
   services.openssh = {
     enable = true;
     permitRootLogin = "yes";
@@ -77,6 +71,11 @@
   roles.tailscale = {
     enable = true;
     authkeyPath = config.age.secrets.tailscale.path;
+  };
+
+  programs.msmtp.accounts.default = {
+    auth = false;
+    host = catalog.smtp.host;
   };
 
   time.timeZone = "US/Pacific";
@@ -103,4 +102,5 @@
     IPv4: \4
   '';
   networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
+  networking.firewall.checkReversePath = "loose";
 }
