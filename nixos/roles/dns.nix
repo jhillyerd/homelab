@@ -62,6 +62,9 @@ in
 
             # Local domains w/o DNSSEC.
             domain-insecure = unifi-zones ++ [ "consul" "home.arpa" ];
+
+            # Disable built-in default home.arpa zone.
+            local-zone = "home.arpa transparent";
           };
 
           # Configure a forward-zone for each unifi zone.
