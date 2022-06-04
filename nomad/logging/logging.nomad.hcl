@@ -1,6 +1,11 @@
-job "vector" {
+job "logging" {
   datacenters = ["skynet"]
   type = "system"
+
+  constraint {
+    attribute = "${attr.kernel.name}"
+    value     = "linux"
+  }
 
   update {
     min_healthy_time = "10s"
@@ -9,7 +14,7 @@ job "vector" {
     auto_revert = true
   }
 
-  group "vector" {
+  group "logging" {
     count = 1
 
     restart {
@@ -37,6 +42,60 @@ job "vector" {
       sticky  = true
     }
 
+    task "telegraf" {
+      driver = "docker"
+
+      config {
+        network_mode = "host"
+        image = "telegraf:1.22"
+        entrypoint = ["/usr/bin/telegraf"]
+        args = [
+          "-config",
+          "/local/telegraf.conf",
+        ]
+      }
+
+      resources {
+        cpu    = 100
+        memory = 128
+      }
+
+      template {
+        data = <<EOH
+          [agent]
+            interval = "10s"
+            round_interval = true
+            metric_batch_size = 1000
+            metric_buffer_limit = 10000
+            collection_jitter = "0s"
+            flush_interval = "10s"
+            flush_jitter = "3s"
+            precision = ""
+            debug = false
+            quiet = false
+            hostname = ""
+            omit_hostname = false
+          [[outputs.influxdb]]
+            urls = ["http://nexus.home.arpa:8086"]
+            database = "telegraf-hosts"
+            username = "telegraf"
+            password = "{{key "secrets/influxdb/telegraf"}}"
+            retention_policy = "autogen"
+            timeout = "5s"
+            user_agent = "telegraf-{{env "NOMAD_TASK_NAME" }}"
+          [[inputs.prometheus]]
+            urls = ["https://127.0.0.1:4646/v1/metrics?format=prometheus"]
+            tls_ca = "/local/nomad-ca-cert.pem"
+          EOH
+        destination = "local/telegraf.conf"
+      }
+
+      template {
+        data = "{{key \"certs/nomad-ca-cert\"}}"
+        destination = "local/nomad-ca-cert.pem"
+      }
+    }
+
     task "vector" {
       driver = "docker"
 
@@ -58,7 +117,6 @@ job "vector" {
         VECTOR_REQUIRE_HEALTHY = "true"
       }
 
-      # resource limits are a good idea because you don't want your log collection to consume all resources available
       resources {
         cpu    = 500 # 500 MHz
         memory = 256 # 256MB

@@ -213,6 +213,12 @@ in
             })
             cfg.hostVolumes);
 
+          telemetry = {
+            publish_allocation_metrics = true;
+            publish_node_metrics = true;
+            prometheus_metrics = true;
+          };
+
           # Nomad client requires client cert if not also a server.
           tls.verify_https_client = mkDefault true;
 
