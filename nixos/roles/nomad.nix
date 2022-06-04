@@ -174,11 +174,19 @@ in
 
       services.nomad = {
         settings = {
-          server.enabled = true;
-          server.bootstrap_expect = 3;
+          server = {
+            enabled = true;
+            bootstrap_expect = 3;
+
+            default_scheduler_config = {
+              scheduler_algorithm = "spread";
+              memory_oversubscription_enabled = true;
+            };
+          };
 
           # Allow CLI, loadbalancers, browsers without client certs.
           tls.verify_https_client = false;
+
         };
 
         # Install extra HCL file to hold secrets.
