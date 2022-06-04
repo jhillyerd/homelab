@@ -206,10 +206,25 @@ in
         settings = {
           client.enabled = true;
           client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
-          client.host_volume = mkIf (cfg.hostVolumes != { }) cfg.hostVolumes;
+          client.host_volume = mkIf (cfg.hostVolumes != { }) (mapAttrs
+            (name: entry: {
+              inherit (entry) path;
+              read_only = entry.readOnly;
+            })
+            cfg.hostVolumes);
 
           # Nomad client requires client cert if not also a server.
           tls.verify_https_client = mkDefault true;
+
+          plugin.docker.config = {
+            extra_labels = [
+              "job_name"
+              "task_group_name"
+              "task_name"
+              "namespace"
+              "node_name"
+            ];
+          };
         };
       };
 

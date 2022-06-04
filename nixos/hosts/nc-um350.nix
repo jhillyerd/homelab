@@ -15,7 +15,12 @@
       (name: {
         path = "/mnt/skynas/${name}";
         readOnly = false;
-      });
+      }) // {
+      "docker-sock-ro" = {
+        path = "/var/run/docker.sock";
+        readOnly = true;
+      };
+    };
   };
 
   roles.gateway-online.addr = "192.168.1.1";
