@@ -25,7 +25,8 @@ in
 
       serviceConfig = {
         ExecStart = ''
-          /bin/sh -c "while ! ping -c 1 ${escapeShellArg cfg.addr}; do sleep 1; done"
+          /bin/sh -c "while ! /run/wrappers/bin/ping -c 1 \
+            ${escapeShellArg cfg.addr}; do sleep 1; done"
         '';
       };
     };
