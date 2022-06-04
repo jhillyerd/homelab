@@ -1,0 +1,19 @@
+#!/bin/sh
+
+curl -G -s -N \
+  --header "X-Nomad-Token: $NOMAD_TOKEN" \
+  --cacert ~/secrets/nomad/ca/nomad-ca.pem \
+  --data-urlencode "topic=Allocation" \
+  https://nomad.service.consul:4646/v1/event/stream \
+  | jq '.Events[]? | {
+    "topic": .Topic,
+    "type": .Type,
+    "client_description": .Payload.Allocation.ClientDescription,
+    "client_status": .Payload.Allocation.ClientStatus,
+    "desired_status": .Payload.Allocation.DesiredStatus,
+    "job_id": .Payload.Allocation.JobID,
+    "name": .Payload.Allocation.Name,
+    "namespace": .Payload.Allocation.Namespace,
+    "node_name": .Payload.Allocation.NodeName,
+    "task_group": .Payload.Allocation.TaskGroup
+  }'
