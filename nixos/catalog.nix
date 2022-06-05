@@ -67,6 +67,8 @@
     "waypoint-storage"
   ];
 
+  cf-api.user = "james@hillyerd.com";
+
   dns.host = nodes.nexus.ip.priv;
 
   syslog.host = nodes.nexus.ip.priv;

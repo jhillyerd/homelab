@@ -3,7 +3,10 @@
   system.stateVersion = "21.11";
 
   imports = [ ./roles ];
-  nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
+  nixpkgs.overlays = [
+    (import ./pkgs/overlay.nix)
+    (import ./pkgs/cfdyndns.nix)
+  ];
   nixpkgs.config.allowUnfree = true;
 
   # Garbage collect & optimize /nix/store daily.

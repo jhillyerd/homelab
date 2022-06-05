@@ -154,7 +154,7 @@
 
   roles.traefik = {
     enable = true;
-    certificateEmail = "james@hillyerd.com";
+    certificateEmail = catalog.cf-api.user;
     cloudflareDnsApiTokenFile = config.age.secrets.cloudflare-dns-api.path;
 
     services = {
@@ -222,6 +222,23 @@
   roles.template.files."nodered-container.env" = {
     vars.secret = config.age.secrets.nodered.path;
     content = "NODE_RED_CREDENTIAL_SECRET=$secret";
+  };
+
+  services.cfdyndns = {
+    enable = true;
+    email = catalog.cf-api.user;
+    records = [ "home.bytemonkey.org" ];
+  };
+
+  systemd.services.cfdyndns = {
+    startAt = lib.mkForce "*:07:00";
+    script = lib.mkForce ''
+      export CLOUDFLARE_APITOKEN="$(cat $CREDENTIALS_DIRECTORY/api.key)"
+      ${pkgs.cfdyndns}/bin/cfdyndns
+    '';
+
+    serviceConfig.LoadCredential =
+      "api.key:${config.age.secrets.cloudflare-dns-api.path}";
   };
 
   age.secrets = {
