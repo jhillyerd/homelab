@@ -6,35 +6,43 @@ in
   options.roles.homesite = {
     enable = mkEnableOption "Enable home website";
 
-    services = mkOption {
-      type = with types;
-        listOf (submodule {
-          options = {
-            name = mkOption { type = str; };
-            host = mkOption { type = str; };
-            port = mkOption {
-              type = nullOr port;
-              default = null;
-            };
-            path = mkOption {
-              type = path;
-              default = "/";
-            };
-            proto = mkOption {
-              type = enum [ "http" "https" ];
-              default = "https";
-            };
-            icon = mkOption { type = str; };
+    sections = with types; mkOption {
+      type = listOf (submodule {
+        options = {
+          title = mkOption { type = str; };
+          services = mkOption {
+            type = with types;
+              listOf (submodule {
+                options = {
+                  name = mkOption { type = str; };
+                  host = mkOption { type = str; };
+                  port = mkOption {
+                    type = nullOr port;
+                    default = null;
+                  };
+                  path = mkOption {
+                    type = path;
+                    default = "/";
+                  };
+                  proto = mkOption {
+                    type = enum [ "http" "https" ];
+                    default = "https";
+                  };
+                  icon = mkOption { type = str; };
+                };
+              });
+            description = "Service links";
+            default = [ ];
           };
-        });
-      description = "Service links";
+        };
+      });
       default = [ ];
     };
   };
 
   config =
     let
-      data = { services = cfg.services; };
+      data = { sections = cfg.sections; };
 
       configDir = pkgs.writeTextDir "data.json" (builtins.toJSON data);
     in

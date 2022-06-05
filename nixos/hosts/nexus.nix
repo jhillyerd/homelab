@@ -60,79 +60,94 @@
     enable = true;
 
     # Service icons come from fontawesome-free.
-    services = [
+    sections = [
       {
-        name = "Home Assistant";
-        host = "homeassistant.bytemonkey.org";
-        icon = "home";
+        title = "Services";
+        services = [
+          {
+            name = "Gitea";
+            host = "gitea.bytemonkey.org";
+            icon = "code-branch";
+          }
+          {
+            name = "Grafana";
+            host = "grafana.bytemonkey.org";
+            icon = "chart-area";
+          }
+          {
+            name = "Home Assistant";
+            host = "homeassistant.bytemonkey.org";
+            icon = "home";
+          }
+          {
+            name = "Inbucket";
+            host = "inbucket.bytemonkey.org";
+            icon = "at";
+          }
+          {
+            name = "Node-RED";
+            host = "nodered.bytemonkey.org";
+            icon = "project-diagram";
+          }
+          {
+            name = "OctoPrint";
+            host = "octopi.bytemonkey.org";
+            icon = "cube";
+          }
+        ];
       }
       {
-        name = "Gitea";
-        host = "gitea.bytemonkey.org";
-        icon = "code-branch";
+        title = "Cluster";
+        services = [
+          {
+            name = "Consul";
+            host = catalog.nodes.nexus.ip.priv;
+            proto = "http";
+            port = 8500;
+            icon = "address-book";
+          }
+          {
+            name = "Nomad";
+            host = "nomad.bytemonkey.org";
+            proto = "https";
+            icon = "server";
+          }
+          {
+            name = "Docker Registry";
+            host = "dockreg.bytemonkey.org";
+            path = "/v2/_catalog";
+            icon = "brands fa-docker";
+          }
+        ];
       }
       {
-        name = "Grafana";
-        host = "grafana.bytemonkey.org";
-        icon = "chart-area";
-      }
-      {
-        name = "Node-RED";
-        host = "nodered.bytemonkey.org";
-        icon = "project-diagram";
-      }
-      {
-        name = "OctoPrint";
-        host = "octopi.bytemonkey.org";
-        icon = "cube";
-      }
-      {
-        name = "SkyNAS";
-        host = "skynas.bytemonkey.org";
-        icon = "hdd";
-      }
-      {
-        name = "Inbucket";
-        host = "inbucket.bytemonkey.org";
-        icon = "at";
-      }
-      {
-        name = "UniFi";
-        host = "unifi.bytemonkey.org";
-        icon = "network-wired";
-      }
-      {
-        name = "Consul";
-        host = catalog.nodes.nexus.ip.priv;
-        proto = "http";
-        port = 8500;
-        icon = "address-book";
-      }
-      {
-        name = "Nomad";
-        host = "nomad.bytemonkey.org";
-        proto = "https";
-        icon = "server";
-      }
-      {
-        name = "Traefik";
-        host = "traefik.bytemonkey.org";
-        path = "/dashboard/";
-        proto = "https";
-        icon = "traffic-light";
-      }
-      {
-        name = "Docker Registry";
-        host = "dockreg.bytemonkey.org";
-        path = "/v2/_catalog";
-        icon = "brands fa-docker";
-      }
-      {
-        name = "Cable Modem";
-        host = "192.168.100.1";
-        path = "/";
-        proto = "http";
-        icon = "satellite-dish";
+        title = "Infrastructure";
+        services = [
+          {
+            name = "Cable Modem";
+            host = "192.168.100.1";
+            path = "/";
+            proto = "http";
+            icon = "satellite-dish";
+          }
+          {
+            name = "SkyNAS";
+            host = "skynas.bytemonkey.org";
+            icon = "hdd";
+          }
+          {
+            name = "Traefik";
+            host = "traefik.bytemonkey.org";
+            path = "/dashboard/";
+            proto = "https";
+            icon = "traffic-light";
+          }
+          {
+            name = "UniFi";
+            host = "unifi.bytemonkey.org";
+            icon = "network-wired";
+          }
+        ];
       }
     ];
   };
