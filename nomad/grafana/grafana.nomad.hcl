@@ -69,6 +69,7 @@ job "grafana" {
       }
 
       env {
+        GF_SERVER_ROOT_URL = "https://grafana.bytemonkey.org/"
         GF_LOG_LEVEL = "info"
         GF_LOG_MODE = "console"
         GF_PATHS_PROVISIONING = "/local/grafana/provisioning"
