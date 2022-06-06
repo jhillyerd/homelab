@@ -118,8 +118,8 @@ job "logging" {
       }
 
       resources {
-        cpu    = 500 # 500 MHz
-        memory = 256 # 256MB
+        cpu    = 500 # MHz
+        memory = 128 # MB
       }
 
       # template with Vector's configuration
