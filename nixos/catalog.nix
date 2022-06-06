@@ -61,9 +61,21 @@
     nc-um350-2.ip.priv
   ];
 
+  # Named TCP/UDP load balancer entry points.
+  traefik.entrypoints = {
+    factorygame = ":7777/udp";
+    factorybeacon = ":15000/udp";
+    factoryquery = ":15777/udp";
+
+    smtp = ":25/tcp";
+    ssh = ":222/tcp";
+    websecure = ":443/tcp";
+  };
+
   skynas-nomad-host-volumes = [
     "gitea-storage"
     "grafana-storage"
+    "satisfactory-storage"
     "waypoint-storage"
   ];
 

@@ -37,24 +37,20 @@ in
       staticConfigOptions = {
         api.dashboard = true;
 
-        entryPoints = {
-          web = {
-            address = ":80/tcp";
+        entryPoints =
+          let
+            catalogEntrypoints =
+              # Convert catalog name=addr to name.address=addr for traefik.
+              mapAttrs (name: address: { inherit address; }) catalog.traefik.entrypoints;
+          in
+          {
+            web = {
+              address = ":80/tcp";
 
-            # Always redirect to HTTPS.
-            http.redirections.entryPoint.to = "websecure";
-          };
-
-          websecure.address = ":443/tcp";
-
-          smtp = {
-            address = ":25/tcp";
-          };
-
-          ssh = {
-            address = ":222/tcp";
-          };
-        };
+              # Always redirect to HTTPS.
+              http.redirections.entryPoint.to = "websecure";
+            };
+          } // catalogEntrypoints;
 
         certificatesResolvers.letsencrypt.acme = {
           email = cfg.certificateEmail;
@@ -140,5 +136,6 @@ in
       config.roles.template.files."traefik.env".path;
 
     networking.firewall.allowedTCPPorts = [ 25 80 443 ];
+    networking.firewall.allowedUDPPorts = [ 7777 15000 15777 ];
   };
 }
