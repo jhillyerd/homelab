@@ -124,6 +124,8 @@ in
 
       services.nomad = {
         enable = true;
+        package = pkgs.nomad_1_3;
+
         dropPrivileges = false;
 
         settings = {
