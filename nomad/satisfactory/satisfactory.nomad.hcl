@@ -73,7 +73,7 @@ job "satisfactory" {
       }
 
       env {
-        AUTOSAVEINTERVAL = "600"
+        AUTOSAVEINTERVAL = "300"
       }
 
       resources {
