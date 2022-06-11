@@ -78,7 +78,7 @@ job "satisfactory" {
 
       resources {
         cpu = 6000 # MHz
-        memory = 8192 # MB
+        memory = 10240 # MB
         memory_max = 12288 # MB
       }
 
