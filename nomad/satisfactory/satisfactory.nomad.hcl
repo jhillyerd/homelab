@@ -74,10 +74,11 @@ job "satisfactory" {
 
       env {
         AUTOSAVEINTERVAL = "300"
+        AUTOSAVENUM = "10"
       }
 
       resources {
-        cpu = 6000 # MHz
+        cpu = 8000 # MHz
         memory = 10240 # MB
         memory_max = 12288 # MB
       }
