@@ -158,6 +158,13 @@
     cloudflareDnsApiTokenFile = config.age.secrets.cloudflare-dns-api.path;
 
     services = {
+      authelia = {
+        domainName = "auth.x.bytemonkey.org";
+        backendUrls = [ "http://127.0.0.1:9091" ];
+        external = true;
+        externalAuth = false;
+      };
+
       dockreg = {
         domainName = "dockreg.bytemonkey.org";
         backendUrls = [ "http://192.168.1.20:5050" ];
@@ -184,6 +191,14 @@
         sticky = true;
       };
 
+      nomadx = {
+        domainName = "nomad.x.bytemonkey.org";
+        backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
+        sticky = true;
+        external = true;
+        externalAuth = true;
+      };
+
       octopi = {
         domainName = "octopi.bytemonkey.org";
         backendUrls = [ "http://192.168.1.21" ];
@@ -198,6 +213,13 @@
         domainName = "unifi.bytemonkey.org";
         backendUrls = [ "https://192.168.1.20:8443" ];
       };
+
+      unifix = {
+        domainName = "unifi.x.bytemonkey.org";
+        backendUrls = [ "https://192.168.1.20:8443" ];
+        external = true;
+        externalAuth = true;
+      };
     };
   };
 
@@ -209,6 +231,12 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   virtualisation.oci-containers.containers = {
+    authelia = {
+      image = "authelia/authelia:4";
+      ports = [ "9091:9091" ];
+      volumes = [ "/data/authelia:/config" ];
+    };
+
     nodered = {
       image = "nodered/node-red:2.2.2";
       ports = [ "1880:1880" ];

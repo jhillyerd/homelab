@@ -41,6 +41,7 @@ job "whoami" {
         "traefik.http.routers.whoami-private.entrypoints=extweb",
         "traefik.http.routers.whoami-private.rule=Host(`x.bytemonkey.org`) && PathPrefix(`/private/`)",
         "traefik.http.routers.whoami-private.tls.certresolver=letsencrypt",
+        "traefik.http.routers.whoami-private.middlewares=authelia@file",
       ]
 
       check {

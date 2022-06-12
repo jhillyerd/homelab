@@ -13,6 +13,8 @@ in
             domainName = mkOption { type = str; };
             backendUrls = mkOption { type = listOf str; };
             sticky = mkOption { type = bool; default = false; };
+            external = mkOption { type = bool; default = false; };
+            externalAuth = mkOption { type = bool; default = true; };
           };
         });
       description = "Services to proxy";
@@ -78,16 +80,17 @@ in
           };
         };
 
-        log.level = "INFO";
+        log.level = "info";
       };
 
       dynamicConfigOptions =
         let
           routerEntry = name: opt: {
-            entryPoints = [ "web" "websecure" ];
+            entryPoints = if opt.external then [ "extweb" ] else [ "web" "websecure" ];
             rule = "Host(`" + opt.domainName + "`)";
             service = name;
             tls.certresolver = "letsencrypt";
+            middlewares = mkIf (opt.external && opt.externalAuth) [ "authelia@file" ];
           };
 
           serviceEntry = name: opt: {
@@ -112,6 +115,20 @@ in
             } // mapAttrs routerEntry cfg.services;
 
             services = mapAttrs serviceEntry cfg.services;
+
+            middlewares.authelia = {
+              # Forward requests w/ middlewares=authelia@file to authelia.
+              forwardAuth = {
+                address = "http://${catalog.nodes.nexus.ip.priv}:9091/api/verify?rd=https://auth.x.bytemonkey.org/";
+                trustForwardHeader = true;
+                authResponseHeaders = [
+                  "Remote-User"
+                  "Remote-Name"
+                  "Remote-Email"
+                  "Remote-Groups"
+                ];
+              };
+            };
           };
         };
     };
