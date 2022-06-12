@@ -135,7 +135,8 @@ in
     systemd.services.traefik.serviceConfig.EnvironmentFile =
       config.roles.template.files."traefik.env".path;
 
-    networking.firewall.allowedTCPPorts = [ 25 80 443 ];
+    # TODO: autogenerate this list from catalog entrypoints
+    networking.firewall.allowedTCPPorts = [ 25 80 443 8443 ];
     networking.firewall.allowedUDPPorts = [ 7777 15000 15777 ];
   };
 }

@@ -70,6 +70,7 @@
     smtp = ":25/tcp";
     ssh = ":222/tcp";
     websecure = ":443/tcp";
+    extweb = ":8443/tcp";
   };
 
   skynas-nomad-host-volumes = [
