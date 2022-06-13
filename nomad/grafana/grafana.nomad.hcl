@@ -33,6 +33,10 @@ job "grafana" {
         "traefik.http.routers.grafana-http.entrypoints=websecure",
         "traefik.http.routers.grafana-http.rule=Host(`grafana.bytemonkey.org`)",
         "traefik.http.routers.grafana-http.tls.certresolver=letsencrypt",
+        "traefik.http.routers.grafana-xhttp.entrypoints=extweb",
+        "traefik.http.routers.grafana-xhttp.rule=Host(`grafana.x.bytemonkey.org`)",
+        "traefik.http.routers.grafana-xhttp.tls.certresolver=letsencrypt",
+        "traefik.http.routers.grafana-xhttp.middlewares=authelia@file",
       ]
 
       check {
