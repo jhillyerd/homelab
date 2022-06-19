@@ -77,9 +77,6 @@ in
               encrypt = "$encrypt"
             }
           '';
-          # TODO: look into systemd LoadCredentials to fix this.
-          # Required for systemd drop privileges.
-          mode = "0444";
         };
       };
 
@@ -93,6 +90,7 @@ in
         wants = [ "consul.service" ];
       };
 
+      # Consul shared client & server config.
       services.consul = {
         enable = true;
 
@@ -122,6 +120,7 @@ in
           [ config.roles.template.files."consul-encrypt.hcl".path ];
       };
 
+      # Nomad shared client & server config.
       services.nomad = {
         enable = true;
         package = pkgs.nomad_1_3;
@@ -151,13 +150,13 @@ in
       };
     })
 
-    # Nomad server config.
     (mkIf cfg.enableServer {
       age.secrets = {
         "skynet-server-consul-0-key.pem".file = ../secrets/skynet-server-consul-0-key.pem.age;
         "skynet-server-consul-0-key.pem".owner = "consul";
       };
 
+      # Consul server config.
       services.consul = {
         webUi = true;
 
@@ -174,6 +173,7 @@ in
         };
       };
 
+      # Nomad server config.
       services.nomad = {
         settings = {
           server = {
@@ -200,8 +200,8 @@ in
       networking.firewall.allowedUDPPorts = [ 4648 8301 8302 8600 ];
     })
 
-    # Nomad client config.
     (mkIf cfg.enableClient {
+      # Nomad client config.
       services.nomad = {
         enableDocker = true;
 
