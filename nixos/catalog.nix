@@ -55,11 +55,21 @@
     urls = [ "http://${host}:${toString port}" ];
   };
 
-  nomad.servers = with nodes; [
-    nexus.ip.priv
-    nc-um350-1.ip.priv
-    nc-um350-2.ip.priv
-  ];
+  nomad = {
+    servers = with nodes; [
+      nexus.ip.priv
+      nc-um350-1.ip.priv
+      nc-um350-2.ip.priv
+    ];
+
+    skynas-host-volumes = [
+      "gitea-storage"
+      "grafana-storage"
+      "nodered-data"
+      "satisfactory-storage"
+      "waypoint-data"
+    ];
+  };
 
   # Named TCP/UDP load balancer entry points.
   traefik.entrypoints = {
@@ -73,13 +83,6 @@
     extweb = ":8443/tcp";
   };
 
-  skynas-nomad-host-volumes = [
-    "gitea-storage"
-    "grafana-storage"
-    "nodered-data"
-    "satisfactory-storage"
-    "waypoint-storage"
-  ];
 
   cf-api.user = "james@hillyerd.com";
 

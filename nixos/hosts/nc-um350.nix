@@ -11,7 +11,7 @@
 
     retryJoin = catalog.nomad.servers;
 
-    hostVolumes = lib.genAttrs catalog.skynas-nomad-host-volumes
+    hostVolumes = lib.genAttrs catalog.nomad.skynas-host-volumes
       (name: {
         path = "/mnt/skynas/${name}";
         readOnly = false;
@@ -43,7 +43,7 @@
           chmod 770 "$path"
         fi
       '')
-      catalog.skynas-nomad-host-volumes);
+      catalog.nomad.skynas-host-volumes);
 
     after = [ "remote-fs.target" ];
     wantedBy = [ "nomad.service" ];
