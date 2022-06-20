@@ -76,6 +76,7 @@
   skynas-nomad-host-volumes = [
     "gitea-storage"
     "grafana-storage"
+    "nodered-data"
     "satisfactory-storage"
     "waypoint-storage"
   ];

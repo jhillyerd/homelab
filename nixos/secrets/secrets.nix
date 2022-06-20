@@ -35,7 +35,6 @@ in
   "influxdb-homeassistant.age".publicKeys = users ++ home-systems;
   "mqtt-admin.age".publicKeys = users ++ home-systems;
   "mqtt-sensor.age".publicKeys = users ++ home-systems;
-  "nodered.age".publicKeys = users ++ home-systems;
 
   # Nomad cluster
   "consul-encrypt.age".publicKeys = users ++ nomad-cluster;

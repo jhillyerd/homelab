@@ -6,14 +6,7 @@
 
   roles.nfs-bind = {
     nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
-
-    binds = {
-      "nodered" = {
-        user = "1000";
-        group = "1000";
-        mode = "0700";
-      };
-    };
+    binds = {};
   };
 
   roles.influxdb = {
@@ -236,20 +229,6 @@
       ports = [ "9091:9091" ];
       volumes = [ "/data/authelia:/config" ];
     };
-
-    nodered = {
-      image = "nodered/node-red:2.2.2";
-      ports = [ "1880:1880" ];
-      volumes = [ "/data/nodered:/data" ];
-      environmentFiles =
-        [ config.roles.template.files."nodered-container.env".path ];
-    };
-  };
-
-  # Create an environment file containing the nodered secret.
-  roles.template.files."nodered-container.env" = {
-    vars.secret = config.age.secrets.nodered.path;
-    content = "NODE_RED_CREDENTIAL_SECRET=$secret";
   };
 
   services.cfdyndns = {
@@ -280,7 +259,5 @@
 
     mqtt-sensor.file = ../secrets/mqtt-sensor.age;
     mqtt-sensor.owner = "mosquitto";
-
-    nodered.file = ../secrets/nodered.age;
   };
 }
