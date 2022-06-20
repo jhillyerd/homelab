@@ -6,7 +6,14 @@
 
   roles.nfs-bind = {
     nfsPath = "192.168.1.20:/volume1/nexus_${environment}";
-    binds = {};
+
+    binds = {
+      "authelia" = {
+        user = "0";
+        group = "0";
+        mode = "0770";
+      };
+    };
   };
 
   roles.influxdb = {
