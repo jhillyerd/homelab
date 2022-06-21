@@ -102,6 +102,7 @@ in
           noxorg = [ rxvt_unicode.terminfo ];
         in
         [
+          dfilemanager
           dmenu
           firefox
           gnome3.gedit
