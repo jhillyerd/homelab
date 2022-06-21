@@ -1,6 +1,6 @@
 # Common config shared among all machines
 { config, pkgs, hostName, environment, lib, catalog, nixpkgs-unstable, ... }: {
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
 
   imports = [ ./roles ];
   nixpkgs.overlays = [
