@@ -225,6 +225,8 @@
 
   roles.gateway-online.addr = "192.168.1.1";
 
+  roles.tailscale.exitNode = true;
+
   virtualisation.oci-containers.containers = {
     authelia = {
       image = "authelia/authelia:4";

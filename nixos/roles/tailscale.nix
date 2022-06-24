@@ -6,6 +6,8 @@ in
   options.roles.tailscale = with types; {
     enable = mkEnableOption "Enable Tailscale daemon + autojoin";
 
+    exitNode = mkEnableOption "Register as an exit node";
+
     authkeyPath = mkOption {
       type = nullOr path;
       description = "Path to tailscale authkey secret";
@@ -31,19 +33,23 @@ in
 
       serviceConfig.Type = "oneshot";
 
-      script = with pkgs; ''
-        ts=${tailscale}/bin/tailscale
+      script = with pkgs;
+        let
+          exitNode = if cfg.exitNode then "--advertise-exit-node" else "";
+        in
+        ''
+          ts=${tailscale}/bin/tailscale
 
-        # Wait for tailscaled to settle.
-        sleep 2
+          # Wait for tailscaled to settle.
+          sleep 2
 
-        if $ts status --peers=false >/dev/null; then
-          # Already online, do nothing.
-          exit 0
-        fi
+          if $ts status --peers=false >/dev/null; then
+            # Already online, do nothing.
+            exit 0
+          fi
 
-        $ts up -authkey "$(< ${cfg.authkeyPath})"
-      '';
+          $ts up -authkey "$(< ${cfg.authkeyPath})" ${exitNode}
+        '';
     };
 
     networking.firewall = {
