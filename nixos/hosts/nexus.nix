@@ -180,11 +180,6 @@
         backendUrls = [ "http://192.168.1.30:8123" ];
       };
 
-      nodered = {
-        domainName = "nodered.bytemonkey.org";
-        backendUrls = [ "http://127.0.0.1:1880" ];
-      };
-
       nomad = {
         domainName = "nomad.bytemonkey.org";
         backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
