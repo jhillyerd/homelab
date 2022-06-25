@@ -56,168 +56,6 @@
     retryJoin = catalog.nomad.servers;
   };
 
-  roles.homesite = {
-    enable = true;
-
-    # Service icons come from fontawesome-free.
-    sections = [
-      {
-        title = "Services";
-        services = [
-          {
-            name = "Gitea";
-            host = "gitea.bytemonkey.org";
-            icon = "code-branch";
-          }
-          {
-            name = "Grafana";
-            host = "grafana.bytemonkey.org";
-            icon = "chart-area";
-          }
-          {
-            name = "Home Assistant";
-            host = "homeassistant.bytemonkey.org";
-            icon = "home";
-          }
-          {
-            name = "Inbucket";
-            host = "inbucket.bytemonkey.org";
-            icon = "at";
-          }
-          {
-            name = "Node-RED";
-            host = "nodered.bytemonkey.org";
-            icon = "project-diagram";
-          }
-          {
-            name = "OctoPrint";
-            host = "octopi.bytemonkey.org";
-            icon = "cube";
-          }
-        ];
-      }
-      {
-        title = "Cluster";
-        services = [
-          {
-            name = "Consul";
-            host = catalog.nodes.nexus.ip.priv;
-            proto = "http";
-            port = 8500;
-            icon = "address-book";
-          }
-          {
-            name = "Nomad";
-            host = "nomad.bytemonkey.org";
-            proto = "https";
-            icon = "server";
-          }
-          {
-            name = "Docker Registry";
-            host = "dockreg.bytemonkey.org";
-            path = "/v2/_catalog";
-            icon = "brands fa-docker";
-          }
-        ];
-      }
-      {
-        title = "Infrastructure";
-        services = [
-          {
-            name = "Cable Modem";
-            host = "192.168.100.1";
-            path = "/";
-            proto = "http";
-            icon = "satellite-dish";
-          }
-          {
-            name = "SkyNAS";
-            host = "skynas.bytemonkey.org";
-            icon = "hdd";
-          }
-          {
-            name = "Traefik";
-            host = "traefik.bytemonkey.org";
-            path = "/dashboard/";
-            proto = "https";
-            icon = "traffic-light";
-          }
-          {
-            name = "UniFi";
-            host = "unifi.bytemonkey.org";
-            icon = "network-wired";
-          }
-        ];
-      }
-    ];
-  };
-
-  roles.traefik = {
-    enable = true;
-    certificateEmail = catalog.cf-api.user;
-    cloudflareDnsApiTokenFile = config.age.secrets.cloudflare-dns-api.path;
-
-    services = {
-      authelia = {
-        domainName = "auth.x.bytemonkey.org";
-        backendUrls = [ "http://127.0.0.1:9091" ];
-        external = true;
-        externalAuth = false;
-      };
-
-      dockreg = {
-        domainName = "dockreg.bytemonkey.org";
-        backendUrls = [ "http://192.168.1.20:5050" ];
-      };
-
-      home = {
-        domainName = "bytemonkey.org";
-        backendUrls = [ "http://127.0.0.1:12701" ];
-      };
-
-      homeassistant = {
-        domainName = "homeassistant.bytemonkey.org";
-        backendUrls = [ "http://192.168.1.30:8123" ];
-      };
-
-      nomad = {
-        domainName = "nomad.bytemonkey.org";
-        backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
-        sticky = true;
-      };
-
-      nomadx = {
-        domainName = "nomad.x.bytemonkey.org";
-        backendUrls = map (ip: "https://${ip}:4646") catalog.nomad.servers;
-        sticky = true;
-        external = true;
-        externalAuth = true;
-      };
-
-      octopi = {
-        domainName = "octopi.bytemonkey.org";
-        backendUrls = [ "http://192.168.1.21" ];
-      };
-
-      skynas = {
-        domainName = "skynas.bytemonkey.org";
-        backendUrls = [ "https://192.168.1.20:5001" ];
-      };
-
-      unifi = {
-        domainName = "unifi.bytemonkey.org";
-        backendUrls = [ "https://192.168.1.20:8443" ];
-      };
-
-      unifix = {
-        domainName = "unifi.x.bytemonkey.org";
-        backendUrls = [ "https://192.168.1.20:8443" ];
-        external = true;
-        externalAuth = true;
-      };
-    };
-  };
-
   roles.log-forwarder = {
     # Forward remote syslogs as well.
     enableTcpListener = true;
@@ -226,6 +64,19 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   roles.tailscale.exitNode = true;
+
+  # Configures traefik and homesite roles from service catalog.
+  roles.websvc = {
+    enable = true;
+
+    internalDomain = "bytemonkey.org";
+    externalDomain = "x.bytemonkey.org";
+
+    cloudflareDnsApiTokenFile = config.age.secrets.cloudflare-dns-api.path;
+
+    services = catalog.services;
+    layout = catalog.layout;
+  };
 
   virtualisation.oci-containers.containers = {
     authelia = {

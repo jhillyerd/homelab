@@ -1,5 +1,5 @@
 # A scratch host for building up new service configurations.
-{ pkgs, lib, self, ... }: {
+{ config, pkgs, lib, self, catalog, ... }: {
   imports = [ ../common.nix ];
 
   roles.tailscale.enable = lib.mkForce false;

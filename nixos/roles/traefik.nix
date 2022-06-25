@@ -6,6 +6,7 @@ in
   options.roles.traefik = {
     enable = mkEnableOption "Enable traefik daemon";
 
+    # TODO: Too much abstraction, let websvc role handle this.
     services = mkOption {
       type = with types;
         attrsOf (submodule {

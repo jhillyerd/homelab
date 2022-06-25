@@ -13,6 +13,7 @@
     ./telegraf.nix
     ./template.nix
     ./traefik.nix
+    ./websvc.nix
     ./workstation.nix
   ];
 }
