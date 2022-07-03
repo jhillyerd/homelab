@@ -33,6 +33,7 @@ job "grafana" {
         "traefik.http.routers.grafana-http.entrypoints=websecure",
         "traefik.http.routers.grafana-http.rule=Host(`grafana.bytemonkey.org`)",
         "traefik.http.routers.grafana-http.tls.certresolver=letsencrypt",
+        "traefik.http.routers.grafana-http.middlewares=authelia@file",
         "traefik.http.routers.grafana-xhttp.entrypoints=extweb",
         "traefik.http.routers.grafana-xhttp.rule=Host(`grafana.x.bytemonkey.org`)",
         "traefik.http.routers.grafana-xhttp.tls.certresolver=letsencrypt",
@@ -77,6 +78,10 @@ job "grafana" {
         GF_LOG_LEVEL = "info"
         GF_LOG_MODE = "console"
         GF_PATHS_PROVISIONING = "/local/grafana/provisioning"
+        GF_AUTH_PROXY_ENABLED = "true"
+        GF_AUTH_PROXY_HEADER_NAME = "Remote-User"
+        GF_AUTH_PROXY_HEADERS = "Email:Remote-Email,Name:Remote-Name"
+        GF_AUTH_PROXY_WHITELIST = "192.168.1.10"
       }
 
       template {
