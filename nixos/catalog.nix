@@ -143,8 +143,8 @@
 
     grafana = {
       title = "Grafana";
-      external = true;
       dash.icon = "chart-area";
+      # Note: external + auth handled by labels.
     };
 
     homeassistant = {

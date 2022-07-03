@@ -14,6 +14,8 @@
         mode = "0770";
       };
     };
+
+    before = [ "podman-authelia.service" ];
   };
 
   roles.influxdb = {
