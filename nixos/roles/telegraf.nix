@@ -3,12 +3,18 @@ with lib;
 let cfg = config.roles.telegraf;
 in
 {
-  options.roles.telegraf = {
+  options.roles.telegraf = with types; {
     enable = mkEnableOption "Telegraf node";
 
     influxdb = mkOption {
-      type = types.attrs;
+      type = attrs;
       description = "Influxdb output options";
+    };
+
+    http_response = mkOption {
+      type = listOf attrs;
+      description = "Telegraf http_response monitoring input config";
+      default = [ ];
     };
   };
 
@@ -26,6 +32,12 @@ in
           processes = { };
           swap = { };
           system = { };
+
+          http_response = map
+            (a: a // {
+              interval = "30s";
+            })
+            cfg.http_response;
         };
 
         outputs.influxdb = with cfg.influxdb; {
