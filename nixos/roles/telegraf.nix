@@ -33,11 +33,12 @@ in
           swap = { };
           system = { };
 
-          http_response = map
-            (a: a // {
-              interval = "30s";
-            })
-            cfg.http_response;
+          http_response = mkIf (length cfg.http_response > 0)
+            (map
+              (a: a // {
+                interval = "30s";
+              })
+              cfg.http_response);
         };
 
         outputs.influxdb = with cfg.influxdb; {
