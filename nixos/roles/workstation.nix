@@ -118,6 +118,7 @@ in
           rxvt_unicode-with-plugins
           sxhkd
           virt-manager
+          xclip
           x-www-browser
           xorg.xdpyinfo
           xorg.xev
