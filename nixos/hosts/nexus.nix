@@ -96,7 +96,7 @@
     }
     {
       urls = [ "https://grafana.bytemonkey.org/" ];
-      response_status_code = 200;
+      response_status_code = 401;
     }
     {
       urls = [ "http://homeassistant.home.arpa:8123" ];
