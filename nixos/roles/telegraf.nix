@@ -16,6 +16,12 @@ in
       description = "Telegraf http_response monitoring input config";
       default = [ ];
     };
+
+    ping = mkOption {
+      type = listOf str;
+      description = "List of hosts for telegraf to ping";
+      default = [ ];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -39,6 +45,15 @@ in
                 interval = "30s";
               })
               cfg.http_response);
+
+          ping = mkIf (length cfg.ping > 0)
+            (map
+              (host: {
+                urls = [ host ];
+                interval = "30s";
+                binary = "/run/wrappers/bin/ping";
+              })
+              cfg.ping);
         };
 
         outputs.influxdb = with cfg.influxdb; {
