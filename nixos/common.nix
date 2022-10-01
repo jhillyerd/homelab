@@ -1,5 +1,5 @@
 # Common config shared among all machines
-{ config, pkgs, hostName, environment, lib, catalog, nixpkgs-unstable, ... }: {
+{ config, pkgs, hostName, environment, lib, catalog, nixpkgs, nixpkgs-unstable, ... }: {
   system.stateVersion = "22.05";
 
   imports = [ ./roles ];
@@ -8,6 +8,8 @@
     (import ./pkgs/cfdyndns.nix)
   ];
   nixpkgs.config.allowUnfree = true;
+
+  nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
 
   # Garbage collect & optimize /nix/store daily.
   nix.gc = {
