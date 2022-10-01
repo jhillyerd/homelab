@@ -112,7 +112,7 @@ in
         in
         {
           name = templateName;
-          value = stringAfter [ "etc" "agenix" "agenixRoot" ] "${activationScript}";
+          value = stringAfter [ "etc" "agenix" ] "${activationScript}";
         };
     in
     mkIf (cfg.files != { }) {

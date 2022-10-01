@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    agenix.url = "github:ryantm/agenix/0.11.0";
+    agenix.url = "github:ryantm/agenix/0.13.0";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     homesite.url = "github:jhillyerd/homesite";
