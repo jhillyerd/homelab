@@ -57,8 +57,14 @@ in
         ACTION!="add|change", GOTO="probe_rs_rules_end"
         SUBSYSTEM=="gpio", MODE="0660", GROUP="dialout", TAG+="uaccess"
         SUBSYSTEM!="usb|tty|hidraw", GOTO="probe_rs_rules_end"
+
         # STMicroelectronics ST-LINK/V2
         ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE="660", GROUP="dialout", TAG+="uaccess"
+        # DAP42 Bluepill CMSIS-DAP Debug Probe
+        ATTRS{idVendor}=="1209", ATTRS{idProduct}=="da42", MODE="660", GROUP="dialout", TAG+="uaccess"
+        # WeACT Blackbill CMSIS-DAP Debug Probe
+        ATTRS{idVendor}=="c251", ATTRS{idProduct}=="f001", MODE="660", GROUP="dialout", TAG+="uaccess"
+
         LABEL="probe_rs_rules_end"
       '';
 
