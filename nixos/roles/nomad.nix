@@ -225,6 +225,24 @@ in
           tls.verify_https_client = mkDefault true;
 
           plugin.docker.config = {
+            # Defaults + net_raw; ping is useful in a home lab.
+            allow_caps = [
+              "audit_write"
+              "chown"
+              "dac_override"
+              "fowner"
+              "fsetid"
+              "kill"
+              "mknod"
+              "net_bind_service"
+              "net_raw"
+              "setfcap"
+              "setgid"
+              "setpcap"
+              "setuid"
+              "sys_chroot"
+            ];
+
             extra_labels = [
               "job_name"
               "task_group_name"
