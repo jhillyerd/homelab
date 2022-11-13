@@ -21,13 +21,13 @@ in
           '';
         in
         [
+          bashmount
           bat
           chezmoi
           exa
           fzf
           gitAndTools.gh
           gitAndTools.git-absorb
-          gitAndTools.gitflow
           gcc
           gnumake
           lazygit
@@ -51,6 +51,8 @@ in
 
       # Programs and Services
       programs.fish.enable = true;
+
+      services.udisks2.enable = true;
 
       # Setup ST-Link MCU probe.
       services.udev.extraRules = ''
