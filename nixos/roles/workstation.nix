@@ -113,12 +113,13 @@ in
           dfilemanager
           dmenu
           firefox
+          gimp
           gnome3.gedit
           google-chrome
           imwheel
           kitty
           lxappearance
-          maim
+          maim # takes screenshots
           pantheon.elementary-icon-theme
           polybarFull
           pavucontrol
