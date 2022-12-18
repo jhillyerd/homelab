@@ -7,7 +7,7 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    trustedUsers = [ "root" "james" ];
+    settings.trusted-users = [ "root" "james" ];
   };
 
   roles.workstation.enable = true;

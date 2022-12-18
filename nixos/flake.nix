@@ -2,7 +2,7 @@
   description = "Home Services";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     agenix.url = "github:ryantm/agenix/0.13.0";
@@ -13,7 +13,6 @@
     homesite.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
-    flake-utils.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, agenix, flake-utils, nixpkgs-unstable, ... }@attrs:

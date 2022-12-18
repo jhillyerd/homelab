@@ -110,7 +110,6 @@ in
           noxorg = [ rxvt_unicode.terminfo ];
         in
         [
-          dfilemanager
           dmenu
           firefox
           gimp
