@@ -9,6 +9,7 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     homesite.url = "github:jhillyerd/homesite";
+    homesite.inputs.flake-utils.follows = "flake-utils";
     homesite.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
