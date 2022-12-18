@@ -126,8 +126,12 @@ in
           rxvt_unicode-with-plugins
           sxhkd
           virt-manager
-          xclip
           x-www-browser
+          xclip
+          xfce.ristretto # image viwer
+          xfce.thunar # file manager
+          xfce.thunar-volman
+          xfce.tumbler # thumbnails
           xorg.xdpyinfo
           xorg.xev
           xsecurelock
