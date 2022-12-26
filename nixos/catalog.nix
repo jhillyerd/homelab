@@ -66,8 +66,9 @@
       "gitea-storage"
       "grafana-storage"
       "nodered-data"
-      "satisfactory-storage"
-      "waypoint-data"
+      "satisfactory-data"
+      "waypoint-runner-data"
+      "waypoint-server-data"
     ];
   };
 

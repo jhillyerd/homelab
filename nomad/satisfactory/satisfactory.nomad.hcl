@@ -54,7 +54,7 @@ job "satisfactory" {
 
     volume "satisfactory" {
       type = "host"
-      source = "satisfactory-storage"
+      source = "satisfactory-data"
       read_only = false
     }
 
