@@ -35,7 +35,7 @@ INFLUX_DB_DATABASE=telegraf-hosts
 # See https://github.com/breadlysm/speedtest-to-influxdb#tag-options
 INFLUX_DB_TAGS=external_ip, server_name, server_location, isp, server_host
 # Speed test interval in minutes
-SPEEDTEST_INTERVAL=300
+SPEEDTEST_INTERVAL=600
 # Ping interval in seconds
 PING_INTERVAL=180
 PING_TARGETS=1.1.1.1, 8.8.8.8
