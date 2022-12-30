@@ -134,7 +134,7 @@
 
   virtualisation.oci-containers.containers = {
     authelia = {
-      image = "authelia/authelia:4";
+      image = "authelia/authelia:4.37.5";
       ports = [ "9091:9091" ];
       volumes = [ "/data/authelia:/config" ];
     };
