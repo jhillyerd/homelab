@@ -146,7 +146,7 @@ in
           };
         };
 
-        extraPackages = [ pkgs.cni-plugins ];
+        extraPackages = [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ];
       };
     })
 
