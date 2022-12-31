@@ -6,8 +6,6 @@
 /nomad/etc/ca
 /nomad/etc/certs
 
-/baseimage/flake.lock
-
 /.vim
 result
 *.qcow2
