@@ -88,16 +88,6 @@
   users.users.root.openssh.authorizedKeys.keys =
     lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
 
-  users.users.james = {
-    uid = 1001;
-    isNormalUser = true;
-    home = "/home/james";
-    description = "James Hillyerd";
-    extraGroups = [ "docker" "wheel" ];
-    openssh.authorizedKeys.keys =
-      lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
-  };
-
   age.secrets = {
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
     tailscale.file = ./secrets/tailscale.age;

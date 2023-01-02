@@ -83,6 +83,13 @@ in
 
       # Extend common.nix user configuration
       users.users.james = {
+        uid = 1001;
+        isNormalUser = true;
+        home = "/home/james";
+        description = "James Hillyerd";
+        shell = pkgs.fish;
+        initialPassword = "hello github";
+
         extraGroups = [
           "audio"
           "dialout"
@@ -93,8 +100,9 @@ in
           "video"
           "wheel"
         ];
-        shell = pkgs.fish;
-        initialPassword = "hello github";
+
+        openssh.authorizedKeys.keys =
+          lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
       };
 
       security.sudo.wheelNeedsPassword = false;
