@@ -1,0 +1,6 @@
+#!/bin/sh
+
+host="$1"
+target="root@$host"
+
+ssh $target "set -x; uname -a; uptime; systemctl --failed"
