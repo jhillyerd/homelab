@@ -18,12 +18,14 @@
   outputs = { self, nixpkgs, agenix, flake-utils, nixpkgs-unstable, ... }@attrs:
     let
       inherit (nixpkgs.lib)
-        mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem;
+        mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem splitString;
 
       inherit (flake-utils.lib) eachSystemMap system;
 
       # catalog.nodes defines the systems available in this flake.
       catalog = import ./catalog.nix { inherit system; };
+
+      authorizedKeys = splitString "\n" (builtins.readFile ../authorized_keys.txt);
 
       # Creates a nixosSystem attribute set for the specified node, allowing
       # the node config to be overridden.
@@ -40,7 +42,7 @@
           # hosts and roles.  `self` lets a host reference aspects of
           # itself.
           specialArgs = attrs // {
-            inherit catalog environment hostName;
+            inherit authorizedKeys catalog environment hostName;
             self = node;
           };
           modules = [ node.config hardware agenix.nixosModule ];

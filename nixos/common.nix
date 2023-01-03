@@ -1,8 +1,18 @@
 # Common config shared among all machines
-{ config, pkgs, hostName, environment, lib, catalog, nixpkgs, nixpkgs-unstable, ... }: {
+{ config
+, pkgs
+, authorizedKeys
+, hostName
+, environment
+, lib
+, catalog
+, nixpkgs
+, nixpkgs-unstable
+, ...
+}: {
   system.stateVersion = "22.05";
 
-  imports = [ ./roles ];
+  imports = [ ./common/packages.nix ./roles ];
   nixpkgs.overlays = [
     (import ./pkgs/overlay.nix)
     (import ./pkgs/cfdyndns.nix)
@@ -22,30 +32,6 @@
   networking.hostName = hostName;
   networking.search = [ "home.arpa" "dyn.skynet.local" ];
 
-  environment.systemPackages = with pkgs;
-    let
-      # Use unstable neovim.
-      neovim = nixpkgs-unstable.legacyPackages.${system}.neovim;
-
-      vim-is-neovim = pkgs.writeShellScriptBin "vim" ''
-        exec ${neovim}/bin/nvim "$@"
-      '';
-    in
-    [
-      bind
-      file
-      git
-      htop
-      jq
-      lsof
-      mailutils
-      neovim
-      nmap
-      psmisc
-      tree
-      vim-is-neovim
-      wget
-    ];
 
   # Configure telegraf agent.
   roles.telegraf = {
@@ -85,8 +71,7 @@
 
   time.timeZone = "US/Pacific";
 
-  users.users.root.openssh.authorizedKeys.keys =
-    lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
+  users.users.root.openssh.authorizedKeys.keys = authorizedKeys;
 
   age.secrets = {
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;

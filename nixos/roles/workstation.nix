@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nixpkgs-unstable, ... }:
+{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, ... }:
 with lib;
 let cfg = config.roles.workstation;
 in
@@ -101,8 +101,7 @@ in
           "wheel"
         ];
 
-        openssh.authorizedKeys.keys =
-          lib.splitString "\n" (builtins.readFile ../authorized_keys.txt);
+        openssh.authorizedKeys.keys = authorizedKeys;
       };
 
       security.sudo.wheelNeedsPassword = false;
