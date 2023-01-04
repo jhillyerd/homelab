@@ -26,10 +26,10 @@
     };
 
     nexus = {
-      ip.priv = "192.168.1.10";
-      ip.tail = "100.80.202.97";
+      ip.priv = "192.168.128.40";
+      ip.tail = "100.96.6.112";
       config = ./hosts/nexus.nix;
-      hw = ./hw/cubi.nix;
+      hw = ./hw/proxmox.nix;
       system = system.x86_64-linux;
     };
 
