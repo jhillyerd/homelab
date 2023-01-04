@@ -10,7 +10,7 @@ let
   fractal =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDdjavkGpkN4niiLWGAjNsaS3R3gxnLn7H4rTtkVkyAt";
   nexus =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILmVRmGOyL441FQBbanju9x+VHqLKzwMoDk3dzWtHfKG";
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEuqgUtpyOVfnxa1oKLdjN4AIN5piKHfdumQHonqjH4P";
   nixtarget1-hyperv =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILiU0B1BYTeGojG+uo2siv2tpl7PEj3iV0CL8EHyM42e";
   nixtarget1-virtd =
