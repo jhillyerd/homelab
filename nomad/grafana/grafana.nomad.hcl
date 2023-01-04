@@ -81,7 +81,7 @@ job "grafana" {
         GF_AUTH_PROXY_ENABLED = "true"
         GF_AUTH_PROXY_HEADER_NAME = "Remote-User"
         GF_AUTH_PROXY_HEADERS = "Email:Remote-Email,Name:Remote-Name"
-        GF_AUTH_PROXY_WHITELIST = "192.168.1.10"
+        GF_AUTH_PROXY_WHITELIST = "192.168.128.40"
       }
 
       template {
@@ -91,7 +91,7 @@ datasources:
   - name: homeassistant influxdb
     type: influxdb
     database: homeassistant
-    url: http://100.80.202.97:8086
+    url: http://nexus.home.arpa:8086
     user: homeassistant
     secureJsonData:
       password: "{{key "secrets/influxdb/homeassistant"}}"
@@ -99,7 +99,7 @@ datasources:
   - name: telegraf-hosts influxdb
     type: influxdb
     database: telegraf-hosts
-    url: http://100.80.202.97:8086
+    url: http://nexus.home.arpa:8086
     user: telegraf
     secureJsonData:
       password: "{{key "secrets/influxdb/telegraf"}}"
@@ -107,7 +107,7 @@ datasources:
   - name: "syslogs loki"
     type: loki
     access: proxy
-    url: "http://100.80.202.97:3100"
+    url: "http://nexus.home.arpa:3100"
     jsonData:
       maxLines: 1000
 EOT
