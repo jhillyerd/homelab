@@ -190,6 +190,13 @@
       lb.backendUrls = [ "http://192.168.1.21" ];
     };
 
+    proxmox = {
+      title = "Proxmox VE";
+      dash.icon = "terminal";
+
+      lb.backendUrls = [ "https://192.168.128.38:8006" ];
+    };
+
     skynas = {
       title = "SkyNAS";
       dash.icon = "hdd";
@@ -222,7 +229,7 @@
     }
     {
       section = "Cluster";
-      services = [ "consul" "nomad" "dockreg" ];
+      services = [ "consul" "nomad" "proxmox" "dockreg" ];
     }
     {
       section = "Infrastructure";
