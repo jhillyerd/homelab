@@ -23,7 +23,7 @@
       inherit (flake-utils.lib) eachSystemMap system;
 
       # catalog.nodes defines the systems available in this flake.
-      catalog = import ./catalog.nix { inherit system; };
+      catalog = import ./catalog { inherit system; };
 
       authorizedKeys = splitString "\n" (builtins.readFile ../authorized_keys.txt);
 
