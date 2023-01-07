@@ -9,6 +9,7 @@ in
     serveLocalZones = mkEnableOption "Serve local zone files";
   };
 
+  # TODO Generate DNS entries from catalog.nodes.
   config =
     let
       unifi-zones = [ "dyn.skynet.local" "cluster.skynet.local" ];
@@ -36,6 +37,7 @@ in
         nc-um350-2     600 IN A     192.168.128.37
         nexus          600 IN A     192.168.128.40
         pve1           600 IN A     192.168.128.38
+        web            600 IN A     192.168.128.43
 
         modem          600 IN A     192.168.100.1
       '';
