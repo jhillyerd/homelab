@@ -6,6 +6,12 @@ in
   options.roles.traefik = {
     enable = mkEnableOption "Enable traefik daemon";
 
+    autheliaUrl = mkOption {
+      type = types.str;
+      description = "forwardAuth URL for authelia service";
+      example = "http://localhost:9091/api/verify?rd=https://login.example.com/";
+    };
+
     # TODO: Too much abstraction, let websvc role handle this.
     services = mkOption {
       type = with types;
@@ -75,12 +81,14 @@ in
           prefix = "traefik";
           exposedByDefault = false;
           endpoint = {
+            # TODO Fix hardcoded consul address
             address = catalog.nodes.nexus.ip.priv + ":8500";
             scheme = "http";
             datacenter = "skynet";
           };
         };
 
+        accessLog = {}; # enabled
         log.level = "info";
       };
 
@@ -120,7 +128,7 @@ in
             middlewares.authelia = {
               # Forward requests w/ middlewares=authelia@file to authelia.
               forwardAuth = {
-                address = "http://${catalog.nodes.nexus.ip.priv}:9091/api/verify?rd=https://auth.x.bytemonkey.org/";
+                address = cfg.autheliaUrl;
                 trustForwardHeader = true;
                 authResponseHeaders = [
                   "Remote-User"

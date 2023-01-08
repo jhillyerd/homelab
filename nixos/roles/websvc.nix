@@ -129,6 +129,8 @@ in
       in
       {
         enable = true;
+        autheliaUrl = "http://${toString catalog.authelia.host}:${toString catalog.authelia.port}"
+          + "/api/verify?rd=https://auth.x.bytemonkey.org/";
         certificateEmail = catalog.cf-api.user;
         cloudflareDnsApiTokenFile = cfg.cloudflareDnsApiTokenFile;
         services = (mapAttrs' mkInternalService internalConfigs) //

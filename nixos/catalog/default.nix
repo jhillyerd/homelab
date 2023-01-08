@@ -3,6 +3,11 @@
   nodes = import ./nodes.nix { inherit system; };
   services = import ./services.nix { inherit nodes nomad; };
 
+  authelia = {
+    host = nodes.web.ip.priv;
+    port = 9091;
+  };
+
   influxdb = rec {
     host = nodes.nexus.ip.priv;
     port = 8086;
