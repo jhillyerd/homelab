@@ -13,9 +13,13 @@
     homesite.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    terranix.url = "github:terranix/terranix";
+    terranix.inputs.flake-utils.follows = "flake-utils";
+    terranix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, agenix, flake-utils, nixpkgs-unstable, ... }@attrs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, agenix, flake-utils, terranix, ... }@attrs:
     let
       inherit (nixpkgs.lib)
         mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem splitString;
@@ -100,8 +104,63 @@
               hardware = ./hw/qemu.nix;
             }).config.system.build.vm;
           };
+
         in
         eachSystemMap [ system.x86_64-linux ]
           (sys: mapAttrs' (vmPackage sys) catalog.nodes);
+
+      # Terraform commands.
+      apps =
+        eachSystemMap [ system.x86_64-linux ]
+          (sys:
+            let
+              pkgs = nixpkgs.legacyPackages.${sys};
+              terraform = pkgs.terraform;
+              terraformConfiguration = terranix.lib.terranixConfiguration {
+                system = sys;
+                modules = [ ./terraform/common.nix ./terraform/dns.nix ];
+                extraArgs = { inherit catalog; };
+              };
+              programInit = ''
+                if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
+                cp ${terraformConfiguration} config.tf.json
+              '';
+            in
+            {
+              # nix run ".#tfcat"
+              tfcat = {
+                type = "app";
+                program = toString (pkgs.writers.writeBash "cat" ''
+                  ${pkgs.bat}/bin/bat ${terraformConfiguration}
+                '');
+              };
+              # nix run ".#tfplan"
+              tfplan = {
+                type = "app";
+                program = toString (pkgs.writers.writeBash "plan" ''
+                  ${programInit}
+                  ${terraform}/bin/terraform init \
+                    && ${terraform}/bin/terraform plan
+                '');
+              };
+              # nix run ".#tfapply"
+              tfapply = {
+                type = "app";
+                program = toString (pkgs.writers.writeBash "apply" ''
+                  ${programInit}
+                  ${terraform}/bin/terraform init \
+                    && ${terraform}/bin/terraform apply
+                '');
+              };
+              # nix run ".#tfdestroy"
+              tfdestroy = {
+                type = "app";
+                program = toString (pkgs.writers.writeBash "destroy" ''
+                  ${programInit}
+                  ${terraform}/bin/terraform init \
+                    && ${terraform}/bin/terraform destroy
+                '');
+              };
+            });
     };
 }

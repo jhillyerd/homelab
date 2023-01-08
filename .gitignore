@@ -6,6 +6,11 @@
 /nomad/etc/ca
 /nomad/etc/certs
 
+# Terraform
+/nixos/.terraform*
+/nixos/config.tf.json
+/nixos/terraform.tfstate*
+
 /.vim
 result
 *.qcow2
