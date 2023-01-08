@@ -45,7 +45,7 @@
   };
 
   web = {
-    ip.priv = "192.168.128.43";
+    ip.priv = "192.168.128.11";
     ip.tail = "100.90.124.31";
     config = ../hosts/web.nix;
     hw = ../hw/proxmox.nix;

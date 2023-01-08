@@ -81,7 +81,7 @@ job "grafana" {
         GF_AUTH_PROXY_ENABLED = "true"
         GF_AUTH_PROXY_HEADER_NAME = "Remote-User"
         GF_AUTH_PROXY_HEADERS = "Email:Remote-Email,Name:Remote-Name"
-        GF_AUTH_PROXY_WHITELIST = "192.168.128.40"
+        GF_AUTH_PROXY_WHITELIST = "192.168.128.11"
       }
 
       template {

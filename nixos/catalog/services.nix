@@ -96,7 +96,7 @@
     title = "Proxmox VE";
     dash.icon = "terminal";
 
-    lb.backendUrls = [ "https://192.168.128.38:8006" ];
+    lb.backendUrls = [ "https://192.168.128.10:8006" ];
   };
 
   skynas = {
