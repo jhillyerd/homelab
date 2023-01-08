@@ -18,6 +18,24 @@ let
           description = "Friendly name";
         };
 
+        dns = mkOption {
+          type = submodule {
+            options = {
+              extCname = mkOption {
+                type = bool;
+                default = false;
+                description = "Create an external (inernet) DNS CNAME record for this service";
+              };
+
+              intCname = mkOption {
+                type = bool;
+                default = false;
+                description = "Create an internal (tailnet) DNS CNAME record for this service";
+              };
+            };
+          };
+        };
+
         external = mkOption {
           type = bool;
           default = false;
