@@ -1,4 +1,12 @@
 { system }: {
+  eph = {
+    ip.priv = "192.168.128.44";
+    ip.tail = "100.119.252.34";
+    config = ../hosts/eph.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   fractal = {
     ip.priv = "192.168.1.12";
     ip.tail = "100.112.232.73";
