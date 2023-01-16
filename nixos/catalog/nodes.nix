@@ -45,6 +45,14 @@
     system = system.aarch64-linux;
   };
 
+  ryzen = {
+    ip.priv = "192.168.1.50";
+    ip.tail = "100.112.232.73";
+    config = ../hosts/ryzen.nix;
+    hw = ../hw/asus-x570p.nix;
+    system = system.x86_64-linux;
+  };
+
   scratch = {
     ip.priv = "10.0.2.15";
     config = ../hosts/scratch.nix;
