@@ -6,8 +6,8 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
-    efi.canTouchEfiVariables = true;
     systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
     timeout = 10;
   };
 
@@ -16,7 +16,6 @@
 
   networking = {
     useDHCP = false;
-    hostName = "fractal";
     interfaces.enp4s0.useDHCP = true;
   };
 
