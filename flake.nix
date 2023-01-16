@@ -28,7 +28,6 @@
               nomad
               openssl
               platformio
-              unstable.waypoint
             ];
           };
         }
