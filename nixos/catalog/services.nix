@@ -50,8 +50,12 @@
 
   gitea = {
     title = "Gitea";
+
     dns.intCname = true;
+    dns.extCname = true;
+
     dash.icon = "code-branch";
+    # Note: external + auth handled by labels.
   };
 
   grafana = {

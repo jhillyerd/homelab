@@ -34,6 +34,9 @@ job "gitea" {
         "traefik.http.routers.gitea-http.entrypoints=websecure",
         "traefik.http.routers.gitea-http.rule=Host(`gitea.bytemonkey.org`)",
         "traefik.http.routers.gitea-http.tls.certresolver=letsencrypt",
+        "traefik.http.routers.gitea-xhttp.entrypoints=extweb",
+        "traefik.http.routers.gitea-xhttp.rule=Host(`gitea.x.bytemonkey.org`)",
+        "traefik.http.routers.gitea-xhttp.tls.certresolver=letsencrypt",
       ]
 
       check {
