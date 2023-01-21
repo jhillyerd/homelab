@@ -32,6 +32,7 @@ in
           gnumake
           lazygit
           lynx
+          nfs-utils
           nixpkgs-fmt
           nodejs
           patchelf
@@ -49,8 +50,12 @@ in
           zip
         ];
 
-      # Programs and Services
+      # Programs and services
       programs.fish.enable = true;
+
+      # NFS mount support
+      boot.supportedFilesystems = [ "nfs" ];
+      services.rpcbind.enable = true;
 
       services.udisks2.enable = true;
 
@@ -83,7 +88,7 @@ in
 
       # Extend common.nix user configuration
       users.users.james = {
-        uid = 1001;
+        uid = 1026;
         isNormalUser = true;
         home = "/home/james";
         description = "James Hillyerd";
