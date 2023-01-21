@@ -69,7 +69,7 @@ job "gitea" {
       driver = "docker"
 
       config {
-        image = "gitea/gitea:1.16"
+        image = "gitea/gitea:1.18.2"
         ports = ["http", "ssh"]
 
         # TODO: timezone volumes
