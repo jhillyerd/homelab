@@ -109,6 +109,20 @@ in
         openssh.authorizedKeys.keys = authorizedKeys;
       };
 
+      services.autofs = {
+        enable = true;
+        debug = true;
+        autoMaster =
+          let
+            netConf = pkgs.writeText "auto" ''
+              skynas -rw,fstype=nfs4 /home skynas.home.arpa:/volume1/homes
+            '';
+          in
+          ''
+            /net file:${netConf}
+          '';
+      };
+
       security.sudo.wheelNeedsPassword = false;
     })
 
