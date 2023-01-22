@@ -74,8 +74,6 @@ job "gitea" {
       config {
         image = "gitea/gitea:1.18.2"
         ports = ["http", "ssh"]
-
-        # TODO: timezone volumes
       }
 
       volume_mount {
