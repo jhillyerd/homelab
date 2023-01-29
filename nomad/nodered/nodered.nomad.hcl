@@ -40,7 +40,7 @@ job "nodered" {
       driver = "docker"
 
       config {
-        image = "nodered/node-red:2.2.2"
+        image = "nodered/node-red:2.2.3"
         ports = ["http"]
       }
 
@@ -52,8 +52,8 @@ job "nodered" {
 
       resources {
         cpu = 200 # MHz
-        memory = 128 # MB
-        memory_max = 256 # MB
+        memory = 256 # MB
+        memory_max = 512 # MB
       }
 
       logs {
