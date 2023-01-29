@@ -42,6 +42,7 @@ in
           rnix-lsp
           rust-analyzer
           starship
+          sumneko-lua-language-server
           tmux
           universal-ctags
           unzip
