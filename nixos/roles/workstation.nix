@@ -130,7 +130,10 @@ in
         # Enable nix flakes, not yet stable.
         package = pkgs.nixFlakes;
         extraOptions = ''
+          connect-timeout = 5
           experimental-features = nix-command flakes
+          keep-outputs = true
+          log-lines = 25
         '';
         settings.trusted-users = [ "root" "james" ];
       };
