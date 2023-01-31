@@ -125,6 +125,15 @@ in
       };
 
       security.sudo.wheelNeedsPassword = false;
+
+      nix = {
+        # Enable nix flakes, not yet stable.
+        package = pkgs.nixFlakes;
+        extraOptions = ''
+          experimental-features = nix-command flakes
+        '';
+        settings.trusted-users = [ "root" "james" ];
+      };
     })
 
     # Graphical workstation configuration.

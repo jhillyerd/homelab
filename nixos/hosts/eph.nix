@@ -1,15 +1,6 @@
 { config, pkgs, environment, catalog, ... }: {
   imports = [ ../common.nix ];
 
-  # Enable nix flakes, not yet stable.
-  nix = {
-    package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-    settings.trusted-users = [ "root" "james" ];
-  };
-
   roles.workstation.enable = true;
   roles.workstation.graphical = false;
 
