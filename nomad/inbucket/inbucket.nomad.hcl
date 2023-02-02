@@ -71,7 +71,7 @@ job "inbucket" {
 
       config {
         # :latest for stable releases, :edge to track development.
-        image = "inbucket/inbucket:edge"
+        image = "inbucket/inbucket:sha-5d18d79"
         ports = ["http", "smtp"]
 
         volumes = [
@@ -80,13 +80,13 @@ job "inbucket" {
       }
 
       env {
-        INBUCKET_LOGLEVEL = "warn"
+        INBUCKET_LOGLEVEL = "info" # TODO set to warn after lua
         INBUCKET_STORAGE_RETENTIONPERIOD = "168h"
       }
 
       resources {
-        cpu = 300 # MHz
-        memory = 128 # MB
+        cpu = 200 # MHz
+        memory = 48 # MB
       }
 
       logs {
