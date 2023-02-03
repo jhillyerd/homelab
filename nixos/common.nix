@@ -19,15 +19,17 @@
   ];
   nixpkgs.config.allowUnfree = true;
 
-  nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
+  nix = {
+    nixPath = [ "nixpkgs=${nixpkgs}" ];
+    optimise.automatic = true;
 
-  # Garbage collect & optimize /nix/store daily.
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 7d";
+      randomizedDelaySec = "20min";
+    };
   };
-  nix.optimise.automatic = true;
 
   networking.hostName = hostName;
   networking.search = [ "home.arpa" "dyn.skynet.local" ];
