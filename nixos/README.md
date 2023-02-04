@@ -1,5 +1,10 @@
 # nixos flake
 
+## Cachix
+
+This flake sets up devenv for workstations, which is an expensive build.
+Run `cachix use devenv` to enable the devenv build cache.
+
 ## Ways to use this flake
 
 ### Update NixOS channel

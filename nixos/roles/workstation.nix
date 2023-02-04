@@ -1,4 +1,4 @@
-{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, ... }:
+{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, devenv, ... }:
 with lib;
 let cfg = config.roles.workstation;
 in
@@ -23,7 +23,10 @@ in
         [
           bashmount
           bat
+          cachix
           chezmoi
+          devenv.packages.${system}.devenv
+          direnv
           exa
           fzf
           gitAndTools.gh
@@ -33,6 +36,7 @@ in
           lazygit
           lynx
           nfs-utils
+          nix-direnv
           nixpkgs-fmt
           nodejs
           patchelf
@@ -50,6 +54,8 @@ in
           weechat
           zip
         ];
+
+      environment.pathsToLink = [ "/share/nix-direnv" ];
 
       # Programs and services
       programs.fish.enable = true;
@@ -141,6 +147,12 @@ in
           experimental-features = nix-command flakes
         '';
       };
+
+      nixpkgs.overlays = [
+        # Enable nix-direnv support for flakes, from:
+        #  https://github.com/nix-community/nix-direnv
+        (self: super: { nix-direnv = super.nix-direnv.override { enableFlakes = true; }; })
+      ];
     })
 
     # Graphical workstation configuration.
