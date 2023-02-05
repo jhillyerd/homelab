@@ -18,12 +18,14 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2022051501 ; serial number
+          2023020501 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
           1800       ; min TTL
         )
+
+        mail           600 IN CNAME web
 
         gateway        600 IN A     192.168.1.1
         printer        600 IN A     192.168.1.5
