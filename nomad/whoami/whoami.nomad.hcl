@@ -20,6 +20,7 @@ job "whoami" {
         "traefik.http.routers.whoami-public.entrypoints=extweb",
         "traefik.http.routers.whoami-public.rule=Host(`x.bytemonkey.org`) && PathPrefix(`/public/`)",
         "traefik.http.routers.whoami-public.tls.certresolver=letsencrypt",
+        "urlprefix-/public/",
       ]
 
       check {
@@ -42,6 +43,7 @@ job "whoami" {
         "traefik.http.routers.whoami-private.rule=Host(`x.bytemonkey.org`) && PathPrefix(`/private/`)",
         "traefik.http.routers.whoami-private.tls.certresolver=letsencrypt",
         "traefik.http.routers.whoami-private.middlewares=authelia@file",
+        "urlprefix-/private/",
       ]
 
       check {
