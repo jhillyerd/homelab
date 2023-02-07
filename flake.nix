@@ -2,10 +2,10 @@
   description = "my nixos & ansible configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    agenix.url = "github:ryantm/agenix";
+    agenix.url = "github:ryantm/agenix/0.13.0";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
