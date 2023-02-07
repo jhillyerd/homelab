@@ -29,6 +29,10 @@
       options = "--delete-older-than 7d";
       randomizedDelaySec = "20min";
     };
+
+    settings.substituters = [
+      "http://nix-cache.service.skynet.consul?priority=10"
+    ];
   };
 
   networking.hostName = hostName;

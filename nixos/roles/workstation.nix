@@ -139,6 +139,7 @@ in
           keep-outputs = true;
           log-lines = 25;
           trusted-users = [ "root" "james" ];
+          substituters = [ "https://devenv.cachix.org" ];
         };
 
         # Enable nix flakes, not yet stable.
