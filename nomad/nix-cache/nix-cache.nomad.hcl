@@ -41,7 +41,7 @@ job "nix-cache" {
 
       resources {
         cpu    = 100 # MHz
-        memory = 128 # MB
+        memory = 160 # MB
       }
 
       template {
