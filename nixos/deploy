@@ -10,5 +10,10 @@ if [ -z "$target" ]; then
   target="root@$host.$domain"
 fi
 
+# Build locally, push to $host.
 nixos-rebuild --flake ".#$host" --target-host "$target" \
   --build-host localhost switch
+
+# Log host & git commit.
+commit="$(git log -n 1 --format="[%ci] %h %s")"
+printf "%-12s %s\n" "$host" "$commit" >> log.txt

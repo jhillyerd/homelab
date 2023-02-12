@@ -14,6 +14,8 @@
 /nixos/config.tf.json
 /nixos/terraform.tfstate*
 
+/nixos/log.txt
+
 /.vim
 result
 *.qcow2
