@@ -27,6 +27,7 @@ in
 
         mail           600 IN CNAME web
         mqtt           600 IN CNAME nexus
+        ntp            600 IN CNAME skynas
 
         gateway        600 IN A     192.168.1.1
         printer        600 IN A     192.168.1.5
