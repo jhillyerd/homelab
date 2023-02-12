@@ -1,19 +1,22 @@
-#!/bin/sh
+#!/usr/bin/env fish
 # deploy <host-name> [root@<target-host>]:
 #  Builds the flake for host-name locally and deploys to target-host
 
-host="$1"
-target="$2"
-domain="home.arpa"
+set host $argv[1]
+set target $argv[2]
+set domain home.arpa
 
-if [ -z "$target" ]; then
-  target="root@$host.$domain"
-fi
+if [ -z "$target" ]
+  set target "root@$host.$domain"
+end
 
-# Build locally, push to $host.
-nixos-rebuild --flake ".#$host" --target-host "$target" \
+# Build flake locally, push to $host.
+echo "Building $host and pushing to $target..."
+nixos-rebuild \
+  --flake ".#$host" \
+  --target-host $target \
   --build-host localhost switch
 
 # Log host & git commit.
-commit="$(git log -n 1 --format="[%ci] %h %s")"
-printf "%-12s %s\n" "$host" "$commit" >> log.txt
+set commit (git log -n 1 --format="[%ci] %h %s")
+printf "%-12s %s\n" $host $commit >> log.txt
