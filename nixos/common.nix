@@ -1,6 +1,7 @@
 # Common config shared among all machines
 { config
 , pkgs
+, options
 , authorizedKeys
 , hostName
 , environment
@@ -35,9 +36,11 @@
     ];
   };
 
-  networking.hostName = hostName;
-  networking.search = [ "home.arpa" "dyn.skynet.local" ];
-
+  networking = {
+    hostName = hostName;
+    search = [ "home.arpa" "dyn.skynet.local" ];
+    timeServers = [ "ntp.home.arpa" ] ++ options.networking.timeServers.default;
+  };
 
   # Configure telegraf agent.
   roles.telegraf = {
