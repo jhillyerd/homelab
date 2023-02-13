@@ -136,7 +136,8 @@
     title = "SkyNAS";
     dns.intCname = true;
     dash.icon = "hdd";
-    lb.backendUrls = [ "https://192.168.1.20:5001" ];
+    dash.host = "skynas.bytemonkey.org";
+    dash.port = 5001;
   };
 
   traefik = {
