@@ -71,7 +71,7 @@ job "inbucket" {
 
       config {
         # :latest for stable releases, :edge to track development.
-        image = "inbucket/inbucket:sha-5d18d79"
+        image = "inbucket/inbucket:sha-a55da8b"
         ports = ["http", "smtp"]
 
         volumes = [
@@ -80,6 +80,7 @@ job "inbucket" {
       }
 
       env {
+        INBUCKET_LUA_PATH = "/local/inbucket.lua"
         INBUCKET_LOGLEVEL = "info" # TODO set to warn after lua
         INBUCKET_STORAGE_RETENTIONPERIOD = "168h"
       }
@@ -92,6 +93,28 @@ job "inbucket" {
       logs {
         max_files = 10
         max_file_size = 5
+      }
+
+      template {
+        data = <<EOT
+          local http = require("http")
+          local json = require("json")
+
+          BASE_URL = "https://monolith.bytemonkey.org"
+
+          function after_message_stored(msg)
+            local request = json.encode {
+              subject = string.format("Mail from %q", msg.from.address),
+              body = msg.subject
+            }
+
+            assert(http.post(BASE_URL .. "/notify/text", {
+              headers = { ["Content-Type"] = "application/json" },
+              body = request,
+            }))
+          end
+        EOT
+        destination = "/local/inbucket.lua"
       }
     }
   }
