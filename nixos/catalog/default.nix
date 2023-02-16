@@ -53,7 +53,7 @@
   syslog.host = nodes.nexus.ip.priv;
   syslog.port = 1514;
 
-  smtp.host = nodes.nexus.ip.priv;
+  smtp.host = "mail.home.arpa";
 
   tailscale.interface = "tailscale0";
 
