@@ -104,7 +104,6 @@ in
           verify_incoming = false;
           verify_outgoing = true;
           verify_server_hostname = true;
-          auto_encrypt.allow_tls = true;
 
           ca_file = ./files/nomad/consul-agent-ca.pem;
 
@@ -146,7 +145,10 @@ in
           };
         };
 
-        extraPackages = [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ];
+        extraPackages =
+          if pkgs.system == "x86_64-linux"
+          then [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ]
+          else [ ];
       };
     })
 
@@ -166,6 +168,7 @@ in
           client_addr = "0.0.0.0";
 
           # Encrypt and verify TLS.
+          auto_encrypt.allow_tls = true;
           verify_incoming = mkForce true;
 
           cert_file = ./files/nomad/skynet-server-consul-0.pem;
