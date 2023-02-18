@@ -15,6 +15,13 @@
     system = system.x86_64-linux;
   };
 
+  nc-pi3-1 = {
+    ip.priv = "192.168.1.243";
+    config = ../hosts/nc-pi3.nix;
+    hw = ../hw/sd-image-pi3.nix;
+    system = system.aarch64-linux;
+  };
+
   nc-um350-1 = {
     ip.priv = "192.168.128.36";
     ip.tail = "100.109.33.10";
