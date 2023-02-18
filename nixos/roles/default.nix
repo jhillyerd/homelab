@@ -1,5 +1,6 @@
 { config, pkgs, lib, ... }: {
   imports = [
+    ./cluster-volumes.nix
     ./dns.nix
     ./gateway-online.nix
     ./homesite.nix
