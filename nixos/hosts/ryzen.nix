@@ -4,6 +4,9 @@
   roles.workstation.enable = true;
   roles.workstation.graphical = true;
 
+  # For Raspberry Pi builds.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   networking.firewall.enable = false;
 
   # Do not enable libvirtd inside of test VM, the inner virtual bridge

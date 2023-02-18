@@ -13,14 +13,14 @@ Run `cachix use devenv` to enable the devenv build cache.
 nix flake update
 ```
 
-### Quick test VM
+### Run a quick test VM
 
 ```sh
 nix build ".#$host"
 result/bin/run-$host-vm
 ```
 
-### Push to running libvirtd or Hyper-V test VM
+### Push to running libvirtd or Hyper-V *test* VM
 
 ```sh
 ./deploy virt-$host root@$hostIP
@@ -32,7 +32,7 @@ or
 ./deploy hyper-$host root@$hostIP
 ```
 
-See `../baseimage` for VM base images for intial boot.
+See `../baseimage` for intial boot VM base images.
 
 ### Push to running bare-metal prod machine
 
@@ -40,8 +40,15 @@ See `../baseimage` for VM base images for intial boot.
 ./deploy $host root@$hostIP
 ```
 
-### Rebuild local system with specified host config
+### Rebuild localhost with specified host config
 
 ```sh
 sudo nixos-rebuild --flake ".#$host" boot
+```
+
+### Build SD card image for host
+
+```sh
+nix build ".#images.$host"
+sudo dd bs=4M conv=fsync if=result/sd-image/*-linux.img of=/dev/sdX
 ```

@@ -11,9 +11,6 @@
     timeout = 10;
   };
 
-  # For Raspberry Pi builds.
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
   networking = {
     useDHCP = false;
     interfaces.enp4s0.useDHCP = true;
