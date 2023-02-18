@@ -71,8 +71,10 @@ job "inbucket" {
 
       config {
         # :latest for stable releases, :edge to track development.
-        image = "inbucket/inbucket:sha-a55da8b"
+        image = "inbucket/inbucket:edge"
         ports = ["http", "smtp"]
+
+        args = ["-logjson=false"]
 
         volumes = [
           "../alloc/data/inbucket_storage:/storage"
