@@ -39,6 +39,11 @@
     };
   };
 
+  roles.consul = {
+    enableServer = true;
+    retryJoin = catalog.consul.servers;
+  };
+
   roles.nomad = {
     enableServer = true;
     retryJoin = catalog.nomad.servers;

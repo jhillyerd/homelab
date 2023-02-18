@@ -16,6 +16,14 @@
     urls = [ "http://${host}:${toString port}" ];
   };
 
+  consul = {
+    servers = with nodes; [
+      nexus.ip.priv
+      nc-um350-1.ip.priv
+      nc-um350-2.ip.priv
+    ];
+  };
+
   nomad = {
     servers = with nodes; [
       nexus.ip.priv
