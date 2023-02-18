@@ -171,7 +171,6 @@ in
           gimp
           gnome3.gedit
           google-chrome
-          imwheel
           kitty
           lxappearance
           maim # takes screenshots
