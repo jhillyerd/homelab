@@ -14,10 +14,7 @@
   system.stateVersion = "22.05";
 
   imports = [ ./common/packages.nix ./roles ];
-  nixpkgs.overlays = [
-    (import ./pkgs/overlay.nix)
-    (import ./pkgs/cfdyndns.nix)
-  ];
+  nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ] ++ (import ./pkgs/overlays.nix);
   nixpkgs.config.allowUnfree = true;
 
   nix = {
