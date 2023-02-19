@@ -48,6 +48,7 @@ in
 
   # Nomad cluster
   "consul-encrypt.age".publicKeys = users ++ nomad-cluster;
+  "consul-agent-token.age".publicKeys = users ++ nomad-cluster;
   "nomad-encrypt.age".publicKeys = users ++ nomad-cluster;
   "nomad-consul-token.age".publicKeys = users ++ nomad-cluster;
   "nomad-server-client-key.age".publicKeys = users ++ nomad-cluster;

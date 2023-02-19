@@ -41,8 +41,11 @@ in
         enable = true;
 
         extraConfig = {
-          bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
+          bind_addr = self.ip.priv;
           inherit datacenter;
+
+          retry_join = filter (x: x != self.ip.priv) cfg.retryJoin;
+          retry_interval = "15s";
 
           tls = {
             internal_rpc.verify_server_hostname = true;
@@ -79,9 +82,6 @@ in
         extraConfig = {
           server = true;
 
-          retry_join = filter (x: x != self.ip.priv) cfg.retryJoin;
-          retry_interval = "15s";
-
           bootstrap_expect = 3;
           client_addr = "0.0.0.0";
 
@@ -94,27 +94,48 @@ in
           };
 
           # Create certs for clients.
+          connect.enabled = true;
           auto_encrypt.allow_tls = true;
         };
       };
 
       age.secrets = {
-        "skynet-server-consul-0-key.pem".file = ../secrets/skynet-server-consul-0-key.pem.age;
-        "skynet-server-consul-0-key.pem".owner = "consul";
+        "skynet-server-consul-0-key.pem" = {
+          file = ../secrets/skynet-server-consul-0-key.pem.age;
+          owner = "consul";
+        };
       };
     })
 
-    (mkIf cfg.enableClient {
-      # Consul client config.
+    (mkIf (cfg.enableClient && !cfg.enableServer) {
+      # Consul client only config.
       services.consul = {
-        # TODO Find some way to provision consul agent token?
-        # Currently manual run of `consul acl set-agent-token default ...`
-
         extraConfig = {
           # Get our certificate from the server.
-          # auto_encrypt.tls = true;
+          auto_encrypt.tls = true;
+        };
+
+        # Install extra HCL file to hold encryption key.
+        extraConfigFiles =
+          [ config.roles.template.files."consul-agent-token.hcl".path ];
+      };
+
+      # Template config file for agent token.
+      roles.template.files = {
+        "consul-agent-token.hcl" = {
+          vars.token = config.age.secrets.consul-agent-token.path;
+          content = ''acl { tokens { default = "$token" } }'';
+          owner = "consul";
+        };
+      };
+
+      age.secrets = {
+        "consul-agent-token" = {
+          file = ../secrets/consul-agent-token.age;
+          owner = "consul";
         };
       };
     })
   ];
 }
+
