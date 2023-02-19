@@ -135,8 +135,7 @@ in
           [ config.roles.template.files."nomad-secrets.hcl".path ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 4646 4647 4648 8300 8301 8302 8500 8501 8502 8600 ];
-      networking.firewall.allowedUDPPorts = [ 4648 8301 8302 8600 ];
+      networking.firewall.allowedTCPPorts = [ 4646 4647 4648 ];
     })
 
     (mkIf cfg.enableClient {

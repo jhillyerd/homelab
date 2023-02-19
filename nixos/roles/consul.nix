@@ -1,4 +1,4 @@
-{ config, pkgs, lib, catalog, ... }:
+{ config, pkgs, lib, catalog, self, ... }:
 with lib;
 let
   cfg = config.roles.consul;
@@ -42,16 +42,18 @@ in
 
         extraConfig = {
           bind_addr = ''{{ GetDefaultInterfaces | exclude "type" "IPv6" | limit 1 | attr "address" }}'';
-          retry_join = cfg.retryJoin;
-          retry_interval = "15s";
           inherit datacenter;
 
-          # Encrypt and verify TLS.
-          verify_incoming = false;
-          verify_outgoing = true;
-          verify_server_hostname = true;
+          tls = {
+            internal_rpc.verify_server_hostname = true;
 
-          ca_file = ./files/consul/consul-agent-ca.pem;
+            # Encrypt and verify outgoing TLS.
+            defaults = {
+              ca_file = ./files/consul/consul-agent-ca.pem;
+              verify_incoming = mkDefault false;
+              verify_outgoing = true;
+            };
+          };
 
           acl = {
             enabled = true;
@@ -64,36 +66,55 @@ in
         extraConfigFiles =
           [ config.roles.template.files."consul-encrypt.hcl".path ];
       };
+
+      networking.firewall.allowedTCPPorts = [ 8300 8301 8302 8500 8501 8502 8600 ];
+      networking.firewall.allowedUDPPorts = [ 8301 8302 8600 ];
     })
 
     (mkIf cfg.enableServer {
-      age.secrets = {
-        "skynet-server-consul-0-key.pem".file = ../secrets/skynet-server-consul-0-key.pem.age;
-        "skynet-server-consul-0-key.pem".owner = "consul";
-      };
-
       # Consul server config.
       services.consul = {
         webUi = true;
 
         extraConfig = {
           server = true;
+
+          retry_join = filter (x: x != self.ip.priv) cfg.retryJoin;
+          retry_interval = "15s";
+
           bootstrap_expect = 3;
           client_addr = "0.0.0.0";
 
           # Encrypt and verify TLS.
-          auto_encrypt.allow_tls = true;
-          verify_incoming = mkForce true;
+          tls.defaults = {
+            cert_file = ./files/consul/skynet-server-consul-0.pem;
+            key_file = config.age.secrets."skynet-server-consul-0-key.pem".path;
 
-          cert_file = ./files/consul/skynet-server-consul-0.pem;
-          key_file = config.age.secrets."skynet-server-consul-0-key.pem".path;
+            verify_incoming = true;
+          };
+
+          # Create certs for clients.
+          auto_encrypt.allow_tls = true;
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 8300 8301 8302 8500 8501 8502 8600 ];
-      networking.firewall.allowedUDPPorts = [ 8301 8302 8600 ];
+      age.secrets = {
+        "skynet-server-consul-0-key.pem".file = ../secrets/skynet-server-consul-0-key.pem.age;
+        "skynet-server-consul-0-key.pem".owner = "consul";
+      };
     })
 
-    (mkIf cfg.enableClient { })
+    (mkIf cfg.enableClient {
+      # Consul client config.
+      services.consul = {
+        # TODO Find some way to provision consul agent token?
+        # Currently manual run of `consul acl set-agent-token default ...`
+
+        extraConfig = {
+          # Get our certificate from the server.
+          # auto_encrypt.tls = true;
+        };
+      };
+    })
   ];
 }
