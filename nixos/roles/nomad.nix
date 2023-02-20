@@ -101,7 +101,11 @@ in
             key_file = config.age.secrets.nomad-server-client-key.path;
 
             verify_server_hostname = true;
+
+            # Allow CLI, loadbalancers, browsers without client certs.
+            verify_https_client = false;
           };
+
         };
 
         extraPackages =
@@ -113,6 +117,8 @@ in
         extraSettingsPaths =
           [ config.roles.template.files."nomad-secrets.hcl".path ];
       };
+
+      networking.firewall.allowedTCPPorts = [ 4646 4647 ];
     })
 
     (mkIf cfg.enableServer {
@@ -128,14 +134,11 @@ in
               memory_oversubscription_enabled = true;
             };
           };
-
-          # Allow CLI, loadbalancers, browsers without client certs.
-          tls.verify_https_client = false;
-
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ 4646 4647 4648 ];
+      networking.firewall.allowedTCPPorts = [ 4648 ];
+      networking.firewall.allowedUDPPorts = [ 4648 ];
     })
 
     (mkIf cfg.enableClient {
