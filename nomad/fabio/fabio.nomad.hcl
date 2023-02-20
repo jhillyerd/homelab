@@ -2,6 +2,16 @@ job "fabio" {
   datacenters = ["skynet"]
   type = "system"
 
+  constraint {
+    attribute = "${attr.kernel.name}"
+    value = "linux"
+  }
+
+  constraint {
+    attribute = "${attr.kernel.arch}"
+    value = "x86_64"
+  }
+
   group "fabio" {
     network {
       port "lb" {
