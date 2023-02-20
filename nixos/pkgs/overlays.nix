@@ -1,3 +1,1 @@
-[
-  (import ./cfdyndns.nix)
-]
+[ ]
