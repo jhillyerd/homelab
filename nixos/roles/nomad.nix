@@ -108,6 +108,10 @@ in
           if pkgs.system == "x86_64-linux"
           then [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ]
           else [ ];
+
+        # Install extra HCL file to hold secrets.
+        extraSettingsPaths =
+          [ config.roles.template.files."nomad-secrets.hcl".path ];
       };
     })
 
@@ -129,10 +133,6 @@ in
           tls.verify_https_client = false;
 
         };
-
-        # Install extra HCL file to hold secrets.
-        extraSettingsPaths =
-          [ config.roles.template.files."nomad-secrets.hcl".path ];
       };
 
       networking.firewall.allowedTCPPorts = [ 4646 4647 4648 ];

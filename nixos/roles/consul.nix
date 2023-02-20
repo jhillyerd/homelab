@@ -41,8 +41,10 @@ in
         enable = true;
 
         extraConfig = {
-          bind_addr = self.ip.priv;
           inherit datacenter;
+
+          bind_addr = self.ip.priv;
+          client_addr = "0.0.0.0";
 
           retry_join = filter (x: x != self.ip.priv) cfg.retryJoin;
           retry_interval = "15s";
@@ -83,7 +85,6 @@ in
           server = true;
 
           bootstrap_expect = 3;
-          client_addr = "0.0.0.0";
 
           # Encrypt and verify TLS.
           tls.defaults = {
