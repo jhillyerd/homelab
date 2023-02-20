@@ -5,6 +5,7 @@
 set host $argv[1]
 set target $argv[2]
 set domain home.arpa
+set logfile log.txt
 
 if [ -z "$target" ]
   set target "root@$host.$domain"
@@ -16,7 +17,12 @@ nixos-rebuild \
   --flake ".#$host" \
   --target-host $target \
   --build-host localhost switch
+or return
 
-# Log host & git commit.
+# Log most recent deploy for host w/ git commit.
 set commit (git log -n 1 --format="[%ci] %h %s")
-printf "%-12s %s\n" $host $commit >> log.txt
+set tmpfile (mktemp)
+cp $logfile $tmpfile
+grep -v "^$host " $tmpfile > $logfile
+printf "%-12s %s\n" $host $commit >> $logfile
+rm -f $tmpfile
