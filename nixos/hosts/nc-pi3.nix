@@ -23,6 +23,11 @@
         readOnly = true;
       };
     };
+
+    usb = {
+      enable = true;
+      includedVendorIds = [ "0x0658" ];
+    };
   };
 
   roles.gateway-online.addr = "192.168.1.1";

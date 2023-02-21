@@ -44,6 +44,22 @@ in
       description = "Host volumes";
       default = { };
     };
+
+    usb = mkOption {
+      type = submodule {
+        options = {
+          enable = mkEnableOption "Enable Nomad USB plugin";
+
+          includedVendorIds = mkOption {
+            type = listOf str;
+            example = [ "0xc1f0" "0x0030" ];
+            default = [ ];
+          };
+        };
+      };
+      description = "USB plugin configuration";
+      default = { };
+    };
   };
 
   config = mkMerge [
@@ -109,9 +125,14 @@ in
         };
 
         extraPackages =
-          if pkgs.system == "x86_64-linux"
-          then [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ]
-          else [ ];
+          let
+            arch = {
+              any = [ ];
+              x86_64-linux = [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ];
+              aarch64-linux = [ ];
+            };
+          in
+          lib.lists.flatten [ arch.${pkgs.system} arch.any ];
 
         # Install extra HCL file to hold secrets.
         extraSettingsPaths =
@@ -192,7 +213,14 @@ in
               "node_name"
             ];
           };
+
+          plugin.usb.config = mkIf cfg.usb.enable {
+            enabled = true;
+            included_vendor_ids = cfg.usb.includedVendorIds;
+          };
         };
+
+        extraSettingsPlugins = mkIf cfg.usb.enable [ pkgs.nomad-usb-device-plugin ];
       };
 
       systemd.services.nomad = {
