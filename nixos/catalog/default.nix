@@ -38,6 +38,7 @@
       "satisfactory-data"
       "waypoint-runner-data"
       "waypoint-server-data"
+      "zwavejs-data"
     ];
   };
 

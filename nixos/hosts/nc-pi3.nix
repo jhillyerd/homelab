@@ -24,9 +24,16 @@
       };
     };
 
-    usb = {
-      enable = true;
-      includedVendorIds = [ "0x0658" ];
+    # USB plugin doesn't seem to work.
+    # usb = {
+    #   enable = true;
+    #   includedVendorIds = [
+    #     1624 # 0x0658, Aeotec
+    #   ];
+    # };
+
+    client = {
+      meta.zwave = "aeotec";
     };
   };
 

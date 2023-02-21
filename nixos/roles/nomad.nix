@@ -45,14 +45,32 @@ in
       default = { };
     };
 
+    client = mkOption {
+      type = submodule {
+        options = {
+          meta = mkOption {
+            type = attrs;
+            description = "Nomad metadata entries";
+            default = { };
+          };
+        };
+      };
+      description = "Client (worker) Nomad configuration";
+      default = { };
+    };
+
     usb = mkOption {
       type = submodule {
         options = {
           enable = mkEnableOption "Enable Nomad USB plugin";
 
           includedVendorIds = mkOption {
-            type = listOf str;
-            example = [ "0xc1f0" "0x0030" ];
+            type = listOf ints.unsigned;
+            default = [ ];
+          };
+
+          includedProductIds = mkOption {
+            type = listOf ints.unsigned;
             default = [ ];
           };
         };
@@ -168,14 +186,19 @@ in
         enableDocker = true;
 
         settings = {
-          client.enabled = true;
-          client.alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
-          client.host_volume = mkIf (cfg.hostVolumes != { }) (mapAttrs
-            (name: entry: {
-              inherit (entry) path;
-              read_only = entry.readOnly;
-            })
-            cfg.hostVolumes);
+          client = {
+            enabled = true;
+            alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
+
+            host_volume = mkIf (cfg.hostVolumes != { }) (mapAttrs
+              (name: entry: {
+                inherit (entry) path;
+                read_only = entry.readOnly;
+              })
+              cfg.hostVolumes);
+
+            meta = cfg.client.meta;
+          };
 
           telemetry = {
             publish_allocation_metrics = true;
@@ -217,6 +240,7 @@ in
           plugin.usb.config = mkIf cfg.usb.enable {
             enabled = true;
             included_vendor_ids = cfg.usb.includedVendorIds;
+            included_product_ids = cfg.usb.includedProductIds;
           };
         };
 
