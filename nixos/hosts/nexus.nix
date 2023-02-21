@@ -36,6 +36,10 @@
         passwordFile = config.age.secrets.mqtt-sensor.path;
         acl = [ ];
       };
+      zwave = {
+        passwordFile = config.age.secrets.mqtt-zwave.path;
+        acl = [ "readwrite zwave/#" ];
+      };
     };
   };
 
@@ -119,5 +123,8 @@
 
     mqtt-sensor.file = ../secrets/mqtt-sensor.age;
     mqtt-sensor.owner = "mosquitto";
+
+    mqtt-zwave.file = ../secrets/mqtt-zwave.age;
+    mqtt-zwave.owner = "mosquitto";
   };
 }
