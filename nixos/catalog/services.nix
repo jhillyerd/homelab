@@ -73,10 +73,7 @@
 
     dns.intCname = true;
 
-    dash.host = "homeassistant.bytemonkey.org";
     dash.icon = "home";
-
-    lb.backendUrls = [ "http://192.168.1.30:8123" ];
   };
 
   inbucket = {

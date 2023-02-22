@@ -34,6 +34,7 @@
     skynas-host-volumes = [
       "gitea-storage"
       "grafana-storage"
+      "homeassistant-data"
       "nodered-data"
       "satisfactory-data"
       "waypoint-runner-data"
