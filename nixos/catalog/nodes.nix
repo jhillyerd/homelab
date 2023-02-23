@@ -16,7 +16,8 @@
   };
 
   nc-pi3-1 = {
-    ip.priv = "192.168.1.243";
+    ip.priv = "192.168.1.22";
+    ip.tail = "100.120.127.103";
     config = ../hosts/nc-pi3.nix;
     hw = ../hw/sd-image-pi3.nix;
     system = system.aarch64-linux;

@@ -1,4 +1,4 @@
-{ pkgs, lib, catalog, ... }: {
+{ pkgs, lib, config, catalog, ... }: {
   imports = [ ../common.nix ];
 
   roles.cluster-volumes.enable = true;
@@ -40,4 +40,10 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   networking.firewall.enable = false;
+
+  networking.wireless = {
+    enable = true;
+    environmentFile = config.age.secrets.wifi-env.path;
+    networks.SKYNET.psk = "@SKYNET_PSK@";
+  };
 }

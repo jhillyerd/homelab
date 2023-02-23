@@ -82,6 +82,7 @@
   age.secrets = {
     influxdb-telegraf.file = ./secrets/influxdb-telegraf.age;
     tailscale.file = ./secrets/tailscale.age;
+    wifi-env.file = ./secrets/wifi-env.age;
   };
 
   environment.etc."issue.d/ip.issue".text = ''

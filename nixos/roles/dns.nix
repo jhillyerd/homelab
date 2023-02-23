@@ -28,12 +28,14 @@ in
         mail           600 IN CNAME web
         mqtt           600 IN CNAME nexus
         ntp            600 IN CNAME skynas
+        zwave          600 IN CNAME nc-pi3-1
 
         gateway        600 IN A     192.168.1.1
         printer        600 IN A     192.168.1.5
         fractal        600 IN A     192.168.1.12
         skynas         600 IN A     192.168.1.20
         octopi         600 IN A     192.168.1.21
+        nc-pi3-1       600 IN A     192.168.1.22
         homeassistant  600 IN A     192.168.1.30
         ryzen          600 IN A     192.168.1.50
 

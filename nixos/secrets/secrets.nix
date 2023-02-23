@@ -35,9 +35,12 @@ let
   nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 web ];
 in
 {
+  # TODO define common, home, nomad groups to simplify assignments below.
+
   # Common
   "influxdb-telegraf.age".publicKeys = users ++ home-systems ++ nomad-cluster;
   "tailscale.age".publicKeys = users ++ home-systems ++ nomad-cluster;
+  "wifi-env.age".publicKeys = users ++ home-systems ++ nomad-cluster;
 
   # Home
   "cloudflare-dns-api.age".publicKeys = users ++ home-systems;
