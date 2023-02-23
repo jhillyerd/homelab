@@ -134,7 +134,6 @@
 
   skynas = {
     title = "SkyNAS";
-    dns.intCname = true;
     dash.icon = "hdd";
     dash.host = "skynas.bytemonkey.org";
     dash.port = 5001;
