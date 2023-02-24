@@ -209,32 +209,39 @@ in
           # Nomad client requires client cert if not also a server.
           tls.verify_https_client = mkDefault true;
 
-          plugin.docker.config = {
-            # Defaults + net_raw; ping is useful in a home lab.
-            allow_caps = [
-              "audit_write"
-              "chown"
-              "dac_override"
-              "fowner"
-              "fsetid"
-              "kill"
-              "mknod"
-              "net_bind_service"
-              "net_raw"
-              "setfcap"
-              "setgid"
-              "setpcap"
-              "setuid"
-              "sys_chroot"
-            ];
+          plugin.docker = {
+            config = {
+              # Defaults + net_raw; ping is useful in a home lab.
+              allow_caps = [
+                "audit_write"
+                "chown"
+                "dac_override"
+                "fowner"
+                "fsetid"
+                "kill"
+                "mknod"
+                "net_bind_service"
+                "net_raw"
+                "setfcap"
+                "setgid"
+                "setpcap"
+                "setuid"
+                "sys_chroot"
+              ];
 
-            extra_labels = [
-              "job_name"
-              "task_group_name"
-              "task_name"
-              "namespace"
-              "node_name"
-            ];
+              extra_labels = [
+                "job_name"
+                "task_group_name"
+                "task_name"
+                "namespace"
+                "node_name"
+              ];
+
+              gc = {
+                image_delay = "60m";
+              };
+            };
+
           };
 
           plugin.usb.config = mkIf cfg.usb.enable {
