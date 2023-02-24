@@ -7,17 +7,25 @@ in
 {
   options.roles.consul = with types; {
     enableServer = mkEnableOption "Enable Consul Server";
-    enableClient = mkEnableOption "Enable Consul Client";
 
     retryJoin = mkOption {
       type = listOf str;
       description = "List of server host or IPs to join to datacenter";
     };
+
+    client = mkOption {
+      type = submodule {
+        options = {
+          enable = mkEnableOption "Enable Consul Client";
+        };
+      };
+      default = { };
+    };
   };
 
   config = mkMerge [
     # Configure if either client or server is enabled.
-    (mkIf (cfg.enableServer || cfg.enableClient) {
+    (mkIf (cfg.enableServer || cfg.client.enable) {
       age.secrets = {
         consul-encrypt.file = ../secrets/consul-encrypt.age;
       };
@@ -108,7 +116,7 @@ in
       };
     })
 
-    (mkIf (cfg.enableClient && !cfg.enableServer) {
+    (mkIf (cfg.client.enable && !cfg.enableServer) {
       # Consul client only config.
       services.consul = {
         extraConfig = {

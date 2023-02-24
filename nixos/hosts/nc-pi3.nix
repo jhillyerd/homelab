@@ -4,8 +4,9 @@
   roles.cluster-volumes.enable = true;
 
   roles.consul = {
-    enableClient = true;
     retryJoin = catalog.consul.servers;
+
+    client.enable = true;
   };
 
   roles.nomad = {
