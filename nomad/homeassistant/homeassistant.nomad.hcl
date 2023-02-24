@@ -16,18 +16,33 @@ job "homeassistant" {
     count = 1
 
     network {
+      mode = "bridge"
       port "http" { to = "8123" }
     }
 
     service {
       name = "homeassistant"
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "zwavejs-ws"
+              local_bind_port = 3000
+            }
+          }
+        }
+      }
+    }
+
+    service {
+      name = "homeassistant-ui"
       port = "http"
       tags = [
         "traefik",
         "traefik.enable=true",
-        "traefik.http.routers.homeassistant.entrypoints=websecure",
-        "traefik.http.routers.homeassistant.rule=Host(`homeassistant.bytemonkey.org`)",
-        "traefik.http.routers.homeassistant.tls.certresolver=letsencrypt",
+        "traefik.http.routers.homeassistant-ui.entrypoints=websecure",
+        "traefik.http.routers.homeassistant-ui.rule=Host(`homeassistant.bytemonkey.org`)",
+        "traefik.http.routers.homeassistant-ui.tls.certresolver=letsencrypt",
       ]
     }
 
@@ -56,7 +71,7 @@ job "homeassistant" {
       }
 
       resources {
-        cpu = 100 # MHz
+        cpu = 300 # MHz
         memory = 600 # MB
       }
     }

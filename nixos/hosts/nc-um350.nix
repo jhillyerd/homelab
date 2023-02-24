@@ -10,7 +10,10 @@
     enableServer = true;
     retryJoin = catalog.consul.servers;
 
-    client.enable = true;
+    client = {
+      enable = true;
+      connect = true;
+    };
   };
 
   roles.nomad = {

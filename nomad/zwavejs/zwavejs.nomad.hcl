@@ -20,8 +20,8 @@ job "zwavejs" {
     }
 
     network {
+      mode = "bridge"
       port "http" { to = 8091 }
-      port "ws" { static = 3000 }
     }
 
     volume "zwavejs" {
@@ -53,16 +53,17 @@ job "zwavejs" {
 
     service {
       name = "zwavejs-ws"
-      port = "ws"
+      port = 3000
 
       tags = ["websocket"]
 
-      check {
-        name = "ZwaveJS WS Check"
-        type = "tcp"
-        interval = "10s"
-        timeout = "2s"
+      # Allows sidecar to connect.
+      address_mode = "alloc"
+      connect {
+        sidecar_service {}
       }
+
+      # TCP checks are not valid for connect services.
     }
 
     ephemeral_disk {
@@ -76,7 +77,7 @@ job "zwavejs" {
 
       config {
         image = "zwavejs/zwave-js-ui:8.8.5"
-        ports = ["http", "ws"]
+        ports = ["http", 3000]
 
         devices = [
           {
