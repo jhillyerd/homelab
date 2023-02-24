@@ -161,4 +161,12 @@
     lb.backendUrls = [ "https://192.168.1.20:8443" ];
     lb.auth = "external";
   };
+
+  zwavejs = {
+    title = "Z-Wave JS";
+
+    dns.intCname = true;
+
+    dash.icon = "plug";
+  };
 }

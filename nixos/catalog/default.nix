@@ -78,7 +78,7 @@
     }
     {
       section = "Infrastructure";
-      services = [ "modem" "skynas" "traefik" "unifi" ];
+      services = [ "modem" "skynas" "traefik" "unifi" "zwavejs" ];
     }
   ];
 }

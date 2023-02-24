@@ -36,7 +36,10 @@ job "zwavejs" {
 
       tags = [
         "http",
-        "urlprefix-zwavejs-ui.service.${node.datacenter}.consul/"
+        "traefik.enable=true",
+        "traefik.http.routers.zwavejs-ui.entrypoints=websecure",
+        "traefik.http.routers.zwavejs-ui.rule=Host(`zwavejs.bytemonkey.org`)",
+        "traefik.http.routers.zwavejs-ui.tls.certresolver=letsencrypt",
       ]
 
       check {
