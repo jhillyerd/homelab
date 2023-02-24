@@ -80,6 +80,8 @@ in
         providers.consulCatalog = {
           prefix = "traefik";
           exposedByDefault = false;
+          connectAware = true;
+
           endpoint = {
             # TODO Fix hardcoded consul address
             address = catalog.nodes.nexus.ip.priv + ":8500";

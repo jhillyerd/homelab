@@ -17,6 +17,7 @@ in
       type = submodule {
         options = {
           enable = mkEnableOption "Enable Consul Client";
+          connect = mkEnableOption "Enable Consul Connect mesh";
         };
       };
       default = { };
@@ -26,24 +27,6 @@ in
   config = mkMerge [
     # Configure if either client or server is enabled.
     (mkIf (cfg.enableServer || cfg.client.enable) {
-      age.secrets = {
-        consul-encrypt.file = ../secrets/consul-encrypt.age;
-      };
-
-      # Create envfiles containing encryption keys.
-      roles.template.files = {
-        "consul-encrypt.hcl" = {
-          vars.encrypt = config.age.secrets.consul-encrypt.path;
-          content = ''encrypt = "$encrypt"'';
-          owner = "consul";
-        };
-      };
-
-      systemd.services.consul = {
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-      };
-
       # Consul shared client & server config.
       services.consul = {
         enable = true;
@@ -80,8 +63,37 @@ in
           [ config.roles.template.files."consul-encrypt.hcl".path ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 8300 8301 8302 8500 8501 8502 8600 ];
+      age.secrets = {
+        consul-encrypt.file = ../secrets/consul-encrypt.age;
+      };
+
+      # Create envfiles containing encryption keys.
+      roles.template.files = {
+        "consul-encrypt.hcl" = {
+          vars.encrypt = config.age.secrets.consul-encrypt.path;
+          content = ''encrypt = "$encrypt"'';
+          owner = "consul";
+        };
+      };
+
+      systemd.services.consul = {
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+      };
+
+      networking.firewall.allowedTCPPorts = [ 8300 8301 8302 8500 8501 8502 8503 8600 ];
       networking.firewall.allowedUDPPorts = [ 8301 8302 8600 ];
+    })
+
+    (mkIf (cfg.client.enable && cfg.client.connect) {
+      # Consul service mesh config.
+      services.consul = {
+        extraConfig = {
+          connect.enabled = true;
+          ports.grpc = 8502;
+          ports.grpc_tls = 8503;
+        };
+      };
     })
 
     (mkIf cfg.enableServer {

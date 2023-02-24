@@ -127,4 +127,6 @@
     mqtt-zwave.file = ../secrets/mqtt-zwave.age;
     mqtt-zwave.owner = "mosquitto";
   };
+
+  networking.firewall.enable = false;
 }
