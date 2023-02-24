@@ -12,7 +12,7 @@ in
   # TODO Generate DNS entries from catalog.nodes.
   config =
     let
-      unifi-zones = [ "dyn.skynet.local" "cluster.skynet.local" ];
+      unifi-zones = [ "dyn.home.arpa" "cluster.home.arpa" ];
 
       skynet-zone-file = pkgs.writeText "home.arpa.zone" ''
         $ORIGIN home.arpa.

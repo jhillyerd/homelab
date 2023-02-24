@@ -35,7 +35,7 @@
 
   networking = {
     hostName = hostName;
-    search = [ "home.arpa" "dyn.skynet.local" ];
+    search = [ "home.arpa" "dyn.home.arpa" ];
     timeServers = [ "ntp.home.arpa" ] ++ options.networking.timeServers.default;
   };
 
