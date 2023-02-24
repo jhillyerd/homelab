@@ -145,8 +145,8 @@ in
         extraPackages =
           let
             arch = {
-              any = [ ];
-              x86_64-linux = [ pkgs.cni-plugins pkgs.qemu_kvm pkgs.getent ];
+              any = [ pkgs.cni-plugins pkgs.consul ];
+              x86_64-linux = [ pkgs.qemu_kvm pkgs.getent ];
               aarch64-linux = [ ];
             };
           in
@@ -189,6 +189,7 @@ in
           client = {
             enabled = true;
             alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
+            cni_path = "${pkgs.cni-plugins}/bin";
 
             host_volume = mkIf (cfg.hostVolumes != { }) (mapAttrs
               (name: entry: {
