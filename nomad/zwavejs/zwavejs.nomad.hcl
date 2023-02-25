@@ -66,12 +66,6 @@ job "zwavejs" {
       # TCP checks are not valid for connect services.
     }
 
-    ephemeral_disk {
-      sticky = true
-      migrate = true
-      size = 150 # MB
-    }
-
     task "zwavejs" {
       driver = "docker"
 
