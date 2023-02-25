@@ -18,6 +18,7 @@ job "homeassistant" {
     network {
       mode = "bridge"
       port "http" { to = "8123" }
+      port "sonos" { static = "1400" }
     }
 
     service {
@@ -57,7 +58,7 @@ job "homeassistant" {
 
       config {
         image = "homeassistant/home-assistant:2023.2"
-        ports = [ "http" ]
+        ports = [ "http", "sonos" ]
       }
 
       env {
