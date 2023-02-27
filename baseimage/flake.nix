@@ -35,7 +35,16 @@
         '';
         networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
       };
-    in {
+
+      qemuModule = { ... }: {
+        boot.kernelParams = [
+          "console=ttyS0"
+        ];
+
+        services.qemuGuest.enable = true;
+      };
+    in
+    {
       packages.${system} = {
         hyperv = nixos-generators.nixosGenerate {
           inherit pkgs;
@@ -45,7 +54,7 @@
 
         libvirt = nixos-generators.nixosGenerate {
           inherit pkgs;
-          modules = [ baseModule { services.qemuGuest.enable = true; } ];
+          modules = [ baseModule qemuModule ];
           format = "qcow";
         };
       };
