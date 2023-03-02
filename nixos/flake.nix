@@ -8,7 +8,7 @@
     agenix.url = "github:ryantm/agenix/0.13.0";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
-    devenv.url = "github:cachix/devenv/v0.5.1";
+    devenv.url = "github:cachix/devenv/v0.6";
 
     homesite.url = "github:jhillyerd/homesite";
     homesite.inputs.flake-utils.follows = "flake-utils";
