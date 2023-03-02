@@ -41,7 +41,6 @@
         # Envoy built with gperftools
         # https://github.com/envoyproxy/envoy/issues/23339#issuecomment-1290509732
         "connect.sidecar_image" = "thegrandpkizzle/envoy:1.24.0";
-        zwave = "aeotec";
       };
     };
   };

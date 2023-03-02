@@ -29,6 +29,7 @@
     config = ../hosts/nc-um350.nix;
     hw = ../hw/minis-um350.nix;
     system = system.x86_64-linux;
+    nomad.meta.zwave = "aeotec";
   };
 
   nc-um350-2 = {

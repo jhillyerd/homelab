@@ -1,4 +1,4 @@
-{ config, lib, pkgs, environment, catalog, ... }: {
+{ config, lib, pkgs, environment, catalog, self, ... }: {
   imports = [ ../common.nix ];
 
   roles.dns.enable = true;
@@ -33,6 +33,9 @@
         readOnly = true;
       };
     };
+
+    # Use node catalog meta tags if defined.
+    client.meta = lib.mkIf (self ? nomad.meta) self.nomad.meta;
   };
 
   roles.gateway-online.addr = "192.168.1.1";
