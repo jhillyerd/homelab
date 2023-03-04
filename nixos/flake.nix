@@ -14,6 +14,10 @@
     homesite.inputs.flake-utils.follows = "flake-utils";
     homesite.inputs.nixpkgs.follows = "nixpkgs";
 
+    hw-gauge.url = "github:jhillyerd/hw-gauge";
+    hw-gauge.inputs.flake-utils.follows = "flake-utils";
+    hw-gauge.inputs.nixpkgs.follows = "nixpkgs";
+
     flake-utils.url = "github:numtide/flake-utils";
 
     terranix.url = "github:terranix/terranix";
@@ -21,7 +25,16 @@
     terranix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, agenix, flake-utils, terranix, ... }@attrs:
+  outputs =
+    { self
+    , nixpkgs
+    , nixpkgs-unstable
+    , flake-utils
+    , agenix
+    , terranix
+    , hw-gauge
+    , ...
+    }@attrs:
     let
       inherit (nixpkgs.lib)
         mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem splitString;
@@ -51,7 +64,12 @@
             inherit authorizedKeys catalog environment hostName;
             self = node;
           };
-          modules = [ node.config hardware agenix.nixosModule ];
+          modules = [
+            node.config
+            hardware
+            agenix.nixosModule
+            hw-gauge.nixosModules.default
+          ];
         };
     in
     rec {
