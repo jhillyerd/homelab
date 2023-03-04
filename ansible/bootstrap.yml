@@ -1,0 +1,30 @@
+- hosts: '{{ host }}'
+  become: yes
+  gather_facts: no
+
+  vars:
+    ansible_user: '{{ user }}'
+
+  tasks:
+  - name: ansible group account
+    group:
+      name: ansible
+
+  - name: ansible user account
+    user:
+      name: ansible
+      comment: "Ansible Deployer"
+      password: "*"
+      group: ansible
+
+  - name: sudo without password for ansible
+    copy:
+      content: "ansible ALL=(ALL:ALL) NOPASSWD: ALL"
+      dest: /etc/sudoers.d/050_ansible-nopasswd
+      mode: 0440
+      validate: /usr/sbin/visudo -csf %s
+
+  - name: setup authorized keys for ansible user
+    authorized_key:
+      user: ansible
+      key: "{{ lookup('file', '../authorized_keys.txt') }}"

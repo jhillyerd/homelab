@@ -28,6 +28,7 @@
               nomad
               openssl
               platformio
+              sshpass
             ];
           };
         }

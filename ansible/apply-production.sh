@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-ansible-playbook --inventory production.yml site.yml
+ansible-playbook --inventory hosts.yml site.yml
