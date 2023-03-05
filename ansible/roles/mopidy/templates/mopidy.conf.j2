@@ -34,6 +34,12 @@ protocols =
 metadata_blacklist =
 timeout = 5000
 
+[jellyfin]
+enabled = true
+hostname = skynas.home.arpa:8096
+username = {{ lowsec.mopidy.jellyfin.user }}
+password = {{ lowsec.mopidy.jellyfin.password }}
+
 [mpd]
 enabled = true
 hostname = ::

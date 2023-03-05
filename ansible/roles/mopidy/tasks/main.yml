@@ -3,6 +3,16 @@
     name:
       - mopidy
       - mopidy-mpd
+      - gstreamer1.0-plugins-bad
+      - python3-pip
+    state: latest
+  notify: "Restart mopidy"
+
+- name: install mopidy python packages
+  pip:
+    name:
+      - mopidy-jellyfin
+      - mopidy-iris
     state: latest
   notify: "Restart mopidy"
 
@@ -16,16 +26,10 @@
   notify: "Restart mopidy"
 
 - name: install mopidy config
-  copy:
-    src: files/mopidy.conf
+  template:
+    src: templates/mopidy.conf.j2
     dest: /etc/mopidy/mopidy.conf
-    owner: root
+    owner: mopidy
     group: root
-    mode: "0644"
+    mode: "0640"
   notify: "Restart mopidy"
-
-# - name: enable mopidy service
-#   service:
-#     name: mopidy
-#     enabled: true
-#     state: started
