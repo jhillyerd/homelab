@@ -1,0 +1,4 @@
+- name: setup authorized keys for ansible user
+  authorized_key:
+    user: ansible
+    key: "{{ lookup('file', '../authorized_keys.txt') }}"

@@ -2,9 +2,14 @@
   roles: [ common ]
   tags: [ common ]
 
-- hosts: octopis
+- hosts: rsyslog_fwd
+  vars_files:
+    - lowsec.yml
+  roles:
+    - { role: robertdebock.rsyslog, become: yes }
+
+- hosts: telegraf
   vars_files:
     - lowsec.yml
   roles:
     - dj-wasabi.telegraf
-    - { role: robertdebock.rsyslog, become: yes }
