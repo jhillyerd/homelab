@@ -1,2 +1,9 @@
 #!/usr/bin/env bash
-ansible-playbook --inventory hosts.yml site.yml
+
+# Optionally limit applied hosts.
+limit=""
+if [ -n "$1" ]; then
+  limit="--limit=$1"
+fi
+
+ansible-playbook site.yml --inventory hosts.yml $limit
