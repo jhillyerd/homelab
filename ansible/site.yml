@@ -15,3 +15,8 @@
   roles:
     - dj-wasabi.telegraf
   tags: [ telegraf ]
+
+- hosts: mopidy
+  roles:
+    - { role: mopidy, become: yes }
+  tags: [ mopidy ]

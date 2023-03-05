@@ -1,0 +1,5 @@
+- name: Restart mopidy
+  service:
+    name: mopidy
+    enabled: true
+    state: restarted

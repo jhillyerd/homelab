@@ -1,0 +1,31 @@
+- name: install mopidy with plugins
+  package:
+    name:
+      - mopidy
+      - mopidy-mpd
+    state: latest
+  notify: "Restart mopidy"
+
+- name: setup ram cache
+  file:
+    path: /var/run/mopidy
+    state: directory
+    owner: mopidy
+    group: audio
+    mode: "0755"
+  notify: "Restart mopidy"
+
+- name: install mopidy config
+  copy:
+    src: files/mopidy.conf
+    dest: /etc/mopidy/mopidy.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: "Restart mopidy"
+
+# - name: enable mopidy service
+#   service:
+#     name: mopidy
+#     enabled: true
+#     state: started
