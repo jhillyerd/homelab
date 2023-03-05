@@ -7,9 +7,11 @@
     - lowsec.yml
   roles:
     - { role: robertdebock.rsyslog, become: yes }
+  tags: [ rsyslog ]
 
 - hosts: telegraf
   vars_files:
     - lowsec.yml
   roles:
     - dj-wasabi.telegraf
+  tags: [ telegraf ]
