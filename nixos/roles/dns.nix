@@ -3,10 +3,16 @@ with lib;
 let cfg = config.roles.dns;
 in
 {
-  options.roles.dns = {
-    enable = mkEnableOption "Run unbound recursive resolver";
-
-    serveLocalZones = mkEnableOption "Serve local zone files";
+  options.roles.dns = with lib.types; {
+    unbound = mkOption {
+      type = submodule {
+        options = {
+          enable = mkEnableOption "Run unbound recursive resolver";
+          serveLocalZones = mkEnableOption "Serve local zone files";
+        };
+      };
+      default = { };
+    };
   };
 
   # TODO Generate DNS entries from catalog.nodes.
@@ -49,7 +55,7 @@ in
         modem          600 IN A     192.168.100.1
       '';
     in
-    mkIf cfg.enable {
+    mkIf cfg.unbound.enable {
       networking.resolvconf = {
         # 127.0.0.1 is not useful in containers, instead we will use our
         # private IP.
@@ -59,7 +65,7 @@ in
         '';
       };
 
-      services.unbound = {
+      services.unbound = mkIf cfg.unbound.enable {
         enable = true;
 
         settings = {
@@ -90,7 +96,7 @@ in
             { name = "consul"; stub-addr = "127.0.0.1@8600"; }
           ];
 
-          auth-zone = mkIf cfg.serveLocalZones {
+          auth-zone = mkIf cfg.unbound.serveLocalZones {
             name = "home.arpa.";
             zonefile = "${skynet-zone-file}";
           };
