@@ -1,8 +1,8 @@
 { config, pkgs, lib, environment, catalog, ... }: {
   imports = [ ../common.nix ];
 
-  roles.dns.unbound.enable = true;
-  roles.dns.unbound.serveLocalZones = true;
+  roles.dns.bind.enable = true;
+  roles.dns.bind.serveLocalZones = true;
 
   roles.influxdb = {
     enable = true;
