@@ -4,6 +4,16 @@ let cfg = config.roles.dns;
 in
 {
   options.roles.dns = with lib.types; {
+    bind = mkOption {
+      type = submodule {
+        options = {
+          enable = mkEnableOption "Run bind DNS server";
+          serveLocalZones = mkEnableOption "Serve local zone files";
+        };
+      };
+      default = { };
+    };
+
     unbound = mkOption {
       type = submodule {
         options = {
@@ -24,12 +34,17 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2023020501 ; serial number
+          2023030603 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
           1800       ; min TTL
         )
+
+        @              600 IN NS    ns1
+        ns1            600 IN A     192.168.128.40
+
+        dyn            600 IN NS    gateway
 
         mail           600 IN CNAME web
         mqtt           600 IN CNAME nexus
@@ -55,7 +70,7 @@ in
         modem          600 IN A     192.168.100.1
       '';
     in
-    mkIf cfg.unbound.enable {
+    mkIf (cfg.bind.enable || cfg.unbound.enable) {
       networking.resolvconf = {
         # 127.0.0.1 is not useful in containers, instead we will use our
         # private IP.
@@ -63,6 +78,28 @@ in
         extraConfig = ''
           name_servers='${self.ip.priv} ${catalog.dns.host}'
         '';
+      };
+
+      services.bind = mkIf cfg.bind.enable {
+        enable = true;
+
+        cacheNetworks = [ "192.168.0.0/16" ];
+        forwarders = [ "1.1.1.1" "8.8.8.8" ];
+
+        zones = mkIf cfg.bind.serveLocalZones {
+          "home.arpa" = {
+            master = true;
+            file = "${skynet-zone-file}";
+          };
+        };
+
+        extraConfig = concatMapStrings (zone: ''
+          zone "${zone}" {
+            type forward;
+            forward only;
+            forwarders { 192.168.1.1; };
+          };
+        '') unifi-zones;
       };
 
       services.unbound = mkIf cfg.unbound.enable {
