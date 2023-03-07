@@ -34,7 +34,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2023030603 ; serial number
+          2023030604 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -44,6 +44,7 @@ in
         @              600 IN NS    ns1
         ns1            600 IN A     192.168.128.40
 
+        cluster        600 IN NS    gateway
         dyn            600 IN NS    gateway
 
         mail           600 IN CNAME web
@@ -123,14 +124,14 @@ in
           # Configure a forward-zone for each unifi zone.
           forward-zone = map
             (name: {
-              inherit name;
+              name = "${name}.";
               forward-addr = "192.168.1.1";
             })
             unifi-zones;
 
           # Forward consul zone to local instance.
           stub-zone = [
-            { name = "consul"; stub-addr = "127.0.0.1@8600"; }
+            { name = "consul."; stub-addr = "127.0.0.1@8600"; }
           ];
 
           auth-zone = mkIf cfg.unbound.serveLocalZones {
