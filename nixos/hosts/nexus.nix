@@ -82,7 +82,7 @@
         response_status_code = 401;
       }
       {
-        urls = [ "http://homeassistant.home.arpa:8123" ];
+        urls = [ "https://homeassistant.bytemonkey.org/" ];
         response_status_code = 200;
       }
       {
@@ -105,7 +105,6 @@
 
     ping = [
       "gateway.home.arpa"
-      "homeassistant.home.arpa"
       "nexus.home.arpa"
       "nc-um350-1.home.arpa"
       "nc-um350-2.home.arpa"
