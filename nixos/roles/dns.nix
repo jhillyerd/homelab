@@ -84,8 +84,14 @@ in
       services.bind = mkIf cfg.bind.enable {
         enable = true;
 
-        cacheNetworks = [ "192.168.0.0/16" ];
+        cacheNetworks = [ "0.0.0.0/0" ];
         forwarders = [ "1.1.1.1" "8.8.8.8" ];
+
+        extraOptions = ''
+          dnssec-validation auto;
+
+          validate-except { "consul"; };
+        '';
 
         zones = mkIf cfg.bind.serveLocalZones {
           "home.arpa" = {
@@ -94,13 +100,27 @@ in
           };
         };
 
-        extraConfig = concatMapStrings (zone: ''
-          zone "${zone}" {
-            type forward;
-            forward only;
-            forwarders { 192.168.1.1; };
-          };
-        '') unifi-zones;
+        extraConfig =
+          let
+            unifiForwardZones = concatMapStrings
+              (zone: ''
+                zone "${zone}" {
+                  type forward;
+                  forward only;
+                  forwarders { 192.168.1.1; };
+                };
+              '')
+              unifi-zones;
+          in
+          ''
+            zone "consul" IN {
+              type forward;
+              forward only;
+              forwarders { 127.0.0.1 port 8600; };
+            };
+
+            ${unifiForwardZones}
+          '';
       };
 
       services.unbound = mkIf cfg.unbound.enable {
