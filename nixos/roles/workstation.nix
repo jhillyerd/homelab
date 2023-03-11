@@ -34,6 +34,7 @@ in
           gcc
           gnumake
           lazygit
+          lf
           lynx
           nfs-utils
           nix-direnv
@@ -51,7 +52,6 @@ in
           universal-ctags
           unzip
           usbutils
-          weechat
           zip
         ];
 
