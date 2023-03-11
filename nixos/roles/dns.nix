@@ -28,9 +28,9 @@ in
   # TODO Generate DNS entries from catalog.nodes.
   config =
     let
-      unifi-zones = [ "dyn.home.arpa" "cluster.home.arpa" ];
+      unifiZones = [ "dyn.home.arpa" "cluster.home.arpa" ];
 
-      skynet-zone-file = pkgs.writeText "home.arpa.zone" ''
+      homeZoneFile = pkgs.writeText "home.arpa.zone" ''
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
@@ -96,7 +96,7 @@ in
         zones = mkIf cfg.bind.serveLocalZones {
           "home.arpa" = {
             master = true;
-            file = "${skynet-zone-file}";
+            file = "${homeZoneFile}";
           };
         };
 
@@ -110,7 +110,7 @@ in
                   forwarders { 192.168.1.1; };
                 };
               '')
-              unifi-zones;
+              unifiZones;
           in
           ''
             zone "consul" IN {
@@ -135,7 +135,7 @@ in
             do-not-query-localhost = false; # for consul.
 
             # Local domains w/o DNSSEC.
-            domain-insecure = unifi-zones ++ [ "consul" "home.arpa" ];
+            domain-insecure = unifiZones ++ [ "consul" "home.arpa" ];
 
             # Disable built-in default home.arpa zone.
             local-zone = "home.arpa transparent";
@@ -147,7 +147,7 @@ in
               name = "${name}.";
               forward-addr = "192.168.1.1";
             })
-            unifi-zones;
+            unifiZones;
 
           # Forward consul zone to local instance.
           stub-zone = [
@@ -156,7 +156,7 @@ in
 
           auth-zone = mkIf cfg.unbound.serveLocalZones {
             name = "home.arpa.";
-            zonefile = "${skynet-zone-file}";
+            zonefile = "${homeZoneFile}";
           };
         };
       };
