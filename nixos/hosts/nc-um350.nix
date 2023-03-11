@@ -1,8 +1,8 @@
 { config, lib, pkgs, environment, catalog, self, ... }: {
   imports = [ ../common.nix ];
 
-  roles.dns.unbound.enable = true;
-  roles.dns.unbound.serveLocalZones = true;
+  roles.dns.bind.enable = true;
+  roles.dns.bind.serveLocalZones = true;
 
   roles.cluster-volumes.enable = true;
 
