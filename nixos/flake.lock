@@ -218,20 +218,22 @@
         "flake-utils": [
           "flake-utils"
         ],
+        "icons": "icons",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1668383491,
-        "narHash": "sha256-nhhLX8AavQNRI/FG1tv08m0mV/avBl9RtXMWwbBVIrI=",
+        "lastModified": 1678652430,
+        "narHash": "sha256-rqKJVmek0xf0sxN/w0aq0uWELt27g8UWkLi/33Ixkdw=",
         "owner": "jhillyerd",
         "repo": "homesite",
-        "rev": "582d0324f993d8da9bf40ef00bdf43cfcfeeb069",
+        "rev": "19a1c96a34a9a089def0e365d9a1e8a73035ff5a",
         "type": "github"
       },
       "original": {
         "owner": "jhillyerd",
+        "ref": "main",
         "repo": "homesite",
         "type": "github"
       }
@@ -258,6 +260,22 @@
       "original": {
         "owner": "jhillyerd",
         "repo": "hw-gauge",
+        "type": "github"
+      }
+    },
+    "icons": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1678232250,
+        "narHash": "sha256-sYhPugJIO6I7gMWBaYyAO2WTt2X+vtMjeThmoTtnoi0=",
+        "owner": "walkxcode",
+        "repo": "dashboard-icons",
+        "rev": "997f8e2631882df354e61e0af106aa19c8c73e0a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "walkxcode",
+        "repo": "dashboard-icons",
         "type": "github"
       }
     },

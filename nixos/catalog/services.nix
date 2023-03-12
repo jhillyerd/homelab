@@ -24,7 +24,7 @@
   consul = {
     title = "Consul";
 
-    dash.icon = "address-book";
+    dash.icon = "png/c.png";
     dash.host = nodes.nexus.ip.priv;
     dash.port = 8500;
     dash.proto = "http";
@@ -41,7 +41,7 @@
 
     dns.intCname = true;
 
-    dash.icon = "brands fa-docker";
+    dash.icon = "svg/docker.svg";
     dash.host = "dockreg.bytemonkey.org";
     dash.path = "/v2/_catalog";
 
@@ -54,7 +54,7 @@
     dns.intCname = true;
     dns.extCname = true;
 
-    dash.icon = "code-branch";
+    dash.icon = "svg/gitea.svg";
     # Note: external + auth handled by labels.
   };
 
@@ -64,7 +64,7 @@
     dns.intCname = true;
     dns.extCname = true;
 
-    dash.icon = "chart-area";
+    dash.icon = "svg/grafana.svg";
     # Note: external + auth handled by labels.
   };
 
@@ -73,19 +73,19 @@
 
     dns.intCname = true;
 
-    dash.icon = "home";
+    dash.icon = "svg/home-assistant.svg";
   };
 
   inbucket = {
     title = "Inbucket";
     dns.intCname = true;
-    dash.icon = "at";
+    dash.icon = "png/google-mail.png";
   };
 
   modem = {
     title = "Cable Modem";
 
-    dash.icon = "satellite-dish";
+    dash.icon = "png/arris.png";
     dash.host = "192.168.100.1";
     dash.proto = "http";
   };
@@ -98,7 +98,7 @@
   nodered = {
     title = "Node-RED";
     dns.intCname = true;
-    dash.icon = "project-diagram";
+    dash.icon = "svg/nodered.svg";
   };
 
   nomad = {
@@ -108,7 +108,7 @@
     dns.intCname = true;
     dns.extCname = true;
 
-    dash.icon = "server";
+    dash.icon = "svg/nomad.svg";
 
     lb.backendUrls = map (ip: "https://${ip}:4646") nomad.servers;
     lb.sticky = true;
@@ -118,20 +118,20 @@
   octopi = {
     title = "OctoPrint";
     dns.intCname = true;
-    dash.icon = "cube";
+    dash.icon = "png/octoprint.png";
     lb.backendUrls = [ "http://192.168.1.21" ];
   };
 
   proxmox = {
     title = "Proxmox VE";
     dns.intCname = true;
-    dash.icon = "terminal";
+    dash.icon = "png/proxmox.png";
     lb.backendUrls = [ "https://192.168.128.10:8006" ];
   };
 
   skynas = {
     title = "SkyNAS";
-    dash.icon = "hdd";
+    dash.icon = "png/synology-dsm.png";
     dash.host = "skynas.bytemonkey.org";
     dash.port = 5001;
   };
@@ -141,7 +141,7 @@
 
     dns.intCname = true;
 
-    dash.icon = "traffic-light";
+    dash.icon = "svg/traefik.svg";
     dash.host = "traefik.bytemonkey.org";
     dash.path = "/dashboard/";
   };
@@ -153,7 +153,7 @@
     dns.intCname = true;
     dns.extCname = true;
 
-    dash.icon = "network-wired";
+    dash.icon = "png/unifi.png";
 
     lb.backendUrls = [ "https://192.168.1.20:8443" ];
     lb.auth = "external";
@@ -164,6 +164,6 @@
 
     dns.intCname = true;
 
-    dash.icon = "plug";
+    dash.icon = "png/zwavejs2mqtt.png";
   };
 }
