@@ -47,6 +47,7 @@ in
   "influxdb-admin.age".publicKeys = users ++ home-systems;
   "influxdb-homeassistant.age".publicKeys = users ++ home-systems;
   "mqtt-admin.age".publicKeys = users ++ home-systems;
+  "mqtt-clock.age".publicKeys = users ++ home-systems;
   "mqtt-sensor.age".publicKeys = users ++ home-systems;
   "mqtt-zwave.age".publicKeys = users ++ home-systems;
 

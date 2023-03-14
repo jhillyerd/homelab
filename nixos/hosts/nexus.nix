@@ -32,6 +32,10 @@
         passwordFile = config.age.secrets.mqtt-admin.path;
         acl = [ "readwrite $SYS/#" "readwrite #" ];
       };
+      clock = {
+        passwordFile = config.age.secrets.mqtt-clock.path;
+        acl = [ "readwrite clock/#" ];
+      };
       sensor = {
         passwordFile = config.age.secrets.mqtt-sensor.path;
         acl = [ ];
@@ -119,6 +123,9 @@
 
     mqtt-admin.file = ../secrets/mqtt-admin.age;
     mqtt-admin.owner = "mosquitto";
+
+    mqtt-clock.file = ../secrets/mqtt-clock.age;
+    mqtt-clock.owner = "mosquitto";
 
     mqtt-sensor.file = ../secrets/mqtt-sensor.age;
     mqtt-sensor.owner = "mosquitto";
