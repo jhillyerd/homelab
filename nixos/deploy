@@ -20,6 +20,7 @@ nixos-rebuild \
 or return
 
 # Log most recent deploy for host w/ git commit.
+test -e $logfile; or touch $logfile
 set commit (git log -n 1 --format="[%ci] %h %s")
 set tmpfile (mktemp)
 cp $logfile $tmpfile
