@@ -34,7 +34,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2023031101 ; serial number
+          2023032501 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -66,6 +66,7 @@ in
         nexus          600 IN A     192.168.128.40
         pve1           600 IN A     192.168.128.10
         pve2           600 IN A     192.168.128.12
+        pve3           600 IN A     192.168.128.13
         web            600 IN A     192.168.128.11
 
         modem          600 IN A     192.168.100.1
