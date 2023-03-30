@@ -24,7 +24,7 @@ job "nix-cache" {
     ephemeral_disk {
       sticky = true
       migrate = false
-      size = 112640 # MB
+      size = 56320 # MB
     }
 
     task "nginx" {
@@ -48,7 +48,7 @@ job "nix-cache" {
         data = <<EOH
           # This config is based on:
           # https://www.channable.com/tech/setting-up-a-private-nix-cache-for-fun-and-profit
-          proxy_cache_path /alloc/data/nginx-cache max_size=100G keys_zone=cache_zone:50m inactive=365d;
+          proxy_cache_path /alloc/data/nginx-cache max_size=50G keys_zone=cache_zone:50m inactive=365d;
           proxy_cache cache_zone;
           # Don't cache failed requests.
           proxy_cache_valid 200 365d;
