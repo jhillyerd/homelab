@@ -9,7 +9,7 @@ esphome:
 wifi:
   ssid: !secret 'wifi_ssid'
   password: !secret 'wifi_pass'
-  domain: .dyn.skynet.local
+  domain: .dyn.home.arpa
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -23,7 +23,8 @@ logger:
 
 # Enable Home Assistant API
 api:
-  password: !secret 'api_pass'
+  encryption:
+    key: !secret 'api_key'
 
 ota:
   password: !secret 'ota_pass'
