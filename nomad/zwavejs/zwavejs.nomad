@@ -70,7 +70,7 @@ job "zwavejs" {
       driver = "docker"
 
       config {
-        image = "zwavejs/zwave-js-ui:8.8.5"
+        image = "zwavejs/zwave-js-ui:8.11.1"
         ports = ["http", 3000]
 
         devices = [
@@ -81,6 +81,10 @@ job "zwavejs" {
         ]
       }
 
+      env {
+        SESSION_SECRET = "itreallydoesntmatter"
+      }
+
       volume_mount {
         volume = "zwavejs"
         destination = "/usr/src/app/store"
@@ -89,7 +93,7 @@ job "zwavejs" {
 
       resources {
         cpu = 200 # MHz
-        memory = 128 # MB
+        memory = 384 # MB
       }
 
       logs {
