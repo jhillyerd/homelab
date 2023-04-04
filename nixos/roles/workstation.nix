@@ -200,6 +200,10 @@ in
       services.xserver = {
         enable = true;
         layout = "us";
+
+        libinput.enable = true;
+        libinput.mouse.accelProfile = "flat";
+
         windowManager.i3.enable = true;
         windowManager.awesome.enable = true;
       };
