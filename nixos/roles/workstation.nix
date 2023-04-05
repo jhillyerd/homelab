@@ -220,6 +220,14 @@ in
       # Enable sound.
       sound.enable = true;
       hardware.pulseaudio.enable = true;
+
+      # IPP Printer support.
+      services.printing.enable = true;
+      services.avahi = {
+        enable = true;
+        nssmdns = true;
+        openFirewall = true;
+      };
     })
   ];
 }
