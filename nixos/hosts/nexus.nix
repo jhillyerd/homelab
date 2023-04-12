@@ -113,7 +113,10 @@
       "nc-um350-1.home.arpa"
       "nc-um350-2.home.arpa"
       "octopi.home.arpa"
+      "pve1.home.arpa"
+      "pve2.home.arpa"
       "skynas.home.arpa"
+      "web.home.arpa"
     ];
   };
 
