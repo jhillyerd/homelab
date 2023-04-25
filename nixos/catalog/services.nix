@@ -126,7 +126,10 @@
     title = "Proxmox VE";
     dns.intCname = true;
     dash.icon = "png/proxmox.png";
-    lb.backendUrls = [ "https://192.168.128.10:8006" ];
+    lb.backendUrls = [
+      "https://192.168.128.12:8006"
+      "https://192.168.128.13:8006"
+    ];
   };
 
   skynas = {
