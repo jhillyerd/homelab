@@ -33,6 +33,7 @@ in
           gitAndTools.git-absorb
           gcc
           gnumake
+          kitty # always install for terminfo
           lazygit
           lf
           lynx
@@ -173,7 +174,6 @@ in
           gimp
           gnome3.gedit
           google-chrome
-          kitty
           lxappearance
           maim # takes screenshots
           pantheon.elementary-icon-theme
