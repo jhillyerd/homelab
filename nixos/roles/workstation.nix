@@ -15,10 +15,6 @@ in
       environment.systemPackages = with pkgs;
         let
           inherit (nixpkgs-unstable.legacyPackages.${system}) rnix-lsp rust-analyzer;
-
-          x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.google-chrome}/bin/google-chrome-stable "$@"
-          '';
         in
         [
           bashmount
@@ -164,7 +160,7 @@ in
       environment.systemPackages = with pkgs;
         let
           x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.google-chrome}/bin/google-chrome-stable "$@"
+            exec ${pkgs.firefox}/bin/firefox "$@"
           '';
           noxorg = [ rxvt_unicode.terminfo ];
         in
