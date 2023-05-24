@@ -6,6 +6,5 @@ in
 {
   # Package template: x = final.callPackage ./x { };
   cfdyndns = callPackage ./cfdyndns.nix { };
-  consul = callPackage ./consul.nix { };
   nomad-usb-device-plugin = callPackage ./nomad-usb-device-plugin.nix { };
 }
