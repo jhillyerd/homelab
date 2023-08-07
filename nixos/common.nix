@@ -11,7 +11,7 @@
 , nixpkgs-unstable
 , ...
 }: {
-  system.stateVersion = "22.05";
+  system.stateVersion = "22.11";
 
   imports = [ ./common/packages.nix ./roles ];
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
