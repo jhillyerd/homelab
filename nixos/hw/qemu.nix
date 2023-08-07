@@ -1,7 +1,6 @@
 # QEMU Guest Hardware
 { lib, modulesPath, ... }: {
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
 
   # We don't always know the interface name on QEMU.
