@@ -28,7 +28,7 @@ in
         '')
         catalog.nomad.skynas-host-volumes);
 
-      after = [ "remote-fs.target" ];
+      after = [ "network-online.target" "remote-fs.target" ];
       wantedBy = [ "nomad.service" ];
       before = [ "nomad.service" ];
       serviceConfig = { Type = "oneshot"; };
