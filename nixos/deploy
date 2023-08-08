@@ -27,3 +27,6 @@ cp $logfile $tmpfile
 grep -v "^$host " $tmpfile > $logfile
 printf "%-12s %s\n" $host $commit >> $logfile
 rm -f $tmpfile
+
+echo
+echo "Deploy of $host --> $target complete"
