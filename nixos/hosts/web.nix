@@ -53,6 +53,8 @@
 
     serviceConfig.LoadCredential =
       "api.key:${config.age.secrets.cloudflare-dns-api.path}";
+
+    after = [ "network-online.target" ];
   };
 
   age.secrets = {
