@@ -15,6 +15,14 @@
     system = system.x86_64-linux;
   };
 
+  metrics = {
+    ip.priv = "192.168.128.41";
+    ip.tail = "100.108.135.101";
+    config = ../hosts/metrics.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   nc-pi3-1 = {
     ip.priv = "192.168.1.22";
     ip.tail = "100.120.127.103";
