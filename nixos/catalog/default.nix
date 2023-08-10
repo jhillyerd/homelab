@@ -9,7 +9,7 @@
   };
 
   influxdb = rec {
-    host = nodes.nexus.ip.priv;
+    host = nodes.metrics.ip.priv;
     port = 8086;
     telegraf.user = "telegraf";
     telegraf.database = "telegraf-hosts";
@@ -60,7 +60,7 @@
 
   dns.host = nodes.nexus.ip.priv;
 
-  syslog.host = nodes.nexus.ip.priv;
+  syslog.host = nodes.metrics.ip.priv;
   syslog.port = 1514;
 
   smtp.host = "mail.home.arpa";

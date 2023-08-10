@@ -99,7 +99,7 @@ datasources:
   - name: telegraf-hosts influxdb
     type: influxdb
     database: telegraf-hosts
-    url: http://nexus.home.arpa:8086
+    url: http://metrics.home.arpa:8086
     user: telegraf
     secureJsonData:
       password: "{{key "secrets/influxdb/telegraf"}}"
@@ -107,7 +107,7 @@ datasources:
   - name: "syslogs loki"
     type: loki
     access: proxy
-    url: "http://nexus.home.arpa:3100"
+    url: "http://metrics.home.arpa:3100"
     jsonData:
       maxLines: 1000
 EOT
