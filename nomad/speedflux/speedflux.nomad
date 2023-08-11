@@ -27,7 +27,7 @@ job "speedflux" {
       template {
         data = <<EOT
 NAMESPACE=comcast
-INFLUX_DB_ADDRESS=nexus.home.arpa
+INFLUX_DB_ADDRESS=metrics.home.arpa
 INFLUX_DB_PORT=8086
 INFLUX_DB_USER=telegraf
 INFLUX_DB_PASSWORD={{key "secrets/influxdb/telegraf"}}
