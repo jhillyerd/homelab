@@ -76,7 +76,7 @@ job "logging" {
             hostname = ""
             omit_hostname = false
           [[outputs.influxdb]]
-            urls = ["http://nexus.home.arpa:8086"]
+            urls = ["http://metrics.home.arpa:8086"]
             database = "telegraf-hosts"
             username = "telegraf"
             password = "{{key "secrets/influxdb/telegraf"}}"
@@ -145,7 +145,7 @@ job "logging" {
           [sinks.loki]
             type = "loki"
             inputs = ["logs"]
-            endpoint = "http://nexus.home.arpa:3100"
+            endpoint = "http://metrics.home.arpa:3100"
             encoding.codec = "json"
             healthcheck.enabled = true
             # remove fields that have been converted to labels to avoid having the field twice
