@@ -4,8 +4,6 @@
   roles.dns.bind.enable = true;
   roles.dns.bind.serveLocalZones = true;
 
-  roles.loki.enable = true;
-
   roles.mosquitto = {
     enable = true;
 
@@ -37,11 +35,6 @@
   roles.nomad = {
     enableServer = true;
     retryJoin = catalog.nomad.servers;
-  };
-
-  roles.log-forwarder = {
-    # Forward remote syslogs as well.
-    enableTcpListener = true;
   };
 
   roles.gateway-online.addr = "192.168.1.1";
