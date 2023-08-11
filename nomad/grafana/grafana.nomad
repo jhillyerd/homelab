@@ -91,7 +91,7 @@ datasources:
   - name: homeassistant influxdb
     type: influxdb
     database: homeassistant
-    url: http://nexus.home.arpa:8086
+    url: http://metrics.home.arpa:8086
     user: homeassistant
     secureJsonData:
       password: "{{key "secrets/influxdb/homeassistant"}}"
