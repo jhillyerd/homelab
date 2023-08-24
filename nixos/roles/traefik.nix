@@ -20,6 +20,8 @@ in
             domainName = mkOption { type = str; };
             backendUrls = mkOption { type = listOf str; };
             sticky = mkOption { type = bool; default = false; };
+            checkPath = mkOption { type = str; default = "/"; };
+            checkInterval = mkOption { type = str; default = "15s"; };
             external = mkOption { type = bool; default = false; };
             externalAuth = mkOption { type = bool; default = true; };
           };
@@ -109,6 +111,10 @@ in
               # Map list of urls to individual url= attributes.
               servers = map (url: { url = url; }) opt.backendUrls;
               sticky = mkIf opt.sticky { cookie = { }; };
+              healthCheck = {
+                path = opt.checkPath;
+                interval = opt.checkInterval;
+              };
             };
           };
         in
