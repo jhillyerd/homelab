@@ -162,14 +162,15 @@ in
           x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
             exec ${pkgs.firefox}/bin/firefox "$@"
           '';
-          noxorg = [ rxvt_unicode.terminfo ];
         in
         [
           dmenu
+          dunst
           firefox
           gimp
           gnome3.gedit
           google-chrome
+          libnotify # for notify-send
           lxappearance
           maim # takes screenshots
           pantheon.elementary-icon-theme
