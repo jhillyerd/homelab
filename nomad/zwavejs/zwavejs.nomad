@@ -70,7 +70,7 @@ job "zwavejs" {
       driver = "docker"
 
       config {
-        image = "zwavejs/zwave-js-ui:8.26.0"
+        image = "zwavejs/zwave-js-ui:9.0.3"
         ports = ["http", 3000]
 
         devices = [
