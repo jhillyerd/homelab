@@ -57,7 +57,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "homeassistant/home-assistant:2023.8.1"
+        image = "homeassistant/home-assistant:2023.9.3"
         ports = [ "http", "sonos" ]
       }
 
