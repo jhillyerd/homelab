@@ -22,7 +22,6 @@ in
           cachix
           chezmoi
           devenv.packages.${system}.devenv
-          exa
           fzf
           gitAndTools.gh
           gitAndTools.git-absorb
@@ -196,7 +195,7 @@ in
         windowManager.awesome.enable = true;
       };
 
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         fira-code
         inconsolata
         noto-fonts

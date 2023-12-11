@@ -92,7 +92,7 @@ in
           };
         };
 
-        accessLog = {}; # enabled
+        accessLog = { }; # enabled
         log.level = "info";
       };
 
@@ -167,7 +167,7 @@ in
     };
 
     systemd.services.traefik.serviceConfig.EnvironmentFile =
-      config.roles.template.files."traefik.env".path;
+      [ config.roles.template.files."traefik.env".path ];
 
     # TODO: autogenerate this list from catalog entrypoints
     networking.firewall.allowedTCPPorts = [ 25 80 443 8443 ];
