@@ -22,7 +22,6 @@ in
           cachix
           chezmoi
           devenv.packages.${system}.devenv
-          direnv
           exa
           fzf
           gitAndTools.gh
@@ -34,7 +33,6 @@ in
           lf
           lynx
           nfs-utils
-          nix-direnv
           nixpkgs-fmt
           nodejs
           patchelf
@@ -52,9 +50,8 @@ in
           zip
         ];
 
-      environment.pathsToLink = [ "/share/nix-direnv" ];
-
       # Programs and services
+      programs.direnv.enable = true;
       programs.fish.enable = true;
 
       services.hw-gauge-daemon.enable = true;
@@ -147,12 +144,6 @@ in
           experimental-features = nix-command flakes
         '';
       };
-
-      nixpkgs.overlays = [
-        # Enable nix-direnv support for flakes, from:
-        #  https://github.com/nix-community/nix-direnv
-        (self: super: { nix-direnv = super.nix-direnv.override { enableFlakes = true; }; })
-      ];
     })
 
     # Graphical workstation configuration.
