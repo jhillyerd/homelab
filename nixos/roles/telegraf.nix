@@ -27,6 +27,7 @@ in
   config = mkIf cfg.enable {
     services.telegraf = {
       enable = true;
+
       extraConfig = {
         inputs = {
           cpu = { percpu = true; };
@@ -51,7 +52,7 @@ in
               (host: {
                 urls = [ host ];
                 interval = "30s";
-                binary = "/run/wrappers/bin/ping";
+                binary = "${pkgs.iputils}/bin/ping";
               })
               cfg.ping);
         };
