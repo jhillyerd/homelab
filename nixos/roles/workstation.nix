@@ -163,6 +163,7 @@ in
           libnotify # for notify-send
           lxappearance
           maim # takes screenshots
+          obs-studio
           pantheon.elementary-icon-theme
           polybarFull
           pavucontrol
