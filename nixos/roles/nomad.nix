@@ -115,7 +115,7 @@ in
       # Nomad shared client & server config.
       services.nomad = {
         enable = true;
-        package = pkgs.nomad_1_4;
+        package = pkgs.nomad_1_6;
 
         dropPrivileges = false;
 
