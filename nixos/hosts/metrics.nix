@@ -99,6 +99,10 @@
         urls = [ "http://octopi.home.arpa" ];
         response_status_code = 302;
       }
+      {
+        urls = [ "https://zwavejs.bytemonkey.org/" ];
+        response_status_code = 200;
+      }
     ];
 
     ping = [
