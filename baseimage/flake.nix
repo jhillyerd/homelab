@@ -15,7 +15,6 @@
       inherit (nixpkgs) lib;
 
       system = "x86_64-linux";
-
       pkgs = nixpkgs.legacyPackages.${system};
 
       baseModule = { ... }: {
@@ -31,6 +30,7 @@
 
         # Display the IP address at the login prompt.
         environment.etc."issue.d/ip.issue".text = ''
+          This is a base image.
           IPv4: \4
         '';
         networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
@@ -56,6 +56,12 @@
           inherit pkgs;
           modules = [ baseModule qemuModule ];
           format = "qcow";
+        };
+
+        proxmox = nixos-generators.nixosGenerate {
+          inherit pkgs;
+          modules = [ baseModule qemuModule ];
+          format = "proxmox";
         };
       };
     };
