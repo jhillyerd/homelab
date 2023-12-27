@@ -2,7 +2,7 @@
   description = "VM deployment target base images";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -21,7 +21,7 @@
       baseModule = { ... }: {
         services.openssh = {
           enable = true;
-          permitRootLogin = "yes";
+          settings.PermitRootLogin = "yes";
         };
 
         time.timeZone = "US/Pacific";
