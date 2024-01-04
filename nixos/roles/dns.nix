@@ -34,7 +34,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2023032501 ; serial number
+          2024010401 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -48,7 +48,7 @@ in
         dyn            600 IN NS    gateway
 
         mail           600 IN CNAME web
-        mqtt           600 IN CNAME nexus
+        mqtt           600 IN CNAME metrics
         ntp            600 IN CNAME skynas
         zwave          600 IN CNAME nc-pi3-1
 
