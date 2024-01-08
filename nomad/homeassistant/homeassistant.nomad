@@ -57,7 +57,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "homeassistant/home-assistant:2023.11.2"
+        image = "homeassistant/home-assistant:2023.12.4"
         ports = [ "http", "sonos" ]
       }
 
@@ -73,7 +73,7 @@ job "homeassistant" {
 
       resources {
         cpu = 300 # MHz
-        memory = 600 # MB
+        memory = 700 # MB
       }
     }
   }
