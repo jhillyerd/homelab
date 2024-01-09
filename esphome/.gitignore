@@ -7,7 +7,7 @@
 **/lib/
 **/src/
 **/platformio.ini
-/secrets.yaml
+**/secrets.yaml
 
 family_esp32
 office_esp32

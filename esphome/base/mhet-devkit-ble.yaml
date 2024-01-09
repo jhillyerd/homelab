@@ -1,0 +1,37 @@
+esphome:
+  name: ${device_name}
+  platform: ESP32
+  board: mhetesp32devkit
+
+wifi:
+  ssid: !secret 'wifi_ssid'
+  password: !secret 'wifi_pass'
+  domain: .dyn.home.arpa
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "${device_name} Fallback Hotspot"
+    password: !secret 'wifi_pass'
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret 'api_key'
+
+ota:
+  password: !secret 'ota_pass'
+
+esp32_ble_tracker:
+
+sensor:
+  - platform: uptime
+    name: "${device_name} Uptime Sensor"
+
+  - platform: wifi_signal
+    name: "${device_name} WiFi Signal"
+    update_interval: 60s

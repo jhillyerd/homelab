@@ -1,36 +1,6 @@
 substitutions:
   device_name: family_esp32
 
-esphome:
-  name: ${device_name}
-  platform: ESP32
-  board: mhetesp32devkit
-
-wifi:
-  ssid: !secret 'wifi_ssid'
-  password: !secret 'wifi_pass'
-  domain: .dyn.home.arpa
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "${device_name} Fallback Hotspot"
-    password: !secret 'wifi_pass'
-
-captive_portal:
-
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-  encryption:
-    key: !secret 'api_key'
-
-ota:
-  password: !secret 'ota_pass'
-
-esp32_ble_tracker:
-
 sensor:
   - platform: uptime
     name: "${device_name} Uptime Sensor"
@@ -56,3 +26,5 @@ sensor:
       name: "Garage Mi Humidity"
     battery_level:
       name: "Garage Mi Battery Level"
+
+<<: !include base/mhet-devkit-ble.yaml
