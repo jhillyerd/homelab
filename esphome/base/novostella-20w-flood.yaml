@@ -1,0 +1,117 @@
+esphome:
+  name: ${device_name}
+  comment: ${device_description}
+  friendly_name: ${friendly_name}
+
+bk72xx:
+  board: generic-bk7231n-qfn32-tuya
+
+logger:
+
+web_server:
+
+captive_portal:
+
+mdns:
+
+api:
+  encryption:
+    key: !secret 'api_key'
+
+ota:
+  password: !secret 'ota_pass'
+
+wifi:
+  ssid: !secret 'wifi_ssid'
+  password: !secret 'wifi_pass'
+  domain: .dyn.home.arpa
+  ap:
+    ssid: "${device_name} AP"
+    password: !secret 'wifi_pass'
+
+button:
+  - platform: restart
+    name: Restart
+
+debug:
+  update_interval: 30s
+
+text_sensor:
+  - platform: debug
+    reset_reason:
+      name: Reset Reason
+  - platform: libretiny
+    version:
+      name: LibreTiny Version
+
+binary_sensor:
+  # Reports if this device is Connected or not
+  - platform: status
+    name: ${friendly_name} Status
+
+sensor:
+  # Reports the WiFi signal strength
+  - platform: wifi_signal
+    name: ${friendly_name} Signal
+    update_interval: 60s
+
+  # Reports how long the device has been powered (in minutes)
+  - platform: uptime
+    name: ${friendly_name} Uptime
+    filters:
+      - lambda: return x / 60.0;
+    unit_of_measurement: minutes
+
+output:
+  - platform: libretiny_pwm
+    id: red
+    pin: P6
+  - platform: libretiny_pwm
+    id: green
+    pin: P7
+  - platform: libretiny_pwm
+    id: blue
+    pin: P8
+  - platform: libretiny_pwm
+    id: cold_white
+    pin: P26
+  - platform: libretiny_pwm
+    id: warm_white
+    pin: P24
+
+light:
+  - platform: rgbww
+    name: ${friendly_name}
+    red: red
+    green: green
+    blue: blue
+    cold_white: cold_white
+    warm_white: warm_white
+    cold_white_color_temperature: 6500 K
+    warm_white_color_temperature: 2700 K
+    id: thelight
+    color_interlock: true #Prevent white leds being on at the same time as RGB leds
+    restore_mode: restore_default_off
+    effects:
+      - random:
+      - strobe:
+      - flicker:
+          alpha: 50% #The percentage that the last color value should affect the light. More or less the “forget-factor” of an exponential moving average. Defaults to 95%.
+          intensity: 50% #The intensity of the flickering, basically the maximum amplitude of the random offsets. Defaults to 1.5%.
+      - lambda:
+          name: Throb
+          update_interval: 1s
+          lambda: |-
+            static int state = 0;
+            auto call = id(thelight).turn_on();
+            // Transtion of 1000ms = 1s
+            call.set_transition_length(1000);
+            if (state == 0) {
+              call.set_brightness(1.0);
+            } else {
+              call.set_brightness(0.01);
+            }
+            call.perform();
+            state += 1;
+            if (state == 2)
+              state = 0;

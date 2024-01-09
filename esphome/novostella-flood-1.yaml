@@ -1,0 +1,6 @@
+substitutions:
+  device_name: novostella-flood-light-1
+  device_description: 20W RGBWW flood light
+  friendly_name: Novostella Flood Light 1
+
+<<: !include base/novostella-20w-flood.yaml
