@@ -40,6 +40,7 @@ in
           ripgrep
           rnix-lsp
           rust-analyzer
+          sshfs
           starship
           sumneko-lua-language-server
           tmux
