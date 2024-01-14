@@ -31,8 +31,10 @@ in
           lazygit
           lf
           lynx
+          mqttui
           nfs-utils
           nixpkgs-fmt
+          nixpkgs-review
           nodejs
           patchelf
           postgresql_14
