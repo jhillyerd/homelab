@@ -44,6 +44,8 @@
       # catalog.nodes defines the systems available in this flake.
       catalog = import ./catalog { inherit system; };
 
+      util = import ./util.nix { lib = nixpkgs.lib; };
+
       authorizedKeys = splitString "\n" (builtins.readFile ../authorized_keys.txt);
 
       # Creates a nixosSystem attribute set for the specified node, allowing
@@ -61,7 +63,7 @@
           # hosts and roles.  `self` lets a host reference aspects of
           # itself.
           specialArgs = attrs // {
-            inherit authorizedKeys catalog environment hostName;
+            inherit authorizedKeys catalog environment hostName util;
             self = node;
           };
           modules = [
