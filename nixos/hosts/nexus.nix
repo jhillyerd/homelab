@@ -1,5 +1,8 @@
-{ config, pkgs, lib, environment, catalog, ... }: {
+{ config, pkgs, lib, environment, catalog, self, util, ... }: {
   imports = [ ../common.nix ];
+
+  systemd.network.networks = util.mkClusterNetworks self;
+  roles.gateway-online.addr = "192.168.1.1";
 
   roles.dns.bind.enable = true;
   roles.dns.bind.serveLocalZones = true;
@@ -13,8 +16,6 @@
     enableServer = true;
     retryJoin = catalog.nomad.servers;
   };
-
-  roles.gateway-online.addr = "192.168.1.1";
 
   roles.tailscale.exitNode = true;
 

@@ -1,5 +1,8 @@
-{ config, pkgs, lib, environment, catalog, ... }: {
+{ config, pkgs, lib, environment, catalog, self, util, ... }: {
   imports = [ ../common.nix ];
+
+  systemd.network.networks = util.mkClusterNetworks self;
+  roles.gateway-online.addr = "192.168.1.1";
 
   roles.nfs-bind = {
     nfsPath = "192.168.1.20:/volume1/web_${environment}";
@@ -14,8 +17,6 @@
 
     before = [ "podman-authelia.service" ];
   };
-
-  roles.gateway-online.addr = "192.168.1.1";
 
   # Configures traefik and homesite roles from service catalog.
   roles.websvc = {

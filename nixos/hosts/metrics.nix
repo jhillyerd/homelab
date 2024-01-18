@@ -1,10 +1,12 @@
-{ config, pkgs, lib, environment, catalog, ... }: {
+{ config, pkgs, lib, environment, catalog, self, util, ... }: {
   imports = [ ../common.nix ];
 
   fileSystems."/var" = {
     device = "/dev/disk/by-label/var";
     fsType = "ext4";
   };
+
+  systemd.network.networks = util.mkClusterNetworks self;
 
   roles.influxdb = {
     enable = true;
