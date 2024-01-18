@@ -12,6 +12,8 @@
 
     kernelModules = [ ];
     extraModulePackages = [ ];
+
+    kernelParams = [ "console=ttyS0" ];
   };
 
   fileSystems."/" = {
