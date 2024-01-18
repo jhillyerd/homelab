@@ -3,9 +3,6 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
 
-  # We don't always know the interface name on QEMU.
-  networking.useDHCP = lib.mkDefault true;
-
   # Hardware configuration
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
@@ -23,6 +20,17 @@
   };
 
   swapDevices = [ ];
+
+  networking.useDHCP = false;
+
+  systemd.network = {
+    enable = true;
+
+    networks."10-cluster" = {
+      matchConfig.Name = "enp0s18";
+      networkConfig.DHCP = lib.mkDefault "ipv4";
+    };
+  };
 
   nix.settings.max-jobs = lib.mkDefault 2;
 
