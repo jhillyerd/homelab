@@ -1,13 +1,23 @@
 #!/usr/bin/env fish
-# deploy <host-name> [root@<target-host>]:
+# deploy [host-name] [root@<target-host>]:
 #  Builds the flake for host-name locally and deploys to target-host
 
-set host $argv[1]
-set target $argv[2]
 set domain home.arpa
 set logfile log.txt
 
-if [ -z "$target" ]
+if test -n "$argv[1]"
+  set host $argv[1]
+end
+if test -n "$argv[2]"
+  set target $argv[2]
+end
+
+if test -z "$host"
+  echo "host env or argument required" >&2
+  exit 1
+end
+
+if test -z "$target"
   set target "root@$host.$domain"
 end
 
@@ -17,7 +27,7 @@ nixos-rebuild \
   --flake ".#$host" \
   --target-host $target \
   --build-host localhost switch
-or return
+or exit $status
 
 # Log most recent deploy for host w/ git commit.
 test -e $logfile; or touch $logfile
