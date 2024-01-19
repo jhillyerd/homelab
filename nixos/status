@@ -1,6 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env fish
 
-host="$1"
-target="root@$host"
+if test -n "$argv[1]"
+  set host $argv[1]
+end
+if test -z "$host"
+  echo "host env or argument required" >&2
+  exit 1
+end
 
-ssh $target "set -x; uname -a; uptime; systemctl --failed; df -h"
+set target "root@$host"
+
+echo "Status for $host"
+
+ssh $target "set -x; systemctl --failed; uname -a; uptime; df -h -x tmpfs -x overlay" 2>&1 \
+  | sed -E -e "s/^(\+ .*)/\n$(set_color -r)\1$(set_color normal)/"
