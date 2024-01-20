@@ -27,6 +27,10 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
   home-systems = [ eph fractal metrics nexus nix-ryzen nixtarget1-virtd web ];
 
+  kube1 =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
+  kube-cluster = [ kube1 ];
+
   nc-um350-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
   nc-um350-2 =
@@ -36,8 +40,9 @@ let
   nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 web ];
 
   group = {
-    common = users ++ home-systems ++ nomad-cluster;
+    common = users ++ home-systems ++ nomad-cluster ++ kube-cluster;
     home = users ++ home-systems;
+    kube = users ++ kube-cluster;
     nomad = users ++ nomad-cluster;
   };
 in
