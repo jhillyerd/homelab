@@ -33,32 +33,35 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
   nc-pi3-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8e1tGPws/Utx3BHPW8bF4UfcbeFZagMvu7x1MyYype";
-
   nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 web ];
+
+  group = {
+    common = users ++ home-systems ++ nomad-cluster;
+    home = users ++ home-systems;
+    nomad = users ++ nomad-cluster;
+  };
 in
 {
-  # TODO define common, home, nomad groups to simplify assignments below.
-
   # Common
-  "influxdb-telegraf.age".publicKeys = users ++ home-systems ++ nomad-cluster;
-  "tailscale.age".publicKeys = users ++ home-systems ++ nomad-cluster;
-  "wifi-env.age".publicKeys = users ++ home-systems ++ nomad-cluster;
+  "influxdb-telegraf.age".publicKeys = group.common;
+  "tailscale.age".publicKeys = group.common;
+  "wifi-env.age".publicKeys = group.common;
 
   # Home
-  "cloudflare-dns-api.age".publicKeys = users ++ home-systems;
-  "influxdb-admin.age".publicKeys = users ++ home-systems;
-  "influxdb-homeassistant.age".publicKeys = users ++ home-systems;
-  "mqtt-admin.age".publicKeys = users ++ home-systems;
-  "mqtt-clock.age".publicKeys = users ++ home-systems;
-  "mqtt-sensor.age".publicKeys = users ++ home-systems;
-  "mqtt-zwave.age".publicKeys = users ++ home-systems;
+  "cloudflare-dns-api.age".publicKeys = group.home;
+  "influxdb-admin.age".publicKeys = group.home;
+  "influxdb-homeassistant.age".publicKeys = group.home;
+  "mqtt-admin.age".publicKeys = group.home;
+  "mqtt-clock.age".publicKeys = group.home;
+  "mqtt-sensor.age".publicKeys = group.home;
+  "mqtt-zwave.age".publicKeys = group.home;
 
   # Nomad cluster
-  "consul-encrypt.age".publicKeys = users ++ nomad-cluster;
-  "consul-agent-token.age".publicKeys = users ++ nomad-cluster;
-  "nomad-encrypt.age".publicKeys = users ++ nomad-cluster;
-  "nomad-consul-token.age".publicKeys = users ++ nomad-cluster;
-  "nomad-server-client-key.age".publicKeys = users ++ nomad-cluster;
-  "skynet-server-consul-0-key.pem.age".publicKeys = users ++ nomad-cluster;
-  "traefik-consul-token.age".publicKeys = users ++ nomad-cluster;
+  "consul-encrypt.age".publicKeys = group.nomad;
+  "consul-agent-token.age".publicKeys = group.nomad;
+  "nomad-encrypt.age".publicKeys = group.nomad;
+  "nomad-consul-token.age".publicKeys = group.nomad;
+  "nomad-server-client-key.age".publicKeys = group.nomad;
+  "skynet-server-consul-0-key.pem.age".publicKeys = group.nomad;
+  "traefik-consul-token.age".publicKeys = group.nomad;
 }
