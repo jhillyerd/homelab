@@ -55,6 +55,7 @@ in
       # Programs and services
       programs.direnv.enable = true;
       programs.fish.enable = true;
+      programs.mosh.enable = true;
 
       services.hw-gauge-daemon.enable = true;
 
