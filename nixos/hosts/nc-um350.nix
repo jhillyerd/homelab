@@ -2,7 +2,7 @@
   imports = [ ../common.nix ];
 
   roles.dns.bind.enable = true;
-  roles.dns.bind.serveLocalZones = true;
+  roles.dns.bind.serveLocalZones = false;
 
   roles.cluster-volumes.enable = true;
 

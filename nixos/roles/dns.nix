@@ -117,6 +117,20 @@ in
                 };
               '')
               unifiZones;
+
+            localForwardZones =
+              if cfg.bind.serveLocalZones then
+                ""
+              else
+                (concatMapStrings
+                  (zone: ''
+                    zone "${zone}" {
+                      type forward;
+                      forward only;
+                      forwarders { ${catalog.dns.host}; };
+                    };
+                  '')
+                  [ "home.arpa" ]);
           in
           ''
             zone "consul" IN {
@@ -126,6 +140,8 @@ in
             };
 
             ${unifiForwardZones}
+
+            ${localForwardZones}
           '';
       };
 
