@@ -1,9 +1,23 @@
 # nixos flake
 
-## Cachix
+## Terminology
 
-This flake sets up devenv for workstations, which is an expensive build.
-Run `cachix use devenv` to enable the devenv build cache.
+Knowing how I use these terms will better help you understand the layout
+of this flake:
+
+- catalog: The high level configuration of my homelab:
+  - common: configuration that can be referenced by any part of this flake.
+  - nodes: combines _host_, _hw_, and network configuration into a deployable
+    NixOS configuration.
+  - services: defines how a particular service may be accessed, including
+    load-balanced URLs, whether to generate DNS entries, and the icon to display
+    on my internal homepage.
+- host: A grouping of _roles_ and _services_ that will be applied to one or
+  more _nodes_.  A _node_ may only have a single host type.
+- hw: Hardware configuration for physical and virtual machines.
+- node: A specific VM or machine on my network.
+- role: A nix module configuring one or more _services_ for one or more hosts.
+- service: Standard nix modules for configuring services.
 
 ## Ways to use this flake
 
@@ -61,7 +75,7 @@ When iterating on my homelab, I often repeat the following steps:
 2. Deploy an updated NixOS config to the host
 3. Check for failed services
 4. Reboot the node
-5. Check for failed services, and that the uptime went to zero
+5. Check for failed services, and confirm the uptime is now zero
 
 The scripts in this directory simplify the process to:
 
@@ -85,3 +99,10 @@ nc-um350-1   [2024-01-21 16:39:14 -0800] ebece50 dns: forward local zones on nom
 metrics      [2024-01-21 16:47:48 -0800] da374b9 k3s: add first node
 kube1        [2024-01-22 10:39:26 -0800] 266e67f catalog: organize default.nix
 ```
+
+## Notes
+
+### Cachix
+
+This flake sets up devenv for workstations, which is an expensive build.
+Run `cachix use devenv` to enable the devenv build cache.
