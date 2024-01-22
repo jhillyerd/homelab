@@ -25,6 +25,10 @@
     ];
   };
 
+  k3s = {
+    leader = nodes.kube1;
+  };
+
   influxdb = rec {
     host = nodes.metrics.ip.priv;
     port = 8086;

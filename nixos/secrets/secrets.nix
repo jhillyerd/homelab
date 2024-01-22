@@ -29,7 +29,9 @@ let
 
   kube1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
-  kube-cluster = [ kube1 ];
+  kube2 =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIziR7mI9vwr2/qHYx89GDJh95oQkZmbfb5AdDePXUtZ";
+  kube-cluster = [ kube1 kube2 ];
 
   nc-um350-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
@@ -60,6 +62,9 @@ in
   "mqtt-clock.age".publicKeys = group.home;
   "mqtt-sensor.age".publicKeys = group.home;
   "mqtt-zwave.age".publicKeys = group.home;
+
+  # Kube cluster
+  "k3s-token.age".publicKeys = group.kube;
 
   # Nomad cluster
   "consul-encrypt.age".publicKeys = group.nomad;
