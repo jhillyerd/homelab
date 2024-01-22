@@ -3,17 +3,18 @@
   nodes = import ./nodes.nix { inherit system; };
   services = import ./services.nix { inherit nodes nomad; };
 
+  # Common config across most machines.
+  cf-api.user = "james@hillyerd.com";
+  dns.host = nodes.nexus.ip.priv;
+  smtp.host = "mail.home.arpa";
+  syslog.host = nodes.metrics.ip.priv;
+  syslog.port = 1514;
+  tailscale.interface = "tailscale0";
+
+  # Role/service specifc configuration.
   authelia = {
     host = nodes.web.ip.priv;
     port = 9091;
-  };
-
-  influxdb = rec {
-    host = nodes.metrics.ip.priv;
-    port = 8086;
-    telegraf.user = "telegraf";
-    telegraf.database = "telegraf-hosts";
-    urls = [ "http://${host}:${toString port}" ];
   };
 
   consul = {
@@ -22,6 +23,14 @@
       nc-um350-1.ip.priv
       nc-um350-2.ip.priv
     ];
+  };
+
+  influxdb = rec {
+    host = nodes.metrics.ip.priv;
+    port = 8086;
+    telegraf.user = "telegraf";
+    telegraf.database = "telegraf-hosts";
+    urls = [ "http://${host}:${toString port}" ];
   };
 
   nomad = {
@@ -54,18 +63,6 @@
     websecure = ":443/tcp";
     extweb = ":8443/tcp";
   };
-
-
-  cf-api.user = "james@hillyerd.com";
-
-  dns.host = nodes.nexus.ip.priv;
-
-  syslog.host = nodes.metrics.ip.priv;
-  syslog.port = 1514;
-
-  smtp.host = "mail.home.arpa";
-
-  tailscale.interface = "tailscale0";
 
   # Layout of services on the dashboard.
   layout = [
