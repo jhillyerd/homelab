@@ -49,6 +49,7 @@ in
           universal-ctags
           unzip
           usbutils
+          yaml-language-server
           zip
         ];
 
