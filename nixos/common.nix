@@ -70,6 +70,8 @@
     authkeyPath = config.age.secrets.tailscale.path;
   };
 
+  programs.command-not-found.enable = false; # not flake aware
+
   programs.msmtp.accounts.default = {
     auth = false;
     host = catalog.smtp.host;
