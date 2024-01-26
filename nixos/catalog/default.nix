@@ -1,7 +1,7 @@
 # Catalog defines the systems & services on my network.
 { system }: rec {
   nodes = import ./nodes.nix { inherit system; };
-  services = import ./services.nix { inherit nodes nomad; };
+  services = import ./services.nix { inherit nodes nomad k3s; };
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";
@@ -27,6 +27,11 @@
 
   k3s = {
     leader = nodes.kube1;
+
+    workers = with nodes; [
+      kube1.ip.priv
+      kube2.ip.priv
+    ];
   };
 
   influxdb = rec {
@@ -76,7 +81,7 @@
     }
     {
       section = "Cluster";
-      services = [ "consul" "nomad" "proxmox" "dockreg" ];
+      services = [ "consul" "nomad" "proxmox" "dockreg" "k3s-dash" ];
     }
     {
       section = "Infrastructure";
