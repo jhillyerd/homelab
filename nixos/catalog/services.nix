@@ -79,7 +79,7 @@
   inbucket = {
     title = "Inbucket";
     dns.intCname = true;
-    dash.icon = "png/google-mail.png";
+    dash.icon = "svg/gmail.svg";
   };
 
   modem = {
@@ -98,7 +98,7 @@
   nodered = {
     title = "Node-RED";
     dns.intCname = true;
-    dash.icon = "svg/nodered.svg";
+    dash.icon = "svg/node-red.svg";
   };
 
   nomad = {
