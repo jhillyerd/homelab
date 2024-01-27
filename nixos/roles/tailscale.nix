@@ -4,14 +4,14 @@ let cfg = config.roles.tailscale;
 in
 {
   options.roles.tailscale = with types; {
-    enable = mkEnableOption "Enable Tailscale daemon + autojoin";
+    enable = mkEnableOption "Enable Tailscale daemon";
 
     exitNode = mkEnableOption "Register as an exit node";
 
-    authkeyPath = mkOption {
-      type = nullOr path;
-      description = "Path to tailscale authkey secret";
-      default = null;
+    useAuthKey = mkOption {
+      type = bool;
+      description = "Use secrets/tailscale.age for auto-join key";
+      default = true;
     };
   };
 
@@ -23,7 +23,7 @@ in
     };
 
     # Create a oneshot job to authenticate to Tailscale.
-    systemd.services.tailscale-autoconnect = mkIf (cfg.authkeyPath != null) {
+    systemd.services.tailscale-autoconnect = mkIf cfg.useAuthKey {
       description = "Automatic connection to Tailscale";
 
       # Make sure tailscale is running before trying to connect.
@@ -48,9 +48,11 @@ in
             exit 0
           fi
 
-          $ts up -authkey "$(< ${cfg.authkeyPath})" ${exitNode}
+          $ts up -authkey "$(< ${config.age.secrets.tailscale.path})" ${exitNode}
         '';
     };
+
+    age.secrets.tailscale.file = mkIf cfg.useAuthKey ../secrets/tailscale.age;
 
     networking.firewall = {
       # Trust inbound tailnet traffic.
