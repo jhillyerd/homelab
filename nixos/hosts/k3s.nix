@@ -1,8 +1,6 @@
 { config, pkgs, lib, environment, catalog, self, util, ... }: {
   imports = [ ../common.nix ];
 
-  roles.tailscale.enable = lib.mkForce false;
-
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
 

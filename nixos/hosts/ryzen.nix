@@ -1,6 +1,8 @@
 { config, pkgs, environment, catalog, ... }: {
   imports = [ ../common.nix ];
 
+  roles.tailscale.enable = true;
+
   roles.workstation.enable = true;
   roles.workstation.graphical = true;
 

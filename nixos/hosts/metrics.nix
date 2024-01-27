@@ -8,6 +8,9 @@
 
   systemd.network.networks = util.mkClusterNetworks self;
 
+  # Telegraf service status goes through tailnet.
+  roles.tailscale.enable = true;
+
   roles.influxdb = {
     enable = true;
     adminUser = "admin";

@@ -65,8 +65,6 @@
     settings.PermitRootLogin = "yes";
   };
 
-  roles.tailscale.enable = true;
-
   programs.command-not-found.enable = false; # not flake aware
 
   programs.msmtp.accounts.default = {
