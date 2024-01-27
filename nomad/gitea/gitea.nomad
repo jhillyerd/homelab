@@ -6,11 +6,13 @@ job "gitea" {
     count = 1
 
     update {
-      canary = 1
-      auto_promote = true
+      # Docs recommend stopping old instances for DB migrations,
+      # so no canary and long deadlines.
+      canary = 0
+      auto_promote = false
       auto_revert = true
-      healthy_deadline = "2m"
-      progress_deadline = "5m"
+      healthy_deadline = "10m"
+      progress_deadline = "15m"
     }
 
     network {
@@ -72,7 +74,7 @@ job "gitea" {
       driver = "docker"
 
       config {
-        image = "gitea/gitea:1.18.5"
+        image = "gitea/gitea:1.21.4"
         ports = ["http", "ssh"]
       }
 
