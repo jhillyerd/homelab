@@ -5,7 +5,10 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   # Web services accessed via tailnet.
-  roles.tailscale.enable = true;
+  roles.tailscale = {
+    enable = true;
+    exitNode = true;
+  };
 
   roles.nfs-bind = {
     nfsPath = "192.168.1.20:/volume1/web_${environment}";

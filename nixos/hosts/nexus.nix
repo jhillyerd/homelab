@@ -17,7 +17,7 @@
     retryJoin = catalog.nomad.servers;
   };
 
-  roles.tailscale.exitNode = true;
+  roles.tailscale.enable = true;
 
   networking.firewall.enable = false;
 }
