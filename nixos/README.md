@@ -27,13 +27,6 @@ of this flake:
 nix flake update
 ```
 
-### Run a quick test VM
-
-```sh
-nix build ".#$host"
-result/bin/run-$host-vm
-```
-
 ### Push to running libvirtd or Hyper-V *test* VM
 
 ```sh
