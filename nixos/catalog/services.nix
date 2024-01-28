@@ -38,11 +38,11 @@
 
   dockreg = {
     title = "Docker Registry";
+    internalDomain = "home.arpa";
 
     dns.intCname = true;
 
     dash.icon = "svg/docker.svg";
-    dash.host = "dockreg.bytemonkey.org";
     dash.path = "/v2/_catalog";
 
     lb.backendUrls = [ "http://192.168.1.20:5050" ];

@@ -34,7 +34,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2024012101 ; serial number
+          2024012701 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -47,10 +47,10 @@ in
         cluster        600 IN NS    gateway
         dyn            600 IN NS    gateway
 
+        dockreg        600 IN CNAME web
         mail           600 IN CNAME web
         mqtt           600 IN CNAME metrics
         ntp            600 IN CNAME skynas
-        zwave          600 IN CNAME nc-pi3-1
 
         gateway        600 IN A     192.168.1.1
         printer        600 IN A     192.168.1.5
@@ -59,6 +59,10 @@ in
         nc-pi3-1       600 IN A     192.168.1.22
         homeassistant  600 IN A     192.168.1.30
         ryzen          600 IN A     192.168.1.50
+
+        modem          600 IN A     192.168.100.1
+
+        ; Cluster subnet
 
         eph            600 IN A     192.168.128.44
         metrics        600 IN A     192.168.128.41
@@ -75,8 +79,6 @@ in
         kube1          600 IN A     192.168.132.1
         kube2          600 IN A     192.168.132.2
         kube3          600 IN A     192.168.132.3
-
-        modem          600 IN A     192.168.100.1
       '';
     in
     mkIf (cfg.bind.enable || cfg.unbound.enable) {
