@@ -23,15 +23,17 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
   nixtarget1-virtd =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILozTQNcPY2BNQZNW+F29M2euRzD7wZ1XtsKsWFjzpeJ";
+  scratch =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
-  home-systems = [ eph fractal metrics nexus nix-ryzen nixtarget1-virtd web ];
+  home-systems = [ eph fractal metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
 
   kube1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
   kube2 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIziR7mI9vwr2/qHYx89GDJh95oQkZmbfb5AdDePXUtZ";
-  kube-cluster = [ kube1 kube2 ];
+  kube-cluster = [ kube1 kube2 scratch ];
 
   nc-um350-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
@@ -39,7 +41,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
   nc-pi3-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8e1tGPws/Utx3BHPW8bF4UfcbeFZagMvu7x1MyYype";
-  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 web ];
+  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 scratch web ];
 
   group = {
     common = users ++ home-systems ++ nomad-cluster ++ kube-cluster;

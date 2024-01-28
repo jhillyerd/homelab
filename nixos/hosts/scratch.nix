@@ -1,11 +1,8 @@
 # A scratch host for building up new service configurations.
-{ config, pkgs, lib, self, catalog, ... }: {
+{ config, pkgs, lib, self, catalog, util, ... }: {
   imports = [ ../common.nix ];
 
-  roles.tailscale.enable = lib.mkForce false;
-
-  users.users.root.initialPassword = "root";
-  users.users.james.initialPassword = "james";
+  systemd.network.networks = util.mkClusterNetworks self;
 
   networking.firewall.enable = false;
 }

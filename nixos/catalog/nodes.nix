@@ -85,9 +85,9 @@
   };
 
   scratch = {
-    ip.priv = "10.0.2.15";
+    ip.priv = "192.168.131.2";
     config = ../hosts/scratch.nix;
-    hw = ../hw/qemu.nix;
+    hw = ../hw/proxmox.nix;
     system = system.x86_64-linux;
   };
 
