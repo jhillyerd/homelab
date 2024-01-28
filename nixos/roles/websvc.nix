@@ -3,8 +3,9 @@ with lib;
 let
   cfg = config.roles.websvc;
 
+  # Options configurable per service entry.
   serviceOptions = with types;
-    submodule ({ config, ... }: {
+    { config, ... }: {
       options = {
         name = mkOption {
           type = str;
@@ -18,13 +19,19 @@ let
           description = "Friendly name";
         };
 
+        internalDomain = mkOption {
+          type = str;
+          default = cfg.internalDomain;
+          description = "Override global websvc internal domain name";
+        };
+
         dns = mkOption {
           type = submodule {
             options = {
               extCname = mkOption {
                 type = bool;
                 default = false;
-                description = "Create an external (inernet) DNS CNAME record for this service";
+                description = "Create an external (internet) DNS CNAME record for this service";
               };
 
               intCname = mkOption {
@@ -54,7 +61,7 @@ let
 
               host = mkOption {
                 type = str;
-                default = "${config.name}.${cfg.internalDomain}";
+                default = "${config.name}.${config.internalDomain}";
               };
 
               port = mkOption { type = nullOr port; default = null; };
@@ -84,7 +91,7 @@ let
           default = null;
         };
       };
-    });
+    };
 in
 {
   options.roles.websvc = with types; {
@@ -100,7 +107,7 @@ in
 
     services = mkOption {
       description = "Web services to expose & dashboard";
-      type = attrsOf serviceOptions;
+      type = attrsOf (submodule serviceOptions);
       default = { };
     };
 
@@ -129,8 +136,7 @@ in
           value = {
             # TODO: Internal auth support.
             inherit (opt.lb) backendUrls sticky;
-            # TODO: opt.name?
-            domainName = "${name}.${cfg.internalDomain}";
+            domainName = "${opt.name}.${opt.internalDomain}";
           };
         };
 
@@ -139,7 +145,7 @@ in
           value = {
             # TODO: don't define a duplicate backend for external.
             inherit (opt.lb) backendUrls sticky;
-            domainName = "${name}.${cfg.externalDomain}";
+            domainName = "${opt.name}.${cfg.externalDomain}";
             external = true;
             externalAuth = elem opt.lb.auth [ "external" "both" ];
           };
