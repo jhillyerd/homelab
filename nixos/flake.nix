@@ -31,7 +31,6 @@
     , nixpkgs-unstable
     , flake-utils
     , agenix
-    , terranix
     , ...
     }@inputs:
     let
@@ -54,56 +53,9 @@
 
       # Terraform commands.
       apps =
-        eachSystemMap [ system.x86_64-linux ]
-          (sys:
-            let
-              pkgs = import nixpkgs { system = sys; config.allowUnfree = true; };
-              terraform = pkgs.terraform;
-              terraformConfiguration = terranix.lib.terranixConfiguration {
-                system = sys;
-                modules = [ ./terraform/common.nix ./terraform/dns.nix ];
-                extraArgs = { inherit catalog; };
-              };
-              programInit = ''
-                if [[ -e config.tf.json ]]; then rm -f config.tf.json; fi
-                cp ${terraformConfiguration} config.tf.json
-              '';
-            in
-            {
-              # nix run ".#tfcat"
-              tfcat = {
-                type = "app";
-                program = toString (pkgs.writers.writeBash "cat" ''
-                  ${pkgs.bat}/bin/bat ${terraformConfiguration}
-                '');
-              };
-              # nix run ".#tfplan"
-              tfplan = {
-                type = "app";
-                program = toString (pkgs.writers.writeBash "plan" ''
-                  ${programInit}
-                  ${terraform}/bin/terraform init \
-                    && ${terraform}/bin/terraform plan
-                '');
-              };
-              # nix run ".#tfapply"
-              tfapply = {
-                type = "app";
-                program = toString (pkgs.writers.writeBash "apply" ''
-                  ${programInit}
-                  ${terraform}/bin/terraform init \
-                    && ${terraform}/bin/terraform apply
-                '');
-              };
-              # nix run ".#tfdestroy"
-              tfdestroy = {
-                type = "app";
-                program = toString (pkgs.writers.writeBash "destroy" ''
-                  ${programInit}
-                  ${terraform}/bin/terraform init \
-                    && ${terraform}/bin/terraform destroy
-                '');
-              };
-            });
+        let
+          tf-apps = import ./terraform/apps.nix inputs catalog;
+        in
+        eachSystemMap [ system.x86_64-linux ] tf-apps;
     };
 }
