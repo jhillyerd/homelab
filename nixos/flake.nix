@@ -136,7 +136,7 @@
         eachSystemMap [ system.x86_64-linux ]
           (sys:
             let
-              pkgs = nixpkgs.legacyPackages.${sys};
+              pkgs = import nixpkgs { system = sys; config.allowUnfree = true; };
               terraform = pkgs.terraform;
               terraformConfiguration = terranix.lib.terranixConfiguration {
                 system = sys;
