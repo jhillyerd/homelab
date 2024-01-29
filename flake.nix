@@ -26,6 +26,8 @@
               consul
               esphome
               nomad
+              unstable.octodns
+              unstable.octodns-providers.bind
               openssl
               platformio
               rnix-lsp

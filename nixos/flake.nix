@@ -50,6 +50,16 @@
         (host: node: nixosConfigurations.${host}.config.system.build.sdImage)
         catalog.nodes;
 
+      # Configuration generators.
+      packages =
+        let
+          confgen = import ./confgen inputs catalog;
+        in
+        eachSystemMap [ system.x86_64-linux ] (system:
+          {
+            confgen = confgen system;
+          });
+
       # Homelab commands.
       apps =
         let

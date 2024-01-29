@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+
+nix build .#confgen; or exit
+
+cd result/octodns; or exit
+
+octodns-sync --config-file=./config.yaml
