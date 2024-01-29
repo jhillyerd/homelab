@@ -30,7 +30,11 @@
 
     networks."10-cluster" = {
       matchConfig.Name = "enp0s18";
-      networkConfig.DHCP = lib.mkDefault "ipv4";
+      networkConfig = {
+        DHCP = lib.mkDefault "ipv4";
+        IPv6AcceptRA = lib.mkDefault "no";
+        LinkLocalAddressing = lib.mkDefault "no";
+      };
     };
   };
 
