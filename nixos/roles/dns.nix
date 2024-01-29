@@ -34,7 +34,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
-          2024012701 ; serial number
+          2024012901 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -75,6 +75,7 @@ in
         web            600 IN A     192.168.128.11
 
         scratch        600 IN A     192.168.131.2
+        witness        600 IN A     192.168.131.3
 
         kube1          600 IN A     192.168.132.1
         kube2          600 IN A     192.168.132.2

@@ -25,11 +25,15 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
   home-systems = [ eph metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
 
+  # Cluster nodes
+  witness =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAXoEYcViLYLHXZRThjTh61ZA43DS2lCCbJa5EXbFAwc";
+
   kube1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
   kube2 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIziR7mI9vwr2/qHYx89GDJh95oQkZmbfb5AdDePXUtZ";
-  kube-cluster = [ kube1 kube2 scratch ];
+  kube-cluster = [ kube1 kube2 scratch witness ];
 
   nc-um350-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
@@ -37,7 +41,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
   nc-pi3-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8e1tGPws/Utx3BHPW8bF4UfcbeFZagMvu7x1MyYype";
-  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 scratch web ];
+  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 scratch web witness ];
 
   group = {
     common = users ++ home-systems ++ nomad-cluster ++ kube-cluster;

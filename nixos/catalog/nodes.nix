@@ -88,4 +88,11 @@
     hw = ../hw/proxmox.nix;
     system = system.x86_64-linux;
   };
+
+  witness = {
+    ip.priv = "192.168.131.3";
+    config = ../hosts/witness.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
 }

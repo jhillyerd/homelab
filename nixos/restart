@@ -8,7 +8,7 @@ if test -z "$host"
   exit 1
 end
 
-set target "root@$host"
+set target "root@$host.home.arpa"
 
 echo "Restarting $host"
 
