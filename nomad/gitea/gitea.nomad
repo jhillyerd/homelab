@@ -85,7 +85,7 @@ job "gitea" {
       }
 
       env {
-        USER_UID = 1000
+        USER_UID = 1024
         USER_GID = 1000
       }
 
