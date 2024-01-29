@@ -7,14 +7,6 @@
     system = system.x86_64-linux;
   };
 
-  fractal = {
-    ip.priv = "192.168.1.12";
-    ip.tail = "100.112.232.73";
-    config = ../hosts/fractal.nix;
-    hw = ../hw/asus-b350.nix;
-    system = system.x86_64-linux;
-  };
-
   kube1 = {
     ip.priv = "192.168.132.1";
     config = ../hosts/k3s.nix;
@@ -47,7 +39,6 @@
 
   nc-um350-1 = {
     ip.priv = "192.168.128.36";
-    ip.tail = "100.109.33.10";
     config = ../hosts/nc-um350.nix;
     hw = ../hw/minis-um350.nix;
     system = system.x86_64-linux;
@@ -56,7 +47,6 @@
 
   nc-um350-2 = {
     ip.priv = "192.168.128.37";
-    ip.tail = "100.97.169.111";
     config = ../hosts/nc-um350.nix;
     hw = ../hw/minis-um350.nix;
     system = system.x86_64-linux;

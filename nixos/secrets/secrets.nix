@@ -2,19 +2,15 @@ let
   # Users
   james-eph =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1Rq9OFHVus5eULteCEGNkHgINch40oPP2LwvlVd6ng";
-  james-fractal =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5SIs0HmrtQN+W7YFqIPpyTqTbRqW8Kq06h2btmXElG";
   james-ryzen =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAXHtE9NI16ZPNSKF6Cn0JNJS6fTNQYduerVmVa6WKY";
   james-nix-ryzen =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICJoH0p+6iSISUAqRO8+6+uvQWpjaP0eQjDeGAXIYUI6";
-  users = [ james-eph james-fractal james-ryzen james-nix-ryzen ];
+  users = [ james-eph james-ryzen james-nix-ryzen ];
 
   # Nodes
   eph =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
-  fractal =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDdjavkGpkN4niiLWGAjNsaS3R3gxnLn7H4rTtkVkyAt";
   metrics =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
   nexus =
@@ -27,7 +23,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
-  home-systems = [ eph fractal metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
+  home-systems = [ eph metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
 
   kube1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
