@@ -20,6 +20,7 @@
       # Enables embedded etcd on leader node.
       clusterInit = isLeader;
       serverAddr = lib.mkIf (! isLeader) "https://${leader.ip.priv}:6443";
+      extraFlags = "--egress-selector-mode pod";
 
       tokenFile = config.age.secrets.k3s-token.path;
     };

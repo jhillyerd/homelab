@@ -9,6 +9,7 @@
     disableAgent = true;
 
     serverAddr = "https://${catalog.k3s.leader.ip.priv}:6443";
+    extraFlags = "--egress-selector-mode pod";
 
     tokenFile = config.age.secrets.k3s-token.path;
   };
