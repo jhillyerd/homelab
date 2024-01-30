@@ -13,16 +13,6 @@ in
       };
       default = { };
     };
-
-    unbound = mkOption {
-      type = submodule {
-        options = {
-          enable = mkEnableOption "Run unbound recursive resolver";
-          serveLocalZones = mkEnableOption "Serve local zone files";
-        };
-      };
-      default = { };
-    };
   };
 
   # TODO Generate DNS entries from catalog.nodes.
@@ -82,7 +72,7 @@ in
         kube3          600 IN A     192.168.132.3
       '';
     in
-    mkIf (cfg.bind.enable || cfg.unbound.enable) {
+    mkIf cfg.bind.enable {
       networking.resolvconf = {
         # 127.0.0.1 is not useful in containers, instead we will use our
         # private IP.
@@ -148,44 +138,6 @@ in
 
             ${localForwardZones}
           '';
-      };
-
-      services.unbound = mkIf cfg.unbound.enable {
-        enable = true;
-
-        settings = {
-          server = {
-            interface = [ "0.0.0.0" ];
-            access-control = "192.168.0.0/16 allow";
-
-            qname-minimisation = true;
-            do-not-query-localhost = false; # for consul.
-
-            # Local domains w/o DNSSEC.
-            domain-insecure = unifiZones ++ [ "consul" "home.arpa" ];
-
-            # Disable built-in default home.arpa zone.
-            local-zone = "home.arpa transparent";
-          };
-
-          # Configure a forward-zone for each unifi zone.
-          forward-zone = map
-            (name: {
-              name = "${name}.";
-              forward-addr = "192.168.1.1";
-            })
-            unifiZones;
-
-          # Forward consul zone to local instance.
-          stub-zone = [
-            { name = "consul."; stub-addr = "127.0.0.1@8600"; }
-          ];
-
-          auth-zone = mkIf cfg.unbound.serveLocalZones {
-            name = "home.arpa.";
-            zonefile = "${homeZoneFile}";
-          };
-        };
       };
 
       networking.firewall.allowedTCPPorts = [ 53 ];
