@@ -22,7 +22,11 @@ job "homeassistant" {
     }
 
     service {
-      name = "homeassistant"
+      name = "homeassistant-api"
+      port = "http"
+
+      # Allows sidecar to connect.
+      address_mode = "alloc"
       connect {
         sidecar_service {
           proxy {
@@ -32,17 +36,6 @@ job "homeassistant" {
             }
           }
         }
-      }
-    }
-
-    service {
-      name = "homeassistant-api"
-      port = "http"
-
-      # Allows sidecar to connect.
-      address_mode = "alloc"
-      connect {
-        sidecar_service {}
       }
     }
 
