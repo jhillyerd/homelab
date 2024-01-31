@@ -6,6 +6,7 @@ job "nodered" {
     count = 1
 
     network {
+      mode = "bridge"
       port "http" { to = 1880 }
     }
 
@@ -13,6 +14,20 @@ job "nodered" {
       type = "host"
       source = "nodered-data"
       read_only = false
+    }
+
+    service {
+      name = "nodered"
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "homeassistant-api"
+              local_bind_port = 8123
+            }
+          }
+        }
+      }
     }
 
     service {
