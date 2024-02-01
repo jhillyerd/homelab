@@ -18,9 +18,27 @@ in
   # TODO Generate DNS entries from catalog.nodes.
   config =
     let
+      transferAddrs = [ "192.168.1.0/24" "192.168.128.0/18" ];
+
       unifiZones = [ "dyn.home.arpa" "cluster.home.arpa" ];
 
-      homeZoneFile = pkgs.writeText "home.arpa.zone" ''
+      bytemonkeyZoneFile = "/var/lib/named/bytemonkey.org.zone";
+      bytemonkeyZoneConfig = pkgs.writeText "bytemonkey.org.zone" ''
+        $ORIGIN bytemonkey.org.
+        @ 3600 SOA nexus.home.arpa. (
+          zone-admin.home.arpa.
+          1          ; serial number
+          3600       ; refresh period
+          600        ; retry period
+          604800     ; expire time
+          1800       ; min TTL
+        )
+
+        @              600 IN NS    ns1
+        ns1            600 IN A     192.168.128.40
+      '';
+
+      homeZoneConfig = pkgs.writeText "home.arpa.zone" ''
         $ORIGIN home.arpa.
         @ 3600 SOA nexus.home.arpa. (
           zone-admin.home.arpa.
@@ -89,6 +107,8 @@ in
         forwarders = [ "1.1.1.1" "8.8.8.8" ];
 
         extraOptions = ''
+          allow-update { key "rndc-key"; };
+
           dnssec-validation auto;
 
           validate-except { "consul"; };
@@ -97,7 +117,14 @@ in
         zones = mkIf cfg.bind.serveLocalZones {
           "home.arpa" = {
             master = true;
-            file = "${homeZoneFile}";
+            slaves = transferAddrs;
+            file = "${homeZoneConfig}";
+          };
+
+          "bytemonkey.org." = {
+            master = true;
+            slaves = transferAddrs;
+            file = "${bytemonkeyZoneFile}";
           };
         };
 
@@ -139,6 +166,18 @@ in
             ${localForwardZones}
           '';
       };
+
+      # Setup named work directory during activation.
+      system.activationScripts.init-named-zones = ''
+        mkdir -p /var/lib/named
+        chown named: /var/lib/named
+
+        # Copy zone file if it does not already exist.
+        if [[ ! -e "${bytemonkeyZoneFile}" ]]; then
+          cp "${bytemonkeyZoneConfig}" "${bytemonkeyZoneFile}"
+          chown named: "${bytemonkeyZoneFile}"
+        fi
+      '';
 
       networking.firewall.allowedTCPPorts = [ 53 ];
       networking.firewall.allowedUDPPorts = [ 53 ];

@@ -1,5 +1,6 @@
 # Direnv
 /.direnv
+.env
 
 # Password files
 /gen_passwords.json

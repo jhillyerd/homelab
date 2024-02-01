@@ -2,8 +2,19 @@
 let
   inherit (pkgs.lib) filterAttrs attrByPath mapAttrs;
 
+  # Nameserver to push records to.
+  target = catalog.nodes.nexus.ip.priv;
+
   # Reverse proxy host for internal services.
-  intHost = "web.bytemonkey.org";
+  intHost = "web.home.arpa";
+
+  bytemonkeyRecords = {
+    "".type = "NS";
+    "".value = "ns1.bytemonkey.org.";
+
+    ns1.type = "A";
+    ns1.value = target;
+  };
 
   # Services that requested a CNAME.
   internalServices = filterAttrs (n: svc: attrByPath [ "dns" "intCname" ] false svc) catalog.services;
@@ -30,7 +41,9 @@ in
 
       nexus_bind = {
         class = "octodns_bind.Rfc2136Provider";
-        host = catalog.nodes.nexus.ip.priv;
+        host = target;
+        key_name = "env/BIND_KEY_NAME";
+        key_secret = "env/BIND_KEY_SECRET";
       };
     };
 
@@ -42,5 +55,6 @@ in
     };
   };
 
-  "octodns/zones/bytemonkey.org.yaml" = (mapAttrs mkInternalServiceRecord internalServices);
+  "octodns/zones/bytemonkey.org.yaml" = bytemonkeyRecords
+    // (mapAttrs mkInternalServiceRecord internalServices);
 }
