@@ -38,7 +38,6 @@
 
   dockreg = {
     title = "Docker Registry";
-    internalDomain = "home.arpa";
 
     dns.intCname = true;
 

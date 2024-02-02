@@ -73,7 +73,7 @@
         response_status_code = 200;
       }
       {
-        urls = [ "https://dockreg.home.arpa/v2/" ];
+        urls = [ "https://dockreg.bytemonkey.org/v2/" ];
         response_status_code = 200;
       }
       {

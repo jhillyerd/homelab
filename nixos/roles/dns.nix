@@ -42,7 +42,7 @@ in
         $ORIGIN home.arpa.
         @ 3600 SOA ns1.home.arpa. (
           zone-admin.home.arpa.
-          2024020101 ; serial number
+          2024020201 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -59,7 +59,6 @@ in
         cluster        600 IN NS    gateway
         dyn            600 IN NS    gateway
 
-        dockreg        600 IN CNAME web
         mail           600 IN CNAME web
         mqtt           600 IN CNAME metrics
         ntp            600 IN CNAME skynas
