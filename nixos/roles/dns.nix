@@ -20,7 +20,7 @@ in
     let
       transferAddrs = [ "192.168.1.0/24" "192.168.128.0/18" ];
 
-      unifiZones = [ "dyn.home.arpa" "cluster.home.arpa" ];
+      unifiZones = [ "dyn.home.arpa." "cluster.home.arpa." ];
 
       bytemonkeyZoneFile = "/var/lib/named/bytemonkey.org.zone";
       bytemonkeyZoneConfig = pkgs.writeText "bytemonkey.org.zone" ''
@@ -120,7 +120,7 @@ in
 
         zones =
           if cfg.bind.serveLocalZones then {
-            "home.arpa" = {
+            "home.arpa." = {
               master = true;
               slaves = transferAddrs;
               file = "${homeZoneConfig}";
@@ -134,14 +134,14 @@ in
           } else
             builtins.listToAttrs (map
               (name: {
-                name = name + ".";
+                inherit name;
                 value = {
                   master = false;
                   masters = [ "${catalog.dns.ns1}" ];
                   file = "/var/lib/named/${name}.zone";
                 };
               })
-              [ "home.arpa" "bytemonkey.org" ]);
+              [ "home.arpa." "bytemonkey.org." ]);
 
         extraConfig =
           let
@@ -156,7 +156,7 @@ in
               unifiZones;
           in
           ''
-            zone "consul" IN {
+            zone "consul." IN {
               type forward;
               forward only;
               forwarders { 127.0.0.1 port 8600; };

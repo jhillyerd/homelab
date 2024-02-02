@@ -6,7 +6,7 @@ let
   target = catalog.dns.ns1;
 
   # Reverse proxy host for internal services.
-  intProxy = "web.home.arpa";
+  intProxy = "web.home.arpa.";
 
   bytemonkeyRecords = {
     "".type = "NS";
@@ -25,7 +25,7 @@ let
 
     x = {
       type = "CNAME";
-      value = intProxy + ".";
+      value = intProxy;
     };
   };
 
@@ -37,14 +37,14 @@ let
 
   mkInternalServiceRecord = proxy: name: svc: {
     type = "CNAME";
-    value = proxy + ".";
+    value = proxy;
   };
 
   mkExternalServiceRecord = proxy: name: svc: {
     name = "${name}.x";
     value = {
       type = "CNAME";
-      value = proxy + ".";
+      value = proxy;
       ttl = 600;
     };
   };
