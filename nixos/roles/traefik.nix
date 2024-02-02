@@ -99,7 +99,9 @@ in
       dynamicConfigOptions =
         let
           routerEntry = name: opt: {
-            entryPoints = if opt.external then [ "extweb" ] else [ "web" "websecure" ];
+            # Always allow internal entry points, external is optional.
+            entryPoints = [ "web" "websecure" ] ++ (if opt.external then [ "extweb" ] else []);
+
             rule = "Host(`" + opt.domainName + "`)";
             service = name;
             tls.certresolver = "letsencrypt";
