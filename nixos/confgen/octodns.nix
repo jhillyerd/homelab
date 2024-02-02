@@ -1,12 +1,12 @@
 { pkgs, catalog, ... }:
 let
-  inherit (pkgs.lib) filterAttrs attrByPath mapAttrs;
+  inherit (pkgs.lib) filterAttrs attrByPath mapAttrs mapAttrs';
 
   # Nameserver to push records to.
   target = catalog.dns.ns1;
 
   # Reverse proxy host for internal services.
-  intHost = "web.home.arpa";
+  intProxy = "web.home.arpa";
 
   bytemonkeyRecords = {
     "".type = "NS";
@@ -22,14 +22,31 @@ let
     ns2.value = catalog.dns.ns2;
     ns3.type = "A";
     ns3.value = catalog.dns.ns3;
+
+    x = {
+      type = "CNAME";
+      value = intProxy + ".";
+    };
   };
 
   # Services that requested a CNAME.
   internalServices = filterAttrs (n: svc: attrByPath [ "dns" "intCname" ] false svc) catalog.services;
 
-  mkInternalServiceRecord = name: svc: {
+  # Services to expose outside of our tailnet.
+  externalServices = filterAttrs (n: svc: attrByPath [ "dns" "extCname" ] false svc) catalog.services;
+
+  mkInternalServiceRecord = proxy: name: svc: {
     type = "CNAME";
-    value = intHost + ".";
+    value = proxy + ".";
+  };
+
+  mkExternalServiceRecord = proxy: name: svc: {
+    name = "${name}.x";
+    value = {
+      type = "CNAME";
+      value = proxy + ".";
+      ttl = 600;
+    };
   };
 in
 {
@@ -73,5 +90,6 @@ in
   };
 
   "octodns/zones/bytemonkey.org.yaml" = bytemonkeyRecords
-    // (mapAttrs mkInternalServiceRecord internalServices);
+    // (mapAttrs (mkInternalServiceRecord intProxy) internalServices)
+    // (mapAttrs' (mkExternalServiceRecord intProxy) externalServices);
 }
