@@ -9,24 +9,21 @@ let
   intProxy = "web.home.arpa.";
 
   bytemonkeyRecords = {
-    "".type = "NS";
-    "".values = [
-      "ns1.bytemonkey.org."
-      "ns2.bytemonkey.org."
-      "ns3.bytemonkey.org."
-    ];
-
-    ns1.type = "A";
-    ns1.value = catalog.dns.ns1;
-    ns2.type = "A";
-    ns2.value = catalog.dns.ns2;
-    ns3.type = "A";
-    ns3.value = catalog.dns.ns3;
-
-    x = {
-      type = "CNAME";
-      value = intProxy;
+    "" = {
+      type = "NS";
+      values = [
+        "ns1.bytemonkey.org."
+        "ns2.bytemonkey.org."
+        "ns3.bytemonkey.org."
+      ];
     };
+
+    ns1 = { type = "A"; value = catalog.dns.ns1; };
+    ns2 = { type = "A"; value = catalog.dns.ns2; };
+    ns3 = { type = "A"; value = catalog.dns.ns3; };
+
+    skynas = { type = "A"; value = "100.126.1.1"; };
+    x = { type = "CNAME"; value = intProxy; };
   };
 
   # Services that requested a CNAME.
@@ -45,7 +42,6 @@ let
     value = {
       type = "CNAME";
       value = proxy;
-      ttl = 600;
     };
   };
 in
