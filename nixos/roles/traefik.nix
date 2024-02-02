@@ -172,7 +172,7 @@ in
       [ config.roles.template.files."traefik.env".path ];
 
     # TODO: autogenerate this list from catalog entrypoints
-    networking.firewall.allowedTCPPorts = [ 25 80 443 8443 ];
+    networking.firewall.allowedTCPPorts = [ 25 80 222 443 8443 ];
     networking.firewall.allowedUDPPorts = [ 7777 15000 15777 ];
   };
 }
