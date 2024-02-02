@@ -5,7 +5,6 @@
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";
-  dns.host = nodes.nexus.ip.priv;
   smtp.host = "mail.home.arpa";
   syslog.host = nodes.metrics.ip.priv;
   syslog.port = 1514;
@@ -23,6 +22,12 @@
       nc-um350-1.ip.priv
       nc-um350-2.ip.priv
     ];
+  };
+
+  dns = with nodes; {
+    ns1 = nexus.ip.priv;
+    ns2 = nc-um350-1.ip.priv;
+    ns3 = nc-um350-2.ip.priv;
   };
 
   k3s = {

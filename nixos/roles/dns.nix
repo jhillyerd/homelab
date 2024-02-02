@@ -8,7 +8,7 @@ in
       type = submodule {
         options = {
           enable = mkEnableOption "Run bind DNS server";
-          serveLocalZones = mkEnableOption "Serve local zone files";
+          serveLocalZones = mkEnableOption "Serve local zone files directly";
         };
       };
       default = { };
@@ -40,9 +40,9 @@ in
 
       homeZoneConfig = pkgs.writeText "home.arpa.zone" ''
         $ORIGIN home.arpa.
-        @ 3600 SOA nexus.home.arpa. (
+        @ 3600 SOA ns1.home.arpa. (
           zone-admin.home.arpa.
-          2024012901 ; serial number
+          2024020101 ; serial number
           3600       ; refresh period
           600        ; retry period
           604800     ; expire time
@@ -50,7 +50,11 @@ in
         )
 
         @              600 IN NS    ns1
+                           IN NS    ns2
+                           IN NS    ns3
         ns1            600 IN A     192.168.128.40
+        ns2            600 IN A     192.168.128.36
+        ns3            600 IN A     192.168.128.37
 
         cluster        600 IN NS    gateway
         dyn            600 IN NS    gateway
@@ -96,7 +100,7 @@ in
         # private IP.
         useLocalResolver = false;
         extraConfig = ''
-          name_servers='${self.ip.priv} ${catalog.dns.host}'
+          name_servers='${self.ip.priv} ${catalog.dns.ns1}'
         '';
       };
 
@@ -114,19 +118,30 @@ in
           validate-except { "consul"; };
         '';
 
-        zones = mkIf cfg.bind.serveLocalZones {
-          "home.arpa" = {
-            master = true;
-            slaves = transferAddrs;
-            file = "${homeZoneConfig}";
-          };
+        zones =
+          if cfg.bind.serveLocalZones then {
+            "home.arpa" = {
+              master = true;
+              slaves = transferAddrs;
+              file = "${homeZoneConfig}";
+            };
 
-          "bytemonkey.org." = {
-            master = true;
-            slaves = transferAddrs;
-            file = "${bytemonkeyZoneFile}";
-          };
-        };
+            "bytemonkey.org." = {
+              master = true;
+              slaves = transferAddrs;
+              file = "${bytemonkeyZoneFile}";
+            };
+          } else
+            builtins.listToAttrs (map
+              (name: {
+                name = name + ".";
+                value = {
+                  master = false;
+                  masters = [ "${catalog.dns.ns1}" ];
+                  file = "/var/lib/named/${name}.zone";
+                };
+              })
+              [ "home.arpa" "bytemonkey.org" ]);
 
         extraConfig =
           let
@@ -139,20 +154,6 @@ in
                 };
               '')
               unifiZones;
-
-            localForwardZones =
-              if cfg.bind.serveLocalZones then
-                ""
-              else
-                (concatMapStrings
-                  (zone: ''
-                    zone "${zone}" {
-                      type forward;
-                      forward only;
-                      forwarders { ${catalog.dns.host}; };
-                    };
-                  '')
-                  [ "home.arpa" ]);
           in
           ''
             zone "consul" IN {
@@ -162,8 +163,6 @@ in
             };
 
             ${unifiForwardZones}
-
-            ${localForwardZones}
           '';
       };
 
