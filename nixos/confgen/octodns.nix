@@ -27,8 +27,9 @@ in
 {
   "octodns/config.yaml" = {
     manager = {
-      include_meta = true;
       max_workers = 1;
+      enable_checksum = true;
+      processors = [ "meta" ];
     };
 
     providers = {
@@ -51,6 +52,14 @@ in
       "bytemonkey.org." = {
         sources = [ "zones" ];
         targets = [ "nexus_bind" ];
+      };
+    };
+
+    processors = {
+      meta = {
+        class = "octodns.processor.meta.MetaProcessor";
+        record_name = "octodns-meta";
+        include_provider = true;
       };
     };
   };
