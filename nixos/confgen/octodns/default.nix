@@ -29,7 +29,7 @@ in
     };
 
     zones = {
-      "bytemonkey.org." = {
+      "*" = {
         sources = [ "zones" ];
         targets = [ "nexus_bind" ];
       };
@@ -45,4 +45,5 @@ in
   };
 
   "octodns/internal-zones/bytemonkey.org.yaml" = import ./bytemonkey.nix inputs target;
+  "octodns/internal-zones/home.arpa.yaml" = import ./home.nix inputs target;
 }
