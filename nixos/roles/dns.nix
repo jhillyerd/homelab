@@ -15,83 +15,37 @@ in
     };
   };
 
-  # TODO Generate DNS entries from catalog.nodes.
   config =
     let
+      namedWorkDir = "/var/lib/named";
+
       transferAddrs = [ "192.168.1.0/24" "192.168.128.0/18" ];
 
       unifiZones = [ "dyn.home.arpa." "cluster.home.arpa." ];
 
-      bytemonkeyZoneFile = "/var/lib/named/bytemonkey.org.zone";
-      bytemonkeyZoneConfig = pkgs.writeText "bytemonkey.org.zone" ''
-        $ORIGIN bytemonkey.org.
-        @ 3600 SOA nexus.home.arpa. (
-          zone-admin.home.arpa.
-          1          ; serial number
-          3600       ; refresh period
-          600        ; retry period
-          604800     ; expire time
-          1800       ; min TTL
-        )
+      mkZone = name: rec {
+        file = "${name}.zone";
+        path = "${namedWorkDir}/${file}";
 
-        @              600 IN NS    ns1
-        ns1            600 IN A     192.168.128.40
-      '';
+        # Barebones zone file that will be overwritten by transfers.
+        emptyZone = pkgs.writeText file ''
+          $ORIGIN ${name}.
+          @ 3600 SOA ns1.${name}. (
+            zone-admin.home.arpa.
+            1      ; serial number
+            3600   ; refresh period
+            600    ; retry period
+            604800 ; expire time
+            1800   ; min TTL
+          )
 
-      homeZoneConfig = pkgs.writeText "home.arpa.zone" ''
-        $ORIGIN home.arpa.
-        @ 3600 SOA ns1.home.arpa. (
-          zone-admin.home.arpa.
-          2024020201 ; serial number
-          3600       ; refresh period
-          600        ; retry period
-          604800     ; expire time
-          1800       ; min TTL
-        )
+          @   600 IN NS ns1
+          ns1 600 IN A  ${catalog.dns.ns1}
+        '';
+      };
 
-        @              600 IN NS    ns1
-                           IN NS    ns2
-                           IN NS    ns3
-        ns1            600 IN A     192.168.128.40
-        ns2            600 IN A     192.168.128.36
-        ns3            600 IN A     192.168.128.37
-
-        cluster        600 IN NS    gateway
-        dyn            600 IN NS    gateway
-
-        mail           600 IN CNAME web
-        mqtt           600 IN CNAME metrics
-        ntp            600 IN CNAME skynas
-
-        gateway        600 IN A     192.168.1.1
-        printer        600 IN A     192.168.1.5
-        skynas         600 IN A     192.168.1.20
-        octopi         600 IN A     192.168.1.21
-        nc-pi3-1       600 IN A     192.168.1.22
-        homeassistant  600 IN A     192.168.1.30
-        ryzen          600 IN A     192.168.1.50
-
-        modem          600 IN A     192.168.100.1
-
-        ; Cluster subnet
-
-        eph            600 IN A     192.168.128.44
-        metrics        600 IN A     192.168.128.41
-        nc-um350-1     600 IN A     192.168.128.36
-        nc-um350-2     600 IN A     192.168.128.37
-        nexus          600 IN A     192.168.128.40
-        pve1           600 IN A     192.168.128.10
-        pve2           600 IN A     192.168.128.12
-        pve3           600 IN A     192.168.128.13
-        web            600 IN A     192.168.128.11
-
-        scratch        600 IN A     192.168.131.2
-        witness        600 IN A     192.168.131.3
-
-        kube1          600 IN A     192.168.132.1
-        kube2          600 IN A     192.168.132.2
-        kube3          600 IN A     192.168.132.3
-      '';
+      bytemonkeyZone = mkZone "bytemonkey.org";
+      homeZone = mkZone "home.arpa";
     in
     mkIf cfg.bind.enable {
       networking.resolvconf = {
@@ -117,18 +71,19 @@ in
           validate-except { "consul"; };
         '';
 
+        # TODO leverage mkZone output.
         zones =
           if cfg.bind.serveLocalZones then {
             "home.arpa." = {
               master = true;
               slaves = transferAddrs;
-              file = "${homeZoneConfig}";
+              file = "${homeZone.path}";
             };
 
             "bytemonkey.org." = {
               master = true;
               slaves = transferAddrs;
-              file = "${bytemonkeyZoneFile}";
+              file = "${bytemonkeyZone.path}";
             };
           } else
             builtins.listToAttrs (map
@@ -166,16 +121,23 @@ in
       };
 
       # Setup named work directory during activation.
-      system.activationScripts.init-named-zones = ''
-        mkdir -p /var/lib/named
-        chown named: /var/lib/named
+      system.activationScripts.init-named-zones =
+        let
+          copyZone = zone: ''
+            # Copy zone file if it does not already exist.
+            if [[ ! -e "${zone.path}" ]]; then
+              cp "${zone.emptyZone}" "${zone.path}"
+              chown named: "${zone.path}"
+            fi
+          '';
+        in
+        ''
+          mkdir -p ${namedWorkDir}
+          chown named: ${namedWorkDir}
 
-        # Copy zone file if it does not already exist.
-        if [[ ! -e "${bytemonkeyZoneFile}" ]]; then
-          cp "${bytemonkeyZoneConfig}" "${bytemonkeyZoneFile}"
-          chown named: "${bytemonkeyZoneFile}"
-        fi
-      '';
+          ${copyZone bytemonkeyZone}
+          ${copyZone homeZone}
+        '';
 
       networking.firewall.allowedTCPPorts = [ 53 ];
       networking.firewall.allowedUDPPorts = [ 53 ];
