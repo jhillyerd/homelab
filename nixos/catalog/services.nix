@@ -10,6 +10,19 @@
   #
   # Authelia is configured to deny by default; services will need to be
   # configured there before being available externally.
+  #
+  # `dash.icon` paths can be found in https://github.com/walkxcode/dashboard-icons
+  argocd = {
+    title = "ArgoCD";
+
+    dns.intCname = true;
+
+    dash.icon = "svg/argocd.svg";
+
+    lb.backendUrls = map (ip: "https://${ip}:443") k3s.workers;
+    lb.checkHost = "argocd.bytemonkey.org";
+  };
+
   auth = {
     title = "Authelia";
     external = true;
@@ -79,15 +92,6 @@
     title = "Inbucket";
     dns.intCname = true;
     dash.icon = "svg/gmail.svg";
-  };
-
-  k3s-dash = {
-    title = "K3S Dashboard";
-    dns.intCname = true;
-
-    dash.icon = "svg/kubernetes-dashboard.svg";
-
-    lb.backendUrls = map (ip: "https://${ip}:30999") k3s.workers;
   };
 
   modem = {

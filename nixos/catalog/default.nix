@@ -86,7 +86,7 @@
     }
     {
       section = "Cluster";
-      services = [ "consul" "nomad" "proxmox" "dockreg" "k3s-dash" ];
+      services = [ "consul" "nomad" "proxmox" "dockreg" "argocd" ];
     }
     {
       section = "Infrastructure";
