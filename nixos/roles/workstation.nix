@@ -18,7 +18,6 @@ in
         in
         [
           bashmount
-          bat
           cachix
           chezmoi
           devenv.packages.${system}.devenv
@@ -29,7 +28,6 @@ in
           gnumake
           kitty # always install for terminfo
           lazygit
-          lf
           lynx
           mqttui
           nfs-utils

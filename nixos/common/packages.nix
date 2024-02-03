@@ -9,11 +9,13 @@
       '';
     in
     [
+      bat
       bind
       file
       git
       htop
       jq
+      lf
       lsof
       mailutils
       neovim
