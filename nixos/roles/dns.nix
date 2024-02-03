@@ -24,6 +24,7 @@ in
       unifiZones = [ "dyn.home.arpa." "cluster.home.arpa." ];
 
       mkZone = name: rec {
+        inherit name;
         file = "${name}.zone";
         path = "${namedWorkDir}/${file}";
 
@@ -71,31 +72,22 @@ in
           validate-except { "consul"; };
         '';
 
-        # TODO leverage mkZone output.
         zones =
-          if cfg.bind.serveLocalZones then {
-            "home.arpa." = {
-              master = true;
-              slaves = transferAddrs;
-              file = "${homeZone.path}";
-            };
-
-            "bytemonkey.org." = {
-              master = true;
-              slaves = transferAddrs;
-              file = "${bytemonkeyZone.path}";
-            };
-          } else
-            builtins.listToAttrs (map
-              (name: {
-                inherit name;
-                value = {
+          builtins.listToAttrs (map
+            (zone: {
+              name = zone.name + ".";
+              value =
+                if cfg.bind.serveLocalZones then {
+                  master = true;
+                  slaves = transferAddrs;
+                  file = zone.path;
+                } else {
                   master = false;
                   masters = [ "${catalog.dns.ns1}" ];
-                  file = "/var/lib/named/${name}.zone";
+                  file = zone.path;
                 };
-              })
-              [ "home.arpa." "bytemonkey.org." ]);
+            })
+            [ bytemonkeyZone homeZone ]);
 
         extraConfig =
           let
@@ -134,10 +126,10 @@ in
         ''
           mkdir -p ${namedWorkDir}
           chown named: ${namedWorkDir}
-
+        '' + (if cfg.bind.serveLocalZones then ''
           ${copyZone bytemonkeyZone}
           ${copyZone homeZone}
-        '';
+        '' else "");
 
       networking.firewall.allowedTCPPorts = [ 53 ];
       networking.firewall.allowedUDPPorts = [ 53 ];
