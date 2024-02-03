@@ -2,7 +2,7 @@
 let
   pkgs = nixpkgs.legacyPackages.${system};
 
-  octodnsBundle = import ./octodns.nix { inherit pkgs catalog; };
+  octodnsBundle = import ./octodns { inherit pkgs catalog; };
 in
 pkgs.stdenvNoCC.mkDerivation {
   name = "config-outputs";

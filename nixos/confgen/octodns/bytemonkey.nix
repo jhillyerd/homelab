@@ -1,9 +1,6 @@
-{ pkgs, catalog, ... }:
+{ pkgs, catalog, ... }: target:
 let
   inherit (pkgs.lib) filterAttrs attrByPath mapAttrs mapAttrs';
-
-  # Nameserver to push records to.
-  target = catalog.dns.ns1;
 
   # Reverse proxy host for internal services.
   intProxy = "web.home.arpa.";
@@ -45,47 +42,6 @@ let
     };
   };
 in
-{
-  "octodns/config.yaml" = {
-    manager = {
-      max_workers = 1;
-      enable_checksum = true;
-      processors = [ "meta" ];
-    };
-
-    providers = {
-      zones = {
-        class = "octodns.provider.yaml.YamlProvider";
-        directory = "./zones";
-        default_ttl = 600;
-        enforce_order = true;
-      };
-
-      nexus_bind = {
-        class = "octodns_bind.Rfc2136Provider";
-        host = target;
-        key_name = "env/BIND_KEY_NAME";
-        key_secret = "env/BIND_KEY_SECRET";
-      };
-    };
-
-    zones = {
-      "bytemonkey.org." = {
-        sources = [ "zones" ];
-        targets = [ "nexus_bind" ];
-      };
-    };
-
-    processors = {
-      meta = {
-        class = "octodns.processor.meta.MetaProcessor";
-        record_name = "octodns-meta";
-        include_provider = true;
-      };
-    };
-  };
-
-  "octodns/zones/bytemonkey.org.yaml" = bytemonkeyRecords
-    // (mapAttrs (mkInternalServiceRecord intProxy) internalServices)
-    // (mapAttrs' (mkExternalServiceRecord intProxy) externalServices);
-}
+bytemonkeyRecords
+// (mapAttrs (mkInternalServiceRecord intProxy) internalServices)
+  // (mapAttrs' (mkExternalServiceRecord intProxy) externalServices)
