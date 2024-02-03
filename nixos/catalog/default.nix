@@ -82,7 +82,7 @@
   layout = [
     {
       section = "Services";
-      services = [ "gitea" "grafana" "homeassistant" "inbucket" "nodered" "octopi" ];
+      services = [ "gitea" "grafana" "homeassistant" "inbucket" "nodered" "fluidd" ];
     }
     {
       section = "Cluster";

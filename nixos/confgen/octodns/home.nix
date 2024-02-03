@@ -31,6 +31,9 @@ let
 
     modem = { type = "A"; value = "192.168.100.1"; };
 
+    # IoT network.
+    msdde3 = { type = "A"; value = "192.168.10.23"; };
+
     # Cluster network.
     pve1 = { type = "A"; value = "192.168.128.10"; };
     pve2 = { type = "A"; value = "192.168.128.12"; };

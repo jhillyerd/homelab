@@ -60,6 +60,13 @@
     lb.backendUrls = [ "http://192.168.1.20:5050" ];
   };
 
+  fluidd = {
+    title = "Fluidd";
+    dns.intCname = true;
+    dash.icon = "svg/fluidd.svg";
+    lb.backendUrls = [ "http://msdde3.home.arpa" ];
+  };
+
   gitea = {
     title = "Gitea";
 
@@ -125,13 +132,6 @@
     lb.backendUrls = map (ip: "https://${ip}:4646") nomad.servers;
     lb.sticky = true;
     lb.auth = "external";
-  };
-
-  octopi = {
-    title = "OctoPrint";
-    dns.intCname = true;
-    dash.icon = "png/octoprint.png";
-    lb.backendUrls = [ "http://192.168.1.21" ];
   };
 
   proxmox = {
