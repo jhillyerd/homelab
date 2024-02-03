@@ -20,6 +20,7 @@ in
             domainName = mkOption { type = str; };
             backendUrls = mkOption { type = listOf str; };
             sticky = mkOption { type = bool; default = false; };
+            checkHost = mkOption { type = nullOr str; default = null; };
             checkPath = mkOption { type = str; default = "/"; };
             checkInterval = mkOption { type = str; default = "15s"; };
             external = mkOption { type = bool; default = false; };
@@ -114,6 +115,7 @@ in
               servers = map (url: { url = url; }) opt.backendUrls;
               sticky = mkIf opt.sticky { cookie = { }; };
               healthCheck = {
+                hostname = mkIf (opt.checkHost != null) opt.checkHost;
                 path = opt.checkPath;
                 interval = opt.checkInterval;
               };

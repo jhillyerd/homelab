@@ -81,6 +81,7 @@ let
           type = nullOr (submodule {
             options = {
               backendUrls = mkOption { type = listOf str; default = [ ]; };
+              checkHost = mkOption { type = nullOr str; default = null; };
               sticky = mkOption { type = bool; default = false; };
               auth = mkOption {
                 type = enum [ "none" "external" "both" ];
@@ -135,7 +136,7 @@ in
           inherit name;
           value = {
             # TODO: Internal auth support.
-            inherit (opt.lb) backendUrls sticky;
+            inherit (opt.lb) backendUrls checkHost sticky;
             domainName = "${opt.name}.${opt.internalDomain}";
           };
         };
@@ -144,7 +145,7 @@ in
           name = name + "-external";
           value = {
             # TODO: don't define a duplicate backend for external.
-            inherit (opt.lb) backendUrls sticky;
+            inherit (opt.lb) backendUrls checkHost sticky;
             domainName = "${opt.name}.${cfg.externalDomain}";
             external = true;
             externalAuth = elem opt.lb.auth [ "external" "both" ];
