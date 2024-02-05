@@ -31,16 +31,16 @@
       response_status_code = 200;
     }
     {
+      urls = [ "http://msdde3.home.arpa/" ];
+      response_status_code = 200;
+    }
+    {
       urls = [ "https://nodered.bytemonkey.org" ];
       response_status_code = 200;
     }
     {
       urls = [ "https://nomad.bytemonkey.org/ui/" ];
       response_status_code = 200;
-    }
-    {
-      urls = [ "http://octopi.home.arpa" ];
-      response_status_code = 302;
     }
     {
       urls = [ "https://zwavejs.bytemonkey.org/" ];
@@ -50,10 +50,10 @@
 
   ping = [
     "gateway.home.arpa"
+    "msdde3.home.arpa"
     "nexus.home.arpa"
     "nc-um350-1.home.arpa"
     "nc-um350-2.home.arpa"
-    "octopi.home.arpa"
     "pve1.home.arpa"
     "pve2.home.arpa"
     "pve3.home.arpa"
