@@ -2,6 +2,7 @@
 { system }: rec {
   nodes = import ./nodes.nix { inherit system; };
   services = import ./services.nix { inherit nodes nomad k3s; };
+  monitors = import ./monitors.nix { };
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";
