@@ -23,7 +23,12 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
-  home-systems = [ eph metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
+  home-nodes = [ eph metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
+
+  # Runners
+  ci-runner1 =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnOeW75UezreS51pqSHleYjx7tNg67Nv34rh5/dJLiZ";
+  runner-nodes = [ ci-runner1 scratch ];
 
   # Cluster nodes
   witness =
@@ -44,10 +49,11 @@ let
   nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 scratch web witness ];
 
   group = {
-    common = users ++ home-systems ++ nomad-cluster ++ kube-cluster;
-    home = users ++ home-systems;
+    common = users ++ home-nodes ++ nomad-cluster ++ kube-cluster ++ runner-nodes;
+    home = users ++ home-nodes;
     kube = users ++ kube-cluster;
     nomad = users ++ nomad-cluster;
+    runners = users ++ runner-nodes;
   };
 in
 {
@@ -76,4 +82,7 @@ in
   "nomad-server-client-key.age".publicKeys = group.nomad;
   "skynet-server-consul-0-key.pem.age".publicKeys = group.nomad;
   "traefik-consul-token.age".publicKeys = group.nomad;
+
+  # Runners.
+  "gitea-runner-token.age".publicKeys = group.runners;
 }

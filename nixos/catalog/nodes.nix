@@ -1,4 +1,11 @@
 { system }: {
+  ci-runner1 = {
+    ip.priv = "192.168.131.4";
+    config = ../hosts/ci-runner.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   eph = {
     ip.priv = "192.168.128.44";
     ip.tail = "100.119.252.34";

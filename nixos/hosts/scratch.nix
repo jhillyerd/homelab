@@ -5,4 +5,6 @@
   systemd.network.networks = util.mkClusterNetworks self;
 
   networking.firewall.enable = false;
+
+  ### Temporary configuration below.
 }
