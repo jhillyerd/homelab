@@ -22,21 +22,21 @@ graph TD
     lan --- pve3
     subgraph pve1 ["pve1 (hypervisor)"]
         direction RL
-        nexus
-        witness
+        nexus("nexus")
+        witness("witness")
     end
     subgraph pve2 ["pve2 (hypervisor)"]
         direction RL
-        kube2
-        scratch
+        kube2("kube2")
+        scratch("scratch")
     end
     subgraph pve3 ["pve3 (hypervisor)"]
         direction RL
-        ci-runner1
-        eph
-        kube1
-        metrics
-        web
+        ci-runner1("ci-runner1")
+        eph("eph")
+        kube1("kube1")
+        metrics("metrics")
+        web("web")
     end
 ```
 
