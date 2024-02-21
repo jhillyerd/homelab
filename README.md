@@ -39,3 +39,29 @@ graph TD
         web
     end
 ```
+
+### Monitoring
+
+```mermaid
+graph LR
+    ha([home assistant]) ---> influxdb
+    subgraph nixos ["all nixos nodes"]
+        nix-telegraf([telegraf])
+        nix-syslog([syslog])
+    end
+    subgraph nomad-nodes ["all nomad client nodes"]
+        nomad([nomad client]) --> nomad-telegraf([telegraf])
+        docker([docker logs]) --> nomad-vector([vector])
+    end
+    subgraph metrics ["node: metrics"]
+        metrics-telegraf(["telegraf<br/>- ping checks<br/>- url checks"])
+        metrics-telegraf --> influxdb([influxdb])
+        loki([loki])
+        nix-telegraf ---> influxdb
+        nix-syslog ---> loki
+        nomad-telegraf --> influxdb
+        nomad-vector --> loki
+    end
+    influxdb -.-> grafana([grafana])
+    loki -.-> grafana
+```
