@@ -4,6 +4,16 @@
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
 
+  roles.consul = {
+    enableServer = true;
+    retryJoin = catalog.consul.servers;
+  };
+
+  roles.nomad = {
+    enableServer = true;
+    retryJoin = catalog.nomad.servers;
+  };
+
   services.k3s = {
     enable = true;
     disableAgent = true;
