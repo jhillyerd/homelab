@@ -2,8 +2,7 @@
   # Telegraf monitoring config.
   http_response = [
     {
-      # TODO Give Consul a LB entry.
-      urls = [ "http://nexus.bytemonkey.org:8500/ui/" ];
+      urls = [ "https://consul.bytemonkey.org/ui/" ];
       response_status_code = 200;
     }
     {
@@ -59,5 +58,6 @@
     "pve3.home.arpa"
     "skynas.home.arpa"
     "web.home.arpa"
+    "witness.home.arpa"
   ];
 }

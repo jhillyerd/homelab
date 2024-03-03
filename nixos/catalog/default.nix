@@ -1,7 +1,7 @@
 # Catalog defines the systems & services on my network.
 { system }: rec {
   nodes = import ./nodes.nix { inherit system; };
-  services = import ./services.nix { inherit nodes nomad k3s; };
+  services = import ./services.nix { inherit nodes consul nomad k3s; };
   monitors = import ./monitors.nix { };
 
   # Common config across most machines.

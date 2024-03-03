@@ -1,4 +1,4 @@
-{ nodes, nomad, k3s }: {
+{ nodes, consul, nomad, k3s }: {
   # The services block populates my dashboard and configures the load balancer.
   #
   # The key-name of each service block is mapped to an internal domain name
@@ -37,10 +37,14 @@
   consul = {
     title = "Consul";
 
-    dash.icon = "png/c.png";
-    dash.host = nodes.nexus.ip.priv;
-    dash.port = 8500;
-    dash.proto = "http";
+    dns.intCname = true;
+    dns.extCname = true;
+
+    dash.icon = "svg/consul.svg";
+
+    lb.backendUrls = map (ip: "http://${ip}:8500") consul.servers;
+    lb.sticky = true;
+    lb.auth = "external";
   };
 
   dash = {
