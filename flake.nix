@@ -13,10 +13,11 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, agenix }:
     flake-utils.lib.eachDefaultSystem
-      (system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-        unstable = nixpkgs-unstable.legacyPackages.${system};
-      in
+      (system:
+        let
+          pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
+          unstable = nixpkgs-unstable.legacyPackages.${system};
+        in
         {
           devShell = pkgs.mkShell {
             buildInputs = with pkgs; [
@@ -25,7 +26,7 @@
               cfssl
               consul
               esphome
-              nomad
+              nomad_1_6
               unstable.octodns
               unstable.octodns-providers.bind
               openssl
