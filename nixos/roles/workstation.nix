@@ -47,6 +47,7 @@ in
           universal-ctags
           unzip
           usbutils
+          watchexec
           yaml-language-server
           zip
         ];
