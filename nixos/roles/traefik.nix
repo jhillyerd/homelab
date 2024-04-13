@@ -86,8 +86,7 @@ in
           connectAware = true;
 
           endpoint = {
-            # TODO Fix hardcoded consul address
-            address = catalog.nodes.nexus.ip.priv + ":8500";
+            address = "consul.service.skynet.consul:8500";
             scheme = "http";
             datacenter = "skynet";
           };
@@ -101,7 +100,7 @@ in
         let
           routerEntry = name: opt: {
             # Always allow internal entry points, external is optional.
-            entryPoints = [ "web" "websecure" ] ++ (if opt.external then [ "extweb" ] else []);
+            entryPoints = [ "web" "websecure" ] ++ (if opt.external then [ "extweb" ] else [ ]);
 
             rule = "Host(`" + opt.domainName + "`)";
             service = name;
