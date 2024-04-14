@@ -1,5 +1,5 @@
 # A scratch host for building up new service configurations.
-{ config, pkgs, lib, self, catalog, util, ... }: {
+{ self, util, ... }: {
   imports = [ ../common.nix ];
 
   systemd.network.networks = util.mkClusterNetworks self;

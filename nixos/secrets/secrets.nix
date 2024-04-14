@@ -11,6 +11,8 @@ let
   # Nodes
   eph =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
+  fastd =
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
   metrics =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
   nexus =
@@ -23,7 +25,7 @@ let
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
-  home-nodes = [ eph metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
+  home-nodes = [ eph fastd metrics nexus nix-ryzen nixtarget1-virtd scratch web ];
 
   # Runners
   ci-runner1 =

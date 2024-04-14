@@ -14,6 +14,14 @@
     system = system.x86_64-linux;
   };
 
+  fastd = {
+    ip.priv = "192.168.131.5";
+    hostId = "f4fa7292";
+    config = ../hosts/fastd.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   kube1 = {
     ip.priv = "192.168.132.1";
     config = ../hosts/k3s.nix;
