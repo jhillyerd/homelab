@@ -74,7 +74,7 @@ job "gitea" {
       driver = "docker"
 
       config {
-        image = "gitea/gitea:1.21.4"
+        image = "gitea/gitea:1.21.10"
         ports = ["http", "ssh"]
       }
 
