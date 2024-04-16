@@ -163,6 +163,7 @@ in
           gimp
           gnome3.gedit
           google-chrome
+          i3-balance-workspace
           libnotify # for notify-send
           lxappearance
           maim # takes screenshots
