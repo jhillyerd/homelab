@@ -14,7 +14,7 @@ in
     (mkIf cfg.enable {
       environment.systemPackages = with pkgs;
         let
-          inherit (nixpkgs-unstable.legacyPackages.${system}) rnix-lsp rust-analyzer;
+          inherit (nixpkgs-unstable.legacyPackages.${system}) rust-analyzer;
         in
         [
           bashmount
@@ -38,7 +38,6 @@ in
           postgresql_14
           python3
           ripgrep
-          rnix-lsp
           rust-analyzer
           sshfs
           starship
