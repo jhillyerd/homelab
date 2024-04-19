@@ -43,10 +43,8 @@ let
   nc-um350-1 =
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
   nc-um350-2 =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINSarN+Keghwq5qltwrvPR0AKNI7nrGoJRkZrl+mTPuO";
-  nc-pi3-1 =
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8e1tGPws/Utx3BHPW8bF4UfcbeFZagMvu7x1MyYype";
-  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 nc-pi3-1 scratch web witness ];
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmHTTSRM1PuZ45KXJACZhJc1GAgcT9i+QCClo6sV88R";
+  nomad-cluster = [ nexus nc-um350-1 nc-um350-2 scratch web witness ];
 
   group = {
     common = users ++ home-nodes ++ nomad-cluster ++ kube-cluster ++ runner-nodes;

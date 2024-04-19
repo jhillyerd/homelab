@@ -21,6 +21,7 @@
       neovim
       nmap
       psmisc
+      smartmontools
       tree
       vim-is-neovim
       wget
