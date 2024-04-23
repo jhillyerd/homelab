@@ -38,6 +38,8 @@
     client.meta = lib.mkIf (self ? nomad.meta) self.nomad.meta;
   };
 
+  roles.telegraf.nomad = true;
+
   roles.gateway-online.addr = "192.168.1.1";
 
   virtualisation.docker.extraOptions = "--data-root /data/docker";

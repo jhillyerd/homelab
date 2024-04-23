@@ -22,6 +22,12 @@ in
       description = "List of hosts for telegraf to ping";
       default = [ ];
     };
+
+    nomad = mkOption {
+      type = bool;
+      description = "Scrape local nomad metrics exposed via prometheus";
+      default = false;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -55,6 +61,11 @@ in
                 binary = "${pkgs.iputils}/bin/ping";
               })
               cfg.ping);
+
+          nomad = mkIf (cfg.nomad) {
+            url = "https://127.0.0.1:4646";
+            insecure_skip_verify = true;
+          };
         };
 
         outputs.influxdb = with cfg.influxdb; {

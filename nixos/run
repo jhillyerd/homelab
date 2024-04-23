@@ -1,0 +1,12 @@
+#!/usr/bin/env fish
+
+if test -z "$host"
+  echo "host env or argument required" >&2
+  exit 1
+end
+
+set target "root@$host.home.arpa"
+
+echo "Running on $host"
+
+ssh $target $argv
