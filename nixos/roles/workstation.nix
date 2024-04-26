@@ -1,4 +1,4 @@
-{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, devenv, ... }:
+{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, devenv, nixd-flake, ... }:
 with lib;
 let cfg = config.roles.workstation;
 in
@@ -15,6 +15,7 @@ in
       environment.systemPackages = with pkgs;
         let
           inherit (nixpkgs-unstable.legacyPackages.${system}) rust-analyzer;
+          inherit (nixd-flake.packages.${system}) nixd;
         in
         [
           bashmount
@@ -31,6 +32,7 @@ in
           lynx
           mqttui
           nfs-utils
+          nixd
           nixpkgs-fmt
           nixpkgs-review
           nodejs
