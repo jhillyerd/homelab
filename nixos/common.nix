@@ -5,10 +5,8 @@
 , authorizedKeys
 , hostName
 , environment
-, lib
 , catalog
 , nixpkgs
-, nixpkgs-unstable
 , ...
 }: {
   system.stateVersion = "22.11";
@@ -34,7 +32,6 @@
   };
 
   networking = {
-    hostName = hostName;
     search = [ "home.arpa" "dyn.home.arpa" ];
     timeServers = [ "ntp.home.arpa" ] ++ options.networking.timeServers.default;
   };

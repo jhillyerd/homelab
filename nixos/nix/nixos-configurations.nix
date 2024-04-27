@@ -2,7 +2,7 @@
 { nixpkgs, agenix, hw-gauge, ... }@inputs: catalog:
 let
   inherit (nixpkgs.lib)
-    mapAttrs mapAttrs' mapAttrsToList mkMerge nixosSystem splitString;
+    mapAttrs mapAttrs' nixosSystem splitString;
 
   authorizedKeys = splitString "\n" (builtins.readFile ../../authorized_keys.txt);
 
@@ -29,11 +29,20 @@ let
       };
 
       modules = modules ++ [
+        (nodeModule node)
         hardware
         node.config
         agenix.nixosModule
       ];
     };
+
+  # Common system config built from node entry.
+  nodeModule = node: { hostName, ... }: {
+    networking = {
+      inherit hostName;
+      hostId = node.hostId or null;
+    };
+  };
 
   # Bare metal systems; in production environment.
   metalSystems = mapAttrs
