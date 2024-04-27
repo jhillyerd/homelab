@@ -1,41 +1,66 @@
-# A scratch host for building up new service configurations.
-{ config, pkgs, lib, self, catalog, util, ... }: {
+{ self, catalog, util, ... }: {
   imports = [ ../common.nix ];
 
-  # boot.supportedFilesystems = [ "zfs" ];
-  # boot.zfs.extraPools = [ "zpool1" "zpool2" ];
+  boot.supportedFilesystems = [ "zfs" ];
 
-  # networking.hostId = "f40588ab";
+  # Listed extra pools must be available during boot.
+  boot.zfs.extraPools = [ "fast1" ];
 
-  # services.syncoid = {
-  #   enable = true;
-  #   interval = "minutely";
+  services.openiscsi = {
+    enable = true;
+    enableAutoLoginOut = true;
+    name = "iqn.1999-11.org.bytemonkey:fastd";
+  };
 
-  #   localSourceAllow = [
-  #     "bookmark"
-  #     "hold"
-  #     "mount" # added
-  #     "send"
-  #     "snapshot"
-  #     "destroy"
-  #   ];
+  # Import iSCSI ZFS pools.
+  systemd.services.zfs-import-backup1 = {
+    # Give iSCSI time to login to NAS.
+    preStart = "/run/current-system/sw/bin/sleep 5";
 
-  #   localTargetAllow = [
-  #     "change-key"
-  #     "compression"
-  #     "create"
-  #     "destroy" # added
-  #     "mount"
-  #     "mountpoint"
-  #     "receive"
-  #     "rollback"
-  #   ];
+    script =
+      let
+        zpoolcmd = "/run/current-system/sw/bin/zpool";
+        pool = "backup1";
+      in
+      ''
+        if ! ${zpoolcmd} list ${pool} >/dev/null 2>&1; then
+          ${zpoolcmd} import ${pool}
+        fi
+      '';
 
-  #   commands.fast = {
-  #     source = "zpool1/fast";
-  #     target = "zpool2/fast";
-  #   };
-  # };
+    wantedBy = [ "multi-user.target" ];
+    requires = [ "iscsi.service" ];
+    after = [ "iscsi.service" ];
+    serviceConfig.Type = "oneshot";
+  };
+
+  services.syncoid = {
+    enable = true;
+    interval = "minutely";
+
+    localSourceAllow = [
+      "bookmark"
+      "hold"
+      "mount" # added
+      "send"
+      "snapshot"
+      "destroy"
+    ];
+
+    localTargetAllow = [
+      "change-key"
+      "compression"
+      "create"
+      "destroy" # added
+      "mount"
+      "mountpoint"
+      "receive"
+      "rollback"
+    ];
+
+    # Volumes to backup.
+    commands."fast1/database".target = "backup1/database";
+  };
 
   systemd.network.networks = util.mkClusterNetworks self;
 
