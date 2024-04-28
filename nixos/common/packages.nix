@@ -21,6 +21,7 @@
       neovim
       nmap
       psmisc
+      python3
       smartmontools
       tree
       vim-is-neovim

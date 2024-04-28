@@ -38,7 +38,6 @@ in
           nodejs
           patchelf
           postgresql_14
-          python3
           ripgrep
           rust-analyzer
           sshfs
