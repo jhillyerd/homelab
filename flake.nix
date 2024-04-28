@@ -26,6 +26,7 @@
               cfssl
               consul
               esphome
+              kubectl
               nomad_1_6
               unstable.octodns
               unstable.octodns-providers.bind

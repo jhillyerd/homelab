@@ -9,7 +9,7 @@
 , nixpkgs
 , ...
 }: {
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 
   imports = [ ./common/packages.nix ./roles ];
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
