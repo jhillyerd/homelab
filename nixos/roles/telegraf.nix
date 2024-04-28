@@ -1,9 +1,12 @@
 { config, pkgs, lib, ... }:
-with lib;
-let cfg = config.roles.telegraf;
+let
+  inherit (lib) mkEnableOption mkIf mkOption length str;
+  inherit (lib.types) attrs bool listOf;
+
+  cfg = config.roles.telegraf;
 in
 {
-  options.roles.telegraf = with types; {
+  options.roles.telegraf = {
     enable = mkEnableOption "Telegraf node";
 
     influxdb = mkOption {
