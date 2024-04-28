@@ -1,27 +1,27 @@
 { config, lib, pkgs, authorizedKeys, nixpkgs-unstable, devenv, nixd-flake, ... }:
-with lib;
-let cfg = config.roles.workstation;
+let
+  inherit (lib) mkEnableOption mkIf mkMerge;
+  cfg = config.roles.workstation;
 in
 {
   options.roles.workstation = {
     enable = mkEnableOption "Base CLI workstation";
-
     graphical = mkEnableOption "Install Xorg and friends";
   };
 
   config = mkMerge [
     # Base workstation configuration.
     (mkIf cfg.enable {
-      environment.systemPackages = with pkgs;
+      environment.systemPackages =
         let
-          inherit (nixpkgs-unstable.legacyPackages.${system}) rust-analyzer;
-          inherit (nixd-flake.packages.${system}) nixd;
+          inherit (pkgs) system;
+          unstable = nixpkgs-unstable.legacyPackages.${system};
         in
+        (with pkgs;
         [
           bashmount
           cachix
           chezmoi
-          devenv.packages.${system}.devenv
           fzf
           gitAndTools.gh
           gitAndTools.git-absorb
@@ -32,14 +32,12 @@ in
           lynx
           mqttui
           nfs-utils
-          nixd
           nixpkgs-fmt
           nixpkgs-review
           nodejs
           patchelf
           postgresql_14
           ripgrep
-          rust-analyzer
           sshfs
           starship
           sumneko-lua-language-server
@@ -50,6 +48,10 @@ in
           watchexec
           yaml-language-server
           zip
+        ]) ++ [
+          devenv.packages.${system}.devenv
+          nixd-flake.packages.${system}.nixd
+          unstable.rust-analyzer
         ];
 
       # Programs and services
@@ -151,12 +153,15 @@ in
 
     # Graphical workstation configuration.
     (mkIf (cfg.enable && cfg.graphical) {
-      environment.systemPackages = with pkgs;
+      environment.systemPackages =
         let
-          x-www-browser = pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.firefox}/bin/firefox "$@"
-          '';
+          remaps = [
+            (pkgs.writeShellScriptBin "x-www-browser" ''
+              exec ${pkgs.firefox}/bin/firefox "$@"
+            '')
+          ];
         in
+        (with pkgs;
         [
           dmenu
           dunst
@@ -176,7 +181,6 @@ in
           rxvt_unicode-with-plugins
           sxhkd
           virt-manager
-          x-www-browser
           xclip
           xfce.ristretto # image viwer
           xfce.thunar # file manager
@@ -186,7 +190,7 @@ in
           xorg.xev
           xsecurelock
           xss-lock
-        ];
+        ]) ++ remaps;
 
       programs.dconf.enable = true;
 
