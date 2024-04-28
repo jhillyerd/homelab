@@ -62,6 +62,9 @@
     commands."fast1/database".target = "backup1/database";
   };
 
+  # Collect snapshot stats.
+  roles.telegraf.zfs = true;
+
   systemd.network.networks = util.mkClusterNetworks self;
 
   networking.firewall.enable = true;

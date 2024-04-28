@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf mkOption length str;
-  inherit (lib.types) attrs bool listOf;
+  inherit (lib) mkEnableOption mkIf mkOption length;
+  inherit (lib.types) attrs bool listOf str;
 
   cfg = config.roles.telegraf;
 in
@@ -29,6 +29,12 @@ in
     nomad = mkOption {
       type = bool;
       description = "Scrape local nomad metrics exposed via prometheus";
+      default = false;
+    };
+
+    zfs = mkOption {
+      type = bool;
+      description = "Collect ZFS snapshot metrics";
       default = false;
     };
   };
@@ -68,6 +74,13 @@ in
           nomad = mkIf (cfg.nomad) {
             url = "https://127.0.0.1:4646";
             insecure_skip_verify = true;
+          };
+
+          exec = mkIf (cfg.zfs) {
+            commands = [ ./files/telegraf/zfs_snap_times.py ];
+            timeout = "5s";
+            data_format = "influx";
+            environment = [ "PATH=/run/current-system/sw/bin" ];
           };
         };
 
