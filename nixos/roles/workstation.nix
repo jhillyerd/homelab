@@ -37,6 +37,7 @@ in
           nodejs
           patchelf
           postgresql_14
+          python311Packages.python-lsp-server
           ripgrep
           sshfs
           starship
