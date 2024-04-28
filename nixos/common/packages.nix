@@ -1,14 +1,15 @@
-{ config, pkgs, lib, nixpkgs-unstable, ... }: {
-  environment.systemPackages = with pkgs;
+{ pkgs, nixpkgs-unstable, ... }: {
+  environment.systemPackages =
     let
-      # Use unstable neovim.
-      neovim = nixpkgs-unstable.legacyPackages.${system}.neovim;
+      unstable = nixpkgs-unstable.legacyPackages.${pkgs.system};
 
-      vim-is-neovim = pkgs.writeShellScriptBin "vim" ''
-        exec ${neovim}/bin/nvim "$@"
-      '';
+      remaps = [
+        (pkgs.writeShellScriptBin "vim" ''
+          exec /run/current-system/sw/bin/nvim "$@"
+        '')
+      ];
     in
-    [
+    (with pkgs; [
       bat
       bind
       file
@@ -18,13 +19,13 @@
       lf
       lsof
       mailutils
-      neovim
       nmap
       psmisc
       python3
       smartmontools
       tree
-      vim-is-neovim
       wget
-    ];
+    ]) ++ (with unstable; [
+      neovim
+    ]) ++ remaps;
 }
