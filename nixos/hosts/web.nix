@@ -1,4 +1,4 @@
-{ config, pkgs, lib, environment, catalog, self, util, ... }: {
+{ config, lib, environment, catalog, self, util, ... }: {
   imports = [ ../common.nix ];
 
   systemd.network.networks = util.mkClusterNetworks self;

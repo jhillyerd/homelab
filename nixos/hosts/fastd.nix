@@ -1,10 +1,36 @@
-{ self, catalog, util, ... }: {
+{ config, self, util, ... }: {
   imports = [ ../common.nix ];
 
   boot.supportedFilesystems = [ "zfs" ];
 
   # Listed extra pools must be available during boot.
   boot.zfs.extraPools = [ "fast1" ];
+
+  services.postgresql = {
+    enable = true;
+    enableTCPIP = true;
+    dataDir = "/fast1/database/postgresql/${config.services.postgresql.package.psqlSchema}";
+
+    authentication = ''
+      host all all all scram-sha-256
+    '';
+
+    ensureDatabases = [ "root" "gitea" ];
+    ensureUsers = [
+      {
+        name = "root";
+        ensureDBOwnership = true;
+        ensureClauses.superuser = true;
+        ensureClauses.login = true;
+      }
+      {
+        name = "gitea";
+        ensureDBOwnership = true;
+        ensureClauses."inherit" = true;
+        ensureClauses.login = true;
+      }
+    ];
+  };
 
   services.openiscsi = {
     enable = true;
@@ -68,4 +94,7 @@
   systemd.network.networks = util.mkClusterNetworks self;
 
   networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [
+    config.services.postgresql.port
+  ];
 }
