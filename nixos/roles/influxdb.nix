@@ -1,36 +1,37 @@
 { config, pkgs, lib, ... }:
-with lib;
-let cfg = config.roles.influxdb;
+let
+  inherit (lib) mapAttrsToList mkEnableOption mkIf mkOption;
+  inherit (lib.types) attrsOf path port str submodule;
+  cfg = config.roles.influxdb;
 in
 {
   options.roles.influxdb = {
     enable = mkEnableOption "Enable InfluxDB role";
 
     port = mkOption {
-      type = types.port;
+      type = port;
       description = "API port. Do not change, for reference only";
       default = 8086;
     };
 
     adminUser = mkOption {
-      type = types.str;
+      type = str;
       description = "Database admin username";
       default = "admin";
     };
 
     adminPasswordFile = mkOption {
-      type = types.path;
+      type = path;
       description = "Database admin password file";
     };
 
     databases = mkOption {
-      type = with types;
-        attrsOf (submodule {
-          options = {
-            user = mkOption { type = str; };
-            passwordFile = mkOption { type = str; };
-          };
-        });
+      type = attrsOf (submodule {
+        options = {
+          user = mkOption { type = str; };
+          passwordFile = mkOption { type = str; };
+        };
+      });
       description = "Influx databases";
       default = { };
     };

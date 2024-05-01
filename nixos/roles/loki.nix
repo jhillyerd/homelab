@@ -1,25 +1,27 @@
-{ config, pkgs, lib, ... }:
-with lib;
-let cfg = config.roles.loki;
+{ config, lib, ... }:
+let
+  inherit (lib) mkEnableOption mkIf mkOption;
+  inherit (lib.types) port;
+  cfg = config.roles.loki;
 in
 {
   options.roles.loki = {
     enable = mkEnableOption "Network Loki host";
 
     loki_http_port = mkOption {
-      type = types.port;
+      type = port;
       description = "Loki HTTP listen port";
       default = 3100;
     };
 
     promtail_http_port = mkOption {
-      type = types.port;
+      type = port;
       description = "Promtail HTTP listen port";
       default = 9080;
     };
 
     promtail_syslog_port = mkOption {
-      type = types.port;
+      type = port;
       description = "Promtail syslog listen port";
       default = 1514;
     };
