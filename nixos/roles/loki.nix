@@ -50,17 +50,44 @@ in
           chunk_retain_period = "30s";
         };
 
-        schema_config.configs = [{
-          from = "2021-01-01";
-          store = "boltdb";
-          object_store = "filesystem";
-          schema = "v11";
-          index.prefix = "index_";
-        }];
+        compactor = {
+          working_directory = "retention";
+          compaction_interval = "30m";
+          retention_enabled = true;
+          retention_delete_delay = "2h";
+          retention_delete_worker_count = 30;
+        };
+
+        limits_config.retention_period = "2160h"; # 90d
+
+        schema_config.configs = [
+          {
+            from = "2021-01-01";
+            store = "boltdb";
+            object_store = "filesystem";
+            schema = "v11";
+            index.prefix = "index_";
+          }
+          {
+            from = "2024-05-02";
+            store = "tsdb";
+            object_store = "filesystem";
+            schema = "v13";
+            index = {
+              prefix = "index_";
+              period = "24h";
+            };
+          }
+        ];
 
         storage_config = {
           boltdb.directory = "index";
           filesystem.directory = "chunks";
+          tsdb_shipper = {
+            active_index_directory = "tsdb_active_index";
+            shared_store = "filesystem";
+            cache_location = "tsdb_cache";
+          };
         };
       };
     };
