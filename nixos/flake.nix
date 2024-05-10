@@ -38,7 +38,7 @@
   };
 
   outputs =
-    { self, nixpkgs, flake-utils, ... }@inputs:
+    { nixpkgs, flake-utils, ... }@inputs:
     let
       inherit (nixpkgs.lib) mapAttrs;
       inherit (flake-utils.lib) eachSystemMap system;

@@ -60,8 +60,6 @@ in
       programs.fish.enable = true;
       programs.mosh.enable = true;
 
-      services.hw-gauge-daemon.enable = true;
-
       # NFS mount support
       boot.supportedFilesystems = [ "nfs" ];
       services.rpcbind.enable = true;

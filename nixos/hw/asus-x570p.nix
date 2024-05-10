@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }: {
+{ config, lib, ... }: {
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
@@ -31,6 +31,7 @@
   };
 
   services.fstrim.enable = true;
+  services.hw-gauge-daemon.enable = true;
 
   # nvidia graphics card setup.
   hardware.opengl.enable = true;

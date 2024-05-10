@@ -33,6 +33,7 @@ let
         hardware
         node.config
         agenix.nixosModule
+        hw-gauge.nixosModules.default
       ];
     };
 
@@ -49,7 +50,6 @@ let
     (hostName: node:
       mkSystem {
         inherit hostName node;
-        modules = [ hw-gauge.nixosModules.default ];
         environment = "prod";
       })
     catalog.nodes;
