@@ -54,17 +54,6 @@ let
       })
     catalog.nodes;
 
-  # Hyper-V systems, name prefixed with "hyper-"; in test environment.
-  hypervSystems = mapAttrs'
-    (hostName: node: {
-      name = "hyper-${hostName}";
-      value = mkSystem {
-        inherit hostName node;
-        hardware = ../hw/hyperv.nix;
-      };
-    })
-    catalog.nodes;
-
   # libvirtd systems, name prefixed with "virt-"; in test environment.
   libvirtSystems = mapAttrs'
     (hostName: node: {
@@ -76,4 +65,4 @@ let
     })
     catalog.nodes;
 in
-metalSystems // hypervSystems // libvirtSystems
+metalSystems // libvirtSystems
