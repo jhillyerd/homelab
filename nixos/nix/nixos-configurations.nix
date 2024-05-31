@@ -41,6 +41,7 @@ let
   nodeModule = node: { hostName, ... }: {
     networking = {
       inherit hostName;
+      domain = "home.arpa";
       hostId = node.hostId or null;
     };
   };
