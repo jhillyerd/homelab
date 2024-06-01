@@ -44,14 +44,6 @@
     system = system.x86_64-linux;
   };
 
-  nc-pi3-1 = {
-    ip.priv = "192.168.1.22";
-    ip.tail = "100.120.127.103";
-    config = ../hosts/nc-pi3.nix;
-    hw = ../hw/sd-image-pi3.nix;
-    system = system.aarch64-linux;
-  };
-
   nc-um350-1 = {
     ip.priv = "192.168.128.36";
     config = ../hosts/nc-um350.nix;
@@ -73,12 +65,6 @@
     config = ../hosts/nexus.nix;
     hw = ../hw/proxmox.nix;
     system = system.x86_64-linux;
-  };
-
-  nixpi3 = {
-    config = ../hosts/nixpi3.nix;
-    hw = ../hw/sd-image-pi3.nix;
-    system = system.aarch64-linux;
   };
 
   ryzen = {
