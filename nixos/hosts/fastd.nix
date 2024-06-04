@@ -95,6 +95,6 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [
-    config.services.postgresql.port
+    config.services.postgresql.settings.port
   ];
 }
