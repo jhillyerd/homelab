@@ -165,8 +165,8 @@ in
           dmenu
           dunst
           firefox
+          gedit
           gimp
-          gnome3.gedit
           google-chrome
           i3-balance-workspace
           libnotify # for notify-send
@@ -195,14 +195,14 @@ in
 
       services.xserver = {
         enable = true;
-        layout = "us";
-
-        libinput.enable = true;
-        libinput.mouse.accelProfile = "flat";
+        xkb.layout = "us";
 
         windowManager.i3.enable = true;
         windowManager.awesome.enable = true;
       };
+
+      services.libinput.enable = true;
+      services.libinput.mouse.accelProfile = "flat";
 
       fonts.packages = with pkgs; [
         fira-code
@@ -221,7 +221,7 @@ in
       services.printing.enable = true;
       services.avahi = {
         enable = true;
-        nssmdns = true;
+        nssmdns4 = true;
         openFirewall = true;
       };
     })
