@@ -1,4 +1,10 @@
 { system }: {
+  carbon = {
+    config = ../hosts/carbon.nix;
+    hw = ../hw/tp-x1g3.nix;
+    system = system.x86_64-linux;
+  };
+
   ci-runner1 = {
     ip.priv = "192.168.131.4";
     config = ../hosts/ci-runner.nix;
