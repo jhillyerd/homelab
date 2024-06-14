@@ -33,7 +33,39 @@
 
   services.fstrim.enable = true;
 
+  # nvidia graphics card setup.
+  hardware.opengl.enable = true;
+  hardware.nvidia.package =
+    config.boot.kernelPackages.nvidiaPackages.stable;
+
+  services.xserver = {
+    videoDrivers = [ "nvidia" ];
+    dpi = 96;
+    enableCtrlAltBackspace = true;
+
+    xrandrHeads = [
+      {
+        output = "DP-2";
+        primary = true;
+      }
+    ];
+
+    # Pipeline prevents screen tearing.
+    screenSection = ''
+      Option "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+      Option "AllowIndirectGLXProtocol" "off"
+      Option "TripleBuffer" "on"
+    '';
+  };
+
+  fonts.fontconfig = {
+    antialias = true;
+    subpixel.rgba = "rgb";
+  };
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.nvidia.modesetting.enable = true; # for udev events
+  hardware.nvidia.open = true;
 }
