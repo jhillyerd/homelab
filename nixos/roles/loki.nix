@@ -56,6 +56,7 @@ in
           retention_enabled = true;
           retention_delete_delay = "2h";
           retention_delete_worker_count = 30;
+          delete_request_store = "filesystem";
         };
 
         limits_config.retention_period = "2160h"; # 90d
@@ -85,7 +86,6 @@ in
           filesystem.directory = "chunks";
           tsdb_shipper = {
             active_index_directory = "tsdb_active_index";
-            shared_store = "filesystem";
             cache_location = "tsdb_cache";
           };
         };
