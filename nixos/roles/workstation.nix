@@ -215,6 +215,11 @@ in
       # Enable sound.
       sound.enable = true;
       hardware.pulseaudio.enable = true;
+      hardware.pulseaudio.package = pkgs.pulseaudioFull;
+
+      hardware.bluetooth.enable = true;
+      hardware.bluetooth.powerOnBoot = true;
+      services.blueman.enable = true;
 
       # IPP Printer support.
       services.printing.enable = true;
