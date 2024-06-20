@@ -198,7 +198,6 @@ in
         xkb.layout = "us";
 
         windowManager.i3.enable = true;
-        windowManager.awesome.enable = true;
       };
 
       services.libinput.enable = true;
