@@ -162,6 +162,7 @@ in
         in
         (with pkgs;
         [
+          audacity
           dmenu
           dunst
           firefox
