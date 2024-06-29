@@ -57,6 +57,7 @@
     startAt = lib.mkForce "*:07:00";
 
     after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
   };
 
   age.secrets = {
