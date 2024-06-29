@@ -2,7 +2,7 @@
 { nixpkgs, agenix, hw-gauge, ... }@inputs: catalog:
 let
   inherit (nixpkgs.lib)
-    mapAttrs mapAttrs' nixosSystem splitString;
+    mapAttrs nixosSystem splitString;
 
   authorizedKeys = splitString "\n" (builtins.readFile ../../authorized_keys.txt);
 
@@ -45,25 +45,11 @@ let
       hostId = node.hostId or null;
     };
   };
-
-  # Bare metal systems; in production environment.
-  metalSystems = mapAttrs
-    (hostName: node:
-      mkSystem {
-        inherit hostName node;
-        environment = "prod";
-      })
-    catalog.nodes;
-
-  # libvirtd systems, name prefixed with "virt-"; in test environment.
-  libvirtSystems = mapAttrs'
-    (hostName: node: {
-      name = "virt-${hostName}";
-      value = mkSystem {
-        inherit hostName node;
-        hardware = ../hw/qemu.nix;
-      };
-    })
-    catalog.nodes;
 in
-metalSystems // libvirtSystems
+mapAttrs
+  (hostName: node:
+  mkSystem {
+    inherit hostName node;
+    environment = "prod";
+  })
+  catalog.nodes
