@@ -1,13 +1,13 @@
-{ config, pkgs, lib, catalog, environment, ... }:
-with lib;
-let cfg = config.roles.cluster-volumes;
+{ config, lib, catalog, environment, ... }:
+let
+  cfg = config.roles.cluster-volumes;
 in
 {
   options.roles.cluster-volumes = {
-    enable = mkEnableOption "Enable NFS mount of catalog cluster volumes";
+    enable = lib.mkEnableOption "Enable NFS mount of catalog cluster volumes";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     fileSystems = {
       "/mnt/skynas" = {
         device = "192.168.1.20:/volume1/cluster_${environment}";
@@ -28,6 +28,7 @@ in
         '')
         catalog.nomad.skynas-host-volumes);
 
+      wants = [ "network-online.target" "remote-fs.target" ];
       after = [ "network-online.target" "remote-fs.target" ];
       wantedBy = [ "nomad.service" ];
       before = [ "nomad.service" ];
