@@ -1,5 +1,5 @@
-{ config, lib, pkgs, environment, catalog, self, ... }: {
-  imports = [ ../common.nix ];
+{ lib, catalog, self, ... }: {
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   roles.dns.bind.enable = true;
   roles.dns.bind.serveLocalZones = false;

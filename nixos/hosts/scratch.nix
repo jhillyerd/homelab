@@ -1,6 +1,6 @@
 # A scratch host for building up new service configurations.
 { self, util, ... }: {
-  imports = [ ../common.nix ];
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   systemd.network.networks = util.mkClusterNetworks self;
 

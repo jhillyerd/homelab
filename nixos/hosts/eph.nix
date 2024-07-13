@@ -1,5 +1,5 @@
-{ config, pkgs, environment, catalog, self, util, ... }: {
-  imports = [ ../common.nix ];
+{ environment, self, util, ... }: {
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   roles.tailscale.enable = true;
 

@@ -1,5 +1,5 @@
-{ pkgs, lib, config, catalog, ... }: {
-  imports = [ ../common.nix ];
+{ lib, config, catalog, ... }: {
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   roles.cluster-volumes.enable = true;
 

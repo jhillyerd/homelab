@@ -1,5 +1,5 @@
 { config, self, util, ... }: {
-  imports = [ ../common.nix ];
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   boot.supportedFilesystems = [ "zfs" ];
 

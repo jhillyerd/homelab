@@ -1,5 +1,5 @@
-{ config, pkgs, lib, environment, catalog, self, util, ... }: {
-  imports = [ ../common.nix ];
+{ config, catalog, self, util, ... }: {
+  imports = [ ../common.nix ../common/onprem.nix ];
 
   fileSystems."/var" = {
     device = "/dev/disk/by-label/var";
