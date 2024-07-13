@@ -3,17 +3,15 @@
 , authorizedKeys
 , hostName
 , environment
-, nixpkgs
 , ...
 }: {
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 
   imports = [ ./common/packages.nix ./roles ];
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
   nixpkgs.config.allowUnfree = true;
 
   nix = {
-    nixPath = [ "nixpkgs=${nixpkgs}" ];
     optimise.automatic = true;
 
     gc = {

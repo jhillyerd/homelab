@@ -1,4 +1,4 @@
-{ lib, ... }: {
+{ ... }: {
   imports = [ ../common.nix ];
 
   roles.workstation.enable = true;
@@ -20,6 +20,4 @@
   };
 
   virtualisation.libvirtd.enable = true;
-
-  system.stateVersion = lib.mkOverride 0 "24.05";
 }
