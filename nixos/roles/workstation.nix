@@ -10,7 +10,7 @@ in
   };
 
   config = mkMerge [
-    # Base workstation configuration.
+    # Base non-graphical workstation configuration.
     (mkIf cfg.enable {
       environment.systemPackages =
         let
@@ -22,9 +22,9 @@ in
           bashmount
           cachix
           chezmoi
+          docker-compose
           fzf
           gitAndTools.gh
-          gitAndTools.git-absorb
           gcc
           gnumake
           kitty # always install for terminfo
