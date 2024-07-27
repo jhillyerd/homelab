@@ -2,10 +2,10 @@
   description = "my nixos & ansible configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    agenix.url = "github:ryantm/agenix/0.13.0";
+    agenix.url = "github:ryantm/agenix/0.15.0";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
@@ -29,10 +29,9 @@
               nomad_1_6
               openssl
               platformio
-              rnix-lsp
               sshpass
             ]) ++ [
-              agenix.defaultPackage.${system}
+              agenix.packages.${system}.default
               unstable.octodns
               unstable.octodns-providers.bind
             ];
