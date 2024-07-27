@@ -11,7 +11,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, flake-utils, agenix }:
+  outputs = { nixpkgs, nixpkgs-unstable, flake-utils, agenix, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -20,20 +20,21 @@
         in
         {
           devShell = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              agenix.defaultPackage.${system}
+            buildInputs = (with pkgs; [
               ansible
               cfssl
               consul
               esphome
               kubectl
               nomad_1_6
-              unstable.octodns
-              unstable.octodns-providers.bind
               openssl
               platformio
               rnix-lsp
               sshpass
+            ]) ++ [
+              agenix.defaultPackage.${system}
+              unstable.octodns
+              unstable.octodns-providers.bind
             ];
           };
         }
