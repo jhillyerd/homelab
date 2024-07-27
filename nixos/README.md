@@ -62,6 +62,9 @@ sudo dd bs=4M conv=fsync if=result/sd-image/*-linux.img of=/dev/sdX
 
 ## Convenience scripts
 
+**Note:** These are obsoleted by my deployment TUI:
+https://github.com/jhillyerd/labcoat/
+
 When iterating on my homelab, I often repeat the following steps:
 
 1. Check an existing node for failed services, uptime, and disk space
@@ -92,10 +95,3 @@ nc-um350-1   [2024-01-21 16:39:14 -0800] ebece50 dns: forward local zones on nom
 metrics      [2024-01-21 16:47:48 -0800] da374b9 k3s: add first node
 kube1        [2024-01-22 10:39:26 -0800] 266e67f catalog: organize default.nix
 ```
-
-## Notes
-
-### Cachix
-
-This flake sets up devenv for workstations, which is an expensive build.
-Run `cachix use devenv` to enable the devenv build cache.

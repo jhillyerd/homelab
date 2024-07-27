@@ -16,8 +16,6 @@
       nixpkgs.follows = "nixpkgs";
     };
 
-    devenv.url = "github:cachix/devenv/v0.6";
-
     homesite.url = "github:jhillyerd/homesite/main";
     homesite.inputs = {
       flake-utils.follows = "flake-utils";

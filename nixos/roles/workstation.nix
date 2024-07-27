@@ -1,4 +1,4 @@
-{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, devenv, nixd-flake, ... }:
+{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, nixd-flake, ... }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
   cfg = config.roles.workstation;
@@ -50,7 +50,6 @@ in
           yaml-language-server
           zip
         ]) ++ [
-          devenv.packages.${system}.devenv
           nixd-flake.packages.${system}.nixd
           unstable.rust-analyzer
         ];
