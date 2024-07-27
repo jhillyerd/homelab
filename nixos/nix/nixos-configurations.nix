@@ -32,7 +32,7 @@ let
         (nodeModule node)
         hardware
         node.config
-        agenix.nixosModule
+        agenix.nixosModules.default
         hw-gauge.nixosModules.default
       ];
     };
