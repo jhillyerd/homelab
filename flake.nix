@@ -26,7 +26,7 @@
               consul
               esphome
               kubectl
-              nomad_1_6
+              nomad_1_7
               openssl
               platformio
               sshpass
