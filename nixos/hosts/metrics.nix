@@ -25,6 +25,7 @@
       telegraf-hosts = {
         user = "telegraf";
         passwordFile = config.age.secrets.influxdb-telegraf.path;
+        retention = "26w";
       };
     };
   };

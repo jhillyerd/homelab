@@ -30,6 +30,7 @@ in
         options = {
           user = mkOption { type = str; };
           passwordFile = mkOption { type = str; };
+          retention = mkOption { type = str; default = "104w"; };
         };
       });
       description = "Influx databases";
@@ -43,6 +44,7 @@ in
         CREATE DATABASE "${name}";
         CREATE USER "${db.user}" WITH PASSWORD '$(< ${db.passwordFile})';
         GRANT ALL ON "${name}" TO "${db.user}";
+        ALTER RETENTION POLICY "autogen" ON "${name}" DURATION ${db.retention};
       '';
 
       initSql = lib.concatStringsSep "\n" (mapAttrsToList createDb cfg.databases);
