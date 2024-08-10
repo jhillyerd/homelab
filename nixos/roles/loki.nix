@@ -63,13 +63,6 @@ in
 
         schema_config.configs = [
           {
-            from = "2021-01-01";
-            store = "boltdb";
-            object_store = "filesystem";
-            schema = "v11";
-            index.prefix = "index_";
-          }
-          {
             from = "2024-05-02";
             store = "tsdb";
             object_store = "filesystem";
@@ -82,7 +75,6 @@ in
         ];
 
         storage_config = {
-          boltdb.directory = "index";
           filesystem.directory = "chunks";
           tsdb_shipper = {
             active_index_directory = "tsdb_active_index";
