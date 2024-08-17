@@ -44,6 +44,51 @@ in
     };
   };
 
-  "octodns/internal-zones/bytemonkey.org.yaml" = import ./bytemonkey.nix inputs target;
+  # Cloudflare octodns config.
+  "octodns/cloudflare-config.yaml" = {
+    manager = {
+      max_workers = 1;
+      enable_checksum = true;
+      processors = [ "meta" "preserve-names" ];
+    };
+
+    providers = {
+      zones = {
+        class = "octodns.provider.yaml.YamlProvider";
+        directory = "./external-zones";
+        default_ttl = 600;
+        enforce_order = true;
+      };
+
+      cloudflare = {
+        class = "octodns_cloudflare.CloudflareProvider";
+        token = "env/CLOUDFLARE_TOKEN";
+      };
+    };
+
+    zones = {
+      "*" = {
+        sources = [ "zones" ];
+        targets = [ "cloudflare" ];
+      };
+    };
+
+    processors = {
+      meta = {
+        class = "octodns.processor.meta.MetaProcessor";
+        record_name = "octodns-meta";
+        include_provider = true;
+      };
+
+      preserve-names = {
+        class = "octodns.processor.filter.NameRejectlistFilter";
+        rejectlist = [ "home" ];
+      };
+    };
+  };
+
+  "octodns/internal-zones/bytemonkey.org.yaml" = import ./bytemonkey-int.nix inputs target;
   "octodns/internal-zones/home.arpa.yaml" = import ./home.nix inputs target;
+
+  "octodns/external-zones/bytemonkey.org.yaml" = import ./bytemonkey-ext.nix inputs target;
 }

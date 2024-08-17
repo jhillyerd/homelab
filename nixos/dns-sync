@@ -5,3 +5,4 @@ nix build ".#confgen"; or exit
 cd result/octodns; or exit
 
 octodns-sync --config-file=./internal-config.yaml $argv
+octodns-sync --config-file=./cloudflare-config.yaml $argv

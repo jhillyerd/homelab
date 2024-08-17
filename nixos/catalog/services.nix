@@ -38,7 +38,6 @@
     title = "Consul";
 
     dns.intCname = true;
-    dns.extCname = true;
 
     dash.icon = "svg/consul.svg";
 

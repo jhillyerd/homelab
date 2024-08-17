@@ -19,23 +19,28 @@
           unstable = nixpkgs-unstable.legacyPackages.${system};
         in
         {
-          devShell = pkgs.mkShell {
-            buildInputs = (with pkgs; [
-              ansible
-              cfssl
-              consul
-              esphome
-              kubectl
-              nomad_1_7
-              openssl
-              platformio
-              sshpass
-            ]) ++ [
-              agenix.packages.${system}.default
-              unstable.octodns
-              unstable.octodns-providers.bind
-            ];
-          };
+          devShell =
+            let
+              octodns-cloudflare = pkgs.python3Packages.callPackage ./pkgs/octodns-cloudflare.nix { };
+            in
+            pkgs.mkShell {
+              buildInputs = (with pkgs; [
+                ansible
+                cfssl
+                consul
+                esphome
+                kubectl
+                nomad_1_7
+                octodns
+                octodns-providers.bind
+                openssl
+                platformio
+                sshpass
+              ]) ++ [
+                agenix.packages.${system}.default
+                octodns-cloudflare
+              ];
+            };
         }
       );
 }
