@@ -27,12 +27,6 @@
       flake-utils.follows = "flake-utils";
       nixpkgs.follows = "nixpkgs";
     };
-
-    terranix.url = "github:terranix/terranix";
-    terranix.inputs = {
-      flake-utils.follows = "flake-utils";
-      nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -62,12 +56,5 @@
           {
             confgen = confgen system;
           });
-
-      # Homelab commands.
-      apps =
-        let
-          tf-apps = import ./terraform/apps.nix inputs catalog;
-        in
-        eachSystemMap [ system.x86_64-linux ] tf-apps;
     };
 }
