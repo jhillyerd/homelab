@@ -60,9 +60,11 @@
       "grafana-storage"
       "homeassistant-data"
       "nodered-data"
+      "piper-data"
       "satisfactory-data"
       "waypoint-runner-data"
       "waypoint-server-data"
+      "whisper-data"
       "zwavejs-data"
     ];
   };
