@@ -6,7 +6,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
 
-    nixd-flake.url = "github:nix-community/nixd/2.3.2";
+    nixd-flake.url = "github:nix-community/nixd/2.4.0";
     nixd-flake.inputs = {
       nixpkgs.follows = "nixpkgs-unstable";
     };
