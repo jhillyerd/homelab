@@ -60,7 +60,7 @@ in
 
         # Install extra HCL file to hold encryption key.
         extraConfigFiles =
-          [ config.roles.template.files."consul-encrypt.hcl".path ];
+          [ config.age-template.files."consul-encrypt.hcl".path ];
       };
 
       age.secrets = {
@@ -68,7 +68,7 @@ in
       };
 
       # Create envfiles containing encryption keys.
-      roles.template.files = {
+      age-template.files = {
         "consul-encrypt.hcl" = {
           vars.encrypt = config.age.secrets.consul-encrypt.path;
           content = ''encrypt = "$encrypt"'';
@@ -138,11 +138,11 @@ in
 
         # Install extra HCL file to hold encryption key.
         extraConfigFiles =
-          [ config.roles.template.files."consul-agent-token.hcl".path ];
+          [ config.age-template.files."consul-agent-token.hcl".path ];
       };
 
       # Template config file for agent token.
-      roles.template.files = {
+      age-template.files = {
         "consul-agent-token.hcl" = {
           vars.token = config.age.secrets.consul-agent-token.path;
           content = ''acl { tokens { default = "$token" } }'';

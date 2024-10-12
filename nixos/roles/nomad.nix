@@ -1,4 +1,4 @@
-{ config, pkgs, lib, catalog, ... }:
+{ config, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.roles.nomad;
@@ -90,7 +90,7 @@ in
       };
 
       # Create envfiles containing encryption keys.
-      roles.template.files = {
+      age-template.files = {
         "nomad-secrets.hcl" = {
           vars = {
             consulToken = config.age.secrets.nomad-consul-token.path;
@@ -154,7 +154,7 @@ in
 
         # Install extra HCL file to hold secrets.
         extraSettingsPaths =
-          [ config.roles.template.files."nomad-secrets.hcl".path ];
+          [ config.age-template.files."nomad-secrets.hcl".path ];
       };
 
       networking.firewall.allowedTCPPorts = [ 4646 4647 ];

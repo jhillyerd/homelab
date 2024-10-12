@@ -158,7 +158,7 @@ in
       traefik-consul-token.file = ../secrets/traefik-consul-token.age;
     };
 
-    roles.template.files."traefik.env" = {
+    age-template.files."traefik.env" = {
       vars = {
         cfDnsToken = cfg.cloudflareDnsApiTokenFile;
         consulToken = config.age.secrets.traefik-consul-token.path;
@@ -170,7 +170,7 @@ in
     };
 
     systemd.services.traefik.serviceConfig.EnvironmentFile =
-      [ config.roles.template.files."traefik.env".path ];
+      [ config.age-template.files."traefik.env".path ];
 
     # TODO: autogenerate this list from catalog entrypoints
     networking.firewall.allowedTCPPorts = [ 25 80 222 443 8443 ];
