@@ -1,5 +1,5 @@
 # Builds nixosConfigurations flake output.
-{ nixpkgs, agenix, hw-gauge, ... }@inputs: catalog:
+{ nixpkgs, agenix, agenix-template, hw-gauge, ... }@inputs: catalog:
 let
   inherit (nixpkgs.lib)
     mapAttrs nixosSystem splitString;
@@ -33,6 +33,7 @@ let
         hardware
         node.config
         agenix.nixosModules.default
+        agenix-template.nixosModules.default
         hw-gauge.nixosModules.default
       ];
     };

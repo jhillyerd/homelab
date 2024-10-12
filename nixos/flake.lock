@@ -23,6 +23,22 @@
         "type": "github"
       }
     },
+    "agenix-template": {
+      "locked": {
+        "lastModified": 1728759042,
+        "narHash": "sha256-DH5nAQy/8PPTNVhhP3DV3TVeturVfIfpO19WvS0YwIQ=",
+        "owner": "jhillyerd",
+        "repo": "agenix-template",
+        "rev": "926f1540ba3223f4bff8c4bb2ad77e1ab4035ada",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jhillyerd",
+        "ref": "main",
+        "repo": "agenix-template",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -330,6 +346,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "agenix-template": "agenix-template",
         "flake-utils": "flake-utils",
         "homesite": "homesite",
         "hw-gauge": "hw-gauge",

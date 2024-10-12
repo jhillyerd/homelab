@@ -16,6 +16,8 @@
       nixpkgs.follows = "nixpkgs";
     };
 
+    agenix-template.url = "github:jhillyerd/agenix-template/main";
+
     homesite.url = "github:jhillyerd/homesite/main";
     homesite.inputs = {
       flake-utils.follows = "flake-utils";
