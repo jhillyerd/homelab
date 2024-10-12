@@ -1,13 +1,18 @@
 # Common config shared among all machines
-{ pkgs
-, authorizedKeys
-, hostName
-, environment
-, ...
-}: {
+{
+  pkgs,
+  authorizedKeys,
+  hostName,
+  environment,
+  ...
+}:
+{
   system.stateVersion = "24.05";
 
-  imports = [ ./common/packages.nix ./roles ];
+  imports = [
+    ./common/packages.nix
+    ./roles
+  ];
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
   nixpkgs.config.allowUnfree = true;
 
@@ -21,13 +26,10 @@
       randomizedDelaySec = "20min";
     };
 
-    settings.substituters = [
-      "http://nix-cache.service.skynet.consul?priority=10"
-    ];
+    settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
   };
 
-  services.getty.helpLine =
-    ">>> Flake node: ${hostName}, environment: ${environment}";
+  services.getty.helpLine = ">>> Flake node: ${hostName}, environment: ${environment}";
 
   services.openssh = {
     enable = true;

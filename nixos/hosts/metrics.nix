@@ -1,5 +1,15 @@
-{ config, catalog, self, util, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  config,
+  catalog,
+  self,
+  util,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   fileSystems."/var" = {
     device = "/dev/disk/by-label/var";
@@ -38,7 +48,10 @@
     users = {
       admin = {
         passwordFile = config.age.secrets.mqtt-admin.path;
-        acl = [ "readwrite $SYS/#" "readwrite #" ];
+        acl = [
+          "readwrite $SYS/#"
+          "readwrite #"
+        ];
       };
       clock = {
         passwordFile = config.age.secrets.mqtt-clock.path;

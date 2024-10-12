@@ -49,7 +49,10 @@ in
     manager = {
       max_workers = 1;
       enable_checksum = true;
-      processors = [ "meta" "preserve-names" ];
+      processors = [
+        "meta"
+        "preserve-names"
+      ];
     };
 
     providers = {

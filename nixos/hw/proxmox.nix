@@ -1,5 +1,6 @@
 # Proxmox VE Guest Hardware
-{ lib, modulesPath, ... }: {
+{ lib, modulesPath, ... }:
+{
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
 

@@ -1,7 +1,21 @@
-{ config, lib, pkgs, modulesPath, ... }: {
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" ];
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
+{
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+  ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "jc42" "kvm-amd" ];
+  boot.kernelModules = [
+    "jc42"
+    "kvm-amd"
+  ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ ];
 
   # Use the systemd-boot EFI boot loader.
@@ -20,8 +34,7 @@
 
   # nvidia graphics card setup.
   hardware.opengl.enable = true;
-  hardware.nvidia.package =
-    config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   services.xserver = {
     dpi = 96;
     videoDrivers = [ "nvidia" ];
@@ -48,5 +61,5 @@
     fsType = "ext4";
   };
 
-  swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
+  swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 }

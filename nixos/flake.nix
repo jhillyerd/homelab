@@ -45,18 +45,17 @@
       nixosConfigurations = import ./nix/nixos-configurations.nix inputs catalog;
 
       # Generate an SD card image for each node in the catalog.
-      images = mapAttrs
-        (host: node: nixosConfigurations.${host}.config.system.build.sdImage)
-        catalog.nodes;
+      images = mapAttrs (
+        host: node: nixosConfigurations.${host}.config.system.build.sdImage
+      ) catalog.nodes;
 
       # Configuration generators.
       packages =
         let
           confgen = import ./confgen inputs catalog;
         in
-        eachSystemMap [ system.x86_64-linux ] (system:
-          {
-            confgen = confgen system;
-          });
+        eachSystemMap [ system.x86_64-linux ] (system: {
+          confgen = confgen system;
+        });
     };
 }

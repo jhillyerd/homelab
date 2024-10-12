@@ -1,5 +1,16 @@
-{ config, lib, catalog, self, util, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  config,
+  lib,
+  catalog,
+  self,
+  util,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
@@ -19,7 +30,7 @@
 
       # Enables embedded etcd on leader node.
       clusterInit = isLeader;
-      serverAddr = lib.mkIf (! isLeader) "https://${leader.ip.priv}:6443";
+      serverAddr = lib.mkIf (!isLeader) "https://${leader.ip.priv}:6443";
       extraFlags = "--egress-selector-mode pod";
 
       tokenFile = config.age.secrets.k3s-token.path;

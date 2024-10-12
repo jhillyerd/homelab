@@ -1,4 +1,5 @@
-{ pkgs, nixpkgs-unstable, ... }: {
+{ pkgs, nixpkgs-unstable, ... }:
+{
   environment.systemPackages =
     let
       unstable = nixpkgs-unstable.legacyPackages.${pkgs.system};
@@ -25,7 +26,7 @@
       smartmontools
       tree
       wget
-    ]) ++ (with unstable; [
-      neovim
-    ]) ++ remaps;
+    ])
+    ++ (with unstable; [ neovim ])
+    ++ remaps;
 }

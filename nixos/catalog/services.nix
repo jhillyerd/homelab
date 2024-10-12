@@ -1,4 +1,10 @@
-{ nodes, consul, nomad, k3s }: {
+{
+  nodes,
+  consul,
+  nomad,
+  k3s,
+}:
+{
   # The services block populates my dashboard and configures the load balancer.
   #
   # The key-name of each service block is mapped to an internal domain name

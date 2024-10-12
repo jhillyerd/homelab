@@ -1,5 +1,15 @@
-{ config, catalog, self, util, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  config,
+  catalog,
+  self,
+  util,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";

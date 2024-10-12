@@ -11,20 +11,31 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, nixpkgs-unstable, flake-utils, agenix, ... }:
-    flake-utils.lib.eachDefaultSystem
-      (system:
-        let
-          pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-          unstable = nixpkgs-unstable.legacyPackages.${system};
-        in
-        {
-          devShell =
-            let
-              octodns-cloudflare = pkgs.python3Packages.callPackage ./pkgs/octodns-cloudflare.nix { };
-            in
-            pkgs.mkShell {
-              buildInputs = (with pkgs; [
+  outputs =
+    {
+      nixpkgs,
+      nixpkgs-unstable,
+      flake-utils,
+      agenix,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        };
+        unstable = nixpkgs-unstable.legacyPackages.${system};
+      in
+      {
+        devShell =
+          let
+            octodns-cloudflare = pkgs.python3Packages.callPackage ./pkgs/octodns-cloudflare.nix { };
+          in
+          pkgs.mkShell {
+            buildInputs =
+              (with pkgs; [
                 ansible
                 cfssl
                 consul
@@ -36,11 +47,12 @@
                 openssl
                 platformio
                 sshpass
-              ]) ++ [
+              ])
+              ++ [
                 agenix.packages.${system}.default
                 octodns-cloudflare
               ];
-            };
-        }
-      );
+          };
+      }
+    );
 }

@@ -1,5 +1,13 @@
-{ config, lib, ... }: {
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+{ config, lib, ... }:
+{
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
@@ -11,17 +19,15 @@
     timeout = 10;
   };
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/c6fb5461-1de7-4764-b313-2de767ccb836";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/c6fb5461-1de7-4764-b313-2de767ccb836";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot/efi" =
-    {
-      device = "/dev/disk/by-uuid/5C34-C3D2";
-      fsType = "vfat";
-    };
+  fileSystems."/boot/efi" = {
+    device = "/dev/disk/by-uuid/5C34-C3D2";
+    fsType = "vfat";
+  };
 
   swapDevices = [ ];
 
@@ -35,8 +41,7 @@
 
   # nvidia graphics card setup.
   hardware.opengl.enable = true;
-  hardware.nvidia.package =
-    config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   services.xserver = {
     dpi = 96;
     videoDrivers = [ "nvidia" ];

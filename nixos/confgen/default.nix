@@ -1,4 +1,5 @@
-{ nixpkgs, ... }: catalog: system:
+{ nixpkgs, ... }:
+catalog: system:
 let
   pkgs = nixpkgs.legacyPackages.${system};
 
@@ -7,7 +8,10 @@ in
 pkgs.stdenvNoCC.mkDerivation {
   name = "config-outputs";
 
-  nativeBuildInputs = [ pkgs.jq pkgs.remarshal ];
+  nativeBuildInputs = [
+    pkgs.jq
+    pkgs.remarshal
+  ];
 
   dontUnpack = true;
 
@@ -15,25 +19,24 @@ pkgs.stdenvNoCC.mkDerivation {
   jsonBundle = (builtins.toJSON octodnsBundle);
   passAsFile = [ "jsonBundle" ];
 
-  installPhase =
-    ''
-      mkdir $out
-      cd $out
+  installPhase = ''
+    mkdir $out
+    cd $out
 
-      # Loop over each destination file name from the JSON bundle.
-      jq -r "keys | .[]" $jsonBundlePath | while read fpath; do
-        if [[ -z "$fpath" ]]; then
-          echo "Empty destination file path for config!" >&2
-          exit 1
-        fi
+    # Loop over each destination file name from the JSON bundle.
+    jq -r "keys | .[]" $jsonBundlePath | while read fpath; do
+      if [[ -z "$fpath" ]]; then
+        echo "Empty destination file path for config!" >&2
+        exit 1
+      fi
 
-        # Create destination directory and convert syntax.
-        mkdir -p $(dirname "$fpath")
-        if [[ "$fpath" == *.yaml ]]; then
-          jq ".[\"$fpath\"]" $jsonBundlePath | json2yaml > "$fpath"
-        else
-          jq ".[\"$fpath\"]" $jsonBundlePath > "$fpath"
-        fi
-      done
-    '';
+      # Create destination directory and convert syntax.
+      mkdir -p $(dirname "$fpath")
+      if [[ "$fpath" == *.yaml ]]; then
+        jq ".[\"$fpath\"]" $jsonBundlePath | json2yaml > "$fpath"
+      else
+        jq ".[\"$fpath\"]" $jsonBundlePath > "$fpath"
+      fi
+    done
+  '';
 }

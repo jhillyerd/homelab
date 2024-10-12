@@ -1,5 +1,6 @@
 # QEMU Guest Hardware
-{ lib, modulesPath, ... }: {
+{ lib, modulesPath, ... }:
+{
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
 
@@ -9,8 +10,12 @@
   # Hardware configuration
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules =
-    [ "ahci" "xhci_pci" "virtio_pci" "virtio_blk" ];
+  boot.initrd.availableKernelModules = [
+    "ahci"
+    "xhci_pci"
+    "virtio_pci"
+    "virtio_blk"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];

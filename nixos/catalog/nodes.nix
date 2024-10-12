@@ -1,4 +1,5 @@
-{ system }: {
+{ system }:
+{
   carbon = {
     config = ../hosts/carbon.nix;
     hw = ../hw/tp-x1g3.nix;

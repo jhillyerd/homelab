@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   # Telegraf monitoring config.
   http_response = [
     {

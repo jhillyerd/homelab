@@ -32,7 +32,7 @@ in
           lynx
           mqttui
           nfs-utils
-          nixpkgs-fmt
+          nixfmt-rfc-style
           nixpkgs-review
           nodejs
           patchelf

@@ -1,7 +1,15 @@
 # Catalog defines the systems & services on my network.
-{ system }: rec {
+{ system }:
+rec {
   nodes = import ./nodes.nix { inherit system; };
-  services = import ./services.nix { inherit nodes consul nomad k3s; };
+  services = import ./services.nix {
+    inherit
+      nodes
+      consul
+      nomad
+      k3s
+      ;
+  };
   monitors = import ./monitors.nix { };
 
   # Common config across most machines.
@@ -85,15 +93,34 @@
   layout = [
     {
       section = "Services";
-      services = [ "gitea" "grafana" "homeassistant" "inbucket" "nodered" "fluidd" ];
+      services = [
+        "gitea"
+        "grafana"
+        "homeassistant"
+        "inbucket"
+        "nodered"
+        "fluidd"
+      ];
     }
     {
       section = "Cluster";
-      services = [ "consul" "nomad" "proxmox" "dockreg" "argocd" ];
+      services = [
+        "consul"
+        "nomad"
+        "proxmox"
+        "dockreg"
+        "argocd"
+      ];
     }
     {
       section = "Infrastructure";
-      services = [ "modem" "skynas" "traefik" "unifi" "zwavejs" ];
+      services = [
+        "modem"
+        "skynas"
+        "traefik"
+        "unifi"
+        "zwavejs"
+      ];
     }
   ];
 }

@@ -1,5 +1,14 @@
-{ lib, config, catalog, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  lib,
+  config,
+  catalog,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   roles.cluster-volumes.enable = true;
 
@@ -17,16 +26,17 @@
 
     retryJoin = catalog.nomad.servers;
 
-    hostVolumes = lib.genAttrs catalog.nomad.skynas-host-volumes
-      (name: {
+    hostVolumes =
+      lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
         path = "/mnt/skynas/${name}";
         readOnly = false;
-      }) // {
-      "docker-sock-ro" = {
-        path = "/var/run/docker.sock";
-        readOnly = true;
+      })
+      // {
+        "docker-sock-ro" = {
+          path = "/var/run/docker.sock";
+          readOnly = true;
+        };
       };
-    };
 
     # USB plugin doesn't seem to work.
     # usb = {

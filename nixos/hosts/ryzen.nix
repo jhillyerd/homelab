@@ -1,5 +1,9 @@
-{ environment, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{ environment, ... }:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   roles.tailscale.enable = true;
 

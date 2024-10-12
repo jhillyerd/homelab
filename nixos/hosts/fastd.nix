@@ -1,5 +1,14 @@
-{ config, self, util, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  config,
+  self,
+  util,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   boot.supportedFilesystems = [ "zfs" ];
 
@@ -15,7 +24,10 @@
       host all all all scram-sha-256
     '';
 
-    ensureDatabases = [ "root" "gitea" ];
+    ensureDatabases = [
+      "root"
+      "gitea"
+    ];
     ensureUsers = [
       {
         name = "root";
@@ -94,7 +106,5 @@
   systemd.network.networks = util.mkClusterNetworks self;
 
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [
-    config.services.postgresql.settings.port
-  ];
+  networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
 }

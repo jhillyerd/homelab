@@ -1,7 +1,16 @@
 # Setup for on-premises machines
-{ config, options, catalog, ... }: {
+{
+  config,
+  options,
+  catalog,
+  ...
+}:
+{
   networking = {
-    search = [ "home.arpa" "dyn.home.arpa" ];
+    search = [
+      "home.arpa"
+      "dyn.home.arpa"
+    ];
     timeServers = [ "ntp.home.arpa" ] ++ options.networking.timeServers.default;
   };
 

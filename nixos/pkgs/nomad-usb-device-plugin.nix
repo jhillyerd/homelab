@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitLab, pkg-config, libusb1 }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  pkg-config,
+  libusb1,
+}:
 buildGoModule rec {
   pname = "nomad-usb-device-plugin";
   version = "0.4.0";
@@ -13,6 +19,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-gf2E7DTAGTjoo3nEjcix3qWjHJHudlR7x9XJODvb2sk=";
 
-  nativeBuildInputs = [ pkg-config libusb1 ];
+  nativeBuildInputs = [
+    pkg-config
+    libusb1
+  ];
   buildInputs = [ libusb1 ];
 }

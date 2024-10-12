@@ -1,5 +1,14 @@
-{ config, self, util, ... }: {
-  imports = [ ../common.nix ../common/onprem.nix ];
+{
+  config,
+  self,
+  util,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+  ];
 
   systemd.network.networks = util.mkClusterNetworks self;
 

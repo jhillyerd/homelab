@@ -1,8 +1,14 @@
 # Builds nixosConfigurations flake output.
-{ nixpkgs, agenix, agenix-template, hw-gauge, ... }@inputs: catalog:
+{
+  nixpkgs,
+  agenix,
+  agenix-template,
+  hw-gauge,
+  ...
+}@inputs:
+catalog:
 let
-  inherit (nixpkgs.lib)
-    mapAttrs nixosSystem splitString;
+  inherit (nixpkgs.lib) mapAttrs nixosSystem splitString;
 
   authorizedKeys = splitString "\n" (builtins.readFile ../../authorized_keys.txt);
 
@@ -11,11 +17,12 @@ let
   # Creates a nixosSystem attribute set for the specified node, allowing
   # the node config to be overridden.
   mkSystem =
-    { hostName
-    , node
-    , hardware ? node.hw
-    , modules ? [ ]
-    , environment ? "test"
+    {
+      hostName,
+      node,
+      hardware ? node.hw,
+      modules ? [ ],
+      environment ? "test",
     }:
     nixosSystem {
       system = node.system;
@@ -24,7 +31,13 @@ let
       # hosts and roles.  `self` lets a host reference aspects of
       # itself.
       specialArgs = inputs // {
-        inherit authorizedKeys catalog environment hostName util;
+        inherit
+          authorizedKeys
+          catalog
+          environment
+          hostName
+          util
+          ;
         self = node;
       };
 
@@ -39,18 +52,21 @@ let
     };
 
   # Common system config built from node entry.
-  nodeModule = node: { hostName, ... }: {
-    networking = {
-      inherit hostName;
-      domain = "home.arpa";
-      hostId = node.hostId or null;
+  nodeModule =
+    node:
+    { hostName, ... }:
+    {
+      networking = {
+        inherit hostName;
+        domain = "home.arpa";
+        hostId = node.hostId or null;
+      };
     };
-  };
 in
-mapAttrs
-  (hostName: node:
+mapAttrs (
+  hostName: node:
   mkSystem {
     inherit hostName node;
     environment = "prod";
-  })
-  catalog.nodes
+  }
+) catalog.nodes

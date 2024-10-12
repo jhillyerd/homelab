@@ -1,4 +1,5 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   # Populate systemd.network.networks given a catalog `self` entry.
   mkClusterNetworks = self: {
     # Hardware config defaults to DHCP, make static if ip.priv is set.
@@ -12,7 +13,10 @@
         "192.168.128.37"
         "192.168.128.40"
       ];
-      domains = [ "home.arpa" "dyn.home.arpa" ];
+      domains = [
+        "home.arpa"
+        "dyn.home.arpa"
+      ];
     };
   };
 }
