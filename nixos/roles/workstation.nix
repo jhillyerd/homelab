@@ -227,6 +227,14 @@ in
         nssmdns4 = true;
         openFirewall = true;
       };
+
+      # Mouse button mappings.
+      environment.etc."X11/xorg.conf.d/99-mouse-buttons.conf".text = ''
+        Section "InputClass"
+          Identifier "SONiX Evoluent VerticalMouse D"
+          Option "ButtonMapping" "1 2 3 4 5 6 7 10 9 8"
+        EndSection
+      '';
     })
   ];
 }
