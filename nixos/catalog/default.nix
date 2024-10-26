@@ -10,7 +10,7 @@ rec {
       k3s
       ;
   };
-  monitors = import ./monitors.nix { };
+  monitors = import ./monitors.nix { inherit consul nomad; };
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";

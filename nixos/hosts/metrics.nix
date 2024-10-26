@@ -76,7 +76,7 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   roles.telegraf = {
-    inherit (catalog.monitors) http_response ping;
+    inherit (catalog.monitors) http_response ping x509_certs;
   };
 
   age.secrets = {

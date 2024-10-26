@@ -1,4 +1,4 @@
-{ ... }:
+{ consul, nomad, ... }:
 {
   # Telegraf monitoring config.
   http_response = [
@@ -61,4 +61,9 @@
     "web.home.arpa"
     "witness.home.arpa"
   ];
+
+  x509_certs =
+    [ "https://dash.bytemonkey.org/" ]
+    ++ (map (ip: "https://${ip}:8300") consul.servers)
+    ++ (map (ip: "https://${ip}:4646") nomad.servers);
 }

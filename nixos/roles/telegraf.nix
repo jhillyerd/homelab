@@ -32,6 +32,12 @@ in
       default = false;
     };
 
+    x509_certs = mkOption {
+      type = listOf str;
+      description = "List of URLs to monitor for certificate expiration";
+      default = [];
+    };
+
     zfs = mkOption {
       type = bool;
       description = "Collect ZFS snapshot metrics";
@@ -75,6 +81,8 @@ in
             url = "https://127.0.0.1:4646";
             insecure_skip_verify = true;
           };
+
+          x509_cert.sources = mkIf (length cfg.x509_certs > 0) cfg.x509_certs;
 
           exec = mkIf (cfg.zfs) {
             commands = [ ./files/telegraf/zfs_snap_times.py ];
