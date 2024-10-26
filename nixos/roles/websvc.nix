@@ -1,11 +1,19 @@
-{ config, pkgs, lib, catalog, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  catalog,
+  ...
+}:
 with lib;
 let
   cfg = config.roles.websvc;
 
   # Options configurable per service entry.
-  serviceOptions = with types;
-    { config, ... }: {
+  serviceOptions =
+    with types;
+    { config, ... }:
+    {
       options = {
         name = mkOption {
           type = str;
@@ -64,11 +72,20 @@ let
                 default = "${config.name}.${config.internalDomain}";
               };
 
-              port = mkOption { type = nullOr port; default = null; };
-              path = mkOption { type = path; default = "/"; };
+              port = mkOption {
+                type = nullOr port;
+                default = null;
+              };
+              path = mkOption {
+                type = path;
+                default = "/";
+              };
 
               proto = mkOption {
-                type = enum [ "http" "https" ];
+                type = enum [
+                  "http"
+                  "https"
+                ];
                 default = "https";
               };
             };
@@ -80,11 +97,24 @@ let
           description = "Loadbalancer (traefik) config.";
           type = nullOr (submodule {
             options = {
-              backendUrls = mkOption { type = listOf str; default = [ ]; };
-              checkHost = mkOption { type = nullOr str; default = null; };
-              sticky = mkOption { type = bool; default = false; };
+              backendUrls = mkOption {
+                type = listOf str;
+                default = [ ];
+              };
+              checkHost = mkOption {
+                type = nullOr str;
+                default = null;
+              };
+              sticky = mkOption {
+                type = bool;
+                default = false;
+              };
               auth = mkOption {
-                type = enum [ "none" "external" "both" ];
+                type = enum [
+                  "none"
+                  "external"
+                  "both"
+                ];
                 default = "none";
               };
             };
@@ -116,8 +146,14 @@ in
       description = "Organization of services within dashboard";
       type = listOf (submodule {
         options = {
-          section = mkOption { type = str; description = "Section title"; };
-          services = mkOption { type = listOf str; description = "Service names to include"; };
+          section = mkOption {
+            type = str;
+            description = "Section title";
+          };
+          services = mkOption {
+            type = listOf str;
+            description = "Service names to include";
+          };
         };
       });
     };
@@ -148,18 +184,23 @@ in
             inherit (opt.lb) backendUrls checkHost sticky;
             domainName = "${opt.name}.${cfg.externalDomain}";
             external = true;
-            externalAuth = elem opt.lb.auth [ "external" "both" ];
+            externalAuth = elem opt.lb.auth [
+              "external"
+              "both"
+            ];
           };
         };
       in
       {
         enable = true;
-        autheliaUrl = "http://${toString catalog.authelia.host}:${toString catalog.authelia.port}"
+        autheliaUrl =
+          "http://${toString catalog.authelia.host}:${toString catalog.authelia.port}"
           + "/api/verify?rd=https://auth.x.bytemonkey.org/";
         certificateEmail = catalog.cf-api.user;
         cloudflareDnsApiTokenFile = cfg.cloudflareDnsApiTokenFile;
-        services = (mapAttrs' mkInternalService internalConfigs) //
-          mapAttrs' mkExternalService externalConfigs;
+        services =
+          (mapAttrs' mkInternalService internalConfigs)
+          // mapAttrs' mkExternalService externalConfigs;
       };
 
     roles.homesite =
@@ -169,11 +210,19 @@ in
           services = map mkServiceEntry opt.services;
         };
 
-        mkServiceEntry = name:
-          let opt = cfg.services.${name};
+        mkServiceEntry =
+          name:
+          let
+            opt = cfg.services.${name};
           in
           {
-            inherit (opt.dash) icon host path port proto;
+            inherit (opt.dash)
+              icon
+              host
+              path
+              port
+              proto
+              ;
 
             name = opt.title;
           };

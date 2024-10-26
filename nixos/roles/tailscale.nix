@@ -1,6 +1,13 @@
-{ config, pkgs, lib, catalog, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  catalog,
+  ...
+}:
 with lib;
-let cfg = config.roles.tailscale;
+let
+  cfg = config.roles.tailscale;
 in
 {
   options.roles.tailscale = with types; {

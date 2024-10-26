@@ -1,7 +1,22 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkIf mkOption length;
-  inherit (lib.types) attrs bool listOf str;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    length
+    ;
+  inherit (lib.types)
+    attrs
+    bool
+    listOf
+    str
+    ;
 
   cfg = config.roles.telegraf;
 in
@@ -35,7 +50,7 @@ in
     x509_certs = mkOption {
       type = listOf str;
       description = "List of URLs to monitor for certificate expiration";
-      default = [];
+      default = [ ];
     };
 
     zfs = mkOption {
@@ -51,7 +66,9 @@ in
 
       extraConfig = {
         inputs = {
-          cpu = { percpu = true; };
+          cpu = {
+            percpu = true;
+          };
           disk = { };
           kernel = { };
           mem = { };
@@ -61,21 +78,17 @@ in
           swap = { };
           system = { };
 
-          http_response = mkIf (length cfg.http_response > 0)
-            (map
-              (a: a // {
-                interval = "30s";
-              })
-              cfg.http_response);
+          http_response = mkIf (length cfg.http_response > 0) (
+            map (a: a // { interval = "30s"; }) cfg.http_response
+          );
 
-          ping = mkIf (length cfg.ping > 0)
-            (map
-              (host: {
-                urls = [ host ];
-                interval = "30s";
-                binary = "${pkgs.iputils}/bin/ping";
-              })
-              cfg.ping);
+          ping = mkIf (length cfg.ping > 0) (
+            map (host: {
+              urls = [ host ];
+              interval = "30s";
+              binary = "${pkgs.iputils}/bin/ping";
+            }) cfg.ping
+          );
 
           nomad = mkIf (cfg.nomad) {
             url = "https://127.0.0.1:4646";
@@ -99,8 +112,7 @@ in
         };
       };
 
-      environmentFiles =
-        [ config.age-template.files."telegraf-influx.env".path ];
+      environmentFiles = [ config.age-template.files."telegraf-influx.env".path ];
     };
 
     # Create an environment file containing the influxdb password.

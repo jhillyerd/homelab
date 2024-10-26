@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.roles.nomad;
@@ -145,19 +150,30 @@ in
         extraPackages =
           let
             arch = {
-              any = [ pkgs.cni-plugins pkgs.consul ];
-              x86_64-linux = [ pkgs.qemu_kvm pkgs.getent ];
+              any = [
+                pkgs.cni-plugins
+                pkgs.consul
+              ];
+              x86_64-linux = [
+                pkgs.qemu_kvm
+                pkgs.getent
+              ];
               aarch64-linux = [ ];
             };
           in
-          lib.lists.flatten [ arch.${pkgs.system} arch.any ];
+          lib.lists.flatten [
+            arch.${pkgs.system}
+            arch.any
+          ];
 
         # Install extra HCL file to hold secrets.
-        extraSettingsPaths =
-          [ config.age-template.files."nomad-secrets.hcl".path ];
+        extraSettingsPaths = [ config.age-template.files."nomad-secrets.hcl".path ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 4646 4647 ];
+      networking.firewall.allowedTCPPorts = [
+        4646
+        4647
+      ];
     })
 
     (mkIf cfg.enableServer {
@@ -191,12 +207,12 @@ in
             alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
             cni_path = "${pkgs.cni-plugins}/bin";
 
-            host_volume = mkIf (cfg.hostVolumes != { }) (mapAttrs
-              (name: entry: {
+            host_volume = mkIf (cfg.hostVolumes != { }) (
+              mapAttrs (name: entry: {
                 inherit (entry) path;
                 read_only = entry.readOnly;
-              })
-              cfg.hostVolumes);
+              }) cfg.hostVolumes
+            );
 
             meta = cfg.client.meta;
           };

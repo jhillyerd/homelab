@@ -1,6 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
-let cfg = config.roles.log-forwarder;
+let
+  cfg = config.roles.log-forwarder;
 in
 {
   options.roles.log-forwarder = {
@@ -34,9 +40,7 @@ in
             };
 
             destination d_loki {
-              syslog("${cfg.syslogHost}" transport("tcp") port(${
-                toString cfg.syslogPort
-              }));
+              syslog("${cfg.syslogHost}" transport("tcp") port(${toString cfg.syslogPort}));
             };
 
             log {
@@ -46,19 +50,24 @@ in
           '';
 
           netListener =
-            if cfg.enableTcpListener then ''
-              source s_net {
-                tcp(ip(0.0.0.0) port(514));
-              };
+            if cfg.enableTcpListener then
+              ''
+                source s_net {
+                  tcp(ip(0.0.0.0) port(514));
+                };
 
-              log {
-                source(s_net);
-                destination(d_loki);
-              };
-            '' else
+                log {
+                  source(s_net);
+                  destination(d_loki);
+                };
+              ''
+            else
               "";
         in
-        concatStringsSep "\n" [ base netListener ];
+        concatStringsSep "\n" [
+          base
+          netListener
+        ];
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.enableTcpListener [ 514 ];

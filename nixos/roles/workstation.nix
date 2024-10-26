@@ -1,4 +1,12 @@
-{ config, lib, pkgs, authorizedKeys, nixpkgs-unstable, nixd-flake, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  authorizedKeys,
+  nixpkgs-unstable,
+  nixd-flake,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
   cfg = config.roles.workstation;
@@ -17,8 +25,7 @@ in
           inherit (pkgs) system;
           unstable = nixpkgs-unstable.legacyPackages.${system};
         in
-        (with pkgs;
-        [
+        (with pkgs; [
           bashmount
           cachix
           chezmoi
@@ -49,7 +56,8 @@ in
           watchexec
           yaml-language-server
           zip
-        ]) ++ [
+        ])
+        ++ [
           nixd-flake.packages.${system}.nixd
           unstable.rust-analyzer
         ];
@@ -137,7 +145,10 @@ in
           keep-derivations = true;
           keep-outputs = true;
           log-lines = 25;
-          trusted-users = [ "root" "james" ];
+          trusted-users = [
+            "root"
+            "james"
+          ];
         };
 
         # Enable nix flakes, not yet stable.
@@ -158,8 +169,7 @@ in
             '')
           ];
         in
-        (with pkgs;
-        [
+        (with pkgs; [
           audacity
           dmenu
           dunst
@@ -188,7 +198,8 @@ in
           xorg.xev
           xsecurelock
           xss-lock
-        ]) ++ remaps;
+        ])
+        ++ remaps;
 
       programs.dconf.enable = true;
 

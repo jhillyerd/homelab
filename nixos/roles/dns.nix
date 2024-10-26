@@ -1,6 +1,14 @@
-{ config, pkgs, lib, self, catalog, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  self,
+  catalog,
+  ...
+}:
 with lib;
-let cfg = config.roles.dns;
+let
+  cfg = config.roles.dns;
 in
 {
   options.roles.dns = with lib.types; {
@@ -19,9 +27,15 @@ in
     let
       namedWorkDir = "/var/lib/named";
 
-      transferAddrs = [ "192.168.1.0/24" "192.168.128.0/18" ];
+      transferAddrs = [
+        "192.168.1.0/24"
+        "192.168.128.0/18"
+      ];
 
-      unifiZones = [ "dyn.home.arpa." "cluster.home.arpa." ];
+      unifiZones = [
+        "dyn.home.arpa."
+        "cluster.home.arpa."
+      ];
 
       mkZone = name: rec {
         inherit name;
@@ -62,7 +76,10 @@ in
         enable = true;
 
         cacheNetworks = [ "0.0.0.0/0" ];
-        forwarders = [ "1.1.1.1" "8.8.8.8" ];
+        forwarders = [
+          "1.1.1.1"
+          "8.8.8.8"
+        ];
 
         extraOptions = ''
           allow-update { key "rndc-key"; };
@@ -72,34 +89,39 @@ in
           validate-except { "consul"; };
         '';
 
-        zones =
-          builtins.listToAttrs (map
+        zones = builtins.listToAttrs (
+          map
             (zone: {
               name = zone.name + ".";
               value =
-                if cfg.bind.serveLocalZones then {
-                  master = true;
-                  slaves = transferAddrs;
-                  file = zone.path;
-                } else {
-                  master = false;
-                  masters = [ "${catalog.dns.ns1}" ];
-                  file = zone.path;
-                };
+                if cfg.bind.serveLocalZones then
+                  {
+                    master = true;
+                    slaves = transferAddrs;
+                    file = zone.path;
+                  }
+                else
+                  {
+                    master = false;
+                    masters = [ "${catalog.dns.ns1}" ];
+                    file = zone.path;
+                  };
             })
-            [ bytemonkeyZone homeZone ]);
+            [
+              bytemonkeyZone
+              homeZone
+            ]
+        );
 
         extraConfig =
           let
-            unifiForwardZones = concatMapStrings
-              (zone: ''
-                zone "${zone}" {
-                  type forward;
-                  forward only;
-                  forwarders { 192.168.1.1; };
-                };
-              '')
-              unifiZones;
+            unifiForwardZones = concatMapStrings (zone: ''
+              zone "${zone}" {
+                type forward;
+                forward only;
+                forwarders { 192.168.1.1; };
+              };
+            '') unifiZones;
           in
           ''
             zone "consul." IN {
@@ -126,10 +148,16 @@ in
         ''
           mkdir -p ${namedWorkDir}
           chown named: ${namedWorkDir}
-        '' + (if cfg.bind.serveLocalZones then ''
-          ${copyZone bytemonkeyZone}
-          ${copyZone homeZone}
-        '' else "");
+        ''
+        + (
+          if cfg.bind.serveLocalZones then
+            ''
+              ${copyZone bytemonkeyZone}
+              ${copyZone homeZone}
+            ''
+          else
+            ""
+        );
 
       networking.firewall.allowedTCPPorts = [ 53 ];
       networking.firewall.allowedUDPPorts = [ 53 ];

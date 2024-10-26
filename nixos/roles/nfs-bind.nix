@@ -5,9 +5,15 @@
 # Example:
 #   nfs.example.com:/exports/files is mounted to /data;
 #   /data/grafana is then bind-mounted to /var/lib/grafana
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
-let cfg = config.roles.nfs-bind;
+let
+  cfg = config.roles.nfs-bind;
 in
 {
   options.roles.nfs-bind = {
@@ -24,7 +30,8 @@ in
     };
 
     binds = mkOption {
-      type = with types;
+      type =
+        with types;
         attrsOf (submodule {
           options = {
             path = mkOption {
@@ -69,10 +76,14 @@ in
         chmod ${bind.mode} "${cfg.mountPoint}/${name}"
       '';
 
-      fsBindEntry = name: bind:
+      fsBindEntry =
+        name: bind:
         nameValuePair bind.path {
           device = "${cfg.mountPoint}/${name}";
-          options = [ "bind" "_netdev" ];
+          options = [
+            "bind"
+            "_netdev"
+          ];
           noCheck = true;
         };
     in
@@ -82,12 +93,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "remote-fs.target" ];
         before = cfg.before;
-        serviceConfig = { Type = "oneshot"; };
+        serviceConfig = {
+          Type = "oneshot";
+        };
       };
 
       # Create fstab bindings; e.g. mount /data/grafana at /var/lib/grafana
-      fileSystems = (mapAttrs' fsBindEntry
-        (filterAttrs (name: bind: bind.path != null) cfg.binds)) // {
+      fileSystems = (mapAttrs' fsBindEntry (filterAttrs (name: bind: bind.path != null) cfg.binds)) // {
         # Mount NFS volume
         "${cfg.mountPoint}" = {
           device = cfg.nfsPath;

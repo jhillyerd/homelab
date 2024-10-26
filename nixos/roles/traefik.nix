@@ -1,6 +1,13 @@
-{ config, pkgs, lib, catalog, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  catalog,
+  ...
+}:
 with lib;
-let cfg = config.roles.traefik;
+let
+  cfg = config.roles.traefik;
 in
 {
   options.roles.traefik = {
@@ -14,17 +21,36 @@ in
 
     # TODO: Too much abstraction, let websvc role handle this.
     services = mkOption {
-      type = with types;
+      type =
+        with types;
         attrsOf (submodule {
           options = {
             domainName = mkOption { type = str; };
             backendUrls = mkOption { type = listOf str; };
-            sticky = mkOption { type = bool; default = false; };
-            checkHost = mkOption { type = nullOr str; default = null; };
-            checkPath = mkOption { type = str; default = "/"; };
-            checkInterval = mkOption { type = str; default = "15s"; };
-            external = mkOption { type = bool; default = false; };
-            externalAuth = mkOption { type = bool; default = true; };
+            sticky = mkOption {
+              type = bool;
+              default = false;
+            };
+            checkHost = mkOption {
+              type = nullOr str;
+              default = null;
+            };
+            checkPath = mkOption {
+              type = str;
+              default = "/";
+            };
+            checkInterval = mkOption {
+              type = str;
+              default = "15s";
+            };
+            external = mkOption {
+              type = bool;
+              default = false;
+            };
+            externalAuth = mkOption {
+              type = bool;
+              default = true;
+            };
           };
         });
       description = "Services to proxy";
@@ -62,7 +88,8 @@ in
               # Always redirect to HTTPS.
               http.redirections.entryPoint.to = "websecure";
             };
-          } // catalogEntrypoints;
+          }
+          // catalogEntrypoints;
 
         certificatesResolvers.letsencrypt.acme = {
           email = cfg.certificateEmail;
@@ -100,7 +127,10 @@ in
         let
           routerEntry = name: opt: {
             # Always allow internal entry points, external is optional.
-            entryPoints = [ "web" "websecure" ] ++ (if opt.external then [ "extweb" ] else [ ]);
+            entryPoints = [
+              "web"
+              "websecure"
+            ] ++ (if opt.external then [ "extweb" ] else [ ]);
 
             rule = "Host(`" + opt.domainName + "`)";
             service = name;
@@ -127,7 +157,10 @@ in
             routers = {
               # Router for built-in traefik API.
               api = {
-                entryPoints = [ "web" "websecure" ];
+                entryPoints = [
+                  "web"
+                  "websecure"
+                ];
                 rule = "Host(`traefik.bytemonkey.org`)";
                 service = "api@internal";
                 tls.certresolver = "letsencrypt";
@@ -169,11 +202,22 @@ in
       '';
     };
 
-    systemd.services.traefik.serviceConfig.EnvironmentFile =
-      [ config.age-template.files."traefik.env".path ];
+    systemd.services.traefik.serviceConfig.EnvironmentFile = [
+      config.age-template.files."traefik.env".path
+    ];
 
     # TODO: autogenerate this list from catalog entrypoints
-    networking.firewall.allowedTCPPorts = [ 25 80 222 443 8443 ];
-    networking.firewall.allowedUDPPorts = [ 7777 15000 15777 ];
+    networking.firewall.allowedTCPPorts = [
+      25
+      80
+      222
+      443
+      8443
+    ];
+    networking.firewall.allowedUDPPorts = [
+      7777
+      15000
+      15777
+    ];
   };
 }

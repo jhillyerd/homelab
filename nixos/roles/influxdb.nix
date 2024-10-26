@@ -1,7 +1,23 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mapAttrsToList mkEnableOption mkIf mkOption;
-  inherit (lib.types) attrsOf path port str submodule;
+  inherit (lib)
+    mapAttrsToList
+    mkEnableOption
+    mkIf
+    mkOption
+    ;
+  inherit (lib.types)
+    attrsOf
+    path
+    port
+    str
+    submodule
+    ;
   cfg = config.roles.influxdb;
 in
 {
@@ -30,7 +46,10 @@ in
         options = {
           user = mkOption { type = str; };
           passwordFile = mkOption { type = str; };
-          retention = mkOption { type = str; default = "104w"; };
+          retention = mkOption {
+            type = str;
+            default = "104w";
+          };
         };
       });
       description = "Influx databases";

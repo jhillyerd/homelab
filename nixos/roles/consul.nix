@@ -1,4 +1,11 @@
-{ config, pkgs, lib, catalog, self, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  catalog,
+  self,
+  ...
+}:
 with lib;
 let
   cfg = config.roles.consul;
@@ -59,8 +66,7 @@ in
         };
 
         # Install extra HCL file to hold encryption key.
-        extraConfigFiles =
-          [ config.age-template.files."consul-encrypt.hcl".path ];
+        extraConfigFiles = [ config.age-template.files."consul-encrypt.hcl".path ];
       };
 
       age.secrets = {
@@ -81,8 +87,21 @@ in
         wants = [ "network-online.target" ];
       };
 
-      networking.firewall.allowedTCPPorts = [ 8300 8301 8302 8500 8501 8502 8503 8600 ];
-      networking.firewall.allowedUDPPorts = [ 8301 8302 8600 ];
+      networking.firewall.allowedTCPPorts = [
+        8300
+        8301
+        8302
+        8500
+        8501
+        8502
+        8503
+        8600
+      ];
+      networking.firewall.allowedUDPPorts = [
+        8301
+        8302
+        8600
+      ];
     })
 
     (mkIf (cfg.client.enable && cfg.client.connect) {
@@ -137,8 +156,7 @@ in
         };
 
         # Install extra HCL file to hold encryption key.
-        extraConfigFiles =
-          [ config.age-template.files."consul-agent-token.hcl".path ];
+        extraConfigFiles = [ config.age-template.files."consul-agent-token.hcl".path ];
       };
 
       # Template config file for agent token.
@@ -159,4 +177,3 @@ in
     })
   ];
 }
-
