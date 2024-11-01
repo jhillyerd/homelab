@@ -36,6 +36,7 @@ in
           gnumake
           kitty # always install for terminfo
           lazygit
+          lua51Packages.luarocks-nix # for rest.nvim
           lynx
           mqttui
           nfs-utils
