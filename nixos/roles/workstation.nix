@@ -43,6 +43,7 @@ in
           nixfmt-rfc-style
           nixpkgs-review
           nodejs
+          openssl
           patchelf
           postgresql_14
           python311Packages.python-lsp-server
