@@ -61,6 +61,7 @@ in
         ])
         ++ [
           nixd-flake.packages.${system}.nixd
+          unstable.devenv
           unstable.rust-analyzer
         ];
 
