@@ -194,9 +194,6 @@ in
           virt-manager
           xclip
           xfce.ristretto # image viwer
-          xfce.thunar # file manager
-          xfce.thunar-volman
-          xfce.tumbler # thumbnails
           xorg.xdpyinfo
           xorg.xev
           xsecurelock
@@ -205,6 +202,15 @@ in
         ++ remaps;
 
       programs.dconf.enable = true;
+
+      programs.thunar = {
+        enable = true;
+        plugins = with pkgs.xfce; [ thunar-volman ];
+      };
+
+      # Used by thunar.
+      services.gvfs.enable = true;
+      services.tumbler.enable = true;
 
       services.xserver = {
         enable = true;
