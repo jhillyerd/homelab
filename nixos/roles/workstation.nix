@@ -155,7 +155,6 @@ in
         };
 
         # Enable nix flakes, not yet stable.
-        package = pkgs.nixFlakes;
         extraOptions = ''
           experimental-features = nix-command flakes
         '';
@@ -189,7 +188,7 @@ in
           polybarFull
           pavucontrol
           rofi
-          rxvt_unicode-with-plugins
+          rxvt-unicode
           sxhkd
           virt-manager
           xclip
@@ -232,9 +231,7 @@ in
       ];
 
       # Enable sound.
-      sound.enable = true;
-      hardware.pulseaudio.enable = true;
-      hardware.pulseaudio.package = pkgs.pulseaudioFull;
+      services.pipewire.pulse.enable = true;
 
       hardware.bluetooth.enable = true;
       hardware.bluetooth.powerOnBoot = true;

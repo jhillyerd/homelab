@@ -40,8 +40,8 @@
   services.hw-gauge-daemon.enable = true;
 
   # nvidia graphics card setup.
-  hardware.opengl.enable = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.graphics.enable = true;
+  hardware.nvidia.open = true;
   services.xserver = {
     dpi = 96;
     videoDrivers = [ "nvidia" ];
