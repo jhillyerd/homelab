@@ -20,9 +20,11 @@
     };
   };
 
-  mkWifiNetworks = self: {
+  mkWifiNetworks = self: matchConfig: {
     # Hardware config defaults to DHCP, make static if ip.priv is set.
     "10-wifi" = lib.mkIf (self ? ip.priv) {
+      inherit matchConfig;
+
       networkConfig.DHCP = "no";
       address = [ (self.ip.priv + "/24") ];
       gateway = [ "192.168.1.1" ];
