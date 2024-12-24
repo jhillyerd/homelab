@@ -43,6 +43,13 @@
     system = system.x86_64-linux;
   };
 
+  media1 = {
+    ip.priv = "192.168.1.51";
+    config = ../hosts/media-player.nix;
+    hw = ../hw/ace-t8plus.nix;
+    system = system.x86_64-linux;
+  };
+
   metrics = {
     ip.priv = "192.168.128.41";
     ip.tail = "100.108.135.101";

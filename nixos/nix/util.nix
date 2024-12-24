@@ -19,4 +19,23 @@
       ];
     };
   };
+
+  mkWifiNetworks = self: {
+    # Hardware config defaults to DHCP, make static if ip.priv is set.
+    "10-wifi" = lib.mkIf (self ? ip.priv) {
+      networkConfig.DHCP = "no";
+      address = [ (self.ip.priv + "/24") ];
+      gateway = [ "192.168.1.1" ];
+
+      dns = [
+        "192.168.128.36"
+        "192.168.128.37"
+        "192.168.128.40"
+      ];
+      domains = [
+        "home.arpa"
+        "dyn.home.arpa"
+      ];
+    };
+  };
 }
