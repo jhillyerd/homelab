@@ -35,6 +35,7 @@ in
           gcc
           gnumake
           kitty # always install for terminfo
+          lazydocker
           lazygit
           lua51Packages.luarocks-nix # for rest.nvim
           lynx
