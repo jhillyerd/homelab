@@ -2,6 +2,7 @@
 {
   pkgs,
   authorizedKeys,
+  catalog,
   hostName,
   environment,
   ...
@@ -47,4 +48,6 @@
   '';
   networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
   networking.firewall.checkReversePath = "loose";
+
+  systemd.network.wait-online.ignoredInterfaces = [ catalog.tailscale.interface ];
 }
