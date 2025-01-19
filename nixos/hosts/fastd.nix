@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   self,
   util,
   ...
@@ -51,26 +52,38 @@
   };
 
   # Import iSCSI ZFS pools.
-  systemd.services.zfs-import-backup1 = {
-    # Give iSCSI time to login to NAS.
-    preStart = "/run/current-system/sw/bin/sleep 5";
+  systemd.services.zfs-import-backup1 =
+    let
+      zpoolcmd = "/run/current-system/sw/bin/zpool";
+      pool = "backup1";
 
-    script =
-      let
-        zpoolcmd = "/run/current-system/sw/bin/zpool";
-        pool = "backup1";
-      in
-      ''
+      script.start = ''
         if ! ${zpoolcmd} list ${pool} >/dev/null 2>&1; then
           ${zpoolcmd} import ${pool}
         fi
       '';
 
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "iscsi.service" ];
-    after = [ "iscsi.service" ];
-    serviceConfig.Type = "oneshot";
-  };
+      script.stop = ''
+        if ${zpoolcmd} list ${pool} >/dev/null 2>&1; then
+          ${zpoolcmd} export ${pool}
+        fi
+      '';
+    in
+    {
+      # Give iSCSI time to login to NAS.
+      preStart = "/run/current-system/sw/bin/sleep 5";
+
+      script = script.start;
+
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "iscsi.service" ];
+      after = [ "iscsi.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+        ExecStop = "${pkgs.writeShellScript "stop-zfs-backup1" script.stop}";
+      };
+    };
 
   services.syncoid = {
     enable = true;
@@ -98,6 +111,8 @@
 
     # Volumes to backup.
     commands."fast1/database".target = "backup1/database";
+
+    service.after = [ "zfs-import-backup1.service" ];
   };
 
   # Collect snapshot stats.
