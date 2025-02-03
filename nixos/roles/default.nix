@@ -1,15 +1,11 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ ... }:
 {
   imports = [
     ./cluster-volumes.nix
     ./consul.nix
     ./dns.nix
     ./gateway-online.nix
+    ./gui-xorg.nix
     ./homesite.nix
     ./influxdb.nix
     ./log-forwarder.nix

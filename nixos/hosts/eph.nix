@@ -13,7 +13,6 @@
   roles.tailscale.enable = true;
 
   roles.workstation.enable = true;
-  roles.workstation.graphical = false;
 
   networking.firewall.enable = true;
 

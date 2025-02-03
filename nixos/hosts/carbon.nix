@@ -2,8 +2,8 @@
 {
   imports = [ ../common.nix ];
 
+  roles.gui-xorg.enable = true;
   roles.workstation.enable = true;
-  roles.workstation.graphical = true;
 
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;

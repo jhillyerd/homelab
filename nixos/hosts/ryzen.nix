@@ -7,8 +7,8 @@
 
   roles.tailscale.enable = true;
 
+  roles.gui-xorg.enable = true;
   roles.workstation.enable = true;
-  roles.workstation.graphical = true;
 
   # For Raspberry Pi builds.
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
