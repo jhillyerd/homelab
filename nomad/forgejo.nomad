@@ -1,8 +1,8 @@
-job "gitea" {
+job "forgejo" {
   datacenters = ["skynet"]
   type = "service"
 
-  group "gitea" {
+  group "forgejo" {
     count = 1
 
     update {
@@ -20,29 +20,29 @@ job "gitea" {
       port "ssh" { to = 22 }
     }
 
-    volume "gitea" {
+    volume "forgejo" {
       type = "host"
-      source = "gitea-storage"
+      source = "forgejo-data"
       read_only = false
     }
 
     service {
-      name = "gitea-http"
+      name = "forgejo-http"
       port = "http"
 
       tags = [
         "http",
         "traefik.enable=true",
-        "traefik.http.routers.gitea-http.entrypoints=websecure",
-        "traefik.http.routers.gitea-http.rule=Host(`gitea.bytemonkey.org`)",
-        "traefik.http.routers.gitea-http.tls.certresolver=letsencrypt",
-        # "traefik.http.routers.gitea-xhttp.entrypoints=extweb",
-        # "traefik.http.routers.gitea-xhttp.rule=Host(`gitea.x.bytemonkey.org`)",
-        # "traefik.http.routers.gitea-xhttp.tls.certresolver=letsencrypt",
+        "traefik.http.routers.forgejo-http.entrypoints=websecure",
+        "traefik.http.routers.forgejo-http.rule=Host(`forgejo.bytemonkey.org`)",
+        "traefik.http.routers.forgejo-http.tls.certresolver=letsencrypt",
+        # "traefik.http.routers.forgejo-xhttp.entrypoints=extweb",
+        # "traefik.http.routers.forgejo-xhttp.rule=Host(`forgejo.x.bytemonkey.org`)",
+        # "traefik.http.routers.forgejo-xhttp.tls.certresolver=letsencrypt",
       ]
 
       check {
-        name = "Gitea HTTP Check"
+        name = "Forgejo HTTP Check"
         type = "http"
         path = "/"
         interval = "10s"
@@ -51,7 +51,7 @@ job "gitea" {
     }
 
     service {
-      name = "gitea-ssh"
+      name = "forgejo-ssh"
       port = "ssh"
 
       tags = [
@@ -62,7 +62,7 @@ job "gitea" {
       ]
 
       check {
-        name = "Gitea SSH Check"
+        name = "Forgejo SSH Check"
         type = "tcp"
         port = "ssh"
         interval = "30s"
@@ -70,16 +70,16 @@ job "gitea" {
       }
     }
 
-    task "gitea" {
+    task "forgejo" {
       driver = "docker"
 
       config {
-        image = "gitea/gitea:1.21.10"
+        image = "codeberg.org/forgejo/forgejo:10.0.1"
         ports = ["http", "ssh"]
       }
 
       volume_mount {
-        volume = "gitea"
+        volume = "forgejo"
         destination = "/data"
         read_only = false
       }
