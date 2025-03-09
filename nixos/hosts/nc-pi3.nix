@@ -64,4 +64,9 @@
     environmentFile = config.age.secrets.wifi-env.path;
     networks.SKYNET.psk = "@SKYNET_PSK@";
   };
+
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
 }

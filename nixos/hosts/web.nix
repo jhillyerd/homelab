@@ -75,4 +75,9 @@
   age.secrets = {
     cloudflare-dns-api.file = ../secrets/cloudflare-dns-api.age;
   };
+
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
 }

@@ -125,4 +125,9 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
+
+  roles.upsmon = {
+    enable = true;
+    wave = 2;
+  };
 }

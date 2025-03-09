@@ -1,0 +1,23 @@
+#!/bin/sh
+
+swbin=/run/current-system/sw/bin
+
+case $1 in
+  onbatt)
+    $swbin/logger -t upssched-cmd "UPS running on battery"
+    ;;
+  earlyshutdown)
+    $swbin/logger -t upssched-cmd "UPS on battery too long, early shutdown"
+    $swbin/upsmon -c fsd
+    ;;
+  shutdowncritical)
+    $swbin/logger -t upssched-cmd "UPS on battery critical, forced shutdown"
+    $swbin/upsmon -c fsd
+    ;;
+  upsgone)
+    $swbin/logger -t upssched-cmd "UPS has been gone too long, can't reach"
+    ;;
+  *)
+    $swbin/logger -t upssched-cmd "Unrecognized command: $1"
+    ;;
+esac

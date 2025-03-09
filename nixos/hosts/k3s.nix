@@ -38,6 +38,11 @@
 
   networking.firewall.enable = false;
 
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
+
   age.secrets = {
     k3s-token.file = ../secrets/k3s-token.age;
   };

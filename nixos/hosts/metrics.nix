@@ -97,4 +97,9 @@
   };
 
   networking.firewall.enable = true;
+
+  roles.upsmon = {
+    enable = true;
+    wave = 2;
+  };
 }

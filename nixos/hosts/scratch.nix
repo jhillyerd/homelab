@@ -1,5 +1,9 @@
 # A scratch host for building up new service configurations.
-{ self, util, ... }:
+{
+  self,
+  util,
+  ...
+}:
 {
   imports = [
     ../common.nix

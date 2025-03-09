@@ -14,4 +14,9 @@
   roles.tailscale.enable = true;
 
   networking.firewall.enable = false;
+
+  roles.upsmon = {
+    enable = true;
+    wave = 3;
+  };
 }

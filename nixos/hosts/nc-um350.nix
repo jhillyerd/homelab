@@ -55,4 +55,9 @@
   virtualisation.docker.extraOptions = "--data-root /data/docker";
 
   networking.firewall.enable = false;
+
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
 }

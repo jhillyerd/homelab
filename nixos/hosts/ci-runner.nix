@@ -83,4 +83,9 @@
   age.secrets = {
     gitea-runner-token.file = ../secrets/gitea-runner-token.age;
   };
+
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
 }
