@@ -16,6 +16,7 @@
     ./tailscale.nix
     ./telegraf.nix
     ./traefik.nix
+    ./upsmon.nix
     ./websvc.nix
     ./workstation.nix
   ];

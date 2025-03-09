@@ -34,6 +34,18 @@
     tokenFile = config.age.secrets.k3s-token.path;
   };
 
+  services.nginx = {
+    enable = true;
+
+    # Foward NUT (UPS) traffic to NAS.
+    streamConfig = ''
+      server {
+        listen *:3493;
+        proxy_pass skynas.home.arpa:3493;
+      }
+    '';
+  };
+
   age.secrets = {
     k3s-token.file = ../secrets/k3s-token.age;
   };
