@@ -53,7 +53,7 @@ job "grafana" {
       driver = "docker"
 
       config {
-        image = "grafana/grafana-oss:10.4.2"
+        image = "grafana/grafana-oss:11.3.4"
         ports = ["http"]
       }
 
@@ -70,7 +70,7 @@ job "grafana" {
 
       resources {
         cpu    = 1000 # MHz
-        memory = 1024 # MB
+        memory = 512 # MB
       }
 
       env {
