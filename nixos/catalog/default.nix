@@ -71,6 +71,7 @@ rec {
       "nodered-data"
       "piper-data"
       "satisfactory-data"
+      "syncthing-data"
       "whisper-data"
       "zwavejs-data"
     ];
@@ -93,12 +94,13 @@ rec {
     {
       section = "Services";
       services = [
+        "fluidd"
         "forgejo"
         "grafana"
         "homeassistant"
         "inbucket"
         "nodered"
-        "fluidd"
+        "syncthing"
       ];
     }
     {

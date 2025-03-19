@@ -168,6 +168,16 @@
     dash.port = 5001;
   };
 
+  syncthing = {
+    title = "Syncthing";
+
+    dns.intCname = true;
+    dns.extCname = false;
+
+    dash.icon = "svg/syncthing.svg";
+    # Note: external + auth handled by labels.
+  };
+
   traefik = {
     title = "Traefik";
 
