@@ -69,7 +69,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "homeassistant/home-assistant:2024.12.3"
+        image = "homeassistant/home-assistant:2025.3.4"
         ports = [ "http", "sonos" ]
       }
 
@@ -178,7 +178,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "linuxserver/faster-whisper:2.0.0"
+        image = "linuxserver/faster-whisper:2.4.0"
         ports = [ 10300 ]
       }
 
@@ -272,7 +272,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "zwavejs/zwave-js-ui:9.27.8"
+        image = "zwavejs/zwave-js-ui:9.33.1"
         ports = ["http", 3000]
 
         devices = [
