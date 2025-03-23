@@ -17,6 +17,8 @@
   boot.zfs.extraPools = [ "fast1" ];
 
   services.postgresql = {
+    package = pkgs.postgresql_15;
+
     enable = true;
     enableTCPIP = true;
     dataDir = "/fast1/database/postgresql/${config.services.postgresql.package.psqlSchema}";
