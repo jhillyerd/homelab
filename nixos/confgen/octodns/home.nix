@@ -47,7 +47,7 @@ let
       value = "skynas.home.arpa.";
     };
 
-    # Default network.
+    # LAN network.
     gateway = {
       type = "A";
       value = "192.168.1.1";
@@ -63,10 +63,6 @@ let
     octopi = {
       type = "A";
       value = "192.168.1.21";
-    };
-    homeassistant = {
-      type = "A";
-      value = "192.168.1.30";
     };
 
     modem = {
