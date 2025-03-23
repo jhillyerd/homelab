@@ -17,7 +17,7 @@
   boot.zfs.extraPools = [ "fast1" ];
 
   services.postgresql = {
-    package = pkgs.postgresql_15;
+    package = pkgs.postgresql_16;
 
     enable = true;
     enableTCPIP = true;
@@ -29,7 +29,6 @@
 
     ensureDatabases = [
       "root"
-      "gitea"
       "forgejo"
     ];
 
@@ -42,12 +41,6 @@
       }
       {
         name = "forgejo";
-        ensureDBOwnership = true;
-        ensureClauses."inherit" = true;
-        ensureClauses.login = true;
-      }
-      {
-        name = "gitea";
         ensureDBOwnership = true;
         ensureClauses."inherit" = true;
         ensureClauses.login = true;
