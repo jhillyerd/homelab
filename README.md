@@ -34,6 +34,7 @@ graph TD
         direction RL
         ci-runner1("ci-runner1")
         eph("eph")
+        fastd("fastd")
         kube1("kube1")
         metrics("metrics")
         web("web")
