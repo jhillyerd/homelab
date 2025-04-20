@@ -12,6 +12,7 @@ let
   # Nodes
   eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
   fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
+  game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
   metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
   nexus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEuqgUtpyOVfnxa1oKLdjN4AIN5piKHfdumQHonqjH4P";
   nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
@@ -21,6 +22,7 @@ let
   home-nodes = [
     eph
     fastd
+    game
     metrics
     nexus
     nix-ryzen

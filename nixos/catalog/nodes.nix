@@ -29,6 +29,13 @@
     system = system.x86_64-linux;
   };
 
+  game = {
+    ip.priv = "192.168.131.6";
+    config = ../hosts/game.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   kube1 = {
     ip.priv = "192.168.132.1";
     config = ../hosts/k3s.nix;
