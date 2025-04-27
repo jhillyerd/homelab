@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   self,
   util,
   ...
@@ -14,8 +15,10 @@
 
   networking.firewall.enable = true;
 
+  services.gitea-actions-runner.package = pkgs.forgejo-actions-runner;
   services.gitea-actions-runner.instances.skynet = {
     enable = true;
+
     name = config.networking.hostName;
     labels = [
       "nixos_amd64:host"
@@ -23,7 +26,7 @@
       "ubuntu-22.04:docker://node:18-bullseye"
     ];
 
-    url = "https://gitea.bytemonkey.org";
+    url = "https://forgejo.bytemonkey.org";
     tokenFile = config.age.secrets.gitea-runner-token.path;
 
     settings = {
@@ -32,7 +35,7 @@
 
       cache = {
         enabled = true;
-        dir = "/var/cache/gitea-runner/actions";
+        dir = "/var/cache/forgejo-runner/actions";
       };
 
       runner = {
@@ -71,7 +74,7 @@
   systemd.services.gitea-runner-skynet = {
     serviceConfig = {
       # Used by for action cache.
-      CacheDirectory = "gitea-runner";
+      CacheDirectory = "forgejo-runner";
     };
   };
 
