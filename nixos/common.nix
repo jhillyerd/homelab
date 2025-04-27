@@ -17,6 +17,10 @@
   nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
   nixpkgs.config.allowUnfree = true;
 
+  environment.shellAliases = {
+    la = "ls -lAh";
+  };
+
   nix = {
     optimise.automatic = true;
 
@@ -50,4 +54,5 @@
   networking.firewall.checkReversePath = "loose";
 
   systemd.network.wait-online.ignoredInterfaces = [ catalog.tailscale.interface ];
+
 }
