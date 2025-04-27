@@ -1,6 +1,7 @@
 # Builds nixosConfigurations flake output.
 {
   nixpkgs,
+  nixpkgs-unstable,
   agenix,
   agenix-template,
   hw-gauge,
@@ -38,6 +39,7 @@ let
           hostName
           util
           ;
+        pkgs-unstable = nixpkgs-unstable.legacyPackages.${node.system};
         self = node;
       };
 
