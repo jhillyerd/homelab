@@ -22,8 +22,8 @@
     name = config.networking.hostName;
     labels = [
       "nixos_amd64:host"
-      "ubuntu-latest:docker://node:18-bullseye"
-      "ubuntu-22.04:docker://node:18-bullseye"
+      "ubuntu-latest:docker://node:20-bookworm"
+      "ubuntu-22.04:docker://node:20-bullseye"
     ];
 
     url = "https://forgejo.bytemonkey.org";
