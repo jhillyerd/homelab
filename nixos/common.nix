@@ -31,6 +31,7 @@
       randomizedDelaySec = "20min";
     };
 
+    settings.download-buffer-size = 134217728;
     settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
   };
 
