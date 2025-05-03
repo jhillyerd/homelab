@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "octodns-cloudflare";
-  version = "0.0.6";
+  version = "0.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "octodns";
     repo = "octodns-cloudflare";
     rev = "v${version}";
-    hash = "sha256-qjacnAXXX/dVLaXaGSgIG+JZjInqhJHai0Ft5LkQs1k=";
+    hash = "sha256-VHmi/ClCZCruz0wSSZC81nhN7i31vK29TsYzyrRJNTY=";
   };
 
   nativeBuildInputs = [
