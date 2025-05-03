@@ -39,7 +39,6 @@
                 ansible
                 cfssl
                 consul
-                esphome
                 kubectl
                 nomad_1_9
                 octodns
@@ -51,6 +50,7 @@
               ++ [
                 agenix.packages.${system}.default
                 octodns-cloudflare
+                unstable.esphome
               ];
           };
       }

@@ -1,0 +1,12 @@
+substitutions:
+  device_name: office-esp32
+
+sensor:
+  - platform: uptime
+    name: "${device_name} Uptime Sensor"
+
+  - platform: wifi_signal
+    name: "${device_name} WiFi Signal"
+    update_interval: 60s
+
+<<: !include base/mhet-devkit-ble.yaml
