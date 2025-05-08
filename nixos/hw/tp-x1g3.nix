@@ -19,7 +19,8 @@
     fsType = "ext4";
   };
 
-  boot.initrd.luks.devices."luks-4923c6cb-e919-458b-bdb9-f972ddd162a6".device = "/dev/disk/by-uuid/4923c6cb-e919-458b-bdb9-f972ddd162a6";
+  boot.initrd.luks.devices."luks-4923c6cb-e919-458b-bdb9-f972ddd162a6".device =
+    "/dev/disk/by-uuid/4923c6cb-e919-458b-bdb9-f972ddd162a6";
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/F480-2E4D";
@@ -37,18 +38,24 @@
     }
   ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
+  networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
-  services.fstrim.enable = true;
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # nvidia graphics card setup.
-  hardware.opengl.enable = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  hardware.graphics.enable = true;
+  hardware.nvidia = {
+    open = true;
+    modesetting.enable = true; # for udev events
+    powerManagement.enable = true;
+  };
+
+  hardware.trackpoint.device = "TPPS/2 Elan TrackPoint";
+
+  services.fstrim.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.throttled.enable = true;
 
   services.xserver = {
     videoDrivers = [ "nvidia" ];
@@ -70,14 +77,25 @@
     '';
   };
 
+  services.libinput.touchpad = {
+    accelSpeed = "0.3";
+    clickMethod = "clickfinger";
+    naturalScrolling = true;
+    tapping = true;
+  };
+
+  environment.etc."libinput/local-overrides.quirks".text = ''
+    [Touchpad pressure override]
+    MatchUdevType=touchpad
+    MatchName=Synaptics TM3625-010
+    MatchDMIModalias=dmi:*svnLENOVO:*:pvrThinkPadX1ExtremeGen3*
+    AttrPressureRange=10:8
+  '';
+
   fonts.fontconfig = {
     antialias = true;
     subpixel.rgba = "rgb";
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.enableRedistributableFirmware = true;
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  hardware.nvidia.modesetting.enable = true; # for udev events
-  hardware.nvidia.open = true;
 }
