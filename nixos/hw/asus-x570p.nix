@@ -41,18 +41,11 @@
 
   # nvidia graphics card setup.
   hardware.graphics.enable = true;
-  hardware.nvidia.open = true;
-  services.xserver = {
-    dpi = 96;
-    videoDrivers = [ "nvidia" ];
-
-    # Pipeline prevents screen tearing.
-    screenSection = ''
-      Option "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
-      Option "AllowIndirectGLXProtocol" "off"
-      Option "TripleBuffer" "on"
-    '';
+  hardware.nvidia = {
+    open = true;
+    powerManagement.enable = true;
   };
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   fonts.fontconfig = {
     antialias = true;
