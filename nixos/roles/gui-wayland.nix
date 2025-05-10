@@ -59,6 +59,22 @@ in
     };
 
     services.xserver.displayManager.gdm.enable = true;
+    services.greetd = {
+      enable = true;
+      settings = {
+        default_session = {
+          command = pkgs.writeShellScript "start-tuigreet" ''
+            setterm --blank=10
+            setterm --powersave on
+            ${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway
+          '';
+          user = "greeter";
+        };
+      };
+
+      # Avoid kernel messages.
+      vt = 7;
+    };
 
     # Used by thunar.
     services.gvfs.enable = true;
