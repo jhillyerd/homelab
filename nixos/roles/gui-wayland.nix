@@ -23,6 +23,7 @@ in
         ];
       in
       (with pkgs; [
+        alsa-utils
         audacity
         clipman
         dunst
