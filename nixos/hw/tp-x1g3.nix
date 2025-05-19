@@ -50,32 +50,13 @@
     modesetting.enable = true; # for udev events
     powerManagement.enable = true;
   };
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.trackpoint.device = "TPPS/2 Elan TrackPoint";
 
   services.fstrim.enable = true;
   services.power-profiles-daemon.enable = true;
   services.throttled.enable = true;
-
-  services.xserver = {
-    videoDrivers = [ "nvidia" ];
-    dpi = 96;
-    enableCtrlAltBackspace = true;
-
-    xrandrHeads = [
-      {
-        output = "DP-2";
-        primary = true;
-      }
-    ];
-
-    # Pipeline prevents screen tearing.
-    screenSection = ''
-      Option "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
-      Option "AllowIndirectGLXProtocol" "off"
-      Option "TripleBuffer" "on"
-    '';
-  };
 
   services.libinput.touchpad = {
     accelSpeed = "0.3";
