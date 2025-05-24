@@ -2,7 +2,7 @@
   description = "my nixos & ansible configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     agenix.url = "github:ryantm/agenix/0.15.0";
@@ -41,7 +41,7 @@
                 consul
                 esphome
                 kubectl
-                nomad_1_8
+                nomad_1_9
                 octodns
                 octodns-providers.bind
                 openssl
