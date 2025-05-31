@@ -32,7 +32,9 @@
     };
 
     settings.download-buffer-size = 134217728;
-    settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
+
+    # TODO revisit after https://github.com/NixOS/nix/pull/13301
+    # settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
   };
 
   services.getty.helpLine = ">>> Flake node: ${hostName}, environment: ${environment}";
