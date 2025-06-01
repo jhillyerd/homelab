@@ -1,12 +1,11 @@
 {
-  lib,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
 }:
 with rustPlatform;
-buildRustPackage rec {
+buildRustPackage {
   pname = "cfdyndns";
   version = "0.0.3";
 
@@ -17,7 +16,7 @@ buildRustPackage rec {
     sha256 = "0plijgr5y58ir9mjvxgm6jszz90pd1g0qjf21z0v5xrzg6bs2sy1";
   };
 
-  cargoSha256 = "sha256-OLxvob50FXumoxVfj97lOwSDaXncWGZXTf0wltnReQo=";
+  cargoHash = "sha256-celZ1QtGlgmhRax1SzXorl82NA8yw/Ik7uXwKxH0RSg=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
