@@ -8,7 +8,6 @@ in
   "octodns/internal-config.yaml" = {
     manager = {
       max_workers = 1;
-      enable_checksum = true;
       processors = [ "meta" ];
     };
 
@@ -48,7 +47,6 @@ in
   "octodns/cloudflare-config.yaml" = {
     manager = {
       max_workers = 1;
-      enable_checksum = true;
       processors = [
         "meta"
         "preserve-names"
