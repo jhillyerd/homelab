@@ -68,6 +68,8 @@ rec {
       "gitea-storage"
       "grafana-storage"
       "homeassistant-data"
+      "linkwarden-data"
+      "linkwarden-meili"
       "nodered-data"
       "piper-data"
       "satisfactory-data"

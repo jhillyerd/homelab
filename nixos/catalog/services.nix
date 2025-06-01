@@ -116,6 +116,12 @@
     dash.icon = "svg/gmail.svg";
   };
 
+  links = {
+    title = "Linkwarden";
+    dns.intCname = true;
+    dash.icon = "svg/linkwarden.svg";
+  };
+
   modem = {
     title = "Cable Modem";
 
