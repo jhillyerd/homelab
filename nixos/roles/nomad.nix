@@ -20,15 +20,21 @@ in
     };
 
     allocDir = mkOption {
-      type = nullOr str;
+      type = nullOr path;
       description = "Where nomad client stores alloc data";
       default = null;
     };
 
     dataDir = mkOption {
-      type = str;
+      type = path;
       description = "Where nomad stores its state";
       default = "/var/lib/nomad";
+    };
+
+    volumesDir = mkOption {
+      type = path;
+      description = "Where nomad places plugin controlled host volumes. Must be an absolute path.";
+      # default = "/var/lib/nomad/host_volumes";
     };
 
     hostVolumes = mkOption {
@@ -221,6 +227,7 @@ in
             enabled = true;
             alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
             cni_path = "${pkgs.cni-plugins}/bin";
+            host_volumes_dir = cfg.volumesDir;
 
             host_volume = mkIf (cfg.hostVolumes != { }) (
               mapAttrs (name: entry: {
