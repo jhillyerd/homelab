@@ -30,8 +30,10 @@
     enableServer = true;
     allocDir = "/data/nomad-alloc";
 
-    retryJoin = catalog.nomad.servers;
+    # Plugin volumes.
+    volumesDir = "/mnt/skynas/nomad-vols";
 
+    # Static volumes.
     hostVolumes =
       lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
         path = "/mnt/skynas/${name}";
@@ -43,6 +45,8 @@
           readOnly = true;
         };
       };
+
+    retryJoin = catalog.nomad.servers;
 
     # Use node catalog meta tags if defined.
     client.meta = lib.mkIf (self ? nomad.meta) self.nomad.meta;
