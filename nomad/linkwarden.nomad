@@ -70,7 +70,10 @@ job "linkwarden" {
       env {
         NEXTAUTH_URL = "https://links.bytemonkey.org/api/v1/auth"
         MEILI_HOST = "http://${NOMAD_ADDR_search}"
+
+        AUTOSCROLL_TIMEOUT = 120 # Seconds to archive a website
         MONOLITH_MAX_BUFFER = 32 # MB, default is 6
+
         NEXT_PUBLIC_OLLAMA_ENDPOINT_URL = "http://${NOMAD_ADDR_ollama}"
         OLLAMA_MODEL = "phi3.5:3.8b"
       }
@@ -88,7 +91,7 @@ EOT
 
       resources {
         cpu = 500 # MHz
-        memory = 1024 # MB
+        memory = 2048 # MB
       }
 
       logs {
