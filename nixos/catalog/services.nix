@@ -118,7 +118,7 @@
   links = {
     title = "Linkwarden";
     dns.intCname = true;
-    dash.icon = "svg/linkwarden.svg";
+    dash.icon = "png/linkwarden.png";
   };
 
   modem = {

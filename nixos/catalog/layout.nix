@@ -9,6 +9,7 @@
       "grafana"
       "homeassistant"
       "inbucket"
+      "links"
       "nodered"
       "syncthing"
     ];
