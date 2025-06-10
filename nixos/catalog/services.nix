@@ -1,5 +1,4 @@
 {
-  nodes,
   consul,
   nomad,
   k3s,

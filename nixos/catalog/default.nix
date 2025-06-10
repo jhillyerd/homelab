@@ -1,16 +1,10 @@
 # Catalog defines the systems & services on my network.
 { system }:
 rec {
-  nodes = import ./nodes.nix { inherit system; };
-  services = import ./services.nix {
-    inherit
-      nodes
-      consul
-      nomad
-      k3s
-      ;
-  };
+  layout = import ./layout.nix { };
   monitors = import ./monitors.nix { inherit consul nomad; };
+  nodes = import ./nodes.nix { inherit system; };
+  services = import ./services.nix { inherit consul nomad k3s; };
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";
@@ -90,40 +84,4 @@ rec {
     websecure = ":443/tcp";
     extweb = ":8443/tcp";
   };
-
-  # Layout of services on the dashboard.
-  layout = [
-    {
-      section = "Services";
-      services = [
-        "fluidd"
-        "forgejo"
-        "grafana"
-        "homeassistant"
-        "inbucket"
-        "nodered"
-        "syncthing"
-      ];
-    }
-    {
-      section = "Cluster";
-      services = [
-        "consul"
-        "nomad"
-        "proxmox"
-        "dockreg"
-        "argocd"
-      ];
-    }
-    {
-      section = "Infrastructure";
-      services = [
-        "modem"
-        "skynas"
-        "traefik"
-        "unifi"
-        "zwavejs"
-      ];
-    }
-  ];
 }
