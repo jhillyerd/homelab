@@ -69,7 +69,7 @@
   };
 
   fluidd = {
-    title = "Fluidd";
+    title = "Ender 3";
     dns.intCname = true;
     dash.icon = "svg/fluidd.svg";
     lb.backendUrls = [ "http://msdde3.home.arpa" ];
