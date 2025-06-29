@@ -214,11 +214,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1733698233,
-        "narHash": "sha256-QTfqgilMze5pSiLnR+xiDTl68p3XNaXILQohBZu/Fe0=",
+        "lastModified": 1751219640,
+        "narHash": "sha256-rTRHeZMcqLoD8dSWzXXniRUeVFGILa6FapwuqPCo4GU=",
         "owner": "jhillyerd",
         "repo": "homesite",
-        "rev": "353177b891e0a78f60e839d2c293706d56347636",
+        "rev": "873fe0b35e45467d4fde60f1b5393c7e206dc916",
         "type": "github"
       },
       "original": {
@@ -256,11 +256,11 @@
     "icons": {
       "flake": false,
       "locked": {
-        "lastModified": 1729419272,
-        "narHash": "sha256-Wkj1Xbt7rbxfeD6GhFV8KeOOWIdMC+i4MTn3+2i8wB4=",
+        "lastModified": 1750802622,
+        "narHash": "sha256-q0IGYcPrUcMfLW5ZV1af/uExkTvIcFKu4VJcdDMMiwU=",
         "owner": "walkxcode",
         "repo": "dashboard-icons",
-        "rev": "07a06d893e901fda965ba10f39d7aa7a3a18ea0d",
+        "rev": "92e341c1c681d3fcdbdebcf14fad670dba5e52d6",
         "type": "github"
       },
       "original": {

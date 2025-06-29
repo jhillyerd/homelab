@@ -17,11 +17,11 @@
   {
     section = "Cluster";
     services = [
+      "argocd"
       "consul"
+      "dockreg"
       "nomad"
       "proxmox"
-      "dockreg"
-      "argocd"
     ];
   }
   {

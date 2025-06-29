@@ -22,7 +22,7 @@
 
     dns.intCname = true;
 
-    dash.icon = "svg/argocd.svg";
+    dash.icon = "svg/argo-cd.svg";
 
     lb.backendUrls = map (ip: "https://${ip}:443") k3s.workers;
     lb.checkHost = "argocd.bytemonkey.org";
