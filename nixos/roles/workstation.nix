@@ -48,6 +48,7 @@ in
         ripgrep
         sshfs
         starship
+        steam-run-free
         sumneko-lua-language-server
         tmux
         universal-ctags
