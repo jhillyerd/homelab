@@ -44,7 +44,7 @@ in
         openssl
         patchelf
         postgresql_14
-        python311Packages.python-lsp-server
+        python3Packages.python-lsp-server
         ripgrep
         sshfs
         starship
