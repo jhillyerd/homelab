@@ -15,7 +15,6 @@
   roles.cluster-volumes.enable = true;
 
   roles.consul = {
-    enableServer = true;
     retryJoin = catalog.consul.servers;
 
     client = {
