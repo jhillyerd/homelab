@@ -11,7 +11,7 @@
       nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    agenix.url = "github:ryantm/agenix/0.15.0";
+    agenix.url = "github:ryantm/agenix/main";
     agenix.inputs = {
       nixpkgs.follows = "nixpkgs";
     };
