@@ -89,6 +89,10 @@ let
       type = "A";
       value = "192.168.128.13";
     };
+    pve4 = {
+      type = "A";
+      value = "192.168.128.14";
+    };
     "*.k" = {
       type = "CNAME";
       value = "kube1.home.arpa.";
