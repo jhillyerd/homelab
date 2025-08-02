@@ -52,11 +52,11 @@ let
 
   nc-um350-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
   nc-um350-2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmHTTSRM1PuZ45KXJACZhJc1GAgcT9i+QCClo6sV88R";
+  nc-virt-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHY+llyPw11hCagbnJiXTmzO/FfHydVRIFmDRseGLTOd";
   nomad-cluster = [
-    nexus
     nc-um350-1
     nc-um350-2
-    scratch
+    nc-virt-1
     web
     witness
   ];

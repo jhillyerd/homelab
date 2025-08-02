@@ -73,6 +73,13 @@
     system = system.x86_64-linux;
   };
 
+  nc-virt-1 = {
+    ip.priv = "192.168.133.1";
+    config = ../hosts/nc-virt.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   nexus = {
     ip.priv = "192.168.128.40";
     ip.tail = "100.96.6.112";
