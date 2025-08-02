@@ -31,6 +31,10 @@
       response_status_code = 200;
     }
     {
+      urls = [ "https://links.bytemonkey.org/login" ];
+      response_status_code = 200;
+    }
+    {
       urls = [ "http://msdde3.home.arpa/" ];
       response_status_code = 200;
     }
@@ -43,12 +47,18 @@
       response_status_code = 200;
     }
     {
+      urls = [ "https://unifi.bytemonkey.org/manage/account/login" ];
+      response_status_code = 200;
+    }
+    {
       urls = [ "https://zwavejs.bytemonkey.org/" ];
       response_status_code = 200;
     }
   ];
 
   ping = [
+    "eph.home.arpa"
+    "fastd.home.arpa"
     "gateway.home.arpa"
     "msdde3.home.arpa"
     "nexus.home.arpa"
@@ -57,6 +67,7 @@
     "pve1.home.arpa"
     "pve2.home.arpa"
     "pve3.home.arpa"
+    "pve4.home.arpa"
     "skynas.home.arpa"
     "web.home.arpa"
     "witness.home.arpa"
