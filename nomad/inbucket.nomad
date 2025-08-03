@@ -71,7 +71,7 @@ job "inbucket" {
 
       config {
         # :latest for stable releases, :edge to track development.
-        image = "inbucket/inbucket:edge"
+        image = "inbucket/inbucket:3.1.0"
         ports = ["http", "smtp"]
 
         args = ["-logjson=false"]
@@ -116,7 +116,7 @@ job "inbucket" {
             }))
           end
         EOT
-        destination = "/local/inbucket.lua"
+        destination = "/local/inbucket.lua.disabled"
       }
     }
   }
