@@ -55,7 +55,7 @@ job "nodered" {
       driver = "docker"
 
       config {
-        image = "nodered/node-red:3.0.2"
+        image = "nodered/node-red:4.0.9"
         ports = ["http"]
       }
 
