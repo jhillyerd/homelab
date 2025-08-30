@@ -76,6 +76,10 @@ job "nodered" {
         max_file_size = 5
       }
 
+      env {
+        TZ = "America/Los_Angeles"
+      }
+
       template {
         data = "NODE_RED_CREDENTIAL_SECRET={{key \"secrets/nodered/credential\"}}"
         destination = "nodered.env"
