@@ -1,4 +1,5 @@
 {
+  config,
   self,
   util,
   ...
@@ -13,24 +14,19 @@
   roles.gateway-online.addr = "192.168.1.1";
 
   virtualisation.oci-containers = {
-    backend = "docker"; # https://github.com/mornedhels/enshrouded-server/issues/103
+    backend = "docker";
 
     containers = {
-      enshrouded = {
-        image = "mornedhels/enshrouded-server:latest";
-        hostname = "enshrouded";
+      theforest = {
+        image = "jammsen/the-forest-dedicated-server:latest";
+        hostname = "theforest";
         ports = [
-          "15637:15637/udp" # Enshrouded
+          "8766:8766/udp"
+          "27015:27015/udp"
+          "27016:27016/udp"
         ];
-        volumes = [ "/data/enshrouded:/opt/enshrouded" ];
-        environment = {
-          SERVER_NAME = "Enshrouded by Cuteness_v3_FINAL";
-          SERVER_ENABLE_TEXT_CHAT = "true";
-          UPDATE_CRON = "37 * * * *";
-          UPDATE_CHECK_PLAYERS = "true";
-          BACKUP_CRON = "*/30 * * * *";
-          BACKUP_MAX_COUNT = "48";
-        };
+        volumes = [ "/data/theforest:/theforest" ];
+        environmentFiles = [ config.age.secrets."theforest-environment".path ];
       };
     };
   };
@@ -40,5 +36,11 @@
   roles.upsmon = {
     enable = true;
     wave = 1;
+  };
+
+  age.secrets = {
+    "theforest-environment" = {
+      file = ../secrets/theforest-environment.age;
+    };
   };
 }

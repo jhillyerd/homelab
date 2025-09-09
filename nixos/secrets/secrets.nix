@@ -83,6 +83,7 @@ in
   "mqtt-clock.age".publicKeys = group.home;
   "mqtt-sensor.age".publicKeys = group.home;
   "mqtt-zwave.age".publicKeys = group.home;
+  "theforest-environment.age".publicKeys = group.home;
 
   # Kube cluster
   "k3s-token.age".publicKeys = group.kube;
