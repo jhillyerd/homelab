@@ -23,6 +23,7 @@ in
         ];
       in
       (with pkgs; [
+        _1password-gui
         alsa-utils
         audacity
         clipman
