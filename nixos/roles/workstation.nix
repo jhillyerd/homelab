@@ -75,7 +75,6 @@ in
 
     services.udisks2.enable = true;
 
-    # Setup ST-Link MCU probe.
     services.udev.extraRules = ''
       ACTION!="add|change", GOTO="probe_rs_rules_end"
       SUBSYSTEM=="gpio", MODE="0660", GROUP="dialout", TAG+="uaccess"
@@ -85,6 +84,8 @@ in
       ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE="660", GROUP="dialout", TAG+="uaccess"
       # DAP42 Bluepill CMSIS-DAP Debug Probe
       ATTRS{idVendor}=="1209", ATTRS{idProduct}=="da42", MODE="660", GROUP="dialout", TAG+="uaccess"
+      # Microbit v2 CMSIS-DAP Debug Probe
+      ATTRS{idVendor}=="0d28", ATTRS{idProduct}=="0204", MODE="660", GROUP="dialout", TAG+="uaccess"
       # WeACT Blackbill CMSIS-DAP Debug Probe
       ATTRS{idVendor}=="c251", ATTRS{idProduct}=="f001", MODE="660", GROUP="dialout", TAG+="uaccess"
 
