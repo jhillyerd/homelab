@@ -26,4 +26,8 @@
     enable = true;
     wave = 1;
   };
+
+  networking.firewall.allowedTCPPorts = [
+    6052 # esphome container UI
+  ];
 }
