@@ -69,7 +69,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "homeassistant/home-assistant:2025.7.1"
+        image = "ghcr.io/home-assistant/home-assistant:2025.9.3"
         ports = [ "http", "sonos" ]
       }
 
@@ -272,7 +272,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "zwavejs/zwave-js-ui:10.7.0"
+        image = "zwavejs/zwave-js-ui:11.2.1"
         ports = ["http", 3000]
 
         devices = [
