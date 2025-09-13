@@ -2,6 +2,10 @@ esphome:
   name: ${device_name}
   comment: ${device_description}
   friendly_name: ${friendly_name}
+  platformio_options:
+    lib_ignore:
+      # https://github.com/esphome/esphome/issues/9566
+      - RPAsyncTCP
 
 bk72xx:
   board: generic-bk7231n-qfn32-tuya
@@ -20,6 +24,7 @@ api:
 
 ota:
   password: !secret 'ota_pass'
+  platform: esphome
 
 wifi:
   ssid: !secret 'wifi_ssid'

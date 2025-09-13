@@ -44,13 +44,11 @@
                 octodns
                 octodns-providers.bind
                 openssl
-                platformio
                 sshpass
               ])
               ++ [
                 agenix.packages.${system}.default
                 octodns-cloudflare
-                unstable.esphome
               ];
           };
       }
