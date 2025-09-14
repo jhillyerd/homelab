@@ -52,7 +52,9 @@
 
   roles.gateway-online.addr = "192.168.1.1";
 
-  virtualisation.docker.extraOptions = "--data-root /data/docker";
+  virtualisation.docker.daemon.settings = {
+    data-root = "/data/docker";
+  };
 
   networking.firewall.enable = false;
 
