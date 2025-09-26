@@ -43,7 +43,7 @@ in
         nodejs
         openssl
         patchelf
-        postgresql_14
+        postgresql_16
         python3Packages.python-lsp-server
         ripgrep
         sshfs
