@@ -40,21 +40,6 @@
         "type": "github"
       }
     },
-    "crane": {
-      "locked": {
-        "lastModified": 1759893430,
-        "narHash": "sha256-yAy4otLYm9iZ+NtQwTMEbqHwswSFUbhn7x826RR6djw=",
-        "owner": "ipetkov",
-        "repo": "crane",
-        "rev": "1979a2524cb8c801520bd94c38bb3d5692419d93",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ipetkov",
-        "repo": "crane",
-        "type": "github"
-      }
-    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -176,7 +161,6 @@
     },
     "hw-gauge": {
       "inputs": {
-        "crane": "crane",
         "flake-utils": [
           "flake-utils"
         ],
@@ -186,11 +170,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1760900049,
-        "narHash": "sha256-hauzoixBherxLs+7rwysmgafMYMtb+LWBLpn9+SNqLw=",
+        "lastModified": 1762626953,
+        "narHash": "sha256-KHMO05aayl+9k9orazF0OU8pCSbbwXe4NbntUNvIvuE=",
         "owner": "jhillyerd",
         "repo": "hw-gauge",
-        "rev": "d34fbf58caeceff8ffa27b37f52797997db997c4",
+        "rev": "e59ec96dc4974f0b922b34a10109fd1e54258d11",
         "type": "github"
       },
       "original": {
