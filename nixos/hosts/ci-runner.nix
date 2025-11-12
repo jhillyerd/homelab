@@ -15,7 +15,7 @@
 
   networking.firewall.enable = true;
 
-  services.gitea-actions-runner.package = pkgs-unstable.forgejo-actions-runner;
+  services.gitea-actions-runner.package = pkgs-unstable.forgejo-runner;
   services.gitea-actions-runner.instances.skynet = {
     enable = true;
 
