@@ -29,6 +29,7 @@ in
         clipman
         dunst
         firefox
+        gcr # gnome keyring SystemPrompter
         gedit
         gimp
         google-chrome
@@ -39,6 +40,7 @@ in
         pantheon.elementary-icon-theme
         pavucontrol
         rofi-wayland
+        seahorse # secret management
         slurp # region selector
         virt-manager
         wl-clipboard # clipboard commands
@@ -86,6 +88,7 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
 
+    services.gnome.gnome-keyring.enable = true;
     services.libinput.enable = true;
     services.libinput.mouse.accelProfile = "flat";
 
