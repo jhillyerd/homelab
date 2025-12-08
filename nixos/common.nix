@@ -31,7 +31,7 @@
       randomizedDelaySec = "20min";
     };
 
-    settings.download-buffer-size = 134217728;
+    settings.download-buffer-size = 201326592;
 
     # TODO revisit after https://github.com/NixOS/nix/pull/13301
     # settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
