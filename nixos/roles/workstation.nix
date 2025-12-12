@@ -67,6 +67,7 @@ in
     programs.direnv.enable = true;
     programs.fish.enable = true;
     programs.mosh.enable = true;
+    programs.nix-ld.enable = true; # For non-nix binaries.
 
     # NFS mount support
     boot.supportedFilesystems = [ "nfs" ];
