@@ -14,6 +14,11 @@
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
 
+  roles.dns.bind = {
+    enable = true;
+    serveLocalZones = true;
+  };
+
   roles.consul = {
     enableServer = true;
     retryJoin = catalog.consul.servers;

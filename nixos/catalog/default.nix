@@ -28,7 +28,7 @@ rec {
   };
 
   dns = with nodes; {
-    ns1 = nexus.ip.priv;
+    ns1 = witness.ip.priv;
     ns2 = nc-um350-1.ip.priv;
     ns3 = nc-um350-2.ip.priv;
   };

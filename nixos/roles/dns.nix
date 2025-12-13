@@ -55,7 +55,11 @@ in
           )
 
           @   600 IN NS ns1
+          @   600 IN NS ns2
+          @   600 IN NS ns3
           ns1 600 IN A  ${catalog.dns.ns1}
+          ns2 600 IN A  ${catalog.dns.ns2}
+          ns3 600 IN A  ${catalog.dns.ns3}
         '';
       };
 
