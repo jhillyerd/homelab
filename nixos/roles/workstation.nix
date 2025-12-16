@@ -19,7 +19,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages =
       let
-        inherit (pkgs) system;
+        system = pkgs.stdenv.hostPlatform.system;
         unstable = nixpkgs-unstable.legacyPackages.${system};
       in
       (with pkgs; [
@@ -28,8 +28,8 @@ in
         chezmoi
         docker-compose
         fzf
-        gitAndTools.gh
         gcc
+        gh
         gnumake
         kitty # always install for terminfo
         lazydocker
@@ -49,7 +49,7 @@ in
         sshfs
         starship
         steam-run-free
-        sumneko-lua-language-server
+        lua-language-server
         tmux
         universal-ctags
         unzip

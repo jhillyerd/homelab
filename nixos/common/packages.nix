@@ -2,7 +2,8 @@
 {
   environment.systemPackages =
     let
-      unstable = nixpkgs-unstable.legacyPackages.${pkgs.system};
+      system = pkgs.stdenv.hostPlatform.system;
+      unstable = nixpkgs-unstable.legacyPackages.${system};
 
       remaps = [
         (pkgs.writeShellScriptBin "vim" ''

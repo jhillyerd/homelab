@@ -53,7 +53,7 @@
   environment.etc."issue.d/ip.issue".text = ''
     IPv4: \4
   '';
-  networking.dhcpcd.runHook = "${pkgs.utillinux}/bin/agetty --reload";
+  networking.dhcpcd.runHook = "${pkgs.util-linux}/bin/agetty --reload";
   networking.firewall.checkReversePath = "loose";
 
   systemd.network.wait-online.ignoredInterfaces = [ catalog.tailscale.interface ];

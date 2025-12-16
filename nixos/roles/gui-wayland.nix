@@ -39,7 +39,7 @@ in
         obs-studio
         pantheon.elementary-icon-theme
         pavucontrol
-        rofi-wayland
+        rofi
         seahorse # secret management
         slurp # region selector
         virt-manager
@@ -66,7 +66,7 @@ in
       extraOptions = [ "--unsupported-gpu" ];
     };
 
-    services.xserver.displayManager.gdm.enable = true;
+    services.displayManager.gdm.enable = true;
     services.greetd = {
       enable = true;
       settings = {
@@ -74,14 +74,11 @@ in
           command = pkgs.writeShellScript "start-tuigreet" ''
             setterm --blank=10
             setterm --powersave on
-            ${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway
+            ${pkgs.tuigreet}/bin/tuigreet --time --cmd sway
           '';
           user = "greeter";
         };
       };
-
-      # Avoid kernel messages.
-      vt = 7;
     };
 
     # Used by thunar.

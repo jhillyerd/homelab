@@ -162,7 +162,7 @@ in
             };
           in
           lib.lists.flatten [
-            arch.${pkgs.system}
+            arch.${pkgs.stdenv.hostPlatform.system}
             arch.any
           ];
 
