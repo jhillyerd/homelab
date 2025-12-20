@@ -57,7 +57,7 @@ job "linkwarden" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/linkwarden/linkwarden:latest"
+        image = "ghcr.io/linkwarden/linkwarden:v2.13.2"
         ports = ["http"]
       }
 
@@ -142,7 +142,7 @@ EOT
 
       resources {
         cpu = 500 # MHz
-        memory = 512 # MB
+        memory = 1024 # MB
       }
 
       logs {
