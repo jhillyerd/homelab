@@ -66,15 +66,16 @@ in
       extraOptions = [ "--unsupported-gpu" ];
     };
 
-    services.displayManager.gdm.enable = true;
     services.greetd = {
       enable = true;
+      useTextGreeter = true;
+
       settings = {
         default_session = {
           command = pkgs.writeShellScript "start-tuigreet" ''
             setterm --blank=10
             setterm --powersave on
-            ${pkgs.tuigreet}/bin/tuigreet --time --cmd sway
+            ${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session
           '';
           user = "greeter";
         };
@@ -88,6 +89,14 @@ in
     services.gnome.gnome-keyring.enable = true;
     services.libinput.enable = true;
     services.libinput.mouse.accelProfile = "flat";
+
+    services.xserver.displayManager.sessionCommands = ''
+      # this is needed for gnome-keyring to work properly
+      ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+
+      # this is needed for xdg-desktop-portal to work
+      systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
+    '';
 
     fonts.packages = with pkgs; [
       font-awesome
