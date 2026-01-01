@@ -23,6 +23,10 @@ job "grafana" {
       read_only = false
     }
 
+    consul {
+      # Use server default task identity.
+    }
+
     service {
       name = "grafana"
       port = "http"

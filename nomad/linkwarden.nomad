@@ -32,6 +32,10 @@ job "linkwarden" {
       read_only = false
     }
 
+    consul {
+      # Use server default task identity.
+    }
+
     service {
       name = "linkwarden-http"
       port = "http"

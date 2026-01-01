@@ -16,6 +16,10 @@ job "nodered" {
       read_only = false
     }
 
+    consul {
+      # Use server default task identity.
+    }
+
     service {
       name = "nodered"
       connect {

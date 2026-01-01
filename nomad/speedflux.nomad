@@ -5,6 +5,10 @@ job "speedflux" {
   group "speedflux" {
     count = 1
 
+    consul {
+      # Use server default task identity.
+    }
+
     task "speedflux" {
       driver = "docker"
 

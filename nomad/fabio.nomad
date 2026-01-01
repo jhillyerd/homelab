@@ -23,6 +23,10 @@ job "fabio" {
       }
     }
 
+    consul {
+      # Use server default task identity.
+    }
+
     task "fabio" {
       driver = "docker"
 

@@ -120,7 +120,7 @@ in
       # Nomad shared client & server config.
       services.nomad = {
         enable = true;
-        package = pkgs.nomad_1_9;
+        package = pkgs.nomad_1_10;
 
         dropPrivileges = false;
 
