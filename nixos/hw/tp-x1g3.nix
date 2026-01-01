@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   boot.initrd.availableKernelModules = [
     "xhci_pci"
@@ -79,4 +84,5 @@
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.firmware = [ pkgs.linux-firmware ];
 }

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   boot.initrd.availableKernelModules = [
     "nvme"
@@ -39,13 +44,8 @@
   services.fstrim.enable = true;
   services.hw-gauge-daemon.enable = true;
 
-  # nvidia graphics card setup.
   hardware.graphics.enable = true;
-  hardware.nvidia = {
-    open = true;
-    powerManagement.enable = true;
-  };
-  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.graphics.enable32Bit = true;
 
   fonts.fontconfig = {
     antialias = true;
@@ -54,4 +54,5 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.firmware = [ pkgs.linux-firmware ];
 }
