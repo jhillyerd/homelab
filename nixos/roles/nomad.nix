@@ -167,6 +167,7 @@ in
           ];
 
         # Install extra HCL file to hold secrets.
+        # TODO replace with services.nomad.credentials if possible.
         extraSettingsPaths = [ config.age-template.files."nomad-secrets.hcl".path ];
       };
 
@@ -187,6 +188,15 @@ in
             default_scheduler_config = {
               scheduler_algorithm = "spread";
               memory_oversubscription_enabled = true;
+            };
+
+          };
+
+          consul = {
+            enabled = true;
+            task_identity = {
+              aud = [ "consul.io" ];
+              ttl = "1h";
             };
           };
         };
