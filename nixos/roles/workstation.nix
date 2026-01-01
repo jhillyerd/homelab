@@ -4,7 +4,6 @@
   pkgs,
   authorizedKeys,
   nixpkgs-unstable,
-  nixd-flake,
   ...
 }:
 let
@@ -38,6 +37,7 @@ in
         lynx
         mqttui
         nfs-utils
+        nixd
         nixfmt-rfc-style
         nixpkgs-review
         nodejs
@@ -59,7 +59,6 @@ in
         zip
       ])
       ++ [
-        nixd-flake.packages.${system}.nixd
         unstable.devenv
       ];
 
