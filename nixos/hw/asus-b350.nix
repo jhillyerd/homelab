@@ -44,6 +44,9 @@
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  # expose GPU to docker containers.
+  hardware.nvidia-container-toolkit.enable = true;
+
   fileSystems."/" = {
     device = "/dev/disk/by-label/root";
     fsType = "ext4";
@@ -54,10 +57,10 @@
     fsType = "vfat";
   };
 
-  # fileSystems."/data" = {
-  #   device = "/dev/disk/by-label/data";
-  #   fsType = "ext4";
-  # };
+  fileSystems."/data/llama" = {
+    device = "/dev/tank/llama";
+    fsType = "ext4";
+  };
 
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 

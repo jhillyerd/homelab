@@ -116,6 +116,7 @@ in
         "dialout"
         "docker"
         "libvirtd"
+        "podman"
         "networkmanager"
         "vboxsf"
         "video"
