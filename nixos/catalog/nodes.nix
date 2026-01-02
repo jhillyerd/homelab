@@ -29,6 +29,13 @@
     system = system.x86_64-linux;
   };
 
+  fractal = {
+    ip.priv = "192.168.128.20";
+    config = ../hosts/fractal.nix;
+    hw = ../hw/asus-b350.nix;
+    system = system.x86_64-linux;
+  };
+
   game = {
     ip.priv = "192.168.131.6";
     config = ../hosts/game.nix;
