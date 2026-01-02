@@ -13,7 +13,10 @@ let
 
   authorizedKeys = splitString "\n" (builtins.readFile ../../authorized_keys.txt);
 
-  util = import ./util.nix { lib = nixpkgs.lib; };
+  util = import ./util.nix {
+    lib = nixpkgs.lib;
+    inherit catalog;
+  };
 
   # Creates a nixosSystem attribute set for the specified node, allowing
   # the node config to be overridden.

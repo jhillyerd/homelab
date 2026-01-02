@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, catalog, ... }:
 {
   # Populate systemd.network.networks given a catalog `self` entry.
   mkClusterNetworks = self: {
@@ -9,9 +9,9 @@
       gateway = [ "192.168.128.1" ];
 
       dns = [
-        "192.168.128.36"
-        "192.168.128.37"
-        "192.168.128.40"
+        catalog.dns.ns2
+        catalog.dns.ns3
+        catalog.dns.ns1
       ];
       domains = [
         "home.arpa"
