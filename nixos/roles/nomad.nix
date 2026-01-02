@@ -194,7 +194,12 @@ in
 
           consul = {
             enabled = true;
+
             task_identity = {
+              aud = [ "consul.io" ];
+              ttl = "1h";
+            };
+            service_identity = {
               aud = [ "consul.io" ];
               ttl = "1h";
             };
