@@ -47,7 +47,7 @@ in
           $ORIGIN ${name}.
           @ 3600 SOA ns1.${name}. (
             zone-admin.home.arpa.
-            1      ; serial number
+            100    ; serial number
             3600   ; refresh period
             600    ; retry period
             604800 ; expire time
