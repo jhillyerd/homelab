@@ -21,6 +21,7 @@
       lf
       lsof
       mailutils
+      ncdu # ncurses disk usage
       nmap
       psmisc
       python3

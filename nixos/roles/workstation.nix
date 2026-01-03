@@ -56,6 +56,7 @@ in
         usbutils
         watchexec
         yaml-language-server
+        yazi # file manager
         zip
       ])
       ++ [
