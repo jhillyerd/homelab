@@ -17,9 +17,6 @@
     nvtopPackages.nvidia
   ];
 
-  networking.firewall.enable = false;
-  systemd.network.networks = util.mkClusterNetworks self;
-
   virtualisation = {
     docker.enable = lib.mkForce false;
     containers.enable = true;
@@ -32,7 +29,7 @@
       containers = {
         llama = {
           image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b7609";
-          ports = [ "8080:8080" ];
+          ports = [ "8001:8080" ]; # healthcheck runs against 8080.
           devices = [ "nvidia.com/gpu=all" ];
           extraOptions = [ "--ipc=host" ];
           volumes = [
@@ -40,8 +37,7 @@
             "/data/llama/models:/models"
           ];
           environment = {
-            LLAMA_ARG_PORT = "8080";
-            LLAMA_ARG_CTX_SIZE = "512000";
+            LLAMA_ARG_CTX_SIZE = "256000";
             LLAMA_ARG_JINJA = "true";
           };
           cmd = [
@@ -52,4 +48,7 @@
       };
     };
   };
+
+  networking.firewall.enable = true;
+  systemd.network.networks = util.mkClusterNetworks self;
 }
