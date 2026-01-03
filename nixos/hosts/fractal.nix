@@ -12,6 +12,7 @@
   ];
 
   roles.workstation.enable = true;
+  roles.gui-wayland.enable = true;
 
   environment.systemPackages = with pkgs; [
     nvtopPackages.nvidia
@@ -37,12 +38,15 @@
             "/data/llama/models:/models"
           ];
           environment = {
-            LLAMA_ARG_CTX_SIZE = "256000";
+            LLAMA_ARG_CTX_SIZE = "49152";
             LLAMA_ARG_JINJA = "true";
+            LLAMA_ARG_TEMP = "0.15";
+            LLAMA_ARG_MIN_P = "0.01";
+            LLAMA_ARG_GPU_LAYERS = "99";
           };
           cmd = [
             "-hf"
-            "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:IQ4_NL"
+            "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF:IQ4_NL"
           ];
         };
       };
