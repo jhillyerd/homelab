@@ -121,17 +121,10 @@
     dash.icon = "png/linkwarden.png";
   };
 
-  modem = {
-    title = "Cable Modem";
-
-    dash.icon = "png/arris.png";
-    dash.host = "192.168.100.1";
-    dash.proto = "http";
-  };
-
-  monolith = {
-    title = "Monolith";
-    dns.intCname = true;
+  mininas = {
+    title = "miniNAS";
+    dash.icon = "svg/truenas.svg";
+    dash.host = "mininas.bytemonkey.org";
   };
 
   nodered = {
@@ -160,8 +153,9 @@
     dash.icon = "png/proxmox.png";
 
     lb.backendUrls = [
-      "https://192.168.128.12:8006"
+      "https://192.168.128.10:8006"
       "https://192.168.128.13:8006"
+      "https://192.168.128.14:8006"
     ];
     lb.sticky = true;
   };

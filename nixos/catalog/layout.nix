@@ -27,7 +27,7 @@
   {
     section = "Infrastructure";
     services = [
-      "modem"
+      "mininas"
       "skynas"
       "traefik"
       "unifi"

@@ -56,6 +56,10 @@ let
       type = "A";
       value = "192.168.1.5";
     };
+    mininas = {
+      type = "A";
+      value = "192.168.1.10";
+    };
     skynas = {
       type = "A";
       value = "192.168.1.20";
@@ -63,11 +67,6 @@ let
     octopi = {
       type = "A";
       value = "192.168.1.21";
-    };
-
-    modem = {
-      type = "A";
-      value = "192.168.100.1";
     };
 
     # IoT network.

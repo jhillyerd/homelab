@@ -34,6 +34,10 @@ let
       value = catalog.dns.ns3;
     };
 
+    mininas = {
+      type = "A";
+      value = "192.168.1.10";
+    };
     skynas = {
       type = "A";
       value = "100.126.1.1";
