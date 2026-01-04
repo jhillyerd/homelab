@@ -95,7 +95,10 @@ in
             insecure_skip_verify = true;
           };
 
-          x509_cert = mkIf (length cfg.x509_certs > 0) { sources = cfg.x509_certs; };
+          x509_cert = mkIf (length cfg.x509_certs > 0) {
+            sources = cfg.x509_certs;
+            interval = "5m";
+          };
 
           exec = mkIf (cfg.zfs) {
             commands = [ ./files/telegraf/zfs_snap_times.py ];

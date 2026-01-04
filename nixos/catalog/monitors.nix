@@ -57,8 +57,10 @@
   ];
 
   ping = [
+    "ci-runner1.home.arpa"
     "eph.home.arpa"
     "fastd.home.arpa"
+    "fractal.home.arpa"
     "gateway.home.arpa"
     "msdde3.home.arpa"
     "nexus.home.arpa"
@@ -66,7 +68,6 @@
     "nc-um350-2.home.arpa"
     "nc-virt-1.home.arpa"
     "pve1.home.arpa"
-    "pve2.home.arpa"
     "pve3.home.arpa"
     "pve4.home.arpa"
     "skynas.home.arpa"
