@@ -65,6 +65,7 @@ rec {
       "linkwarden-data"
       "linkwarden-meili"
       "nodered-data"
+      "open-webui-data"
       "piper-data"
       "satisfactory-data"
       "syncthing-data"

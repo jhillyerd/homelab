@@ -11,6 +11,7 @@
       "inbucket"
       "links"
       "nodered"
+      "openwebui"
       "syncthing"
     ];
   }
