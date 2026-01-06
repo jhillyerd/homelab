@@ -38,18 +38,18 @@
             "/data/llama/models:/models"
           ];
           environment = {
-            LLAMA_ARG_CTX_SIZE = "65536";
+            LLAMA_ARG_CTX_SIZE = "262144";
             LLAMA_ARG_JINJA = "true";
-            LLAMA_ARG_TEMP = "0.7";
-            LLAMA_ARG_TOP_K = "20";
+            LLAMA_ARG_TEMP = "0.6";
             LLAMA_ARG_MIN_P = "0.0";
-            LLAMA_ARG_TOP_P = "0.8";
-            LLAMA_ARG_REPEAT_PENALTY = "1.05";
+            LLAMA_ARG_TOP_P = "0.95";
+            # LLAMA_ARG_TOP_K
+            # LLAMA_ARG_REPEAT_PENALTY
             LLAMA_ARG_GPU_LAYERS = "99";
           };
           cmd = [
             "-hf"
-            "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ4_NL"
+            "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:IQ4_NL"
           ];
         };
       };
