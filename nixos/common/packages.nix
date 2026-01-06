@@ -14,9 +14,9 @@
     (with pkgs; [
       bat
       bind
+      btop
       file
       git
-      htop
       jq
       lf
       lsof
