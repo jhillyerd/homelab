@@ -32,7 +32,6 @@ in
         gcr # gnome keyring SystemPrompter
         gedit
         gimp
-        google-chrome
         i3-balance-workspace
         libnotify # for notify-send
         lxappearance
@@ -42,6 +41,7 @@ in
         rofi
         seahorse # secret management
         slurp # region selector
+        ungoogled-chromium
         virt-manager
         wl-clipboard # clipboard commands
         xfce.ristretto # image viwer
