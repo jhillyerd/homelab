@@ -12,6 +12,7 @@ let
   ];
 
   # Nodes
+  boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO1L6/RnWa8jBLfre3EQm4pCQ4fpObmj4GrqMarpuDNM";
   eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
   fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
   fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
@@ -23,6 +24,7 @@ let
   scratch = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
   home-nodes = [
+    boss
     eph
     fastd
     fractal

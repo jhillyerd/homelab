@@ -1,5 +1,13 @@
 { system }:
 {
+  boss = {
+    ip.priv = "192.168.1.30";
+    ip.tail = "100.115.100.34";
+    config = ../hosts/boss.nix;
+    hw = ../hw/bosgame-m4.nix;
+    system = system.x86_64-linux;
+  };
+
   carbon = {
     config = ../hosts/carbon.nix;
     hw = ../hw/tp-x1g3.nix;
