@@ -57,11 +57,6 @@
     fsType = "vfat";
   };
 
-  fileSystems."/data/llama" = {
-    device = "/dev/tank/llama";
-    fsType = "ext4";
-  };
-
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
