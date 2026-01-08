@@ -7,6 +7,7 @@
 }:
 {
   networking = {
+    firewall.allowPing = true;
     search = [
       "home.arpa"
       "dyn.home.arpa"
