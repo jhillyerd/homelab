@@ -29,18 +29,21 @@
     oci-containers = {
       containers = {
         embeddings = {
-          image = "ghcr.io/huggingface/text-embeddings-inference:cuda-sha-0ec2ba5";
-          ports = [ "8002:3000" ];
+          image = "ollama/ollama:0.13.5";
+          ports = [ "8002:11434" ];
           environment = {
-            MODEL_ID = "sentence-transformers/all-MiniLM-L6-v2";
-            HOSTNAME = "0.0.0.0";
-            PORT = "3000";
+            NVIDIA_VISIBLE_DEVICES = "all";
           };
           volumes = [
-            "/data/embed/data:/data"
+            "/data/embed/ollama:/root/.ollama"
           ];
           devices = [ "nvidia.com/gpu=all" ];
           extraOptions = [ "--ipc=host" ];
+          entrypoint = "/bin/sh";
+          cmd = [
+            "-c"
+            "ollama serve & sleep 5 && ollama pull nomic-embed-text && wait"
+          ];
         };
 
         llama = {
