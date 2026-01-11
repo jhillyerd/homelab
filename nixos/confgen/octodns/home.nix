@@ -92,6 +92,10 @@ let
       type = "A";
       value = "192.168.128.14";
     };
+    unifi = {
+      type = "A";
+      value = "192.168.131.7";
+    };
     "*.k" = {
       type = "CNAME";
       value = "kube1.home.arpa.";

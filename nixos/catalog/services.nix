@@ -205,7 +205,7 @@
 
     dash.icon = "png/unifi.png";
 
-    lb.backendUrls = [ "https://192.168.1.20:8443" ];
+    lb.backendUrls = [ "https://192.168.131.7:11443" ];
     lb.auth = "external";
   };
 
