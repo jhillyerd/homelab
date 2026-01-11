@@ -23,7 +23,6 @@ in
         ];
       in
       (with pkgs; [
-        _1password-gui
         alsa-utils
         audacity
         clipman
@@ -52,6 +51,13 @@ in
     # Enable Ozone Wayland support in Chromium and Electron based applications
     # Still breaks camera in Chrome.
     # environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+    programs._1password-gui = {
+      enable = true;
+      # Certain features, including CLI integration and system authentication support,
+      # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+      polkitPolicyOwners = [ "james" ];
+    };
 
     programs.dconf.enable = true;
 
@@ -87,6 +93,7 @@ in
     services.tumbler.enable = true;
 
     services.gnome.gnome-keyring.enable = true;
+    services.gnome.gcr-ssh-agent.enable = false;
     services.libinput.enable = true;
     services.libinput.mouse.accelProfile = "flat";
 
@@ -95,7 +102,9 @@ in
       ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
 
       # this is needed for xdg-desktop-portal to work
-      systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
+      systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION \
+        XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID \
+        DBUS_SESSION_BUS_ADDRESS || true
     '';
 
     fonts.packages = with pkgs; [

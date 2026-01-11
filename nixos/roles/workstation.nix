@@ -64,6 +64,7 @@ in
       ];
 
     # Programs and services
+    programs._1password.enable = true;
     programs.direnv.enable = true;
     programs.fish.enable = true;
     programs.mosh.enable = true;
