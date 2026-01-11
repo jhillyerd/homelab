@@ -1,10 +1,12 @@
 let
   # Users
+  james-skynet = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGKG8scDbgNAwAfeKg76EfMHlaJOVzXMdcAKX9IInudG";
   james-boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMUS8WdTqKJ5zH4o/grh0UgBRpmyo9f1o4pELqq23y/";
   james-eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1Rq9OFHVus5eULteCEGNkHgINch40oPP2LwvlVd6ng";
   james-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAXHtE9NI16ZPNSKF6Cn0JNJS6fTNQYduerVmVa6WKY";
   james-nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICJoH0p+6iSISUAqRO8+6+uvQWpjaP0eQjDeGAXIYUI6";
   users = [
+    james-skynet
     james-boss
     james-eph
     james-ryzen
