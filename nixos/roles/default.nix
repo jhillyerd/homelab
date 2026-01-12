@@ -5,7 +5,7 @@
     ./consul.nix
     ./dns.nix
     ./gateway-online.nix
-    ./gui-wayland.nix
+    ./gui-sway.nix
     ./gui-xorg.nix
     ./homesite.nix
     ./influxdb.nix

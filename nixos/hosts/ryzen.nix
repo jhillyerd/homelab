@@ -7,7 +7,7 @@
 
   roles.tailscale.enable = true;
 
-  roles.gui-wayland.enable = true;
+  roles.gui-sway.enable = true;
   roles.workstation.enable = true;
 
   # For Raspberry Pi builds.

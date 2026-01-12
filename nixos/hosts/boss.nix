@@ -8,7 +8,7 @@
     ../common/onprem.nix
   ];
 
-  roles.gui-wayland.enable = true;
+  roles.gui-sway.enable = true;
   roles.workstation.enable = true;
 
   roles.tailscale.enable = true;

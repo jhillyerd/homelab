@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.roles.gui-wayland;
+  cfg = config.roles.gui-sway;
 in
 {
-  options.roles.gui-wayland = {
+  options.roles.gui-sway = {
     enable = mkEnableOption "Wayland GUI";
   };
 
