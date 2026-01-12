@@ -1,3 +1,13 @@
+# NixOS Configuration Guidelines
+
+## Commands
+- Test that a host builds: `cd nixos; nixos-rebuild --flake .#<host> build`
+
+## Constraints
+- DO NOT run nixos-rebuild with the `switch` or `boot` options, we are not
+  always logged into the host we are configuring.
+
+
 # Nomad Job Authoring Guidelines
 
 ## Basic Job Structure
