@@ -121,6 +121,16 @@
     dash.icon = "png/linkwarden.png";
   };
 
+  llm = {
+    title = "Llama";
+    dns.intCname = true;
+    dash.icon = "svg/ollama.svg";
+
+    lb.backendUrls = [
+      "http://fractal.home.arpa:8001"
+    ];
+  };
+
   mininas = {
     title = "miniNAS";
     dash.icon = "svg/truenas.svg";

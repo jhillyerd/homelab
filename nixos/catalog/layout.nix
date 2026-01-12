@@ -28,6 +28,7 @@
   {
     section = "Infrastructure";
     services = [
+      "llm"
       "mininas"
       "skynas"
       "traefik"
