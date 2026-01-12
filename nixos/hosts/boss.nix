@@ -8,7 +8,7 @@
     ../common/onprem.nix
   ];
 
-  roles.gui-sway.enable = true;
+  roles.gui-plasma.enable = true;
   roles.workstation.enable = true;
 
   roles.tailscale.enable = true;
