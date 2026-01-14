@@ -67,6 +67,7 @@ in
     programs._1password.enable = true;
     programs.direnv.enable = true;
     programs.fish.enable = true;
+    programs.fzf.keybindings = true;
     programs.mosh.enable = true;
     programs.nix-ld.enable = true; # For non-nix binaries.
 
