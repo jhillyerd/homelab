@@ -28,59 +28,61 @@
 
     oci-containers = {
       containers = {
-        embeddings = {
-          image = "ollama/ollama:0.13.5";
-          ports = [ "8002:11434" ];
-          environment = {
-            NVIDIA_VISIBLE_DEVICES = "all";
-          };
-          volumes = [
-            "/data/embed/ollama:/root/.ollama"
-          ];
-          devices = [ "nvidia.com/gpu=all" ];
-          extraOptions = [ "--ipc=host" ];
-          entrypoint = "/bin/sh";
-          cmd = [
-            "-c"
-            "ollama serve & sleep 5 && ollama pull nomic-embed-text && wait"
-          ];
-        };
+        ollama =
+          let
+            modelName = "Nemotron-3-Nano-30B-A3B-GGUF";
+            modelPath = "hf.co/unsloth/${modelName}:IQ4_NL";
+            modelFile = pkgs.writeText "ollama-modelfile" ''
+              FROM ${modelPath}
 
-        llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b7609";
-          ports = [ "8001:8080" ]; # healthcheck runs against 8080.
-          environment = {
-            LLAMA_ARG_CTX_SIZE = "262144";
-            LLAMA_ARG_JINJA = "true";
-            LLAMA_ARG_TEMP = "0.6";
-            LLAMA_ARG_MIN_P = "0.0";
-            LLAMA_ARG_TOP_P = "0.95";
-            # LLAMA_ARG_TOP_K
-            # LLAMA_ARG_REPEAT_PENALTY
-            LLAMA_ARG_GPU_LAYERS = "99";
+              PARAMETER temperature 0.6
+              PARAMETER top_p 0.95
+              PARAMETER min_p 0
+              PARAMETER top_k -1
+
+              PARAMETER num_ctx 262144
+              PARAMETER num_predict 32768
+              PARAMETER num_gpu 99
+
+              RENDERER nemotron-3-nano
+              PARSER nemotron-3-nano
+              TEMPLATE {{ .Prompt }}
+            '';
+          in
+          {
+            image = "ollama/ollama:0.13.5";
+            ports = [ "11434:11434" ];
+            environment = {
+              NVIDIA_VISIBLE_DEVICES = "all";
+              OLLAMA_KEEP_ALIVE = "-1";
+            };
+            volumes = [
+              "/data/ollama:/root/.ollama"
+              "${modelFile}:/Modelfile:ro"
+            ];
+            devices = [ "nvidia.com/gpu=all" ];
+            extraOptions = [ "--ipc=host" ];
+            entrypoint = "/bin/sh";
+            cmd = [
+              "-c"
+              ''
+                ollama serve &
+                sleep 5
+                ollama pull nomic-embed-text
+                ollama create "${modelName}" -f /Modelfile
+
+                # Preload the model
+                ollama run "${modelName}" ""
+                wait
+              ''
+            ];
           };
-          cmd = [
-            "-hf"
-            "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:IQ4_NL"
-          ];
-          volumes = [
-            "/data/llama/cache:/root/.cache"
-            "/data/llama/models:/models"
-          ];
-          devices = [ "nvidia.com/gpu=all" ];
-          extraOptions = [ "--ipc=host" ];
-        };
       };
     };
   };
 
-  fileSystems."/data/embed" = {
-    device = "/dev/tank/embed";
-    fsType = "ext4";
-  };
-
-  fileSystems."/data/llama" = {
-    device = "/dev/tank/llama";
+  fileSystems."/data/ollama" = {
+    device = "/dev/tank/ollama";
     fsType = "ext4";
   };
 
