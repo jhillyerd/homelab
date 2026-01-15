@@ -29,6 +29,7 @@ in
         fzf
         gcc
         gh
+        glow
         gnumake
         kitty # always install for terminfo
         lazydocker
