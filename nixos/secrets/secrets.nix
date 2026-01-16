@@ -107,4 +107,8 @@ in
 
   # Runners.
   "gitea-runner-token.age".publicKeys = group.runners;
+
+  # Specific hosts.
+  "syncoid-ssh-key.age".publicKeys = users ++ [ fastd ];
+
 }

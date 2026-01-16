@@ -26,67 +26,7 @@
     authentication = ''
       host all all all scram-sha-256
     '';
-
-    ensureDatabases = [
-      "root"
-      "forgejo"
-    ];
-
-    ensureUsers = [
-      {
-        name = "root";
-        ensureDBOwnership = true;
-        ensureClauses.superuser = true;
-        ensureClauses.login = true;
-      }
-      {
-        name = "forgejo";
-        ensureDBOwnership = true;
-        ensureClauses."inherit" = true;
-        ensureClauses.login = true;
-      }
-    ];
   };
-
-  services.openiscsi = {
-    enable = true;
-    enableAutoLoginOut = true;
-    name = "iqn.1999-11.org.bytemonkey:fastd";
-  };
-
-  # Import iSCSI ZFS pools.
-  systemd.services.zfs-import-backup1 =
-    let
-      zpoolcmd = "/run/current-system/sw/bin/zpool";
-      pool = "backup1";
-
-      script.start = ''
-        if ! ${zpoolcmd} list ${pool} >/dev/null 2>&1; then
-          ${zpoolcmd} import ${pool}
-        fi
-      '';
-
-      script.stop = ''
-        if ${zpoolcmd} list ${pool} >/dev/null 2>&1; then
-          ${zpoolcmd} export ${pool}
-        fi
-      '';
-    in
-    {
-      # Give iSCSI time to login to NAS.
-      preStart = "/run/current-system/sw/bin/sleep 5";
-
-      script = script.start;
-
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "iscsi.service" ];
-      after = [ "iscsi.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = "yes";
-        ExecStop = "${pkgs.writeShellScript "stop-zfs-backup1" script.stop}";
-      };
-    };
 
   services.syncoid = {
     enable = true;
@@ -113,7 +53,13 @@
     ];
 
     # Volumes to backup.
-    commands."fast1/database".target = "backup1/database";
+    commands."fast1/database" = {
+      target = "syncoid@mininas.home.arpa:tank/replicas/fastd/database";
+      sshKey = config.age.secrets."syncoid-ssh-key".path;
+      extraArgs = [
+        "--compress=zstd-fast"
+      ];
+    };
 
     service.after = [ "zfs-import-backup1.service" ];
   };
@@ -125,6 +71,13 @@
 
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ config.services.postgresql.settings.port ];
+
+  age.secrets = {
+    syncoid-ssh-key = {
+      file = ../secrets/syncoid-ssh-key.age;
+      owner = "syncoid";
+    };
+  };
 
   roles.upsmon = {
     enable = true;

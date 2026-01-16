@@ -38,6 +38,14 @@
     host = catalog.smtp.host;
   };
 
+  services.openssh = {
+    knownHosts = {
+      # For syncoid snapshot replication.
+      "mininas.home.arpa".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKzTnOx/MakYL8aVcovL3X/tpyX6MXWNdufxZg3qilBc";
+    };
+  };
+
   age.secrets = {
     influxdb-telegraf.file = ../secrets/influxdb-telegraf.age;
     wifi-env.file = ../secrets/wifi-env.age;
