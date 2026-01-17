@@ -1,6 +1,4 @@
 {
-  lib,
-  catalog,
   self,
   util,
   ...
@@ -14,8 +12,6 @@
   systemd.network.networks = util.mkClusterNetworks self;
 
   roles.consul = {
-    retryJoin = catalog.consul.servers;
-
     client = {
       enable = true;
       connect = true;
@@ -25,23 +21,6 @@
   roles.nomad = {
     enableClient = true;
     allocDir = "/data/nomad-alloc";
-
-    retryJoin = catalog.nomad.servers;
-
-    hostVolumes =
-      lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
-        path = "/mnt/skynas/${name}";
-        readOnly = false;
-      })
-      // {
-        "docker-sock-ro" = {
-          path = "/var/run/docker.sock";
-          readOnly = true;
-        };
-      };
-
-    # Use node catalog meta tags if defined.
-    client.meta = lib.mkIf (self ? nomad.meta) self.nomad.meta;
   };
 
   roles.telegraf.nomad = true;

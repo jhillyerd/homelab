@@ -19,15 +19,8 @@
     serveLocalZones = true;
   };
 
-  roles.consul = {
-    enableServer = true;
-    retryJoin = catalog.consul.servers;
-  };
-
-  roles.nomad = {
-    enableServer = true;
-    retryJoin = catalog.nomad.servers;
-  };
+  roles.consul.enableServer = true;
+  roles.nomad.enableServer = true;
 
   services.k3s = {
     enable = true;

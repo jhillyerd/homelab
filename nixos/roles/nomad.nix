@@ -1,7 +1,9 @@
 {
+  catalog,
   config,
   pkgs,
   lib,
+  self,
   ...
 }:
 with lib;
@@ -17,6 +19,8 @@ in
     retryJoin = mkOption {
       type = listOf str;
       description = "List of server host or IPs to join to datacenter";
+      # Use catalog nomad servers by default.
+      default = catalog.nomad.servers;
     };
 
     allocDir = mkOption {
@@ -47,7 +51,18 @@ in
         };
       });
       description = "Host volumes";
-      default = { };
+      # Mount skynas host volumes defined in catalog by default.
+      default =
+        lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
+          path = "/mnt/skynas/${name}";
+          readOnly = false;
+        })
+        // {
+          "docker-sock-ro" = {
+            path = "/var/run/docker.sock";
+            readOnly = true;
+          };
+        };
     };
 
     client = mkOption {
@@ -56,7 +71,8 @@ in
           meta = mkOption {
             type = attrs;
             description = "Nomad metadata entries";
-            default = { };
+            # Use node catalog meta tags if defined.
+            default = lib.mkIf (self ? nomad.meta) self.nomad.meta;
           };
         };
       };

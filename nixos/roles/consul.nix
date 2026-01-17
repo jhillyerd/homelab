@@ -1,4 +1,5 @@
 {
+  catalog,
   config,
   lib,
   self,
@@ -16,6 +17,8 @@ in
     retryJoin = mkOption {
       type = listOf str;
       description = "List of server host or IPs to join to datacenter";
+      # Use catalog consul servers by default.
+      default = catalog.consul.servers;
     };
 
     client = mkOption {
