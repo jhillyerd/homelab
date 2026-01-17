@@ -23,51 +23,51 @@ in
       default = catalog.nomad.servers;
     };
 
-    allocDir = mkOption {
-      type = nullOr path;
-      description = "Where nomad client stores alloc data";
-      default = null;
-    };
-
     dataDir = mkOption {
       type = path;
       description = "Where nomad stores its state";
       default = "/var/lib/nomad";
     };
 
-    hostVolumes = mkOption {
-      type = attrsOf (submodule {
-        options = {
-          path = mkOption {
-            type = path;
-            description = "Path on host filesystem";
-          };
-
-          readOnly = mkOption {
-            type = bool;
-            description = "Prevents writes to volume";
-            default = true;
-          };
-        };
-      });
-      description = "Host volumes";
-      # Mount skynas host volumes defined in catalog by default.
-      default =
-        lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
-          path = "/mnt/skynas/${name}";
-          readOnly = false;
-        })
-        // {
-          "docker-sock-ro" = {
-            path = "/var/run/docker.sock";
-            readOnly = true;
-          };
-        };
-    };
-
     client = mkOption {
       type = submodule {
         options = {
+          allocDir = mkOption {
+            type = nullOr path;
+            description = "Where nomad client stores alloc data";
+            default = null;
+          };
+
+          hostVolumes = mkOption {
+            type = attrsOf (submodule {
+              options = {
+                path = mkOption {
+                  type = path;
+                  description = "Path on host filesystem";
+                };
+
+                readOnly = mkOption {
+                  type = bool;
+                  description = "Prevents writes to volume";
+                  default = true;
+                };
+              };
+            });
+            description = "Host volumes";
+            # Mount skynas host volumes defined in catalog by default.
+            default =
+              lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
+                path = "/mnt/skynas/${name}";
+                readOnly = false;
+              })
+              // {
+                "docker-sock-ro" = {
+                  path = "/var/run/docker.sock";
+                  readOnly = true;
+                };
+              };
+          };
+
           meta = mkOption {
             type = attrs;
             description = "Nomad metadata entries";
@@ -237,14 +237,14 @@ in
         settings = {
           client = {
             enabled = true;
-            alloc_dir = mkIf (cfg.allocDir != null) cfg.allocDir;
+            alloc_dir = mkIf (cfg.client.allocDir != null) cfg.client.allocDir;
             cni_path = "${pkgs.cni-plugins}/bin";
 
-            host_volume = mkIf (cfg.hostVolumes != { }) (
+            host_volume = mkIf (cfg.client.hostVolumes != { }) (
               mapAttrs (name: entry: {
                 inherit (entry) path;
                 read_only = entry.readOnly;
-              }) cfg.hostVolumes
+              }) cfg.client.hostVolumes
             );
 
             meta = cfg.client.meta;

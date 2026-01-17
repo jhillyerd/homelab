@@ -22,7 +22,7 @@
   roles.nomad = {
     enableClient = true;
     enableServer = true;
-    allocDir = "/data/nomad-alloc";
+    client.allocDir = "/data/nomad-alloc";
   };
 
   roles.telegraf.nomad = true;
