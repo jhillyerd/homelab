@@ -12,7 +12,6 @@
   ];
 
   systemd.network.networks = util.mkClusterNetworks self;
-  roles.cluster-volumes.enable = true;
 
   roles.consul = {
     retryJoin = catalog.consul.servers;

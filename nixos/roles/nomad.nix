@@ -20,13 +20,13 @@ in
     };
 
     allocDir = mkOption {
-      type = nullOr str;
+      type = nullOr path;
       description = "Where nomad client stores alloc data";
       default = null;
     };
 
     dataDir = mkOption {
-      type = str;
+      type = path;
       description = "Where nomad stores its state";
       default = "/var/lib/nomad";
     };
@@ -212,6 +212,8 @@ in
     })
 
     (mkIf cfg.enableClient {
+      roles.cluster-volumes.enable = true;
+
       # Nomad client config.
       services.nomad = {
         enableDocker = true;

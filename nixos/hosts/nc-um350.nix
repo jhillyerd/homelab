@@ -13,8 +13,6 @@
   roles.dns.bind.enable = true;
   roles.dns.bind.serveLocalZones = false;
 
-  roles.cluster-volumes.enable = true;
-
   roles.consul = {
     enableServer = true;
     retryJoin = catalog.consul.servers;
