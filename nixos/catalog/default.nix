@@ -56,8 +56,6 @@ rec {
       nc-um350-2.ip.priv
       witness.ip.priv
     ];
-
-    skynas-host-volumes = [ ];
   };
 
   # Named TCP/UDP load balancer entry points.

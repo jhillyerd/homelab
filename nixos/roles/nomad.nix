@@ -54,18 +54,13 @@ in
               };
             });
             description = "Host volumes";
-            # Mount skynas host volumes defined in catalog by default.
-            default =
-              lib.genAttrs catalog.nomad.skynas-host-volumes (name: {
-                path = "/mnt/skynas/${name}";
-                readOnly = false;
-              })
-              // {
-                "docker-sock-ro" = {
-                  path = "/var/run/docker.sock";
-                  readOnly = true;
-                };
+            # Allow docker socket by default.
+            default = {
+              "docker-sock-ro" = {
+                path = "/var/run/docker.sock";
+                readOnly = true;
               };
+            };
           };
 
           meta = mkOption {
@@ -245,8 +240,6 @@ in
     })
 
     (mkIf cfg.enableClient {
-      roles.cluster-volumes.enable = true;
-
       # Nomad client config.
       services.nomad = {
         enableDocker = true;
@@ -328,6 +321,17 @@ in
 
       systemd.services.nomad = {
         after = [ "remote-fs.target" ];
+      };
+
+      fileSystems = {
+        "/mnt/nomad-volumes" = {
+          device = "192.168.1.10:/mnt/red-ssd/cluster/nomad/volumes";
+          fsType = "nfs";
+          options = [
+            "x-systemd.automount"
+            "noauto"
+          ];
+        };
       };
     })
   ];

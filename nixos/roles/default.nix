@@ -1,7 +1,6 @@
 { ... }:
 {
   imports = [
-    ./cluster-volumes.nix
     ./consul.nix
     ./dns.nix
     ./gateway-online.nix
