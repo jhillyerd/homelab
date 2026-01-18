@@ -10,12 +10,6 @@ job "nodered" {
       port "http" { to = 1880 }
     }
 
-    volume "data" {
-      type = "host"
-      source = "nodered-data"
-      read_only = false
-    }
-
     consul {
       # Use server default task identity.
     }
@@ -57,16 +51,18 @@ job "nodered" {
 
     task "nodered" {
       driver = "docker"
+      user = "3003"
 
       config {
         image = "nodered/node-red:4.0.9"
         ports = ["http"]
-      }
 
-      volume_mount {
-        volume = "data"
-        destination = "/data"
-        read_only = false
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/nodered"
+          target   = "/data"
+          readonly = false
+        }
       }
 
       resources {

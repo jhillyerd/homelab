@@ -20,12 +20,6 @@ job "forgejo" {
       port "ssh" { to = 22 }
     }
 
-    volume "forgejo" {
-      type = "host"
-      source = "forgejo-data"
-      read_only = false
-    }
-
     service {
       name = "forgejo-http"
       port = "http"
@@ -76,17 +70,18 @@ job "forgejo" {
       config {
         image = "codeberg.org/forgejo/forgejo:11.0.0"
         ports = ["http", "ssh"]
-      }
 
-      volume_mount {
-        volume = "forgejo"
-        destination = "/data"
-        read_only = false
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/forgejo"
+          target   = "/data"
+          readonly = false
+        }
       }
 
       env {
-        USER_UID = 1024
-        USER_GID = 1000
+        USER_UID = 3003
+        USER_GID = 3003
       }
 
       resources {

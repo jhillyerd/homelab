@@ -17,12 +17,6 @@ job "grafana" {
       }
     }
 
-    volume "grafana" {
-      type = "host"
-      source = "grafana-storage"
-      read_only = false
-    }
-
     consul {
       # Use server default task identity.
     }
@@ -55,16 +49,18 @@ job "grafana" {
 
     task "grafana" {
       driver = "docker"
+      user = "3003"
 
       config {
         image = "grafana/grafana-oss:12.0.3"
         ports = ["http"]
-      }
 
-      volume_mount {
-        volume = "grafana"
-        destination = "/var/lib/grafana"
-        read_only = false
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/grafana"
+          target   = "/var/lib/grafana"
+          readonly = false
+        }
       }
 
       logs {

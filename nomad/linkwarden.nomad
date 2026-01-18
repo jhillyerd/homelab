@@ -20,18 +20,6 @@ job "linkwarden" {
       port "ollama" { to = 11434 }
     }
 
-    volume "linkwarden" {
-      type = "host"
-      source = "linkwarden-data"
-      read_only = false
-    }
-
-    volume "meilisearch" {
-      type = "host"
-      source = "linkwarden-meili"
-      read_only = false
-    }
-
     consul {
       # Use server default task identity.
     }
@@ -63,12 +51,13 @@ job "linkwarden" {
       config {
         image = "ghcr.io/linkwarden/linkwarden:v2.13.2"
         ports = ["http"]
-      }
 
-      volume_mount {
-        volume = "linkwarden"
-        destination = "/data/data"
-        read_only = false
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/linkwarden/data"
+          target   = "/data/data"
+          readonly = false
+        }
       }
 
       env {
@@ -123,12 +112,13 @@ EOT
       config {
         image = "getmeili/meilisearch:v1.12.8"
         ports = ["search"]
-      }
-
-      volume_mount {
-        volume = "meilisearch"
-        destination = "/meili_data"
-        read_only = false
+        
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/linkwarden/meilisearch"
+          target   = "/meili_data"
+          readonly = false
+        }
       }
 
       env {

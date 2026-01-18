@@ -17,12 +17,6 @@ job "open-webui" {
       port "http" { to = 8080 }
     }
 
-    volume "open-webui-data" {
-      type = "host"
-      source = "open-webui-data"
-      read_only = false
-    }
-
     service {
       name = "open-webui"
       port = "http"
@@ -50,12 +44,13 @@ job "open-webui" {
       config {
         image = "ghcr.io/open-webui/open-webui:v0.6.43"
         ports = ["http"]
-      }
 
-      volume_mount {
-        volume = "open-webui-data"
-        destination = "/app/backend/data"
-        read_only = false
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/open-webui/data"
+          target   = "/app/backend/data"
+          readonly = false
+        }
       }
 
       env {

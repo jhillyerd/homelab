@@ -139,6 +139,17 @@ in
         wants = [ "consul.service" ];
       };
 
+      users.users.nomad = {
+        description = "Nomad volume user";
+        isSystemUser = true;
+        uid = 3003;
+        group = "nomad";
+      };
+
+      users.groups.nomad = {
+        gid = 3003;
+      };
+
       # Nomad shared client & server config.
       services.nomad = {
         enable = true;
@@ -298,8 +309,11 @@ in
               gc = {
                 image_delay = "60m";
               };
-            };
 
+              volumes = {
+                enabled = true;
+              };
+            };
           };
 
           plugin.usb.config = mkIf cfg.usb.enable {

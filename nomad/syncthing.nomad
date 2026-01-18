@@ -20,12 +20,6 @@ job "syncthing" {
       port "sync" { static = 22000 }
     }
 
-    volume "syncthing" {
-      type = "host"
-      source = "syncthing-data"
-      read_only = false
-    }
-
     service {
       name = "syncthing-http"
       port = "http"
@@ -53,17 +47,18 @@ job "syncthing" {
       config {
         image = "ghcr.io/syncthing/syncthing:1.29.3"
         ports = ["http", "discovery", "sync"]
-      }
 
-      volume_mount {
-        volume = "syncthing"
-        destination = "/var/syncthing"
-        read_only = false
+        mount = {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/syncthing"
+          target   = "/var/syncthing"
+          readonly = false
+        }
       }
 
       env {
-        PUID = 1024
-        PGID = 1000
+        PUID = 3003
+        PGID = 3003
       }
 
       resources {

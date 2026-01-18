@@ -59,28 +59,23 @@ job "homeassistant" {
       ]
     }
 
-    volume "homeassistant-data" {
-      type = "host"
-      read_only = false
-      source = "homeassistant-data"
-    }
-
     task "homeassistant" {
       driver = "docker"
 
       config {
         image = "ghcr.io/home-assistant/home-assistant:2025.9.3"
         ports = [ "http", "sonos" ]
+
+        mount {
+          type = "bind"
+          source = "/mnt/nomad-volumes/homeassistant/data"
+          target = "/config"
+          readonly = false
+        }
       }
 
       env {
         TZ = "America/Los_Angeles"
-      }
-
-      volume_mount {
-        volume = "homeassistant-data"
-        destination = "/config"
-        read_only = false
       }
 
       resources {
@@ -95,12 +90,6 @@ job "homeassistant" {
 
     network {
       mode = "bridge"
-    }
-
-    volume "piper-data" {
-      type = "host"
-      read_only = false
-      source = "piper-data"
     }
 
     service {
@@ -124,6 +113,13 @@ job "homeassistant" {
       config {
         image = "lscr.io/linuxserver/piper:1.4.0"
         ports = [ 10200 ]
+
+        mount {
+          type = "bind"
+          source = "/mnt/nomad-volumes/homeassistant/piper"
+          target = "/config"
+          readonly = false
+        }
       }
 
       env {
@@ -131,12 +127,6 @@ job "homeassistant" {
         PGID = 1000
         TZ = "America/Los_Angeles"
         PIPER_VOICE = "en_US-ryan-medium"
-      }
-
-      volume_mount {
-        volume = "piper-data"
-        destination = "/config"
-        read_only = false
       }
 
       resources {
@@ -151,12 +141,6 @@ job "homeassistant" {
 
     network {
       mode = "bridge"
-    }
-
-    volume "whisper-data" {
-      type = "host"
-      read_only = false
-      source = "whisper-data"
     }
 
     service {
@@ -180,6 +164,13 @@ job "homeassistant" {
       config {
         image = "linuxserver/faster-whisper:2.4.0"
         ports = [ 10300 ]
+
+        mount {
+          type = "bind"
+          source = "/mnt/nomad-volumes/homeassistant/whisper"
+          target = "/config"
+          readonly = false
+        }
       }
 
       env {
@@ -189,12 +180,6 @@ job "homeassistant" {
         WHISPER_MODEL = "tiny"
         WHISPER_LANG = "en"
         #WHISPER_BEAM = 5
-      }
-
-      volume_mount {
-        volume = "whisper-data"
-        destination = "/config"
-        read_only = false
       }
 
       resources {
@@ -224,12 +209,6 @@ job "homeassistant" {
     network {
       mode = "bridge"
       port "http" { to = 8091 }
-    }
-
-    volume "zwavejs" {
-      type = "host"
-      source = "zwavejs-data"
-      read_only = false
     }
 
     service {
@@ -275,6 +254,13 @@ job "homeassistant" {
         image = "zwavejs/zwave-js-ui:11.2.1"
         ports = ["http", 3000]
 
+        mount {
+          type = "bind"
+          source = "/mnt/nomad-volumes/homeassistant/zwavejs"
+          target = "/usr/src/app/store"
+          readonly = false
+        }
+
         devices = [
           {
             host_path = "/dev/serial/by-id/usb-0658_0200-if00"
@@ -285,12 +271,6 @@ job "homeassistant" {
 
       env {
         SESSION_SECRET = "itreallydoesntmatter"
-      }
-
-      volume_mount {
-        volume = "zwavejs"
-        destination = "/usr/src/app/store"
-        read_only = false
       }
 
       resources {

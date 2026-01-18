@@ -71,14 +71,17 @@ job "inbucket" {
 
       config {
         # :latest for stable releases, :edge to track development.
-        image = "inbucket/inbucket:3.1.0"
+        image = "inbucket/inbucket:3.1.1"
         ports = ["http", "smtp"]
 
         args = ["-logjson=false"]
 
-        volumes = [
-          "../alloc/data/inbucket_storage:/storage"
-        ]
+        mount {
+          type = "bind"
+          source = "/mnt/nomad-volumes/inbucket"
+          target = "/storage"
+          readonly = false
+        }
       }
 
       env {

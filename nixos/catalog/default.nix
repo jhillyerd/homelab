@@ -57,21 +57,7 @@ rec {
       witness.ip.priv
     ];
 
-    skynas-host-volumes = [
-      "forgejo-data"
-      "gitea-storage"
-      "grafana-storage"
-      "homeassistant-data"
-      "linkwarden-data"
-      "linkwarden-meili"
-      "nodered-data"
-      "open-webui-data"
-      "piper-data"
-      "satisfactory-data"
-      "syncthing-data"
-      "whisper-data"
-      "zwavejs-data"
-    ];
+    skynas-host-volumes = [ ];
   };
 
   # Named TCP/UDP load balancer entry points.
