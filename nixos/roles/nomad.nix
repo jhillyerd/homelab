@@ -74,6 +74,12 @@ in
             # Use node catalog meta tags if defined.
             default = lib.mkIf (self ? nomad.meta) self.nomad.meta;
           };
+
+          volumesDir = mkOption {
+            type = nullOr path;
+            default = null;
+            description = "Where nomad places plugin controlled host volumes. Must be an absolute path.";
+          };
         };
       };
       description = "Client (worker) Nomad configuration";
@@ -246,6 +252,8 @@ in
                 read_only = entry.readOnly;
               }) cfg.client.hostVolumes
             );
+
+            host_volumes_dir = mkIf (cfg.client.volumesDir != null) cfg.client.volumesDir;
 
             meta = cfg.client.meta;
           };

@@ -15,6 +15,14 @@ in
 
   config = lib.mkIf cfg.enable {
     fileSystems = {
+      "/mnt/nomad-volumes" = {
+        device = "192.168.1.10:/mnt/red-ssd/cluster/nomad/volumes";
+        fsType = "nfs";
+        options = [
+          "x-systemd.automount"
+          "noauto"
+        ];
+      };
       "/mnt/skynas" = {
         device = "192.168.1.20:/volume1/cluster_${environment}";
         fsType = "nfs";
