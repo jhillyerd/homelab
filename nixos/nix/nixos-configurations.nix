@@ -26,19 +26,16 @@ let
       node,
       hardware ? node.hw,
       modules ? [ ],
-      environment ? "test",
     }:
     nixosSystem {
       system = node.system;
 
-      # `specialArgs` allows access to catalog, environment, etc with
-      # hosts and roles.  `self` lets a host reference aspects of
-      # itself.
+      # `specialArgs` allows access to catalog, etc with hosts and roles. `self`
+      # lets a host reference aspects of itself.
       specialArgs = inputs // {
         inherit
           authorizedKeys
           catalog
-          environment
           hostName
           util
           ;
@@ -72,6 +69,5 @@ mapAttrs (
   hostName: node:
   mkSystem {
     inherit hostName node;
-    environment = "prod";
   }
 ) catalog.nodes

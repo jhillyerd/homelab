@@ -4,7 +4,6 @@
   authorizedKeys,
   catalog,
   hostName,
-  environment,
   ...
 }:
 {
@@ -37,7 +36,7 @@
     # settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
   };
 
-  services.getty.helpLine = ">>> Flake node: ${hostName}, environment: ${environment}";
+  services.getty.helpLine = ">>> Flake node: ${hostName}";
 
   services.openssh = {
     enable = true;
@@ -57,5 +56,4 @@
   networking.firewall.checkReversePath = "loose";
 
   systemd.network.wait-online.ignoredInterfaces = [ catalog.tailscale.interface ];
-
 }

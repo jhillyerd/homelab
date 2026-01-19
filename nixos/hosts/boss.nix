@@ -1,4 +1,4 @@
-{ environment, lib, ... }:
+{ lib, ... }:
 {
   # TODO remove after homelab catches up.
   system.stateVersion = lib.mkForce "25.11";
@@ -15,5 +15,5 @@
 
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
-  virtualisation.libvirtd.enable = environment == "prod";
+  virtualisation.libvirtd.enable = true;
 }

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  environment,
   catalog,
   self,
   util,
@@ -23,7 +22,7 @@
   };
 
   roles.nfs-bind = {
-    nfsPath = "192.168.1.20:/volume1/web_${environment}";
+    nfsPath = "192.168.1.20:/volume1/web_prod";
 
     binds = {
       "authelia" = {
