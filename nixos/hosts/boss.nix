@@ -16,4 +16,9 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
   virtualisation.libvirtd.enable = true;
+
+  roles.upsmon = {
+    enable = true;
+    wave = 2;
+  };
 }

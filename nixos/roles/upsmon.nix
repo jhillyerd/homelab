@@ -71,8 +71,8 @@ in
           ];
         };
 
-        upsmon.monitor.skynas = {
-          system = "ups@witness.home.arpa";
+        upsmon.monitor.mininas = {
+          system = "ups@mininas.home.arpa";
           type = "secondary";
           user = "monuser";
           passwordFile = "${secret}";

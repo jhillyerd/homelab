@@ -39,7 +39,7 @@
     streamConfig = ''
       server {
         listen *:3493;
-        proxy_pass skynas.home.arpa:3493;
+        proxy_pass mininas.home.arpa:3493;
       }
     '';
   };
