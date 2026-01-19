@@ -2,7 +2,7 @@
   description = "VM deployment target base images";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -12,9 +12,9 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       nixos-generators,
+      ...
     }:
     let
       inherit (nixpkgs) lib;
