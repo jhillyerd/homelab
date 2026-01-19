@@ -47,6 +47,10 @@
       response_status_code = 200;
     }
     {
+      urls = [ "https://syncthing.bytemonkey.org/" ];
+      response_status_code = 200;
+    }
+    {
       urls = [ "https://unifi.bytemonkey.org/manage/account/login" ];
       response_status_code = 200;
     }
@@ -62,6 +66,7 @@
     "fastd.home.arpa"
     "fractal.home.arpa"
     "gateway.home.arpa"
+    "mininas.home.arpa"
     "msdde3.home.arpa"
     "nexus.home.arpa"
     "nc-um350-1.home.arpa"

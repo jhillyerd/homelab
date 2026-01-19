@@ -38,6 +38,13 @@ in
     services.libinput.enable = true;
     services.libinput.mouse.accelProfile = "flat";
 
+    services.syncthing = {
+      enable = true;
+      user = "james";
+      dataDir = "/home/james";
+    };
+    users.users.james.extraGroups = [ "syncthing" ];
+
     fonts.packages = with pkgs; [
       font-awesome
       fira-code
