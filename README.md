@@ -16,28 +16,29 @@ graph TD
     gw --- lan{LAN}
     nc1("nc-um350-1<br/>(nomad client)") --- lan
     nc2("nc-um350-2<br/>(nomad client)") --- lan
-    nas("skynas<br/>(NAS)") --- lan
+    nas("mininas<br/>(NAS)") --- lan
     lan --- pve1
-    lan --- pve2
     lan --- pve3
-    subgraph pve1 ["pve1 (hypervisor)"]
+    lan --- pve4
+    subgraph pve1 ["pve1 (16GB hypervisor)"]
         direction RL
         nexus("nexus")
-        witness("witness")
+        witness("witness<br/>(nomad server)")
     end
-    subgraph pve2 ["pve2 (hypervisor)"]
+    subgraph pve3 ["pve3 (64GB hypervisor)"]
         direction RL
-        kube2("kube2")
-        scratch("scratch")
-    end
-    subgraph pve3 ["pve3 (hypervisor)"]
-        direction RL
-        ci-runner1("ci-runner1")
-        eph("eph")
-        fastd("fastd")
+        fastd("fastd<br/>(database)")
         kube1("kube1")
-        metrics("metrics")
+        nc-virt-1("nc-virt-1<br/>(nomad client)")
         web("web")
+    end
+    subgraph pve4 ["pve4 (64GB hypervisor)"]
+        direction RL
+        ci-runner1("ci-runner1<br/>(forgejo)")
+        eph("eph")
+        kube2("kube2")
+        metrics("metrics")
+        unifi("unifi")
     end
 ```
 
