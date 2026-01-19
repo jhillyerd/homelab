@@ -75,8 +75,9 @@
     "witness.home.arpa"
   ];
 
-  x509_certs =
-    [ "https://dash.bytemonkey.org/" ]
-    ++ (map (ip: "https://${ip}:8300") consul.servers)
-    ++ (map (ip: "https://${ip}:4646") nomad.servers);
+  x509_certs = [
+    "https://dash.bytemonkey.org/"
+  ]
+  ++ (map (ip: "https://${ip}:8300") consul.servers)
+  ++ (map (ip: "https://${ip}:4646") nomad.servers);
 }

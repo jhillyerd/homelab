@@ -121,7 +121,7 @@ in
     # Create an environment file containing the influxdb password.
     age-template.files."telegraf-influx.env" = {
       vars.password = cfg.influxdb.passwordFile;
-      content = ''PASSWORD=$password'';
+      content = "PASSWORD=$password";
     };
   };
 }

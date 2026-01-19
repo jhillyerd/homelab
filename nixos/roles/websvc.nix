@@ -199,8 +199,7 @@ in
         certificateEmail = catalog.cf-api.user;
         cloudflareDnsApiTokenFile = cfg.cloudflareDnsApiTokenFile;
         services =
-          (mapAttrs' mkInternalService internalConfigs)
-          // mapAttrs' mkExternalService externalConfigs;
+          (mapAttrs' mkInternalService internalConfigs) // mapAttrs' mkExternalService externalConfigs;
       };
 
     roles.homesite =

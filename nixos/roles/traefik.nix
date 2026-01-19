@@ -130,7 +130,8 @@ in
             entryPoints = [
               "web"
               "websecure"
-            ] ++ (if opt.external then [ "extweb" ] else [ ]);
+            ]
+            ++ (if opt.external then [ "extweb" ] else [ ]);
 
             rule = "Host(`" + opt.domainName + "`)";
             service = name;
@@ -165,7 +166,8 @@ in
                 service = "api@internal";
                 tls.certresolver = "letsencrypt";
               };
-            } // mapAttrs routerEntry cfg.services;
+            }
+            // mapAttrs routerEntry cfg.services;
 
             services = mapAttrs serviceEntry cfg.services;
 
