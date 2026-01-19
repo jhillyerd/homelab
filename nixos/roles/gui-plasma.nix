@@ -14,28 +14,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      let
-        remaps = [
-          (pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.firefox}/bin/firefox "$@"
-          '')
-        ];
-      in
-      (with pkgs; [
-        alsa-utils
-        audacity
-        clipman
-        firefox
-        gimp
-        libnotify
-        obs-studio
-        pavucontrol
-        slurp
-        ungoogled-chromium
-        virt-manager
-      ])
-      ++ remaps;
+    roles.gui-common.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      clipman
+      slurp
+    ];
 
     programs._1password-gui = {
       enable = true;

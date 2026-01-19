@@ -4,6 +4,7 @@
     ./consul.nix
     ./dns.nix
     ./gateway-online.nix
+    ./gui-common.nix
     ./gui-plasma.nix
     ./gui-sway.nix
     ./gui-xorg.nix

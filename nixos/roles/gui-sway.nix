@@ -14,39 +14,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      let
-        remaps = [
-          (pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.firefox}/bin/firefox "$@"
-          '')
-        ];
-      in
-      (with pkgs; [
-        alsa-utils
-        audacity
-        clipman
-        dunst
-        firefox
-        gcr # gnome keyring SystemPrompter
-        gedit
-        gimp
-        i3-balance-workspace
-        libnotify # for notify-send
-        lxappearance
-        obs-studio
-        pantheon.elementary-icon-theme
-        pavucontrol
-        rofi
-        seahorse # secret management
-        slurp # region selector
-        ungoogled-chromium
-        virt-manager
-        wl-clipboard # clipboard commands
-        xfce.ristretto # image viwer
-        yambar
-      ])
-      ++ remaps;
+    roles.gui-common.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      clipman
+      dunst
+      gcr # gnome keyring SystemPrompter
+      gedit
+      i3-balance-workspace
+      lxappearance
+      pantheon.elementary-icon-theme
+      rofi
+      seahorse # secret management
+      slurp # region selector
+      wl-clipboard # clipboard commands
+      xfce.ristretto # image viwer
+      yambar
+    ];
 
     # Enable Ozone Wayland support in Chromium and Electron based applications
     # Still breaks camera in Chrome.

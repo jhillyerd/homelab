@@ -14,42 +14,27 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      let
-        remaps = [
-          (pkgs.writeShellScriptBin "x-www-browser" ''
-            exec ${pkgs.firefox}/bin/firefox "$@"
-          '')
-        ];
-      in
-      (with pkgs; [
-        audacity
-        dmenu
-        dunst
-        firefox
-        gedit
-        gimp
-        google-chrome
-        i3-balance-workspace
-        libnotify # for notify-send
-        lxappearance
-        maim # takes screenshots
-        obs-studio
-        pantheon.elementary-icon-theme
-        polybarFull
-        pavucontrol
-        rofi
-        rxvt-unicode
-        sxhkd
-        virt-manager
-        xclip
-        xfce.ristretto # image viwer
-        xorg.xdpyinfo
-        xorg.xev
-        xsecurelock
-        xss-lock
-      ])
-      ++ remaps;
+    roles.gui-common.enable = true;
+
+    environment.systemPackages = with pkgs; [
+      dmenu
+      dunst
+      gedit
+      i3-balance-workspace
+      lxappearance
+      maim # takes screenshots
+      pantheon.elementary-icon-theme
+      polybarFull
+      rofi
+      rxvt-unicode
+      sxhkd
+      xclip
+      xfce.ristretto # image viwer
+      xorg.xdpyinfo
+      xorg.xev
+      xsecurelock
+      xss-lock
+    ];
 
     programs.dconf.enable = true;
 
