@@ -21,13 +21,6 @@ in
       slurp
     ];
 
-    programs._1password-gui = {
-      enable = true;
-      polkitPolicyOwners = [ "james" ];
-    };
-
-    programs.dconf.enable = true;
-
     services.greetd = {
       enable = true;
       useTextGreeter = true;
@@ -44,35 +37,5 @@ in
       };
     };
     services.desktopManager.plasma6.enable = true;
-
-    services.libinput.enable = true;
-    services.libinput.mouse.accelProfile = "flat";
-
-    fonts.packages = with pkgs; [
-      font-awesome
-      fira-code
-      inconsolata
-      noto-fonts
-      terminus_font
-    ];
-
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
-
-    hardware.bluetooth.enable = true;
-    hardware.bluetooth.powerOnBoot = true;
-    services.blueman.enable = true;
-
-    services.printing.enable = true;
-    services.avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true;
-    };
   };
 }

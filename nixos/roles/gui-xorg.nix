@@ -36,8 +36,6 @@ in
       xss-lock
     ];
 
-    programs.dconf.enable = true;
-
     programs.thunar = {
       enable = true;
       plugins = with pkgs.xfce; [ thunar-volman ];
@@ -50,42 +48,12 @@ in
     services.xserver = {
       enable = true;
       xkb.layout = "us";
-
       windowManager.i3.enable = true;
     };
 
-    services.libinput.enable = true;
-    services.libinput.mouse.accelProfile = "flat";
-
     fonts.packages = with pkgs; [
-      fira-code
-      inconsolata
-      noto-fonts
       siji
-      terminus_font
-      unifont
     ];
-
-    # Enable sound.
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
-
-    hardware.bluetooth.enable = true;
-    hardware.bluetooth.powerOnBoot = true;
-    services.blueman.enable = true;
-
-    # IPP Printer support.
-    services.printing.enable = true;
-    services.avahi = {
-      enable = true;
-      nssmdns4 = true;
-      openFirewall = true;
-    };
 
     # Mouse button mappings.
     environment.etc."X11/xorg.conf.d/99-mouse-buttons.conf".text = ''
