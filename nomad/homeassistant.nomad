@@ -174,8 +174,8 @@ job "homeassistant" {
       }
 
       env {
-        PUID = 1024
-        PGID = 1000
+        PUID = 3003
+        PGID = 3003
         TZ = "America/Los_Angeles"
         WHISPER_MODEL = "tiny"
         WHISPER_LANG = "en"
