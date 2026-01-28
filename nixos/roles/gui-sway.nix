@@ -47,22 +47,6 @@ in
       extraOptions = [ "--unsupported-gpu" ];
     };
 
-    services.greetd = {
-      enable = true;
-      useTextGreeter = true;
-
-      settings = {
-        default_session = {
-          command = pkgs.writeShellScript "start-tuigreet" ''
-            setterm --blank=10
-            setterm --powersave on
-            ${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session
-          '';
-          user = "greeter";
-        };
-      };
-    };
-
     # Used by thunar.
     services.gvfs.enable = true;
     services.tumbler.enable = true;

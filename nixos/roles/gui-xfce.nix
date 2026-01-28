@@ -6,11 +6,11 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.roles.gui-xorg;
+  cfg = config.roles.gui-xfce;
 in
 {
-  options.roles.gui-xorg = {
-    enable = mkEnableOption "Xorg GUI";
+  options.roles.gui-xfce = {
+    enable = mkEnableOption "Xfce GUI";
   };
 
   config = mkIf cfg.enable {
@@ -20,40 +20,29 @@ in
       dmenu
       dunst
       gedit
-      i3-balance-workspace
       lxappearance
       maim # takes screenshots
       pantheon.elementary-icon-theme
-      polybarFull
       rofi
       rxvt-unicode
       sxhkd
       xclip
-      xfce.ristretto # image viwer
       xorg.xdpyinfo
+      xorg.xinit
       xorg.xev
-      xsecurelock
-      xss-lock
     ];
 
-    programs.thunar = {
-      enable = true;
-      plugins = with pkgs.xfce; [ thunar-volman ];
-    };
-
-    # Used by thunar.
-    services.gvfs.enable = true;
-    services.tumbler.enable = true;
+    programs.thunar.plugins = [ pkgs.xfce.thunar-volman ];
 
     services.xserver = {
       enable = true;
       xkb.layout = "us";
-      windowManager.i3.enable = true;
+      desktopManager = {
+        xfce.enable = true;
+        xterm.enable = false;
+      };
     };
-
-    fonts.packages = with pkgs; [
-      siji
-    ];
+    services.displayManager.defaultSession = "xfce";
 
     # Mouse button mappings.
     environment.etc."X11/xorg.conf.d/99-mouse-buttons.conf".text = ''

@@ -21,21 +21,6 @@ in
       slurp
     ];
 
-    services.greetd = {
-      enable = true;
-      useTextGreeter = true;
-
-      settings = {
-        default_session = {
-          command = pkgs.writeShellScript "start-tuigreet" ''
-            setterm --blank=10
-            setterm --powersave on
-            ${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session
-          '';
-          user = "greeter";
-        };
-      };
-    };
     services.desktopManager.plasma6.enable = true;
   };
 }

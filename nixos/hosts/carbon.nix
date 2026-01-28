@@ -2,7 +2,7 @@
 {
   imports = [ ../common.nix ];
 
-  roles.gui-xorg.enable = true;
+  roles.gui-sway.enable = true;
   roles.workstation.enable = true;
 
   networking.networkmanager.enable = true;

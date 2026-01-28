@@ -12,7 +12,7 @@
   ];
 
   roles.workstation.enable = true;
-  roles.gui-sway.enable = true;
+  roles.gui-xfce.enable = true;
 
   environment.systemPackages = with pkgs; [
     nvtopPackages.nvidia
