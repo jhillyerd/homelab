@@ -49,7 +49,7 @@ job "linkwarden" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/linkwarden/linkwarden:v2.13.2"
+        image = "ghcr.io/linkwarden/linkwarden:v2.13.5"
         ports = ["http"]
 
         mount {
