@@ -9,10 +9,11 @@
       "grafana"
       "homeassistant"
       "inbucket"
+      "jellyfin"
       "links"
       "nodered"
       "openwebui"
-      "syncthing"
+      "radarr"
     ];
   }
   {
@@ -31,6 +32,7 @@
       "llm"
       "mininas"
       "skynas"
+      "syncthing"
       "traefik"
       "unifi"
       "zwavejs"

@@ -115,6 +115,15 @@
     dash.icon = "svg/gmail.svg";
   };
 
+  jellyfin = {
+    title = "Jellyfin";
+
+    dash.icon = "svg/jellyfin.svg";
+    dash.host = "mininas.bytemonkey.org";
+    dash.port = 8096;
+    dash.proto = "http";
+  };
+
   links = {
     title = "Linkwarden";
     dns.intCname = true;
@@ -177,6 +186,14 @@
       "https://192.168.128.14:8006"
     ];
     lb.sticky = true;
+  };
+
+  radarr = {
+    title = "Radarr";
+    dns.intCname = true;
+    dash.icon = "svg/radarr.svg";
+
+    lb.backendUrls = [ "http://mininas.bytemonkey.org:30025" ];
   };
 
   skynas = {
