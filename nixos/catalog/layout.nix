@@ -14,6 +14,7 @@
       "nodered"
       "openwebui"
       "radarr"
+      "sonarr"
     ];
   }
   {

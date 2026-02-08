@@ -203,6 +203,14 @@
     dash.port = 5001;
   };
 
+  sonarr = {
+    title = "Sonarr";
+    dns.intCname = true;
+    dash.icon = "svg/sonarr.svg";
+
+    lb.backendUrls = [ "http://mininas.bytemonkey.org:30113" ];
+  };
+
   syncthing = {
     title = "Syncthing";
 
