@@ -68,6 +68,10 @@ let
       type = "A";
       value = "192.168.1.21";
     };
+    dgx1 = {
+      type = "A";
+      value = "192.168.1.31";
+    };
 
     # IoT network.
     msdde3 = {
