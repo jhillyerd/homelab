@@ -22,6 +22,7 @@ in
       libnotify # for notify-send
       obs-studio
       pavucontrol
+      remmina
       ungoogled-chromium
       virt-manager
     ];
