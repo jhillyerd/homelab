@@ -58,6 +58,13 @@ rec {
     ];
   };
 
+  ntp = with nodes; {
+    servers = [
+      nc-um350-1.ip.priv
+      nc-um350-2.ip.priv
+    ];
+  };
+
   # Named TCP/UDP load balancer entry points.
   traefik.entrypoints = {
     factorygame = ":7777/udp";

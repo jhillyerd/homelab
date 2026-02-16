@@ -43,8 +43,8 @@ let
       value = "metrics.home.arpa.";
     };
     ntp = {
-      type = "CNAME";
-      value = "skynas.home.arpa.";
+      type = "A";
+      values = catalog.ntp.servers;
     };
 
     # LAN network.
