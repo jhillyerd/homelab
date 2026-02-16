@@ -1,3 +1,8 @@
+variable "ollama_model" {
+  type    = string
+  default = "phi4-mini:3.8b"
+}
+
 job "linkwarden" {
   datacenters = ["skynet"]
   type = "service"
@@ -17,7 +22,6 @@ job "linkwarden" {
     network {
       port "http" { to = 3000 }
       port "search" { to = 7700 }
-      port "ollama" { to = 11434 }
     }
 
     consul {
@@ -67,8 +71,7 @@ job "linkwarden" {
         AUTOSCROLL_TIMEOUT = 120 # Seconds to archive a website
         MONOLITH_MAX_BUFFER = 32 # MB, default is 6
 
-        NEXT_PUBLIC_OLLAMA_ENDPOINT_URL = "http://${NOMAD_ADDR_ollama}"
-        OLLAMA_MODEL = "phi3.5:3.8b"
+        OLLAMA_MODEL = "${var.ollama_model}"
       }
 
       template {
@@ -77,6 +80,9 @@ job "linkwarden" {
 NEXTAUTH_SECRET={{key "secrets/linkwarden/nextauth"}}
 DATABASE_URL=postgresql://linkwarden:{{key "secrets/linkwarden/postgres"}}@fastd.home.arpa:5432/linkwarden
 MEILI_MASTER_KEY={{key "secrets/linkwarden/meilisearch"}}
+{{ range service "linkwarden-ollama" }}
+NEXT_PUBLIC_OLLAMA_ENDPOINT_URL = "http://{{ .Address }}:{{ .Port }}"
+{{ end }}
 EOT
         destination = "secrets/linkwarden.env"
         env = true
@@ -144,6 +150,23 @@ EOT
         max_file_size = 5
       }
     }
+  }
+
+  group "ollama" {
+    count = 1
+
+    update {
+      # Too big for canary.
+      canary = 0
+    }
+
+    network {
+      port "ollama" { to = 11434 }
+    }
+
+    consul {
+      # Use server default task identity.
+    }
 
     service {
       name = "linkwarden-ollama"
@@ -162,18 +185,52 @@ EOT
       driver = "docker"
 
       config {
-        image = "dockreg.bytemonkey.org/ollama-phi3.5:edge"
+        image = "ollama/ollama:0.16.1"
         ports = ["ollama"]
+
+        mount {
+          type     = "bind"
+          source   = "/mnt/nomad-volumes/linkwarden/ollama"
+          target   = "/root/.ollama"
+          readonly = false
+        }
+      }
+
+      env {
+        OLLAMA_CONTEXT_LENGTH = 8192 # Tokens
+        OLLAMA_KEEP_ALIVE = "-1" # Keep the model loaded in memory indefinitely
       }
 
       resources {
         cpu = 4000 # MHz
-        memory = 6144 # MB
+        memory = 4096 # MB
+        memory_max = 6144 # MB
       }
 
       logs {
         max_files = 10
         max_file_size = 5
+      }
+    }
+
+    task "download-model" {
+      driver = "docker"
+
+      lifecycle {
+        hook = "poststart"
+      }
+
+      config {
+        image = "quay.io/curl/curl:latest"
+        args = [
+          "-d", "{\"name\": \"${var.ollama_model}\"}",
+          "http://${NOMAD_ADDR_ollama}/api/pull"
+        ]
+      }
+
+      resources {
+        cpu    = 100
+        memory = 100
       }
     }
   }
