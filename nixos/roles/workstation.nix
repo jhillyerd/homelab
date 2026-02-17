@@ -29,19 +29,20 @@ in
         fzf
         gcc
         gh
-        glow
+        glow # markdown viewer
         gnumake
+        gnupg
         kitty # always install for terminfo
         lazydocker
         lazygit
         lua51Packages.luarocks-nix # for rest.nvim
         lynx
-        mqttui
         nfs-utils
         nixd
         nixfmt-rfc-style
         nixpkgs-review
         nodejs
+        nomad
         openssl
         patchelf
         postgresql_16
