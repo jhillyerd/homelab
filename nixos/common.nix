@@ -7,7 +7,7 @@
   ...
 }:
 {
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 
   imports = [
     ./common/packages.nix
@@ -42,8 +42,6 @@
     enable = true;
     settings.PermitRootLogin = "yes";
   };
-
-  programs.command-not-found.enable = false; # not flake aware
 
   time.timeZone = "US/Pacific";
 
