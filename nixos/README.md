@@ -60,6 +60,19 @@ nix build ".#images.$host"
 sudo dd bs=4M conv=fsync if=result/sd-image/*-linux.img of=/dev/sdX
 ```
 
+### Build and restore Proxmox image for host
+
+```sh
+nixos-rebuild build-image --image-variant proxmox --flake .#$host
+scp vzdump-qemu-nixos-NNNN.vma.zst root@proxmox-host:
+
+# On Proxmox host
+qmrestore ./vzdump-qemu-nixos-NNNN.vma.zst <vmid>
+```
+
+You may then use the proxmox web UI to convert to template, and set
+`Hardware: Display` to `Serial terminal 0`.
+
 ## Convenience scripts
 
 **Note:** These are obsoleted by my deployment TUI:
