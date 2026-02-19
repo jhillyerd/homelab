@@ -1,5 +1,12 @@
 { system }:
 {
+  agent-zero = {
+    ip.priv = "192.168.131.8";
+    config = ../hosts/agent-zero.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   boss = {
     ip.priv = "192.168.1.30";
     ip.tail = "100.115.100.34";

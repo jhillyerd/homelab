@@ -4,6 +4,7 @@
   {
     section = "Services";
     services = [
+      "agent-zero"
       "fluidd"
       "forgejo"
       "grafana"

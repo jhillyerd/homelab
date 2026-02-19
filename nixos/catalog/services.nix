@@ -17,6 +17,18 @@
   # configured there before being available externally.
   #
   # `dash.icon` paths can be found in https://github.com/walkxcode/dashboard-icons
+  agent-zero = {
+    title = "Agent Zero";
+
+    dns.intCname = true;
+    dns.extCname = false;
+
+    dash.icon = "svg/anything-llm.svg";
+
+    lb.backendUrls = [ "http://agent-zero.home.arpa" ];
+    lb.auth = "external";
+  };
+
   argocd = {
     title = "ArgoCD";
 
