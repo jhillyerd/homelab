@@ -10,7 +10,7 @@ let
 in
 {
   options.roles.gui-sway = {
-    enable = mkEnableOption "Wayland GUI";
+    enable = mkEnableOption "Sway GUI";
   };
 
   config = mkIf cfg.enable {
@@ -45,7 +45,16 @@ in
       enable = true;
       wrapperFeatures.gtk = true;
       extraOptions = [ "--unsupported-gpu" ];
+      extraSessionCommands = ''
+        # Import environment into systemd user session and D-Bus activation
+        # environment. This is needed for gnome-keyring, xdg-desktop-portal,
+        # and polkit agents (soteria) to work properly.
+        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+      '';
     };
+
+    # Polkit authentication agent.
+    security.soteria.enable = true;
 
     # Used by thunar.
     services.gvfs.enable = true;
@@ -53,15 +62,5 @@ in
 
     services.gnome.gnome-keyring.enable = true;
     services.gnome.gcr-ssh-agent.enable = false;
-
-    services.xserver.displayManager.sessionCommands = ''
-      # this is needed for gnome-keyring to work properly
-      ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-
-      # this is needed for xdg-desktop-portal to work
-      systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION \
-        XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID \
-        DBUS_SESSION_BUS_ADDRESS || true
-    '';
   };
 }
