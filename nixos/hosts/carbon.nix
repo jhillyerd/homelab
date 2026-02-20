@@ -5,8 +5,17 @@
   roles.gui-sway.enable = true;
   roles.workstation.enable = true;
 
-  networking.networkmanager.enable = true;
-  networking.firewall.enable = false;
+  # NetworkManager for wifi.
+  networking = {
+    firewall.enable = false;
+    networkmanager.enable = true;
+  };
+
+  # systemd-network for everything else.
+  systemd.network = {
+    enable = true;
+    wait-online.enable = false;
+  };
 
   services.resolved.enable = true;
 
