@@ -7,4 +7,5 @@ in
   # Package template: x = final.callPackage ./x { };
   cfdyndns = callPackage ./cfdyndns.nix { };
   nomad-usb-device-plugin = callPackage ./nomad-usb-device-plugin.nix { };
+  plannotator = callPackage ./plannotator.nix { };
 }
