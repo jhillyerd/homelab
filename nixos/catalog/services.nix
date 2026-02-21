@@ -69,17 +69,6 @@
     lb.backendUrls = [ "http://127.0.0.1:12701" ];
   };
 
-  dockreg = {
-    title = "Docker Registry";
-
-    dns.intCname = true;
-
-    dash.icon = "svg/docker.svg";
-    dash.path = "/v2/_catalog";
-
-    lb.backendUrls = [ "http://192.168.1.20:5050" ];
-  };
-
   fluidd = {
     title = "Ender 3";
     dns.intCname = true;

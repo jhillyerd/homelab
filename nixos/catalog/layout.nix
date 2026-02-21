@@ -23,7 +23,6 @@
     services = [
       "argocd"
       "consul"
-      "dockreg"
       "nomad"
       "proxmox"
     ];
