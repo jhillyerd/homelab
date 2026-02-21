@@ -24,6 +24,11 @@
       flake-utils.follows = "flake-utils";
       nixpkgs.follows = "nixpkgs";
     };
+
+    microvm = {
+      url = "github:microvm-nix/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
