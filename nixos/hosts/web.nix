@@ -22,7 +22,7 @@
   };
 
   roles.nfs-bind = {
-    nfsPath = "192.168.1.20:/volume1/web_prod";
+    nfsPath = "mininas.home.arpa:/mnt/red-ssd/cluster/binds";
 
     binds = {
       "authelia" = {
