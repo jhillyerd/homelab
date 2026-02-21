@@ -68,7 +68,7 @@ job "forgejo" {
       driver = "docker"
 
       config {
-        image = "codeberg.org/forgejo/forgejo:11.0.0"
+        image = "codeberg.org/forgejo/forgejo:14.0.2"
         ports = ["http", "ssh"]
 
         mount {
