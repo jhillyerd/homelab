@@ -1,25 +1,11 @@
 { ... }:
+let
+  dir = builtins.readDir ./.;
+  nixFiles = builtins.filter (
+    name: name != "default.nix" && builtins.match ".*\\.nix$" name != null
+  ) (builtins.attrNames dir);
+in
 {
-  imports = [
-    ./consul.nix
-    ./dns.nix
-    ./gateway-online.nix
-    ./gui-common.nix
-    ./gui-plasma.nix
-    ./gui-sway.nix
-    ./gui-xfce.nix
-    ./homesite.nix
-    ./influxdb.nix
-    ./log-forwarder.nix
-    ./loki.nix
-    ./mosquitto.nix
-    ./nomad.nix
-    ./nfs-bind.nix
-    ./tailscale.nix
-    ./telegraf.nix
-    ./traefik.nix
-    ./upsmon.nix
-    ./websvc.nix
-    ./workstation.nix
-  ];
+  # Import all .nix files in the current directory.
+  imports = map (f: ./. + "/${f}") nixFiles;
 }
