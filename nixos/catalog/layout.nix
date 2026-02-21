@@ -21,7 +21,6 @@
   {
     section = "Cluster";
     services = [
-      "argocd"
       "consul"
       "nomad"
       "proxmox"

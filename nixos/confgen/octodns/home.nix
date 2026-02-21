@@ -100,10 +100,6 @@ let
       type = "A";
       value = "192.168.131.7";
     };
-    "*.k" = {
-      type = "CNAME";
-      value = "kube1.home.arpa.";
-    };
   };
 
   ipPrivNodes = filterAttrs (n: v: v ? ip.priv) catalog.nodes;

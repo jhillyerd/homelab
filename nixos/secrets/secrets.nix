@@ -51,15 +51,6 @@ let
   # Cluster nodes
   witness = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAXoEYcViLYLHXZRThjTh61ZA43DS2lCCbJa5EXbFAwc";
 
-  kube1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB7K81sGBvuRcbOaQpippdNHhCRL2eDfmsJ1BNosZ8+o";
-  kube2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIziR7mI9vwr2/qHYx89GDJh95oQkZmbfb5AdDePXUtZ";
-  kube-cluster = [
-    kube1
-    kube2
-    scratch
-    witness
-  ];
-
   nc-um350-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
   nc-um350-2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmHTTSRM1PuZ45KXJACZhJc1GAgcT9i+QCClo6sV88R";
   nc-virt-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHY+llyPw11hCagbnJiXTmzO/FfHydVRIFmDRseGLTOd";
@@ -72,9 +63,8 @@ let
   ];
 
   group = {
-    common = users ++ home-nodes ++ nomad-cluster ++ kube-cluster ++ runner-nodes;
+    common = users ++ home-nodes ++ nomad-cluster ++ runner-nodes;
     home = users ++ home-nodes;
-    kube = users ++ kube-cluster;
     nomad = users ++ nomad-cluster;
     runners = users ++ runner-nodes;
   };
@@ -94,9 +84,6 @@ in
   "mqtt-sensor.age".publicKeys = group.home;
   "mqtt-zwave.age".publicKeys = group.home;
   "theforest-environment.age".publicKeys = group.home;
-
-  # Kube cluster
-  "k3s-token.age".publicKeys = group.kube;
 
   # Nomad cluster
   "consul-encrypt.age".publicKeys = group.nomad;

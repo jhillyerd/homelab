@@ -1,7 +1,6 @@
 {
   consul,
   nomad,
-  k3s,
 }:
 {
   # The services block populates my dashboard and configures the load balancer.
@@ -27,17 +26,6 @@
 
     lb.backendUrls = [ "http://agent-zero.home.arpa" ];
     lb.auth = "external";
-  };
-
-  argocd = {
-    title = "ArgoCD";
-
-    dns.intCname = true;
-
-    dash.icon = "svg/argo-cd.svg";
-
-    lb.backendUrls = map (ip: "https://${ip}:443") k3s.workers;
-    lb.checkHost = "argocd.bytemonkey.org";
   };
 
   auth = {

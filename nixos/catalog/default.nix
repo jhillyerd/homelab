@@ -4,7 +4,7 @@ rec {
   layout = import ./layout.nix { };
   monitors = import ./monitors.nix { inherit consul nomad; };
   nodes = import ./nodes.nix { inherit system; };
-  services = import ./services.nix { inherit consul nomad k3s; };
+  services = import ./services.nix { inherit consul nomad; };
 
   # Common config across most machines.
   cf-api.user = "james@hillyerd.com";
@@ -31,15 +31,6 @@ rec {
     ns1 = witness.ip.priv;
     ns2 = nc-um350-1.ip.priv;
     ns3 = nc-um350-2.ip.priv;
-  };
-
-  k3s = {
-    leader = nodes.kube1;
-
-    workers = with nodes; [
-      kube1.ip.priv
-      kube2.ip.priv
-    ];
   };
 
   influxdb = rec {

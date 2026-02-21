@@ -1,6 +1,4 @@
 {
-  config,
-  catalog,
   self,
   util,
   ...
@@ -22,16 +20,6 @@
   roles.consul.enableServer = true;
   roles.nomad.enableServer = true;
 
-  services.k3s = {
-    enable = true;
-    disableAgent = true;
-
-    serverAddr = "https://${catalog.k3s.leader.ip.priv}:6443";
-    extraFlags = "--egress-selector-mode pod";
-
-    tokenFile = config.age.secrets.k3s-token.path;
-  };
-
   services.nginx = {
     enable = true;
 
@@ -42,10 +30,6 @@
         proxy_pass mininas.home.arpa:3493;
       }
     '';
-  };
-
-  age.secrets = {
-    k3s-token.file = ../secrets/k3s-token.age;
   };
 
   networking.firewall.enable = false;
