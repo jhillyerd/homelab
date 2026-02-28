@@ -19,10 +19,6 @@ let
       type = "A";
       value = "100.87.48.66";
     };
-    skynas = {
-      type = "A";
-      value = "100.126.1.1";
-    };
     tse = {
       type = "TXT";
       value = "google-site-verification=AuTsq7_HTu2uyAM1L-FDshwDdFfzjtUHyQ2lzXr7UOg";

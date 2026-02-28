@@ -185,13 +185,6 @@
     lb.backendUrls = [ "http://mininas.bytemonkey.org:30025" ];
   };
 
-  skynas = {
-    title = "SkyNAS";
-    dash.icon = "png/synology-dsm.png";
-    dash.host = "skynas.bytemonkey.org";
-    dash.port = 5001;
-  };
-
   sonarr = {
     title = "Sonarr";
     dns.intCname = true;

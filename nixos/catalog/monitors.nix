@@ -71,7 +71,6 @@
     "pve1.home.arpa"
     "pve3.home.arpa"
     "pve4.home.arpa"
-    "skynas.home.arpa"
     "web.home.arpa"
     "witness.home.arpa"
   ];

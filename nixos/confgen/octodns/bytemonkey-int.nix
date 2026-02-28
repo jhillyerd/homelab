@@ -38,10 +38,6 @@ let
       type = "A";
       value = "192.168.1.10";
     };
-    skynas = {
-      type = "A";
-      value = "100.126.1.1";
-    };
     x = {
       type = "CNAME";
       value = intProxy;

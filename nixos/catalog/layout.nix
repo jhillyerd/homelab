@@ -7,7 +7,6 @@
       "agent-zero"
       "fluidd"
       "forgejo"
-      "grafana"
       "homeassistant"
       "inbucket"
       "jellyfin"
@@ -22,8 +21,10 @@
     section = "Cluster";
     services = [
       "consul"
+      "grafana"
       "nomad"
       "proxmox"
+      "traefik"
     ];
   }
   {
@@ -31,9 +32,7 @@
     services = [
       "llm"
       "mininas"
-      "skynas"
       "syncthing"
-      "traefik"
       "unifi"
       "zwavejs"
     ];

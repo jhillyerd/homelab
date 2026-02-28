@@ -60,10 +60,6 @@ let
       type = "A";
       value = "192.168.1.10";
     };
-    skynas = {
-      type = "A";
-      value = "192.168.1.20";
-    };
     octopi = {
       type = "A";
       value = "192.168.1.21";
