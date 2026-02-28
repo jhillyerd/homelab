@@ -15,6 +15,10 @@ let
   extProxy = "x.bytemonkey.org.";
 
   bytemonkeyRecords = {
+    boss = {
+      type = "A";
+      value = catalog.nodes.boss.ip.tail;
+    };
     mininas = {
       type = "A";
       value = "100.87.48.66";

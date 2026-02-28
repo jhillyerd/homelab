@@ -34,6 +34,11 @@ let
       value = catalog.dns.ns3;
     };
 
+    boss = {
+      type = "A";
+      # Take advantage of tailscale to avoid SSH port-forwarding.
+      value = catalog.nodes.boss.ip.tail;
+    };
     mininas = {
       type = "A";
       value = "192.168.1.10";
