@@ -45,7 +45,6 @@ in
         nomad
         openssl
         patchelf
-        plannotator
         postgresql_16
         python3Packages.python-lsp-server
         ripgrep
