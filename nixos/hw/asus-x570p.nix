@@ -21,7 +21,7 @@
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot/efi";
-    timeout = 10;
+    timeout = 15;
   };
 
   fileSystems."/" = {
