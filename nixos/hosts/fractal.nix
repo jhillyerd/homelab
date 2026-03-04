@@ -47,21 +47,20 @@
         };
 
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b7609";
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8191";
           ports = [ "8001:8080" ]; # healthcheck runs against 8080.
           environment = {
-            LLAMA_ARG_CTX_SIZE = "262144";
-            LLAMA_ARG_JINJA = "true";
+            LLAMA_ARG_CTX_SIZE = "131072";
             LLAMA_ARG_TEMP = "0.6";
             LLAMA_ARG_MIN_P = "0.0";
             LLAMA_ARG_TOP_P = "0.95";
-            # LLAMA_ARG_TOP_K
+            LLAMA_ARG_TOP_K = "20";
             # LLAMA_ARG_REPEAT_PENALTY
-            LLAMA_ARG_GPU_LAYERS = "99";
+            LLAMA_ARG_GPU_LAYERS = "all";
           };
           cmd = [
             "-hf"
-            "unsloth/Nemotron-3-Nano-30B-A3B-GGUF:IQ4_NL"
+            "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ4_NL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
