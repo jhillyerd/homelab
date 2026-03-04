@@ -74,6 +74,12 @@
     };
   };
 
+  services.xrdp = {
+    enable = true;
+    openFirewall = true;
+    defaultWindowManager = "xfce4-session";
+  };
+
   fileSystems."/data/embed" = {
     device = "/dev/tank/embed";
     fsType = "ext4";
