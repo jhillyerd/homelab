@@ -4,11 +4,11 @@ let
   inherit (inputs.nixpkgs.lib) mapAttrs;
   inherit (inputs.flake-utils.lib) system;
 
-  catalog = import ../catalog { inherit system; };
+  catalog = import ../nixos/catalog { inherit system; };
 in
 {
   flake = {
-    nixosConfigurations = import ../nix/nixos-configurations.nix inputs catalog;
+    nixosConfigurations = import ../nixos/nix/nixos-configurations.nix inputs catalog;
 
     images = mapAttrs (
       host: _: inputs.self.nixosConfigurations.${host}.config.system.build.sdImage

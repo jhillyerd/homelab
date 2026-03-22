@@ -2,8 +2,8 @@
 
 let
   inherit (inputs.flake-utils.lib) system;
-  catalog = import ../catalog { inherit system; };
-  confgen = import ../confgen inputs catalog;
+  catalog = import ../nixos/catalog { inherit system; };
+  confgen = import ../nixos/confgen inputs catalog;
 in
 {
   perSystem =

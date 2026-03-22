@@ -8,7 +8,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      octodns-cloudflare = pkgs.python3Packages.callPackage ../../pkgs/octodns-cloudflare.nix { };
+      octodns-cloudflare = pkgs.python3Packages.callPackage ../pkgs/octodns-cloudflare.nix { };
     in
     {
       devShells.default = pkgs.mkShell {

@@ -5,52 +5,39 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    agenix.url = "github:ryantm/agenix/main";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    agenix = {
+      url = "github:ryantm/agenix/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    agenix-template.url = "github:jhillyerd/agenix-template/main";
+
+    homesite = {
+      url = "github:jhillyerd/homesite/main";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hw-gauge = {
+      url = "github:jhillyerd/hw-gauge";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
   };
 
   outputs =
-    {
-      nixpkgs,
-      nixpkgs-unstable,
-      flake-utils,
-      agenix,
-      ...
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
-        unstable = nixpkgs-unstable.legacyPackages.${system};
-      in
-      {
-        devShell =
-          let
-            octodns-cloudflare = pkgs.python3Packages.callPackage ./pkgs/octodns-cloudflare.nix { };
-          in
-          pkgs.mkShell {
-            buildInputs =
-              (with pkgs; [
-                ansible
-                cfssl
-                consul
-                kubectl
-                nomad_1_10
-                octodns
-                octodns-providers.bind
-                openssl
-                sshpass
-              ])
-              ++ [
-                agenix.packages.${system}.default
-                octodns-cloudflare
-              ];
-          };
-      }
-    );
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+
+      imports = [
+        ./flake-modules/nixos.nix
+        ./flake-modules/packages.nix
+        ./flake-modules/devshell.nix
+      ];
+    };
 }
