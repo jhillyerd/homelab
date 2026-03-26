@@ -47,7 +47,7 @@
         };
 
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8191";
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8532";
           ports = [ "8001:8080" ]; # healthcheck runs against 8080.
           environment = {
             LLAMA_ARG_CTX_SIZE = "131072";
