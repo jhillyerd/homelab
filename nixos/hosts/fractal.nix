@@ -47,23 +47,26 @@
         };
 
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8532";
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8672";
           ports = [ "8001:8080" ]; # healthcheck runs against 8080.
           environment = {
-            LLAMA_ARG_CTX_SIZE = "131072";
-            LLAMA_ARG_UBATCH = "1024"; # Faster PP, but more VRAM usage
+            # Serving
             LLAMA_ARG_IMAGE_MIN_TOKENS = "1024"; # Improves small image results
+            LLAMA_ARG_GPU_LAYERS = "all";
+            # LLAMA_ARG_CTX_SIZE = "";
+            # LLAMA_ARG_UBATCH = "1024"; # Faster PP, but more VRAM usage
+
+            # Sampling
             LLAMA_ARG_TEMP = "0.6";
             LLAMA_ARG_MIN_P = "0.0";
             LLAMA_ARG_TOP_P = "0.95";
             LLAMA_ARG_TOP_K = "20";
-            # LLAMA_ARG_REPEAT_PENALTY
-            LLAMA_ARG_THINK_BUDGET = "1000";
-            LLAMA_ARG_GPU_LAYERS = "all";
+            LLAMA_ARG_THINK_BUDGET = "1500";
+            # LLAMA_ARG_REPEAT_PENALTY = "";
           };
           cmd = [
             "-hf"
-            "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ4_NL"
+            "unsloth/Qwen3.5-27B-GGUF:IQ4_NL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
