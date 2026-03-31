@@ -20,6 +20,7 @@ let
   fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
   fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
   game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
+  hermes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ01PSNkesday4JTlDOcOFQLQVI7P9ePZ5OlZGItG+Wz";
   metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
   nexus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEuqgUtpyOVfnxa1oKLdjN4AIN5piKHfdumQHonqjH4P";
   nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
@@ -33,6 +34,7 @@ let
     fastd
     fractal
     game
+    hermes
     metrics
     nexus
     nix-ryzen
@@ -77,6 +79,7 @@ in
 
   # Home
   "cloudflare-dns-api.age".publicKeys = group.home;
+  "hermes-env.age".publicKeys = group.home;
   "influxdb-admin.age".publicKeys = group.home;
   "influxdb-homeassistant.age".publicKeys = group.home;
   "mqtt-admin.age".publicKeys = group.home;

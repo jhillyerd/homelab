@@ -12,6 +12,12 @@
 
     agenix-template.url = "github:jhillyerd/agenix-template/main";
 
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     homesite = {
       url = "github:jhillyerd/homesite/main";
       inputs.flake-utils.follows = "flake-utils";

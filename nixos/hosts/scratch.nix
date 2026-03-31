@@ -11,7 +11,7 @@
   ];
 
   systemd.network.networks = util.mkClusterNetworks self;
-
+  roles.gateway-online.addr = "192.168.1.1";
   networking.firewall.enable = false;
 
   ### Temporary configuration below.

@@ -1,0 +1,52 @@
+{
+  authorizedKeys,
+  config,
+  self,
+  util,
+  hermes-agent,
+  ...
+}:
+{
+  imports = [
+    ../common.nix
+    ../common/onprem.nix
+    hermes-agent.nixosModules.default
+  ];
+
+  systemd.network.networks = util.mkClusterNetworks self;
+  roles.gateway-online.addr = "192.168.1.1";
+  networking.firewall.enable = true;
+
+  services.hermes-agent = {
+    enable = true;
+    addToSystemPackages = true;
+
+    settings = {
+      model = {
+        provider = "zai";
+        default = "glm-5-turbo";
+      };
+      fallback_model = {
+        provider = "openrouter";
+        model = "stepfun/step-3.5-flash";
+      };
+      compression = {
+        enable = true;
+        threshold = 0.5;
+        summary_provider = "custom";
+        summary_model = "qwen3.5-35b-a3b";
+        summary_base_url = "http://fractal.home.arpa:8001/v1";
+      };
+    };
+
+    environmentFiles = [ config.age.secrets."hermes-env".path ];
+  };
+
+  users.users.hermes.openssh.authorizedKeys.keys = authorizedKeys;
+  age.secrets."hermes-env".file = ../secrets/hermes-env.age;
+
+  roles.upsmon = {
+    enable = true;
+    wave = 1;
+  };
+}

@@ -58,6 +58,13 @@
     system = system.x86_64-linux;
   };
 
+  hermes = {
+    ip.priv = "192.168.131.9";
+    config = ../hosts/hermes.nix;
+    hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
   metrics = {
     ip.priv = "192.168.128.41";
     ip.tail = "100.108.135.101";
