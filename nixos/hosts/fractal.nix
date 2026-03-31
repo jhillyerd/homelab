@@ -67,7 +67,6 @@
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
-            "/data/llama/models:/models"
           ];
           devices = [ "nvidia.com/gpu=all" ];
           extraOptions = [ "--ipc=host" ];
