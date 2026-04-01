@@ -4,7 +4,8 @@ let
   inherit (final) callPackage;
 in
 {
-  # Package template: x = final.callPackage ./x { };
+  # Package template: x = callPackage ./x { };
   cfdyndns = callPackage ./cfdyndns.nix { };
   nomad-usb-device-plugin = callPackage ./nomad-usb-device-plugin.nix { };
+  sesh = callPackage ./sesh.nix { };
 }

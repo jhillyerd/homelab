@@ -48,6 +48,7 @@ in
         postgresql_16
         python3Packages.python-lsp-server
         ripgrep
+        sesh
         sshfs
         starship
         steam-run-free
@@ -66,12 +67,15 @@ in
       ];
 
     # Programs and services
-    programs._1password.enable = true;
-    programs.direnv.enable = true;
-    programs.fish.enable = true;
-    programs.fzf.keybindings = true;
-    programs.mosh.enable = true;
-    programs.nix-ld.enable = true; # For non-nix binaries.
+    programs = {
+      _1password.enable = true;
+      direnv.enable = true;
+      fish.enable = true;
+      fzf.keybindings = true;
+      mosh.enable = true;
+      nix-ld.enable = true; # For non-nix binaries.
+      zoxide.enable = true;
+    };
 
     # NFS mount support
     boot.supportedFilesystems = [ "nfs" ];
