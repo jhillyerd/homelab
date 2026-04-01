@@ -1,6 +1,7 @@
 {
   authorizedKeys,
   config,
+  pkgs,
   self,
   util,
   hermes-agent,
@@ -16,6 +17,13 @@
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
   networking.firewall.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    kitty # always install for terminfo
+    ripgrep
+    tmux
+    yazi
+  ];
 
   services.hermes-agent = {
     enable = true;
