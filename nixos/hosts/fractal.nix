@@ -58,7 +58,7 @@
             LLAMA_ARG_TOP_P = "0.95";
             LLAMA_ARG_TOP_K = "20";
             # LLAMA_ARG_REPEAT_PENALTY
-            LLAMA_ARG_THINK_BUDGET = "0";
+            LLAMA_ARG_THINK_BUDGET = "1000";
             LLAMA_ARG_GPU_LAYERS = "all";
           };
           cmd = [
