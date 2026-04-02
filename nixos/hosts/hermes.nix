@@ -45,13 +45,21 @@
         summary_model = "qwen3.5-35b-a3b";
         summary_base_url = "http://fractal.home.arpa:8001/v1";
       };
+      terminal = {
+        backend = "docker";
+      };
     };
 
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
 
-  users.users.hermes.openssh.authorizedKeys.keys = authorizedKeys;
+  users.users.hermes = {
+    openssh.authorizedKeys.keys = authorizedKeys;
+    extraGroups = [ "docker" ];
+  };
   age.secrets."hermes-env".file = ../secrets/hermes-env.age;
+
+  virtualisation.docker.enable = true;
 
   roles.upsmon = {
     enable = true;
