@@ -52,7 +52,7 @@ job "grafana" {
       user = "3003"
 
       config {
-        image = "grafana/grafana-oss:12.0.3"
+        image = "grafana/grafana-oss:12.4.2"
         ports = ["http"]
 
         mount {
