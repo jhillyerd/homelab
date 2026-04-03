@@ -54,7 +54,7 @@ job "nodered" {
       user = "3003"
 
       config {
-        image = "nodered/node-red:4.0.9"
+        image = "nodered/node-red:4.1.8"
         ports = ["http"]
 
         mount {
