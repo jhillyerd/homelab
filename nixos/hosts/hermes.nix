@@ -7,6 +7,9 @@
   hermes-agent,
   ...
 }:
+let
+  hermesHome = "/var/lib/hermes";
+in
 {
   imports = [
     ../common.nix
@@ -28,6 +31,7 @@
   services.hermes-agent = {
     enable = true;
     addToSystemPackages = true;
+    stateDir = hermesHome;
 
     settings = {
       model = {
@@ -45,16 +49,13 @@
         # summary_model = "qwen3.5-35b-a3b";
         # summary_base_url = "http://fractal.home.arpa:8001/v1";
       };
-      terminal = {
-        backend = "docker";
-      };
     };
 
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
 
   services.borgbackup.jobs.hermes-data = {
-    paths = "/var/lib/hermes/.hermes";
+    paths = "${hermesHome}/.hermes";
     repo = "/var/lib/borg/hermes-data";
     doInit = true;
     encryption.mode = "none";
