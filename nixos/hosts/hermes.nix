@@ -53,6 +53,19 @@
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
 
+  services.borgbackup.jobs.hermes-data = {
+    paths = "/var/lib/hermes/.hermes";
+    repo = "/var/lib/borg/hermes-data";
+    doInit = true;
+    encryption.mode = "none";
+    compression = "auto,zstd";
+    startAt = "daily";
+    prune.keep = {
+      within = "14d";
+      weekly = 4;
+    };
+  };
+
   users.users.hermes = {
     openssh.authorizedKeys.keys = authorizedKeys;
     extraGroups = [ "docker" ];
