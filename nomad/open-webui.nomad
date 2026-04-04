@@ -42,7 +42,7 @@ job "open-webui" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/open-webui/open-webui:v0.8.3"
+        image = "ghcr.io/open-webui/open-webui:v0.8.12"
         ports = ["http"]
 
         mount {
