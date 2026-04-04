@@ -41,9 +41,9 @@
       compression = {
         enable = true;
         threshold = 0.5;
-        summary_provider = "custom";
-        summary_model = "qwen3.5-35b-a3b";
-        summary_base_url = "http://fractal.home.arpa:8001/v1";
+        # summary_provider = "custom";
+        # summary_model = "qwen3.5-35b-a3b";
+        # summary_base_url = "http://fractal.home.arpa:8001/v1";
       };
       terminal = {
         backend = "docker";
