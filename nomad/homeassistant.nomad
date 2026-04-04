@@ -80,7 +80,7 @@ job "homeassistant" {
 
       resources {
         cpu = 300 # MHz
-        memory = 700 # MB
+        memory = 1024 # MB
       }
     }
   }
