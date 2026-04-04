@@ -5,9 +5,6 @@
   ...
 }:
 {
-  # TODO remove after homelab catches up.
-  system.stateVersion = lib.mkForce "25.11";
-
   boot.initrd.availableKernelModules = [
     "nvme"
     "xhci_pci"

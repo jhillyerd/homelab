@@ -1,8 +1,5 @@
-{ lib, ... }:
+{ ... }:
 {
-  # TODO remove after homelab catches up.
-  system.stateVersion = lib.mkForce "25.11";
-
   imports = [
     ../common.nix
     ../common/onprem.nix
