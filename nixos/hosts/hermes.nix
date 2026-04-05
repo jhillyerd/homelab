@@ -19,7 +19,12 @@ in
 
   systemd.network.networks = util.mkClusterNetworks self;
   roles.gateway-online.addr = "192.168.1.1";
-  networking.firewall.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [
+      8642 # hermes agent API
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
     kitty # always install for terminfo
