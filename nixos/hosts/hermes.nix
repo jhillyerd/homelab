@@ -38,23 +38,44 @@ in
     addToSystemPackages = true;
     stateDir = hermesHome;
 
-    settings = {
-      model = {
-        provider = "zai";
-        default = "glm-5-turbo";
+    settings =
+      let
+        fractal_qwen = {
+          base_url = "http://fractal.home.arpa:8001/v1";
+          model = "qwen3.5-27b";
+          timeout = 60; # seconds
+        };
+        fast = {
+          provider = "zai";
+          model = "glm-4.7-flash";
+        };
+      in
+      {
+        approvals.mode = "smart";
+        model = {
+          provider = "zai";
+          default = "glm-5-turbo";
+        };
+        fallback_model = {
+          provider = "openrouter";
+          model = "stepfun/step-3.5-flash";
+        };
+        auxiliary = {
+          approval = fractal_qwen;
+          flush_memories = fast;
+          session_search = fast;
+          skills_hub = fractal_qwen;
+          vision = fractal_qwen;
+          web_extract = fractal_qwen;
+        };
+
+        compression = {
+          enable = true;
+          threshold = 0.5;
+          summary_provider = fast.provider;
+          summary_model = fast.model;
+        };
       };
-      fallback_model = {
-        provider = "openrouter";
-        model = "stepfun/step-3.5-flash";
-      };
-      compression = {
-        enable = true;
-        threshold = 0.5;
-        # summary_provider = "custom";
-        # summary_model = "qwen3.5-35b-a3b";
-        # summary_base_url = "http://fractal.home.arpa:8001/v1";
-      };
-    };
 
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
