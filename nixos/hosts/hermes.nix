@@ -58,7 +58,7 @@ in
         fast = fractal_qwen;
       in
       {
-        approvals.mode = "smart";
+        approvals.mode = "off";
 
         model = thinking;
         fallback_model = {
