@@ -40,33 +40,39 @@ in
 
     settings =
       let
-        fractal_qwen = {
-          base_url = "http://fractal.home.arpa:8001/v1";
-          model = "qwen3.5-27b";
+        dgx_qwen = {
+          # Qwen 3.5 122B-A10B thinking for main-agent tasks
+          provider = "custom";
+          base_url = "http://dgx1.home.arpa:8000/v1";
+          model = "qwen"; # 122B-A10B
           timeout = 60; # seconds
         };
-        fast = {
-          provider = "zai";
-          model = "glm-4.7-flash";
+        fractal_qwen = {
+          # Qwen 3.5 35B-A3B non-thinking for auxiliary tasks
+          provider = "custom";
+          base_url = "http://fractal.home.arpa:8001/v1";
+          model = "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ4_NL";
+          timeout = 60; # seconds
         };
+        thinking = dgx_qwen;
+        fast = fractal_qwen;
       in
       {
         approvals.mode = "smart";
-        model = {
-          provider = "zai";
-          default = "glm-5-turbo";
-        };
+
+        model = thinking;
         fallback_model = {
-          provider = "openrouter";
-          model = "stepfun/step-3.5-flash";
+          provider = "zai";
+          model = "glm-5-turbo";
         };
+
         auxiliary = {
-          approval = fractal_qwen;
+          approval = thinking;
           flush_memories = fast;
           session_search = fast;
-          skills_hub = fractal_qwen;
-          vision = fractal_qwen;
-          web_extract = fractal_qwen;
+          skills_hub = thinking;
+          vision = thinking;
+          web_extract = fast;
         };
 
         compression = {
