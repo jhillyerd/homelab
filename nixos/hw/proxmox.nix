@@ -39,7 +39,7 @@
     };
   };
 
-  nix.settings.max-jobs = lib.mkDefault 2;
+  nix.settings.max-jobs = lib.mkOverride 500 2;
 
   services.qemuGuest.enable = true;
 }

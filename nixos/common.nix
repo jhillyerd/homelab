@@ -1,9 +1,10 @@
 # Common config shared among all machines
 {
-  pkgs,
   authorizedKeys,
   catalog,
   hostName,
+  lib,
+  pkgs,
   ...
 }:
 {
@@ -30,7 +31,10 @@
       randomizedDelaySec = "20min";
     };
 
-    settings.download-buffer-size = 201326592;
+    settings = {
+      download-buffer-size = 201326592;
+      max-jobs = lib.mkDefault 4;
+    };
 
     # TODO revisit after https://github.com/NixOS/nix/pull/13301
     # settings.substituters = [ "http://nix-cache.service.skynet.consul?priority=10" ];
