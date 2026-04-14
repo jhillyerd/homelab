@@ -15,10 +15,3 @@
   roles:
     - dj-wasabi.telegraf
   tags: [ telegraf ]
-
-- hosts: mopidy
-  vars_files:
-    - lowsec.yml
-  roles:
-    - { role: mopidy, become: yes }
-  tags: [ mopidy ]
