@@ -96,6 +96,10 @@ let
       type = "A";
       value = "192.168.131.7";
     };
+    ubuntu24 = {
+      type = "A";
+      value = "192.168.131.10";
+    };
   };
 
   ipPrivNodes = filterAttrs (n: v: v ? ip.priv) catalog.nodes;
