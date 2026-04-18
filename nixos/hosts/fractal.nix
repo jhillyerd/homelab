@@ -29,7 +29,7 @@
     oci-containers = {
       containers = {
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8672";
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8833";
           ports = [ "8001:8080" ]; # healthcheck runs against 8080.
           environment = {
             # Serving
@@ -48,7 +48,7 @@
           };
           cmd = [
             "-hf"
-            "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ4_NL"
+            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
