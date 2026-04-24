@@ -106,21 +106,22 @@
         "nixpkgs": [
           "nixpkgs"
         ],
+        "npm-lockfile-fix": "npm-lockfile-fix",
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix_2",
         "uv2nix": "uv2nix_2"
       },
       "locked": {
-        "lastModified": 1776106329,
-        "narHash": "sha256-AKRAnvpUXntEbO88fR7Dq4Ra3vxbg/JCJvxh5UJ+TQY=",
+        "lastModified": 1776963985,
+        "narHash": "sha256-YAohlru6n65TejmpFys9HaAHoJOY4VXhgEf9OSabjYI=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "1af2e18d408a9dcc2c61d6fc1eef5c6667f8e254",
+        "rev": "82a0ed1afb3fb3840a0bdca94a22fa8b005ac49a",
         "type": "github"
       },
       "original": {
         "owner": "NousResearch",
-        "ref": "v2026.4.13",
+        "ref": "main",
         "repo": "hermes-agent",
         "type": "github"
       }
@@ -276,6 +277,27 @@
         "owner": "nixos",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "npm-lockfile-fix": {
+      "inputs": {
+        "nixpkgs": [
+          "hermes-agent",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1775903712,
+        "narHash": "sha256-2GV79U6iVH4gKAPWYrxUReB0S41ty/Y3dBLquU8AlaA=",
+        "owner": "jeslie0",
+        "repo": "npm-lockfile-fix",
+        "rev": "c6093acb0c0548e0f9b8b3d82918823721930fe8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeslie0",
+        "repo": "npm-lockfile-fix",
         "type": "github"
       }
     },
