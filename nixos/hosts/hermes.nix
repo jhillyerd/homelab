@@ -1,6 +1,7 @@
 {
   authorizedKeys,
   config,
+  nixpkgs-unstable,
   pkgs,
   self,
   util,
@@ -26,12 +27,23 @@ in
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    kitty # always install for terminfo
-    ripgrep
-    tmux
-    yazi
-  ];
+  environment.systemPackages =
+    let
+      system = pkgs.stdenv.hostPlatform.system;
+      unstable = nixpkgs-unstable.legacyPackages.${system};
+    in
+    with pkgs;
+    [
+      gcc
+      gh
+      gnumake
+      kitty # always install for terminfo
+      ripgrep
+      tmux
+      ungoogled-chromium
+      yazi
+    ]
+    ++ (with unstable; [ agent-browser ]);
 
   services.hermes-agent = {
     enable = true;
