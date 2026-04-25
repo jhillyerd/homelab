@@ -13,7 +13,7 @@
     agenix-template.url = "github:jhillyerd/agenix-template/main";
 
     hermes-agent = {
-      url = "github:NousResearch/hermes-agent/main";
+      url = "github:NousResearch/hermes-agent/v2026.4.23";
       inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
