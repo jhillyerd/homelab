@@ -125,7 +125,7 @@
     dash.icon = "svg/ollama.svg";
 
     lb.backendUrls = [
-      "http://fractal.home.arpa:8001"
+      "http://fractal.home.arpa:8000"
     ];
   };
 

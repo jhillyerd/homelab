@@ -29,8 +29,8 @@
     oci-containers = {
       containers = {
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8833";
-          ports = [ "8001:8080" ]; # healthcheck runs against 8080.
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda13-b8895";
+          ports = [ "8000:8080" ]; # healthcheck runs against 8080.
           environment = {
             # Serving
             LLAMA_ARG_IMAGE_MIN_TOKENS = "1024"; # Improves small image results
@@ -43,12 +43,12 @@
             LLAMA_ARG_MIN_P = "0.0";
             LLAMA_ARG_TOP_P = "0.95";
             LLAMA_ARG_TOP_K = "20";
-            LLAMA_ARG_THINK_BUDGET = "0";
+            LLAMA_ARG_THINK_BUDGET = "1000";
             # LLAMA_ARG_REPEAT_PENALTY = "";
           };
           cmd = [
             "-hf"
-            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL"
+            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL_XL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"

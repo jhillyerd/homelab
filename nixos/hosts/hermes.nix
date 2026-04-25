@@ -53,17 +53,15 @@ in
     settings =
       let
         dgx_qwen = {
-          # Qwen 3.5 122B-A10B thinking for main-agent tasks
           provider = "custom";
           base_url = "http://dgx1.home.arpa:8000/v1";
           model = "qwen"; # 122B-A10B
           timeout = 60; # seconds
         };
         fractal_qwen = {
-          # Qwen 3.5 35B-A3B non-thinking for auxiliary tasks
           provider = "custom";
-          base_url = "http://fractal.home.arpa:8001/v1";
-          model = "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ4_NL";
+          base_url = "http://fractal.home.arpa:8000/v1";
+          model = "Qwen3.6-35B-A3B";
           timeout = 60; # seconds
         };
         thinking = dgx_qwen;
