@@ -41,6 +41,7 @@ in
       ripgrep
       tmux
       ungoogled-chromium
+      uv
       yazi
     ]
     ++ (with unstable; [ agent-browser ]);

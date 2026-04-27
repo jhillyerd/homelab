@@ -56,6 +56,7 @@ in
         universal-ctags
         unzip
         usbutils
+        uv
         watchexec
         yaml-language-server
         yazi # file manager
