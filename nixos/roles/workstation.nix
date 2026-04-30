@@ -35,7 +35,6 @@ in
         kitty # always install for terminfo
         lazydocker
         lazygit
-        lua51Packages.luarocks-nix # for rest.nvim
         lynx
         nfs-utils
         nixd
@@ -62,9 +61,9 @@ in
         yazi # file manager
         zip
       ])
-      ++ [
-        unstable.devenv
-      ];
+      ++ (with unstable; [
+        devenv
+      ]);
 
     # Programs and services
     programs = {
