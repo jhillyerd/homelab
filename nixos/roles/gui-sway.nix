@@ -7,6 +7,16 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.roles.gui-sway;
+
+  polkit-agent-script = pkgs.writeShellApplication {
+    name = "polkit-agent-script";
+    runtimeInputs = with pkgs; [
+      jq
+      libnotify
+      rofi
+    ];
+    text = builtins.readFile ./files/gui/polkit-agent-script.sh;
+  };
 in
 {
   options.roles.gui-sway = {
@@ -18,6 +28,7 @@ in
 
     environment.systemPackages = with pkgs; [
       clipman
+      cmd-polkit
       dunst
       gcr # gnome keyring SystemPrompter
       gedit
@@ -48,13 +59,32 @@ in
       extraSessionCommands = ''
         # Import environment into systemd user session and D-Bus activation
         # environment. This is needed for gnome-keyring, xdg-desktop-portal,
-        # and polkit agents (soteria) to work properly.
+        # and polkit agents to work properly.
         ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
       '';
     };
 
     # Polkit authentication agent.
-    security.soteria.enable = true;
+    # We use cmd-polkit instead of soteria because cmd-polkit spawns the
+    # PAM helper immediately and forwards PAM messages (like pam_u2f's
+    # "please touch" cue) in real time, allowing touch-only auth without
+    # a password prompt.
+    security.polkit.enable = true;
+
+    systemd.user.services.polkit-cmd-polkit = {
+      description = "cmd-polkit authentication agent";
+      wantedBy = [ "graphical-session.target" ];
+      wants = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
+      serviceConfig = {
+        ExecStart = ''
+          ${lib.getExe pkgs.cmd-polkit} --serial --command ${lib.getExe polkit-agent-script}
+        '';
+        Type = "simple";
+        Restart = "on-failure";
+        RestartSec = 2;
+      };
+    };
 
     # Used by thunar.
     services.gvfs.enable = true;

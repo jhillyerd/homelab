@@ -43,6 +43,7 @@ in
         nodejs
         nomad
         openssl
+        pam_u2f
         patchelf
         postgresql_16
         python3Packages.python-lsp-server
@@ -136,6 +137,15 @@ in
     };
 
     security.sudo.wheelNeedsPassword = false;
+
+    # U2F (e.g. YubiKey) as sufficient auth for sudo and polkit only,
+    # not for regular logins or screenlocks.
+    security.pam.u2f = {
+      control = "sufficient";
+      settings.cue = true;
+    };
+    security.pam.services.sudo.u2fAuth = true;
+    security.pam.services.polkit-1.u2fAuth = true;
 
     nix = {
       settings = {
