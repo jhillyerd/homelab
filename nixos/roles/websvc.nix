@@ -212,7 +212,11 @@ in
         mkServiceEntry =
           name:
           let
-            opt = cfg.services.${name};
+            opt =
+              if hasAttr name cfg.services then
+                cfg.services.${name}
+              else
+                abort "roles.websvc: service '${name}' referenced in layout but not defined in services";
           in
           {
             inherit (opt.dash)

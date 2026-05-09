@@ -193,6 +193,12 @@
     lb.backendUrls = [ "http://mininas.bytemonkey.org:30113" ];
   };
 
+  search = {
+    title = "SearXNG";
+    dns.intCname = true;
+    dash.icon = "svg/searxng.svg";
+  };
+
   syncthing = {
     title = "Syncthing";
 
