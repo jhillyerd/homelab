@@ -69,6 +69,7 @@ search:
   safe_search: 0
   autocomplete: "duckduckgo"
   default_lang: "en"
+  formats: ["csv", "html", "json", "rss"]
 
 server:
   secret_key: "{{ with nomadVar "nomad/jobs/searxng" }}{{ .secret_key }}{{ end }}"
