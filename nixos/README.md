@@ -58,3 +58,13 @@ qmrestore ./vzdump-qemu-nixos-NNNN.vma.zst <vmid>
 
 You may then use the proxmox web UI to convert to template, and set
 `Hardware: Display` to `Serial terminal 0`.
+
+### Register u2f key for user
+
+Allows for touch-based auth for sudo and polkit (including 1Password.)
+
+```sh
+mkdir -p ~/.config/Yubico
+pamu2fcfg > ~/.config/Yubico/u2f_keys
+chmod 600 ~/.config/Yubico/u2f_keys
+```
