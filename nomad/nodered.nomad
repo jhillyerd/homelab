@@ -81,8 +81,8 @@ job "nodered" {
       }
 
       template {
-        data = "NODE_RED_CREDENTIAL_SECRET={{key \"secrets/nodered/credential\"}}"
-        destination = "nodered.env"
+        data = "NODE_RED_CREDENTIAL_SECRET={{ with nomadVar \"nomad/jobs/nodered\" }}{{ .credential }}{{ end }}"
+        destination = "secrets/nodered.env"
         env = true
       }
     }
