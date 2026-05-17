@@ -130,6 +130,61 @@ ephemeral_disk {
     - Job-scoped, supports ACL restrictions per path
   - **Consul KV**: `{{key "secrets/path"}}` (legacy, still used in existing jobs)
 
+### Nomad Variables: Job-scoped secrets
+By default, each job can only read variables at its own path (`nomad/jobs/<job-name>`).
+No additional ACL configuration is needed for this case.
+```hcl
+# In the template block:
+{{ with nomadVar "nomad/jobs/myjob" }}{{ .api_key }}{{ end }}
+```
+```bash
+# Store the secret:
+nomad var put nomad/jobs/myjob api_key=xxx
+```
+
+### Nomad Variables: Shared secrets across jobs
+When multiple jobs need access to the same secret, use a shared variable path
+(e.g., `influxdb/telegraf`) and create an ACL policy to grant read access.
+
+**1. Define the ACL policy** (`nomad/acl/<name>-policy.hcl`):
+```hcl
+namespace "default" {
+  variables {
+    path "influxdb/*" {
+      capabilities = ["read"]
+    }
+  }
+}
+```
+Note: variable paths never start with a leading `/`.
+
+**2. Apply the policy, scoped to the job(s) that need access:**
+```bash
+# Scope to a specific job (uses Nomad workload identities — no manual tokens needed)
+nomad acl policy apply \
+  -namespace default -job speedflux \
+  shared-influxdb-read nomad/acl/shared-variables-policy.hcl
+
+# Scope to all tasks in a group:
+nomad acl policy apply -namespace default -job <job> -group <group> <name> <file>
+
+# Scope to a specific task:
+nomad acl policy apply -namespace default -job <job> -group <group> -task <task> <name> <file>
+```
+
+**3. Store the shared variable:**
+```bash
+nomad var put influxdb/telegraf password=xxx
+```
+
+**4. Reference in templates:**
+```hcl
+{{ with nomadVar "influxdb/telegraf" }}{{ .password }}{{ end }}
+```
+
+**Backup:** ACL policy source files live in `nomad/acl/` (in git). Nomad Variables
+are only in Nomad's Raft store — use `nomad operator snapshot save` for disaster recovery.
+
 ## Logging
 - Add log configuration for long-running services:
   - `logs { max_files = 10, max_file_size = 15 }`

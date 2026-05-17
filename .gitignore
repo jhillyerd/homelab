@@ -5,6 +5,7 @@
 # Password files
 /gen_passwords.json
 /ansible/lowsec.yml
+/nomad/*.snap
 
 # Certificates
 /nomad/etc/ca

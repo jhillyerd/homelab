@@ -1,0 +1,3 @@
+#!/bin/sh
+
+nomad operator snapshot save backup.snap

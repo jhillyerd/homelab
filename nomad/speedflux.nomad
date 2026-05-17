@@ -34,7 +34,7 @@ NAMESPACE=comcast
 INFLUX_DB_ADDRESS=metrics.home.arpa
 INFLUX_DB_PORT=8086
 INFLUX_DB_USER=telegraf
-INFLUX_DB_PASSWORD={{key "secrets/influxdb/telegraf"}}
+INFLUX_DB_PASSWORD={{ with nomadVar "influxdb/telegraf" }}{{ .password }}{{ end }}
 INFLUX_DB_DATABASE=telegraf-hosts
 # See https://github.com/breadlysm/speedtest-to-influxdb#tag-options
 INFLUX_DB_TAGS=external_ip, server_name, server_location, isp, server_host
