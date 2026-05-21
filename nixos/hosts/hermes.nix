@@ -96,6 +96,8 @@ in
         };
       };
 
+    extraDependencyGroups = [ "messaging" ];
+
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
 
