@@ -63,7 +63,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/home-assistant/home-assistant:2026.3.4"
+        image = "ghcr.io/home-assistant/home-assistant:2026.5.4"
         ports = [ "http", "sonos" ]
 
         mount {
