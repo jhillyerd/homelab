@@ -22,7 +22,6 @@ let
   game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
   hermes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ01PSNkesday4JTlDOcOFQLQVI7P9ePZ5OlZGItG+Wz";
   metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
-  nexus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEuqgUtpyOVfnxa1oKLdjN4AIN5piKHfdumQHonqjH4P";
   nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
   nixtarget1-virtd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILozTQNcPY2BNQZNW+F29M2euRzD7wZ1XtsKsWFjzpeJ";
   scratch = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
@@ -36,7 +35,6 @@ let
     game
     hermes
     metrics
-    nexus
     nix-ryzen
     nixtarget1-virtd
     scratch

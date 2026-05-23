@@ -19,7 +19,7 @@ in
         enforce_order = true;
       };
 
-      nexus_bind = {
+      witness_bind = {
         class = "octodns_bind.Rfc2136Provider";
         host = target;
         key_name = "env/BIND_KEY_NAME";
@@ -30,7 +30,7 @@ in
     zones = {
       "*" = {
         sources = [ "zones" ];
-        targets = [ "nexus_bind" ];
+        targets = [ "witness_bind" ];
       };
     };
 

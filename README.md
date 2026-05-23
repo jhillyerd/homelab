@@ -21,7 +21,6 @@ graph TD
     lan --- pve4
     subgraph pve1 ["pve1 (16GB hypervisor)"]
         direction RL
-        nexus("nexus")
         witness("witness<br/>(nomad server)")
     end
     subgraph pve3 ["pve3 (64GB hypervisor)"]
