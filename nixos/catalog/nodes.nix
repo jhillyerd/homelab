@@ -3,7 +3,7 @@
   agent-zero = {
     ip.priv = "192.168.131.8";
     config = ../hosts/agent-zero.nix;
-    hw = ../hw/proxmox.nix;
+    hw = ../hw/proxmox-vda.nix;
     system = system.x86_64-linux;
   };
 
@@ -61,7 +61,7 @@
   hermes = {
     ip.priv = "192.168.131.9";
     config = ../hosts/hermes.nix;
-    hw = ../hw/proxmox.nix;
+    hw = ../hw/proxmox-vda.nix;
     system = system.x86_64-linux;
   };
 
