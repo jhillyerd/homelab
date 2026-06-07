@@ -39,7 +39,7 @@ in
       seahorse # secret management
       slurp # region selector
       wl-clipboard # clipboard commands
-      xfce.ristretto # image viwer
+      ristretto # image viwer
       yambar
     ];
 
@@ -49,7 +49,7 @@ in
 
     programs.thunar = {
       enable = true;
-      plugins = with pkgs.xfce; [ thunar-volman ];
+      plugins = with pkgs; [ thunar-volman ];
     };
 
     programs.sway = {

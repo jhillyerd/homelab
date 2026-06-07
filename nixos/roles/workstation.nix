@@ -38,7 +38,7 @@ in
         lynx
         nfs-utils
         nixd
-        nixfmt-rfc-style
+        nixfmt
         nixpkgs-review
         nodejs
         nomad
