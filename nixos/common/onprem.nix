@@ -8,6 +8,16 @@
 {
   networking = {
     firewall.allowPing = true;
+    # Cluster DNS resolvers, used as systemd-resolved's global `DNS=`.
+    # Required so that lookups matching the global search domains below
+    # (e.g. `*.home.arpa`) route to our authoritative servers instead of
+    # falling through to the fallback (1.1.1.1), which returns NXDOMAIN for
+    # the IANA special-use `home.arpa` zone.
+    nameservers = [
+      catalog.dns.ns2
+      catalog.dns.ns3
+      catalog.dns.ns1
+    ];
     search = [
       "home.arpa"
       "dyn.home.arpa"
