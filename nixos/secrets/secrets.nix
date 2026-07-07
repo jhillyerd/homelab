@@ -16,6 +16,7 @@ let
   # Nodes
   agent-zero = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOeMONJSXhs+Ydp9wx7fbBnacM9V30HwgRWhHHg09VeN";
   boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO1L6/RnWa8jBLfre3EQm4pCQ4fpObmj4GrqMarpuDNM";
+  carbon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUT6FrpCKiRIGuzQQnl28ohDYfrt+SxvPMmSfWm15I0";
   eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
   fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
   fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
@@ -29,6 +30,7 @@ let
   home-nodes = [
     agent-zero
     boss
+    carbon
     eph
     fastd
     fractal
