@@ -12,7 +12,7 @@
   virtualisation.oci-containers = {
     containers = {
       agent0 = {
-        image = "agent0ai/agent-zero:v1.15";
+        image = "agent0ai/agent-zero:v2.4";
         hostname = "agent0";
         ports = [
           "80:80/tcp"
