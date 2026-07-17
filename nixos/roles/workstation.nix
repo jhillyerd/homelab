@@ -144,8 +144,22 @@ in
       control = "sufficient";
       settings.cue = true;
     };
-    security.pam.services.sudo.u2fAuth = true;
-    security.pam.services.polkit-1.u2fAuth = true;
+    security.pam.services.sudo.u2f.enable = true;
+    security.pam.services.polkit-1.u2f.enable = true;
+
+    # polkit's PAM helper is sandboxed.  The upstream NixOS override that
+    # exposes FIDO devices and the user's u2f_keys file is conditional on
+    # security.pam.u2f.enable, but enabling that globally would add U2F to
+    # every PAM service.  We only enable it for sudo and polkit, so apply the
+    # required sandbox exceptions directly to polkit's helper.
+    systemd.services."polkit-agent-helper@".serviceConfig = {
+      PrivateDevices = false;
+      DeviceAllow = [
+        "/dev/urandom r"
+        "char-hidraw rw"
+      ];
+      ProtectHome = "read-only";
+    };
 
     nix = {
       settings = {
