@@ -13,25 +13,28 @@
     "usb_storage"
     "sd_mod"
   ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
-    efi.efiSysMountPoint = "/boot/efi";
     timeout = 15;
   };
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/c6fb5461-1de7-4764-b313-2de767ccb836";
+    device = "/dev/mapper/nixos-root";
     fsType = "ext4";
   };
 
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/5C34-C3D2";
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/1BA0-6563";
     fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
   };
 
   swapDevices = [ ];
