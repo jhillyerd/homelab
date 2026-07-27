@@ -54,6 +54,7 @@ in
         steam-run-free
         lua-language-server
         tmux
+        tree-sitter
         universal-ctags
         unzip
         usbutils
