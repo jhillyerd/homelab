@@ -14,15 +14,9 @@ in
       default = 3100;
     };
 
-    promtail_http_port = mkOption {
+    syslog_ingest_port = mkOption {
       type = port;
-      description = "Promtail HTTP listen port";
-      default = 9080;
-    };
-
-    promtail_syslog_port = mkOption {
-      type = port;
-      description = "Promtail syslog listen port";
+      description = "Syslog listen port";
       default = 1514;
     };
   };
@@ -86,52 +80,56 @@ in
       };
     };
 
-    services.promtail = {
-      enable = true;
+    # Listens on syslog_port and forwards logs to loki.
+    services.alloy.enable = true;
+    environment.etc."alloy/config.alloy".text = ''
+      discovery.relabel "syslog" {
+        targets = []
 
-      configuration = {
-        server = {
-          http_listen_port = cfg.promtail_http_port;
-          grpc_listen_port = 0;
-        };
+        rule {
+          source_labels = ["__syslog_message_hostname"]
+          target_label  = "host"
+        }
 
-        clients = [ { url = "http://localhost:${toString cfg.loki_http_port}/loki/api/v1/push"; } ];
+        rule {
+          source_labels = ["__syslog_message_app_name"]
+          target_label  = "app_name"
+        }
+      }
 
-        scrape_configs = [
-          {
-            job_name = "syslog";
-            syslog = {
-              listen_address = "0.0.0.0:${toString cfg.promtail_syslog_port}";
-              idle_timeout = "60s";
-              label_structured_data = true;
-              labels = {
-                job = "syslog";
-              };
-            };
-            relabel_configs = [
-              {
-                source_labels = [ "__syslog_message_hostname" ];
-                target_label = "host";
-              }
-              {
-                source_labels = [ "__syslog_message_app_name" ];
-                target_label = "app_name";
-              }
-            ];
+      loki.source.syslog "syslog" {
+        listener {
+          address               = "0.0.0.0:${toString cfg.syslog_ingest_port}"
+          protocol              = "tcp"
+          idle_timeout          = "1m0s"
+          label_structured_data = true
+          max_message_length    = 0
+
+          labels = {
+            job = "syslog",
           }
-        ];
-      };
-    };
+        }
 
-    systemd.services.promtail = {
-      # Forces promtail to be stopped before loki, preventing retry hang.
-      after = [ "loki.service" ];
-    };
+        forward_to    = [loki.write.default.receiver]
+        relabel_rules = discovery.relabel.syslog.rules
+      }
+
+      loki.write "default" {
+        endpoint {
+          url = "http://localhost:${toString cfg.loki_http_port}/loki/api/v1/push"
+        }
+        external_labels = {}
+      }
+    '';
+
+    # systemd.services.promtail = {
+    #   # Forces promtail to be stopped before loki, preventing retry hang.
+    #   after = [ "loki.service" ];
+    # };
 
     networking.firewall.allowedTCPPorts = [
       cfg.loki_http_port
-      cfg.promtail_http_port
-      cfg.promtail_syslog_port
+      cfg.syslog_ingest_port
     ];
   };
 }

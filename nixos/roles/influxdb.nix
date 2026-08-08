@@ -73,7 +73,7 @@ in
 
       services.influxdb = {
         enable = true;
-        extraConfig.http.auth-enabled = true;
+        settings.http.auth-enabled = true;
       };
 
       systemd.services.influxdb-init = {
