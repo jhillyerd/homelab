@@ -79,6 +79,9 @@ in
       services.bind = mkIf cfg.bind.enable {
         enable = true;
 
+        # The use of /var/lib/named prevents automated checks.
+        checkConfig = false;
+
         cacheNetworks = [ "0.0.0.0/0" ];
         forwarders = [
           "1.1.1.1"
