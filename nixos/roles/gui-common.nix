@@ -16,6 +16,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       alsa-utils
+      appimage-run
       audacity
       firefox
       gimp
