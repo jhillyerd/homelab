@@ -28,14 +28,6 @@
     system = system.x86_64-linux;
   };
 
-  eph = {
-    ip.priv = "192.168.128.44";
-    ip.tail = "100.119.252.34";
-    config = ../hosts/eph.nix;
-    hw = ../hw/proxmox.nix;
-    system = system.x86_64-linux;
-  };
-
   fastd = {
     ip.priv = "192.168.131.5";
     hostId = "f4fa7292";

@@ -2,13 +2,11 @@ let
   # Users
   james-skynet = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGKG8scDbgNAwAfeKg76EfMHlaJOVzXMdcAKX9IInudG";
   james-boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMUS8WdTqKJ5zH4o/grh0UgBRpmyo9f1o4pELqq23y/";
-  james-eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1Rq9OFHVus5eULteCEGNkHgINch40oPP2LwvlVd6ng";
   james-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAXHtE9NI16ZPNSKF6Cn0JNJS6fTNQYduerVmVa6WKY";
   james-nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICJoH0p+6iSISUAqRO8+6+uvQWpjaP0eQjDeGAXIYUI6";
   users = [
     james-skynet
     james-boss
-    james-eph
     james-ryzen
     james-nix-ryzen
   ];
@@ -17,28 +15,24 @@ let
   agent-zero = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOeMONJSXhs+Ydp9wx7fbBnacM9V30HwgRWhHHg09VeN";
   boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO1L6/RnWa8jBLfre3EQm4pCQ4fpObmj4GrqMarpuDNM";
   carbon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUT6FrpCKiRIGuzQQnl28ohDYfrt+SxvPMmSfWm15I0";
-  eph = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJy9svdsaaW77i5QPwiNLDSN+jJmFvkK5NisZzbm7Lro";
   fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
   fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
   game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
   hermes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ01PSNkesday4JTlDOcOFQLQVI7P9ePZ5OlZGItG+Wz";
   metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
   nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
-  nixtarget1-virtd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILozTQNcPY2BNQZNW+F29M2euRzD7wZ1XtsKsWFjzpeJ";
   scratch = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
   web = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
   home-nodes = [
     agent-zero
     boss
     carbon
-    eph
     fastd
     fractal
     game
     hermes
     metrics
     nix-ryzen
-    nixtarget1-virtd
     scratch
     web
   ];

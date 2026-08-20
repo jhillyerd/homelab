@@ -27,10 +27,6 @@
       response_status_code = 200;
     }
     {
-      urls = [ "https://links.bytemonkey.org/login" ];
-      response_status_code = 200;
-    }
-    {
       urls = [ "http://msdde3.home.arpa/" ];
       response_status_code = 200;
     }
@@ -58,7 +54,6 @@
 
   ping = [
     "ci-runner1.home.arpa"
-    "eph.home.arpa"
     "fastd.home.arpa"
     "fractal.home.arpa"
     "gateway.home.arpa"

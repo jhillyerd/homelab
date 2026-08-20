@@ -10,7 +10,6 @@
       "homeassistant"
       "inbucket"
       "jellyfin"
-      "links"
       "nodered"
       "openwebui"
       "radarr"

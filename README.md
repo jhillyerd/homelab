@@ -33,7 +33,6 @@ graph TD
     subgraph pve4 ["pve4 (64GB hypervisor)"]
         direction RL
         ci-runner1("ci-runner1<br/>(forgejo)")
-        eph("eph")
         kube2("kube2")
         metrics("metrics")
         unifi("unifi")

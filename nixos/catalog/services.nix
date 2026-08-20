@@ -113,12 +113,6 @@
     dash.proto = "http";
   };
 
-  links = {
-    title = "Linkwarden";
-    dns.intCname = true;
-    dash.icon = "png/linkwarden.png";
-  };
-
   llm = {
     title = "Llama";
     dns.intCname = true;
