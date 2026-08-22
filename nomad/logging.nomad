@@ -46,7 +46,7 @@ job "logging" {
       driver = "docker"
 
       config {
-        image = "timberio/vector:0.22.X-alpine"
+        image = "timberio/vector:0.57.0-alpine"
         ports = ["api"]
       }
 
@@ -81,7 +81,6 @@ job "logging" {
           [api]
             enabled = true
             address = "0.0.0.0:8686"
-            playground = true
           [sources.logs]
             type = "docker_logs"
           [sinks.out]
@@ -99,10 +98,10 @@ job "logging" {
           [sinks.loki.labels]
             forwarder = 'vector'
             app_name = 'nomad_docker'
-            job = '{{ label."com.hashicorp.nomad.job_name" }}'
-            task = '{{ label."com.hashicorp.nomad.task_name" }}'
-            group = '{{ label."com.hashicorp.nomad.task_group_name" }}'
-            node = '{{ label."com.hashicorp.nomad.node_name" }}'
+            job = 'job_{{ label."com.hashicorp.nomad.job_name" }}'
+            task = 'task_{{ label."com.hashicorp.nomad.task_name" }}'
+            group = 'group_{{ label."com.hashicorp.nomad.task_group_name" }}'
+            node = 'node_{{ label."com.hashicorp.nomad.node_name" }}'
         EOH
       }
 
