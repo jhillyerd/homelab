@@ -11,7 +11,6 @@
       "inbucket"
       "jellyfin"
       "nodered"
-      "openwebui"
       "radarr"
       "search"
       "sonarr"

@@ -149,15 +149,6 @@
     lb.auth = "external";
   };
 
-  openwebui = {
-    title = "Open WebUI";
-
-    dns.intCname = true;
-    dns.extCname = false;
-
-    dash.icon = "svg/open-webui.svg";
-  };
-
   proxmox = {
     title = "Proxmox VE";
     dns.intCname = true;
