@@ -46,7 +46,7 @@ job "fabio" {
       template {
         data = <<EOT
           registry.consul.addr = {{env "NOMAD_IP_lb"}}:8500
-          registry.consul.token = {{key "secrets/fabio/consul"}}
+          registry.consul.token = {{ with nomadVar "nomad/jobs/fabio" }}{{ .consul_token }}{{ end }}
         EOT
         destination = "secrets/fabio.properties"
       }
