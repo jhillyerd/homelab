@@ -94,7 +94,7 @@ datasources:
     url: http://metrics.home.arpa:8086
     user: homeassistant
     secureJsonData:
-      password: "{{key "secrets/influxdb/homeassistant"}}"
+      password: "{{ with nomadVar "influxdb/homeassistant" }}{{ .password }}{{ end }}"
 
   - name: telegraf-hosts influxdb
     type: influxdb
@@ -102,7 +102,7 @@ datasources:
     url: http://metrics.home.arpa:8086
     user: telegraf
     secureJsonData:
-      password: "{{key "secrets/influxdb/telegraf"}}"
+      password: "{{ with nomadVar "influxdb/telegraf" }}{{ .password }}{{ end }}"
 
   - name: "syslogs loki"
     type: loki
