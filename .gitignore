@@ -21,3 +21,5 @@
 /.vim
 result
 *.qcow2
+
+/esphome/.device-builder*
