@@ -32,6 +32,7 @@ in
         glow # markdown viewer
         gnumake
         gnupg
+        grafana-loki
         kitty # always install for terminfo
         lazydocker
         lazygit
