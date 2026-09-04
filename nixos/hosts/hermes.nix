@@ -56,18 +56,18 @@ in
         dgx_qwen = {
           provider = "custom";
           base_url = "http://dgx1.home.arpa:8000/v1";
-          model = "qwen/qwen3.5"; # 122B-A10B
-          timeout = 60; # seconds
+          model = "qwen";
+          timeout = 120; # seconds
         };
         fractal_qwen = {
           provider = "custom";
           base_url = "http://fractal.home.arpa:8000/v1";
           model = "Qwen3.6-35B-A3B";
-          timeout = 60; # seconds
+          timeout = 120; # seconds
         };
-        zai_turbo = {
+        zai_flash = {
           provider = "zai";
-          model = "glm-5-turbo";
+          model = "glm-5.3-flash";
         };
         thinking = dgx_qwen;
         fast = fractal_qwen;
@@ -76,7 +76,7 @@ in
         approvals.mode = "off";
 
         model = thinking;
-        fallback_model = zai_turbo;
+        fallback_model = zai_flash;
         delegation = fractal_qwen;
 
         auxiliary = {
@@ -90,7 +90,7 @@ in
 
         compression = {
           enable = true;
-          threshold = 0.5;
+          threshold = 0.75;
           summary_provider = fast.provider;
           summary_model = fast.model;
         };
