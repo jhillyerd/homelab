@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  pkgs-unstable,
   ...
 }:
 let
@@ -26,22 +27,27 @@ in
   config = mkIf cfg.enable {
     roles.gui-common.enable = true;
 
-    environment.systemPackages = with pkgs; [
-      clipman
-      cmd-polkit
-      dunst
-      gcr # gnome keyring SystemPrompter
-      gedit
-      i3-balance-workspace
-      lxappearance
-      pantheon.elementary-icon-theme
-      rofi
-      seahorse # secret management
-      slurp # region selector
-      wl-clipboard # clipboard commands
-      ristretto # image viwer
-      yambar
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        cmd-polkit
+        gcr # gnome keyring SystemPrompter
+        gedit
+        i3-balance-workspace
+        lxappearance
+        pantheon.elementary-icon-theme
+        rofi
+        seahorse # secret management
+        slurp # region selector
+        wl-clipboard # clipboard commands
+        ristretto # image viwer
+      ]
+      ++ [
+        # Desktop shell: bar, notifications, launcher, lock screen, OSDs.
+        # Replaces yambar and dunst. Noctalia is only in nixpkgs unstable,
+        # not nixos-26.05.
+        pkgs-unstable.noctalia
+      ];
 
     # Enable Ozone Wayland support in Chromium and Electron based applications
     # Still breaks camera in Chrome.
@@ -89,6 +95,9 @@ in
     # Used by thunar.
     services.gvfs.enable = true;
     services.tumbler.enable = true;
+
+    # Power status (battery, charging) for Noctalia's battery widget.
+    services.upower.enable = true;
 
     services.gnome.gnome-keyring.enable = true;
     services.gnome.gcr-ssh-agent.enable = false;
