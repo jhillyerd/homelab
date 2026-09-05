@@ -62,12 +62,6 @@ in
       enable = true;
       wrapperFeatures.gtk = true;
       extraOptions = [ "--unsupported-gpu" ];
-      extraSessionCommands = ''
-        # Import environment into systemd user session and D-Bus activation
-        # environment. This is needed for gnome-keyring, xdg-desktop-portal,
-        # and polkit agents to work properly.
-        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-      '';
     };
 
     # Polkit authentication agent.
