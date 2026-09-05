@@ -76,6 +76,10 @@ let
     };
 
     # Cluster network.
+    mininasxg = {
+      type = "A";
+      value = "192.168.128.9";
+    };
     pve1 = {
       type = "A";
       value = "192.168.128.10";
