@@ -24,6 +24,7 @@ in
     enable = true;
     allowedTCPPorts = [
       8642 # hermes agent API
+      9119 # hermes web dashboard
     ];
   };
 
@@ -96,7 +97,18 @@ in
         };
       };
 
-    extraDependencyGroups = [ "messaging" ];
+    extraDependencyGroups = [
+      "messaging"
+      "web" # dashboard backend (fastapi/uvicorn)
+    ];
+
+    backend = {
+      mode = "dashboard";
+      host = "0.0.0.0"; # non-loopback bind enables the dashboard auth gate
+      # Auth credentials come from hermes-env (HERMES_DASHBOARD_BASIC_AUTH_*),
+      # otherwise the backend fails closed on start.
+      port = 9119;
+    };
 
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
