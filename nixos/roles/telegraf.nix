@@ -47,6 +47,12 @@ in
       default = false;
     };
 
+    nvidia_smi = mkOption {
+      type = bool;
+      description = "Collect NVIDIA GPU metrics via nvidia-smi";
+      default = false;
+    };
+
     x509_certs = mkOption {
       type = listOf str;
       description = "List of URLs to monitor for certificate expiration";
@@ -93,6 +99,11 @@ in
           nomad = mkIf (cfg.nomad) {
             url = "https://127.0.0.1:4646";
             insecure_skip_verify = true;
+          };
+
+          nvidia_smi = mkIf cfg.nvidia_smi {
+            bin_path = "/run/current-system/sw/bin/nvidia-smi";
+            timeout = "5s";
           };
 
           x509_cert = mkIf (length cfg.x509_certs > 0) {

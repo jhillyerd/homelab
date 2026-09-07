@@ -12,6 +12,7 @@
   ];
 
   roles.workstation.enable = true;
+  roles.telegraf.nvidia_smi = true;
 
   environment.systemPackages = with pkgs; [
     nvtopPackages.nvidia
