@@ -12,7 +12,6 @@
   ];
 
   roles.workstation.enable = true;
-  roles.gui-xfce.enable = true;
 
   environment.systemPackages = with pkgs; [
     nvtopPackages.nvidia
@@ -58,12 +57,6 @@
         };
       };
     };
-  };
-
-  services.xrdp = {
-    enable = true;
-    openFirewall = true;
-    defaultWindowManager = "xfce4-session";
   };
 
   fileSystems."/data/llama" = {
