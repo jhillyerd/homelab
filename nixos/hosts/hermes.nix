@@ -54,46 +54,41 @@ in
 
     settings =
       let
-        dgx_qwen = {
+        bifrost_url = "https://bifrost.bytemonkey.org/v1";
+        bifrost_smart = {
           provider = "custom";
-          base_url = "http://dgx1.home.arpa:8000/v1";
-          model = "qwen";
+          base_url = bifrost_url;
+          api_key = "smartsmart";
+          model = "smart";
           timeout = 120; # seconds
         };
-        fractal_qwen = {
+        bifrost_fast = {
           provider = "custom";
-          base_url = "http://fractal.home.arpa:8000/v1";
-          model = "Qwen3.6-35B-A3B";
+          base_url = bifrost_url;
+          api_key = "fastfast";
+          model = "fast";
           timeout = 120; # seconds
         };
         zai_flash = {
           provider = "zai";
           model = "glm-5.3-flash";
         };
-        thinking = dgx_qwen;
-        fast = fractal_qwen;
       in
       {
         approvals.mode = "off";
 
-        model = thinking;
+        model = bifrost_smart;
         fallback_model = zai_flash;
-        delegation = fractal_qwen;
+        delegation = bifrost_fast;
 
         auxiliary = {
-          approval = thinking;
-          flush_memories = fast;
-          session_search = fast;
-          skills_hub = thinking;
-          vision = thinking;
-          web_extract = fast;
-        };
-
-        compression = {
-          enable = true;
-          threshold = 0.75;
-          summary_provider = fast.provider;
-          summary_model = fast.model;
+          approval = bifrost_smart;
+          compression = bifrost_fast;
+          flush_memories = bifrost_fast;
+          session_search = bifrost_fast;
+          skills_hub = bifrost_smart;
+          vision = bifrost_smart;
+          web_extract = bifrost_fast;
         };
       };
 
