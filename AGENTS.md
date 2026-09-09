@@ -10,6 +10,68 @@
   long time.
 
 
+# Service Catalog, DNS & Dashboard
+
+Web-facing services (DNS names, reverse proxy, dashboard entries) are driven
+by a central catalog rather than per-host config. A typical new service touches
+three places: `nixos/catalog/services.nix` (definition), `nixos/catalog/layout.nix`
+(dashboard placement), and DNS generation via `nix build .#confgen`.
+
+## `nixos/catalog/services.nix`
+The key of each block is the DNS hostname: `<key>.bytemonkey.org`, plus
+`<key>.x.bytemonkey.org` when exposed externally.
+```nix
+bifrost = {
+  title = "Bifrost";           # friendly name for the dashboard
+
+  dns.intCname = true;         # internal CNAME <key>.bytemonkey.org -> web proxy
+  # dns.extCname = true;       # external <key>.x.bytemonkey.org (Authelia-gated)
+
+  # Icon path in https://github.com/walkxcode/dashboard-icons,
+  # e.g. "svg/forgejo.svg" or "png/unifi.png".
+  # Required if the service appears in the layout.
+  dash.icon = "svg/openai.svg";
+
+  # Traefik file-provider backend; omit when routing is handled by
+  # traefik tags in a Nomad job (the usual case).
+  # lb.backendUrls = [ "http://some-host:8000" ];
+};
+```
+- Omit `lb` for Nomad services: routing is assumed to come from Traefik tags
+  on the Consul service registration (see Nomad guidelines below).
+- `lb` is used for non-Nomad backends (e.g. proxmox, consul) and supports
+  `backendUrls`, `checkHost`, `sticky`, and `auth` (Authelia) options.
+- Other `dash` overrides: `host`, `port`, `path`, `proto` for the dashboard link.
+- `external = true` exposes a service through the external Traefik entrypoint;
+  Authelia denies by default, so it must also be configured there.
+
+## DNS generation (`nixos/confgen/octodns/`)
+- `bytemonkey-{int,ext}.nix` derive zone records from the catalog:
+  `dns.intCname` services get `<key>` CNAMEs (internal zone -> `web.home.arpa.`,
+  external zone -> `web.bytemonkey.org.`); `dns.extCname` adds `<key>.x` records.
+- Validate and generate zone YAML: `nix build .#confgen` (output in `result/octodns/`)
+- Apply with octodns from the devshell: internal zones push via RFC2136 to BIND
+  on the `witness` host, external zones push to Cloudflare.
+
+## Dashboard layout (`nixos/catalog/layout.nix`)
+- Defines homesite dashboard sections and which service keys appear in each.
+- Every name in the layout must exist in `nixos/catalog/services.nix` (the web
+  host build aborts otherwise) and must set `dash.icon`.
+
+## homesite (`nixos/roles/homesite.nix`)
+- Static dashboard served by nginx on port 12701 on the `web` host.
+- `roles/websvc.nix` glues everything together: it feeds Traefik from `lb`
+  stanzas and serializes catalog + layout into homesite's `data.json`.
+
+## Checklist: adding a new web-facing service
+1. Nomad job with Traefik tags (usual), or `lb.backendUrls` for non-Nomad backends.
+2. Add an entry to `nixos/catalog/services.nix` with `dns.intCname = true`.
+3. Optionally add the key to `nixos/catalog/layout.nix` (requires `dash.icon`).
+4. Validate: `nix build .#confgen` and `cd nixos; nixos-rebuild --flake .#web build`.
+5. Apply: push DNS from the devshell (octodns), deploy the `web` host, then run
+   the Nomad job.
+
+
 # Nomad Job Authoring Guidelines
 
 ## Basic Job Structure

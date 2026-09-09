@@ -29,6 +29,7 @@
   {
     section = "Infrastructure";
     services = [
+      "bifrost"
       "llm"
       "mininas"
       "syncthing"

@@ -39,6 +39,17 @@
     lb.auth = "none";
   };
 
+  bifrost = {
+    title = "Bifrost";
+
+    dns.intCname = true;
+
+    # TODO: swap for a bifrost icon when dashboard-icons adds one.
+    dash.icon = "svg/openai.svg";
+
+    # Note: routing handled by traefik tags in nomad/bifrost.nomad.
+  };
+
   consul = {
     title = "Consul";
 
