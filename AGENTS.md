@@ -1,7 +1,7 @@
 # NixOS Configuration Guidelines
 
 ## Commands
-- Test that a host builds: `cd nixos; nixos-rebuild --flake .#<host> build`
+- Test that a host builds: `nixos-rebuild --flake .#<host> build`
 
 ## Constraints
 - Do not run nixos-rebuild with the `switch` or `boot` options, we are not
