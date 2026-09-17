@@ -155,6 +155,10 @@ in
     # every PAM service.  We only enable it for sudo and polkit, so apply the
     # required sandbox exceptions directly to polkit's helper.
     systemd.services."polkit-agent-helper@".serviceConfig = {
+      # Polkit's PAM helper is a oneshot unit with an infinite default start
+      # timeout. Bound U2F touch requests so abandoned clients cannot keep an
+      # authenticator waiting indefinitely.
+      TimeoutStartSec = "2min";
       PrivateDevices = false;
       DeviceAllow = [
         "/dev/urandom r"
