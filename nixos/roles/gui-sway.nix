@@ -12,6 +12,7 @@ let
   polkit-agent-script = pkgs.writeShellApplication {
     name = "polkit-agent-script";
     runtimeInputs = with pkgs; [
+      dbus
       jq
       libnotify
       rofi

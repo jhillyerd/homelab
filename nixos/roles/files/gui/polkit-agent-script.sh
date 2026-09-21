@@ -10,9 +10,15 @@ notify_id=""
 
 dismiss_notification() {
   if [[ -n "$notify_id" ]]; then
-    # dunst: replace notification by re-sending with same replace-id then
-    # immediately expiring it. There is no direct dismiss command.
-    notify-send --replace-id="$notify_id" --expire-time=1 " " 2>/dev/null || true
+    # CloseNotification is the freedesktop.org notification-spec mechanism for
+    # immediate dismissal. Re-sending an expired replacement only happened to
+    # work with Dunst; Noctalia assigns its own notification IDs.
+    dbus-send --session \
+      --dest=org.freedesktop.Notifications \
+      --type=method_call \
+      /org/freedesktop/Notifications \
+      org.freedesktop.Notifications.CloseNotification \
+      "uint32:$notify_id" >/dev/null 2>&1 || true
     notify_id=""
   fi
 }
@@ -20,14 +26,21 @@ dismiss_notification() {
 show_notification() {
   local text="$1"
   local icon="${2:-dialog-information}"
-  # Use a fixed replace-id so repeated messages update the same notification.
-  notify_id=99944
-  notify-send \
-    --replace-id="$notify_id" \
+  local new_notify_id
+
+  # Keep the ID returned by the server: replacement IDs are assigned by the
+  # notification daemon, rather than by clients. --print-id makes this work
+  # with both Noctalia and Dunst.
+  new_notify_id=$(notify-send \
+    --print-id \
+    --replace-id="${notify_id:-0}" \
     --expire-time=30000 \
     --icon="$icon" \
     "Authentication" \
-    "$text" 2>/dev/null || true
+    "$text" 2>/dev/null) || true
+  if [[ "$new_notify_id" =~ ^[0-9]+$ ]]; then
+    notify_id="$new_notify_id"
+  fi
 }
 
 cleanup() {
