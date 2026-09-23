@@ -221,11 +221,11 @@
     "icons": {
       "flake": false,
       "locked": {
-        "lastModified": 1771492566,
-        "narHash": "sha256-21gmWr9D9C9xNXu/53mNVW0xya6X0cqi8a5grElvJHQ=",
-        "owner": "walkxcode",
+        "lastModified": 1790006091,
+        "narHash": "sha256-l82xaGC5b4LakqxeJCmpuK43a6n0113UjQ2bX7XCc6I=",
+        "owner": "homarr-labs",
         "repo": "dashboard-icons",
-        "rev": "e04e6733106b65409e43623cd29a71974bad3bac",
+        "rev": "cf87d9bbd47792b20893f090ff48763fe874b05d",
         "type": "github"
       },
       "original": {

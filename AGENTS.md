@@ -27,7 +27,8 @@ bifrost = {
   dns.intCname = true;         # internal CNAME <key>.bytemonkey.org -> web proxy
   # dns.extCname = true;       # external <key>.x.bytemonkey.org (Authelia-gated)
 
-  # Icon path in https://github.com/walkxcode/dashboard-icons,
+  # Icon path in https://github.com/homarr-labs/dashboard-icons
+  # (formerly walkxcode/dashboard-icons — same repo, moved owner),
   # e.g. "svg/forgejo.svg" or "png/unifi.png".
   # Required if the service appears in the layout.
   dash.icon = "svg/openai.svg";
@@ -57,6 +58,14 @@ bifrost = {
 - Defines homesite dashboard sections and which service keys appear in each.
 - Every name in the layout must exist in `nixos/catalog/services.nix` (the web
   host build aborts otherwise) and must set `dash.icon`.
+- Icons are **not** fetched from GitHub at runtime: homesite serves a vendored
+  copy of dashboard-icons from the `homesite/icons` flake input, locked in
+  `flake.lock`. A missing icon usually means the pinned snapshot predates it,
+  not that upstream lacks it — check
+  `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/<rev>/{svg,png}/<name>.{svg,png}`.
+  Bump with `nix flake lock --override-input homesite/icons
+  'github:homarr-labs/dashboard-icons/main'` (data-only, no code changes).
+  Some icons are PNG/WebP only, so prefer `png/...` when no SVG exists.
 
 ## homesite (`nixos/roles/homesite.nix`)
 - Static dashboard served by nginx on port 12701 on the `web` host.

@@ -15,7 +15,8 @@
   # Authelia is configured to deny by default; services will need to be
   # configured there before being available externally.
   #
-  # `dash.icon` paths can be found in https://github.com/walkxcode/dashboard-icons
+  # `dash.icon` paths can be found in https://github.com/homarr-labs/dashboard-icons
+# (formerly walkxcode/dashboard-icons)
   agent-zero = {
     title = "Agent Zero";
 
@@ -99,6 +100,23 @@
 
     dash.icon = "svg/grafana.svg";
     # Note: external + auth handled by labels.
+  };
+
+  hindsight = {
+    title = "Hindsight";
+
+    dns.intCname = true;
+
+    # No SVG upstream yet, PNG-only (verified against the locked icons input).
+    dash.icon = "png/hindsight.png";
+    # Note: routing handled by traefik tags in nomad/hindsight.nomad.
+  };
+
+  hindsight-api = {
+    title = "Hindsight API";
+
+    dns.intCname = true;
+    # Memory banks live behind this endpoint; keep it out of the dashboard.
   };
 
   homeassistant = {

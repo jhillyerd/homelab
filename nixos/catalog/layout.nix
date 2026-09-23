@@ -30,6 +30,7 @@
     section = "Infrastructure";
     services = [
       "bifrost"
+      "hindsight"
       "llm"
       "mininas"
       "syncthing"
