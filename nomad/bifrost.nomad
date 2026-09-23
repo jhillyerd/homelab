@@ -30,12 +30,20 @@ job "bifrost" {
         "traefik.http.routers.bifrost.tls.certresolver=letsencrypt",
       ]
 
+      # NOTE: /health pings bifrost's SQLite DBs, which live on the NFS
+      # export from mininas. NAS-side periodic tasks can stall those pings for
+      # tens of seconds while the app itself keeps serving traffic. A single
+      # failed probe flips the Consul check critical, and Traefik's
+      # consul-catalog provider then drops the whole router (hard 404s).
+      # Debounce with failures_before_critical + a generous probe timeout.
       check {
         name     = "Bifrost HTTP Check"
         type     = "http"
         path     = "/health"
-        interval = "10s"
-        timeout  = "2s"
+        interval = "30s"
+        timeout  = "10s"
+
+        failures_before_critical = 4
       }
     }
 
