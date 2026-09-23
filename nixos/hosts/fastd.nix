@@ -23,6 +23,8 @@
     enableTCPIP = true;
     dataDir = "/fast1/database/postgresql/${config.services.postgresql.package.psqlSchema}";
 
+    extensions = ps: with ps; [ pgvector ];
+
     authentication = ''
       host all all all scram-sha-256
     '';
