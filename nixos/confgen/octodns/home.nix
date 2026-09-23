@@ -104,6 +104,10 @@ let
       type = "A";
       value = "192.168.131.10";
     };
+    plastic = {
+      type = "A";
+      value = "192.168.131.11";
+    };
   };
 
   ipPrivNodes = filterAttrs (n: v: v ? ip.priv) catalog.nodes;
