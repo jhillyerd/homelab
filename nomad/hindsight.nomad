@@ -122,6 +122,24 @@ HINDSIGHT_API_LLM_MODEL=fast
 # HINDSIGHT_API_*_LLM_REASONING_EFFORT.
 HINDSIGHT_API_LLM_REASONING_EFFORT=none
 
+# Reflect is the user-facing reasoning pass (a caller holds the request open
+# and answers come back through it), so it gets the smarter model behind the
+# `smart` alias. Provider/base URL still fall back to the globals above, so
+# only the model is repointed and Bifrost resolves the alias.
+HINDSIGHT_API_REFLECT_LLM_MODEL=smart
+
+# Reflect wall timeout: the default 300s cap on the whole agentic pipeline is
+# too tight for `smart` — solo reflects run 150-260s (4 agent iterations, the
+# final synthesis call alone 60-90s), so a concurrent reflect queues on the
+# single dgx1 llama.cpp slot and the slower one dies at the wall.
+HINDSIGHT_API_REFLECT_WALL_TIMEOUT=600
+
+# Mental-model refresh inherits its model from reflect — pin it back to the
+# no-think lane so the background job doesn't follow reflect onto `smart`
+# (docs' guidance for single-box self-hosting: keep the background refresh on
+# a fast no-think model).
+HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MODEL=fast
+
 HINDSIGHT_API_LLM_API_KEY=unused
 
 # Mental-model refresh runs the reflect pipeline in the background and has
