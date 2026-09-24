@@ -115,6 +115,13 @@ HINDSIGHT_API_WORKER_ID=hindsight-1
 HINDSIGHT_API_LLM_PROVIDER=openai
 HINDSIGHT_API_LLM_BASE_URL=https://bifrost.bytemonkey.org/v1
 HINDSIGHT_API_LLM_MODEL=fast
+
+# `chat_template_kwargs`/`enable_thinking` does NOT survive Bifrost, but
+# `reasoning_effort` does.) Applies globally: retain, reflect, consolidation
+# and mental-model refresh all inherit it unless overridden by their own
+# HINDSIGHT_API_*_LLM_REASONING_EFFORT.
+HINDSIGHT_API_LLM_REASONING_EFFORT=none
+
 HINDSIGHT_API_LLM_API_KEY=unused
 
 # Mental-model refresh runs the reflect pipeline in the background and has
@@ -123,6 +130,13 @@ HINDSIGHT_API_LLM_API_KEY=unused
 # global 120s default — which is what those refresh_mental_model timeouts
 # were hitting.
 HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_TIMEOUT=600
+
+# Debounce for automatic mental-model refreshes: a triggered refresh arriving
+# within N seconds of the model's last rebuild is parked until the window
+# expires. Default is 0 — every trigger rebuilds immediately — which let
+# auto-refreshes fire back-to-back and kept the GPU busy. Explicit refreshes
+# (API/MCP/control plane) ignore this and always run.
+HINDSIGHT_API_MENTAL_MODEL_MIN_REFRESH_INTERVAL_SECONDS=300
 
 # Consolidation batches make the longest LLM calls in the system, and the
 # global per-request deadline (HINDSIGHT_API_LLM_TIMEOUT) is only 120s, which
