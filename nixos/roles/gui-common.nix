@@ -2,11 +2,30 @@
   config,
   pkgs,
   lib,
+  hermes-desktop,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.roles.gui-common;
+
+  # Remote-only Hermes desktop shell: the bundled local agent runtime is
+  # replaced by a stub. GUI machines talk to the gateway on the `hermes`
+  # host; saved remote connections live in ~/.hermes.
+  hermesDesktop =
+    let
+      hermesStub = pkgs.runCommand "hermes-remote-stub" { meta.mainProgram = "hermes"; } ''
+        mkdir -p $out/bin
+        printf '%s\n' \
+          '#!/bin/sh' \
+          'echo "hermes-desktop: remote-only build - connect to the hermes gateway instead" >&2' \
+          'exit 127' > $out/bin/hermes
+        chmod +x $out/bin/hermes
+      '';
+    in
+    hermes-desktop.packages.${pkgs.stdenv.hostPlatform.system}.minimal.hermesDesktop.override {
+      hermesAgent = hermesStub;
+    };
 in
 {
   options.roles.gui-common = {
@@ -14,19 +33,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      alsa-utils
-      appimage-run
-      audacity
-      firefox
-      gimp
-      libnotify # for notify-send
-      obs-studio
-      pavucontrol
-      remmina
-      ungoogled-chromium
-      virt-manager
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        alsa-utils
+        appimage-run
+        audacity
+        firefox
+        gimp
+        libnotify # for notify-send
+        obs-studio
+        pavucontrol
+        remmina
+        ungoogled-chromium
+        virt-manager
+      ]
+      ++ [ hermesDesktop ];
 
     programs.dconf.enable = true;
 

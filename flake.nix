@@ -13,9 +13,17 @@
     agenix-template.url = "github:jhillyerd/agenix-template/main";
 
     hermes-agent = {
-      url = "github:NousResearch/hermes-agent/v2026.9.14";
+      url = "github:NousResearch/hermes-agent/v2026.9.24";
       inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Desktop client for the hermes-agent gateway. Deliberately does NOT
+    # follow our nixpkgs: upstream's nix/desktop.nix hash-pins the Electron
+    # headers tarball, which only matches the default electron in their own
+    # locked nixpkgs. Keep both hermes inputs on the same tag.
+    hermes-desktop = {
+      url = "github:NousResearch/hermes-agent/v2026.9.24";
     };
 
     homesite = {
