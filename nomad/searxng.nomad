@@ -42,7 +42,7 @@ job "searxng" {
       driver = "docker"
 
       config {
-        image = "searxng/searxng:2026.5.9-0cba32c15"
+        image = "ghcr.io/searxng/searxng:2026.9.25-12f8b6515"
         ports = ["http"]
 
         # The entrypoint expects /etc/searxng/settings.yml to exist. If it
