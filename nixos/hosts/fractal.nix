@@ -43,12 +43,12 @@
             LLAMA_ARG_MIN_P = "0.0";
             LLAMA_ARG_TOP_P = "0.95";
             LLAMA_ARG_TOP_K = "20";
-            # LLAMA_ARG_THINK_BUDGET = "1000";
+            LLAMA_ARG_THINK_BUDGET = "1000";
             # LLAMA_ARG_REPEAT_PENALTY = "";
           };
           cmd = [
             "-hf"
-            "peculiar-ragdoll/Tiel-Coder-35B-A3B-GGUF-MTP:UD-IQ4_XS"
+            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL_XL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
