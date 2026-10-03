@@ -126,6 +126,15 @@ in
 
           bootstrap_expect = 3;
 
+          # Consul 2.0.x applies rpc_handshake_timeout as a read deadline on
+          # EVERY RPC request served over long-lived yamux streams, not just
+          # the initial handshake. With the 5s default, servers kill pooled
+          # agent connections that sit idle >5s; client agents then fail with
+          # `rpc error making call: EOF` (breaking Nomad's Consul token
+          # derivation, coordinate updates, CA root fetches, etc). Raise it
+          # above the client connection pool idle window so streams survive.
+          limits.rpc_handshake_timeout = "10m";
+
           # Encrypt and verify TLS.
           tls.defaults = {
             cert_file = ./files/consul/skynet-server-consul-0.pem;
