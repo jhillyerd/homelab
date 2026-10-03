@@ -30,6 +30,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+      # Pinned to their own nixpkgs-unstable: packages are CI-tested against
+      # it daily, and we have no numtide cache configured to make a local
+      # rebuild against ours worthwhile.
+    };
+
     microvm = {
       url = "github:microvm-nix/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
