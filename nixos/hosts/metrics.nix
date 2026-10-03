@@ -42,6 +42,46 @@
 
   roles.loki.enable = true;
 
+  # Prometheus metrics store for Consul (and future) agent metrics.
+  services.prometheus = {
+    enable = true;
+
+    # promtool fails the build on the agenix credentials_file path, which
+    # only exists at runtime.
+    checkConfig = false;
+
+    # Match influxdb telegraf-hosts retention.
+    retentionTime = "26w";
+    globalConfig.scrape_interval = "15s";
+
+    scrapeConfigs = [
+      {
+        job_name = "consul";
+        metrics_path = "/v1/agent/metrics";
+        params = {
+          format = [ "prometheus" ];
+        };
+
+        # ACL token with read-only agent/node access (see consul/README.md).
+        authorization = {
+          type = "Bearer";
+          credentials_file = config.age.secrets.consul-metrics-token.path;
+        };
+
+        static_configs = [
+          {
+            targets = map (ip: "${ip}:8500") catalog.consul.servers;
+            labels.role = "server";
+          }
+          {
+            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:8500" ];
+            labels.role = "client";
+          }
+        ];
+      }
+    ];
+  };
+
   roles.mosquitto = {
     enable = true;
 
@@ -94,7 +134,13 @@
 
     mqtt-zwave.file = ../secrets/mqtt-zwave.age;
     mqtt-zwave.owner = "mosquitto";
+
+    consul-metrics-token.file = ../secrets/consul-metrics-token.age;
+    consul-metrics-token.owner = "prometheus";
   };
+
+  # Grafana (nomad) queries the Prometheus HTTP API.
+  networking.firewall.allowedTCPPorts = [ 9090 ];
 
   networking.firewall.enable = true;
 

@@ -110,6 +110,13 @@ datasources:
     url: "http://metrics.home.arpa:3100"
     jsonData:
       maxLines: 1000
+
+  - name: "Prometheus"
+    type: prometheus
+    access: proxy
+    url: "http://metrics.home.arpa:9090"
+    jsonData:
+      timeInterval: "15s"
 EOT
 
         destination = "/local/grafana/provisioning/datasources/datasources.yml"

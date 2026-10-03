@@ -48,6 +48,14 @@ in
           retry_join = filter (x: x != self.ip.priv) cfg.retryJoin;
           retry_interval = "15s";
 
+          # Expose Prometheus-format metrics at /v1/agent/metrics?format=prometheus.
+          # disable_hostname drops the "<host>_" prefix so official dashboards
+          # (10642/13396) match metric names like consul_raft_commitTime.
+          telemetry = {
+            prometheus_retention_time = "60s";
+            disable_hostname = true;
+          };
+
           tls = {
             internal_rpc.verify_server_hostname = true;
 

@@ -76,6 +76,7 @@ in
   "hermes-env.age".publicKeys = group.home;
   "influxdb-admin.age".publicKeys = group.home;
   "influxdb-homeassistant.age".publicKeys = group.home;
+  "consul-metrics-token.age".publicKeys = group.home;
   "mqtt-admin.age".publicKeys = group.home;
   "mqtt-clock.age".publicKeys = group.home;
   "mqtt-sensor.age".publicKeys = group.home;
