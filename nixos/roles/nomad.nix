@@ -159,6 +159,10 @@ in
 
           acl.enabled = true;
 
+          # Serve /v1/metrics?format=prometheus from every agent, including
+          # server-only hosts; scraped by Prometheus on the metrics host.
+          telemetry.prometheus_metrics = true;
+
           tls = {
             http = true;
             rpc = true;
@@ -265,7 +269,6 @@ in
           telemetry = {
             publish_allocation_metrics = true;
             publish_node_metrics = true;
-            prometheus_metrics = true;
           };
 
           # Nomad client requires client cert if not also a server.

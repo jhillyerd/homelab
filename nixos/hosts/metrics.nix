@@ -86,6 +86,39 @@
           { targets = [ "consul-exporter.service.consul:9107" ]; }
         ];
       }
+      {
+        # Nomad agent telemetry (jobs, allocs, autopilot). /v1/metrics is
+        # ACL-exempt so needs no token, but the TLS certs are issued for
+        # nomad.service.consul rather than target IPs, so skip verification.
+        # Leader-only gauges arrive double-prefixed, e.g.
+        # nomad_nomad_job_summary_* — see the monitoring plan.
+        job_name = "nomad";
+        scheme = "https";
+        metrics_path = "/v1/metrics";
+        params = {
+          format = [ "prometheus" ];
+        };
+        tls_config.insecure_skip_verify = true;
+
+        static_configs = [
+          {
+            targets = map (ip: "${ip}:4646") catalog.nomad.servers;
+            labels = {
+              role = "server";
+              # Nomad metrics carry no cluster label (datacenter is only on
+              # nomad_client_uptime); mrkaran dashboards 16923-5 filter on it.
+              cluster = "skynet";
+            };
+          }
+          {
+            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:4646" ];
+            labels = {
+              role = "client";
+              cluster = "skynet";
+            };
+          }
+        ];
+      }
     ];
   };
 
