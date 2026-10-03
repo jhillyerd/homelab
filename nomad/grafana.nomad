@@ -52,7 +52,7 @@ job "grafana" {
       user = "3003"
 
       config {
-        image = "grafana/grafana-oss:12.4.2"
+        image = "grafana/grafana-oss:13.0.2"
         ports = ["http"]
 
         mount {
@@ -69,8 +69,9 @@ job "grafana" {
       }
 
       resources {
-        cpu    = 1000 # MHz
-        memory = 512 # MB
+        cpu        = 1000 # MHz
+        memory     = 768 # MB
+        memory_max = 4096 # MB
       }
 
       env {
