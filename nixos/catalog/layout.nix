@@ -10,6 +10,7 @@
       "homeassistant"
       "inbucket"
       "jellyfin"
+      "kandev"
       "nodered"
       "radarr"
       "search"

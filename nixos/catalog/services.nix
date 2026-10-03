@@ -142,6 +142,13 @@
     dash.proto = "http";
   };
 
+  kandev = {
+    title = "Kandev";
+    dns.intCname = true;
+    dash.icon = "svg/kasten-k10.svg";
+    # Note: routing handled by traefik tags in nomad/kandev.nomad.
+  };
+
   llm = {
     title = "Llama";
     dns.intCname = true;
