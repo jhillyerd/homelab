@@ -5,3 +5,7 @@ node_prefix "" {
 agent_prefix "" {
   policy = "read"
 }
+
+service_prefix "" {
+  policy = "read"
+}

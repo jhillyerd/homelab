@@ -6,14 +6,19 @@ nodes.
 ## `consul-metrics` policy
 
 Read-only policy used by Prometheus (on the metrics host) to scrape
-`/v1/agent/metrics?format=prometheus` from every agent.  The token is stored
-at `nixos/secrets/consul-metrics-token.age` (encrypted for `group.home`).
+`/v1/agent/metrics?format=prometheus` from every agent, and by the
+consul-exporter Nomad job to read the catalog and service health.  The
+Prometheus token is stored at `nixos/secrets/consul-metrics-token.age`
+(encrypted for `group.home`); the exporter token lives in the Nomad variable
+`nomad/jobs/consul-exporter`.
 
 ```bash
 consul acl policy create -name consul-metrics -rules @consul-metrics-policy.hcl
 consul acl token create -policy-name consul-metrics -description "prometheus scrape token"
 # Store the SecretID with:
 agenix -e nixos/secrets/consul-metrics-token.age   # (from nixos/secrets)
+# Exporter token instead goes to the nomad variable:
+nomad var put nomad/jobs/consul-exporter token=<secret>
 ```
 
 

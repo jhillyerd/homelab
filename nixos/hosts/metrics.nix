@@ -79,6 +79,13 @@
           }
         ];
       }
+      {
+        # Per-check health metrics (see nomad/consul-exporter.nomad).
+        job_name = "consul-exporter";
+        static_configs = [
+          { targets = [ "consul-exporter.service.consul:9107" ]; }
+        ];
+      }
     ];
   };
 
