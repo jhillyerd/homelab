@@ -119,6 +119,109 @@
           }
         ];
       }
+      {
+        # NFS path monitoring (see nfs-path-monitoring-plan): blackbox
+        # ICMP probes from every nomad client's exporter to the NAS and
+        # the gateway. Targets are found via consul DNS so new clients
+        # are covered automatically; instance stays the probe origin.
+        job_name = "blackbox-icmp-nas";
+        metrics_path = "/probe";
+        params = {
+          module = [ "icmp" ];
+          target = [ "192.168.1.10" ]; # mininas
+        };
+        dns_sd_configs = [
+          {
+            names = [ "blackbox-exporter.service.consul" ];
+            type = "A";
+            port = 9115;
+          }
+        ];
+        relabel_configs = [
+          {
+            source_labels = [ "__address__" ];
+            target_label = "instance";
+          }
+          {
+            target_label = "probe_target";
+            replacement = "mininas";
+          }
+        ];
+      }
+      {
+        job_name = "blackbox-icmp-gateway";
+        metrics_path = "/probe";
+        params = {
+          module = [ "icmp" ];
+          target = [ "192.168.1.1" ]; # unifi gateway
+        };
+        dns_sd_configs = [
+          {
+            names = [ "blackbox-exporter.service.consul" ];
+            type = "A";
+            port = 9115;
+          }
+        ];
+        relabel_configs = [
+          {
+            source_labels = [ "__address__" ];
+            target_label = "instance";
+          }
+          {
+            target_label = "probe_target";
+            replacement = "gateway";
+          }
+        ];
+      }
+      {
+        # Control for nfsd starvation: TCP connect to mininas:2049 from
+        # each client. Failing here while ICMP is clean points at the
+        # NFS daemon rather than the network path.
+        job_name = "blackbox-tcp-nfsd";
+        metrics_path = "/probe";
+        params = {
+          module = [ "tcp_connect" ];
+          target = [ "192.168.1.10:2049" ];
+        };
+        dns_sd_configs = [
+          {
+            names = [ "blackbox-exporter.service.consul" ];
+            type = "A";
+            port = 9115;
+          }
+        ];
+        relabel_configs = [
+          {
+            source_labels = [ "__address__" ];
+            target_label = "instance";
+          }
+          {
+            target_label = "probe_target";
+            replacement = "mininas-nfsd";
+          }
+        ];
+      }
+      {
+        # Nomad client host metrics (nfs-path-monitoring-plan phase 2):
+        # mountstats collector exposes per-mount NFS RPC counters from
+        # /proc/self/mountstats. Host module, not a nomad job, so it
+        # survives a nomad outage.
+        job_name = "node";
+        static_configs = [
+          {
+            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:9100" ];
+            labels.node = "nc-virt-1";
+          }
+          {
+            targets = [ "${catalog.nodes.nc-um350-1.ip.priv}:9100" ];
+            labels.node = "nc-um350-1";
+          }
+          {
+            targets = [ "${catalog.nodes.nc-um350-2.ip.priv}:9100" ];
+            labels.node = "nc-um350-2";
+          }
+        ];
+      }
     ];
   };
 
