@@ -164,21 +164,27 @@ HINDSIGHT_API_MENTAL_MODEL_MIN_REFRESH_INTERVAL_SECONDS=300
 HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT=600
 
 # Client-side LLM concurrency gate. Default 32 assumes a cloud provider;
-# llama.cpp on fractal has 4 slots sharing one KV pool, so anything past
-# ~4 concurrent `fast` calls overflows it (observed: 8-19 in-flight,
+# llama.cpp on fractal serves 3 partitioned 192k slots, so the global cap is
+# pinned to 3 to match (observed when unconstrained: 8-19 in-flight,
 # 'Context size has been exceeded' errors, 50%+ HTTP 500s at bifrost,
 # amplified by HINDSIGHT_API_LLM_MAX_RETRIES=3). Hindsight holds the excess
 # in its own queue, which is retry- and timeout-aware — better than piling
 # up in bifrost's buffer where queued waits burn the 120s interactive
-# deadline. Bifrost's per-provider fractal limit (currently 2) stays as a
-# safety net behind this.
-HINDSIGHT_API_LLM_MAX_CONCURRENT=4
+# deadline. NOTE: the cap is per-process; during a Nomad rolling deploy the
+# old and new allocation's caps add up (observed 7 with 4+2 in flight), so
+# expect a brief overshoot on job updates.
+HINDSIGHT_API_LLM_MAX_CONCURRENT=3
 
-# Consolidation prompt size. Default 50 memories per batch produced
-# 28k-66k-token prompts; at 4-way slot parallelism those overflow the
-# 137k-per-slot KV pool before generation finishes. Halving the batch
-# halves the prompts; consolidation runs more, smaller rounds instead.
-HINDSIGHT_API_CONSOLIDATION_BATCH_SIZE=24
+# Background mental-model refreshes run the reflect pipeline and can hog
+# every global slot for minutes (the inbucket backlog stacked 6 refresh
+# ops). This reserves headroom for interactive traffic: a refresh call
+# holds BOTH this semaphore and the global one, so with global=3 and this
+# at 1, at most one refresh call runs and 2 slots stay free for
+# recall/reflect/consolidation (upstream issue #4463 is this exact knob).
+HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MAX_CONCURRENT=1
+
+# Consolidation prompt size. Default 50 memories per batch.
+HINDSIGHT_API_CONSOLIDATION_BATCH_SIZE=36
 
 # Control Plane -> API, server-side. Both processes share this container's
 # network namespace, so the API is on the task's own loopback at its `to`
@@ -195,7 +201,7 @@ EOT
       }
 
       resources {
-        cpu        = 1000  # MHz
+        cpu        = 4000  # MHz
         memory     = 2048  # MB — soft limit; OOMed at 1024
         memory_max = 3072  # MB — hard limit; lets the container burst between
                             #       consolidation batches without being killed
