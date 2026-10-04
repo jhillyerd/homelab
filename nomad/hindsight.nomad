@@ -163,6 +163,23 @@ HINDSIGHT_API_MENTAL_MODEL_MIN_REFRESH_INTERVAL_SECONDS=300
 # default deadline. 0 or unset falls back to the global timeout.
 HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT=600
 
+# Client-side LLM concurrency gate. Default 32 assumes a cloud provider;
+# llama.cpp on fractal has 4 slots sharing one KV pool, so anything past
+# ~4 concurrent `fast` calls overflows it (observed: 8-19 in-flight,
+# 'Context size has been exceeded' errors, 50%+ HTTP 500s at bifrost,
+# amplified by HINDSIGHT_API_LLM_MAX_RETRIES=3). Hindsight holds the excess
+# in its own queue, which is retry- and timeout-aware — better than piling
+# up in bifrost's buffer where queued waits burn the 120s interactive
+# deadline. Bifrost's per-provider fractal limit (currently 2) stays as a
+# safety net behind this.
+HINDSIGHT_API_LLM_MAX_CONCURRENT=4
+
+# Consolidation prompt size. Default 50 memories per batch produced
+# 28k-66k-token prompts; at 4-way slot parallelism those overflow the
+# 137k-per-slot KV pool before generation finishes. Halving the batch
+# halves the prompts; consolidation runs more, smaller rounds instead.
+HINDSIGHT_API_CONSOLIDATION_BATCH_SIZE=24
+
 # Control Plane -> API, server-side. Both processes share this container's
 # network namespace, so the API is on the task's own loopback at its `to`
 # port (8888).
