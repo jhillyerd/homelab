@@ -1,10 +1,27 @@
 {
   config,
   catalog,
+  lib,
   self,
   util,
   ...
 }:
+let
+  # Probe origins for the nfs-path blackbox jobs (see
+  # nfs-path-monitoring-plan): dns_sd only knows IPs, so relabel a
+  # node=<hostname> label to match the node_* and consul_* series.
+  probeNodes = [
+    "nc-virt-1"
+    "nc-um350-1"
+    "nc-um350-2"
+  ];
+  nodeRelabel = map (name: {
+    source_labels = [ "__address__" ];
+    regex = "(${lib.strings.escapeRegex catalog.nodes.${name}.ip.priv}):.*";
+    target_label = "node";
+    replacement = name;
+  }) probeNodes;
+in
 {
   imports = [
     ../common.nix
@@ -137,7 +154,7 @@
             port = 9115;
           }
         ];
-        relabel_configs = [
+        relabel_configs = nodeRelabel ++ [
           {
             source_labels = [ "__address__" ];
             target_label = "instance";
@@ -162,7 +179,7 @@
             port = 9115;
           }
         ];
-        relabel_configs = [
+        relabel_configs = nodeRelabel ++ [
           {
             source_labels = [ "__address__" ];
             target_label = "instance";
@@ -190,7 +207,7 @@
             port = 9115;
           }
         ];
-        relabel_configs = [
+        relabel_configs = nodeRelabel ++ [
           {
             source_labels = [ "__address__" ];
             target_label = "instance";
