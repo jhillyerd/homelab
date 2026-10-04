@@ -35,8 +35,18 @@
             # Serving
             LLAMA_ARG_IMAGE_MIN_TOKENS = "1024"; # Improves small image results
             LLAMA_ARG_GPU_LAYERS = "all";
-            # LLAMA_ARG_CTX_SIZE = "";
             LLAMA_ARG_UBATCH = "1024"; # Faster PP, but more VRAM usage
+
+            # Explicit parallelism so llama.cpp partitions the KV pool into
+            # fixed per-slot buffers. With n_parallel on auto it enables
+            # kv_unified, and 4 slots competing for contiguous ranges in the
+            # shared 3090-sized pool fragment it — requests well under the
+            # nominal 4x137k capacity died with "Context size has been
+            # exceeded". 3 x 196608 = 192k per slot; ~3.45 GiB of KV at
+            # ~6 KiB/token (hybrid-recurrent model), leaving ~1.4 GiB VRAM
+            # headroom for the vision encoder and compute buffers.
+            LLAMA_ARG_N_PARALLEL = "3";
+            LLAMA_ARG_CTX_SIZE = "589824";
 
             # Sampling
             LLAMA_ARG_TEMP = "0.6";
