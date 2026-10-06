@@ -3,6 +3,7 @@
   pkgs,
   lib,
   homesite,
+  self,
   ...
 }:
 with lib;
@@ -65,7 +66,7 @@ in
       services.nginx = {
         enable = true;
         virtualHosts."homesite" = {
-          root = "${homesite.defaultPackage.x86_64-linux}"; # From flake
+          root = "${homesite.packages.${self.system}.homesite}"; # From flake
 
           locations."/config/" = {
             alias = "${configDir}/";

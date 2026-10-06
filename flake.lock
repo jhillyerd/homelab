@@ -189,11 +189,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771556534,
-        "narHash": "sha256-RsZ0FJnEnkrXnFlXL2P+VhDd14XdO7fmyz6+ZYekhTw=",
+        "lastModified": 1791262184,
+        "narHash": "sha256-yl4lFm2WRKRr8UXGpsf18fgS7AplYSUTWF7jNwpRSOc=",
         "owner": "jhillyerd",
         "repo": "homesite",
-        "rev": "b1c3f06bc0e25a95ccd4c006aea17faf1c61d462",
+        "rev": "1f33758ff171378bf510e729d7022ecc962d751c",
         "type": "github"
       },
       "original": {
@@ -230,15 +230,15 @@
     "icons": {
       "flake": false,
       "locked": {
-        "lastModified": 1771492566,
-        "narHash": "sha256-21gmWr9D9C9xNXu/53mNVW0xya6X0cqi8a5grElvJHQ=",
-        "owner": "walkxcode",
+        "lastModified": 1791011741,
+        "narHash": "sha256-pq3NhSjPV5ebyMOvOOcfNJxpdc2fDPN7V1x24tCgy/c=",
+        "owner": "homarr-labs",
         "repo": "dashboard-icons",
-        "rev": "e04e6733106b65409e43623cd29a71974bad3bac",
+        "rev": "adca944175c9a3eb0471f78a4da87f237476d585",
         "type": "github"
       },
       "original": {
-        "owner": "walkxcode",
+        "owner": "homarr-labs",
         "repo": "dashboard-icons",
         "type": "github"
       }
