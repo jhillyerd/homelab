@@ -26,6 +26,10 @@ approval session keys). When bumping `hermes-agent`, pick a webui `exp-*` tag
 from on/after the agent tag's release date — the webui is only tested against
 the agent release current at its own release time.
 
+The agent's Docker sandbox image is pinned in `nixos/hosts/hermes.nix` as
+`terminal.docker_image = "nousresearch/hermes-sandbox:v<version>-desktop"` —
+keep it version-matched to the hermes-agent pin (a third sync item).
+
 # Service Catalog, DNS & Dashboard
 
 Web-facing services (DNS names, reverse proxy, dashboard entries) are driven

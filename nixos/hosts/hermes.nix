@@ -95,6 +95,14 @@ in
       {
         approvals.mode = "off";
 
+        # Run terminal sessions in Docker containers instead of on the host
+        # (also covers webui sessions — shared config.yaml). Image tag is
+        # version-matched to the hermes-agent pin: bump together, see AGENTS.md.
+        terminal = {
+          backend = "docker";
+          docker_image = "nousresearch/hermes-sandbox:v0.21.6-desktop";
+        };
+
         model = bifrost_smart;
         fallback_model = zai_flash;
         delegation = bifrost_fast;
@@ -114,6 +122,11 @@ in
       "messaging"
       "web" # dashboard backend (fastapi/uvicorn)
     ];
+
+    # Docker CLI for terminal.backend = "docker" — service units get a
+    # minimal PATH, so the CLI must be wired in explicitly (also lands in the
+    # hermes user's profile for login shells).
+    extraPackages = [ pkgs.docker-client ];
 
     backend = {
       mode = "dashboard";
@@ -157,6 +170,10 @@ in
         "${hermesPkg.passthru.hermesVenv}/${hermesPkg.passthru.python.sitePackages}";
     };
   };
+
+  # The webui unit has no packages option; give its in-process agent the
+  # docker CLI the same way the agent module does for its own services.
+  systemd.services.hermes-webui.path = [ pkgs.docker-client ];
 
   services.borgbackup.jobs.hermes-data = {
     paths = [
