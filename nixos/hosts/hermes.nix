@@ -49,6 +49,16 @@ in
 
   services.hermes-agent = {
     enable = true;
+
+    # Upstream's nix/packages.nix never passes `version` (flake tags aren't
+    # exposed to builds), so the install stamp defaults to 0.0.0 — which the
+    # banner and plugin `requires_hermes` checks then read. Override with the
+    # pinned tag's version, kept in sync with flake.nix.
+    package =
+      hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+        version = "0.21.6";
+      };
+
     addToSystemPackages = true;
     stateDir = hermesHome;
 

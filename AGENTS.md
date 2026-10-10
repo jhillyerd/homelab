@@ -9,6 +9,15 @@
 - Do not rebuild multiple hosts just to check the config, this can take a
   long time.
 
+## Hermes host (`nixos/hosts/hermes.nix`)
+The `hermes-agent` flake input is pinned to a release tag. When bumping it,
+update **both** places or the agent reports a bogus version:
+1. `flake.nix`: the pinned `url = "github:NousResearch/hermes-agent/<tag>"`.
+2. `nixos/hosts/hermes.nix`: the `services.hermes-agent.package ... override {` version string.
+
+Upstream's nix packaging never passes `version` (flake tag refs are not
+exposed to builds), so without the override the install stamp defaults to
+`0.0.0`, which the banner and plugin `requires_hermes` checks read.
 
 # Service Catalog, DNS & Dashboard
 
