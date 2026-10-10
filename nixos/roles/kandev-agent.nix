@@ -136,6 +136,16 @@ let
       mkdir -p .${conventionalLoaderDir}
       ln -s ${pkgs.nix-ld}/libexec/nix-ld .${conventionalLoaderDir}/${baseNameOf realLoader}
 
+      # TLS trust at conventional FHS paths: prebuilt binaries (Go, Debian-
+      # built ELFs, Java) ignore SSL_CERT_FILE and probe /etc/ssl/certs.
+      #   ca-bundle.crt        - RHEL/Fedora convention
+      #   ca-certificates.crt  - Debian/Ubuntu + Go x509 convention
+      #   cert.pem             - Alpine/OpenBSD (and Python) convention
+      mkdir -p etc/ssl/certs
+      ln -s ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt etc/ssl/certs/ca-bundle.crt
+      ln -s ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt etc/ssl/certs/ca-certificates.crt
+      ln -s ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt etc/ssl/cert.pem
+
       # Login shells source this: runtime-installed tooling (npm -g, etc.)
       # persists in the mounted home and stays visible to Kandev sessions.
       # The interactive block is the skeleton equivalent (there is no
@@ -180,6 +190,7 @@ let
         git
         gnugrep
         gnused
+        hostname-debian
         less
         openssh
         procps
@@ -209,6 +220,7 @@ let
         fd
         gzip
         jq
+        lf
         lsof
         neovim
         openssl
