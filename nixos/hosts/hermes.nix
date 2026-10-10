@@ -6,16 +6,26 @@
   self,
   util,
   hermes-agent,
+  hermes-webui,
   ...
 }:
 let
   hermesHome = "/var/lib/hermes";
+
+  # Same overridden package for the gateway service and the WebUI (which
+  # derives its agent python from passthru). Keep the version string in
+  # sync with the hermes-agent tag pinned in flake.nix.
+  hermesPkg =
+    hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+      version = "0.21.6";
+    };
 in
 {
   imports = [
     ../common.nix
     ../common/onprem.nix
     hermes-agent.nixosModules.default
+    hermes-webui.nixosModules.default
   ];
 
   systemd.network.networks = util.mkClusterNetworks self;
@@ -24,6 +34,7 @@ in
     enable = true;
     allowedTCPPorts = [
       8642 # hermes agent API
+      8787 # hermes webui
       9119 # hermes web dashboard
     ];
   };
@@ -54,10 +65,7 @@ in
     # exposed to builds), so the install stamp defaults to 0.0.0 — which the
     # banner and plugin `requires_hermes` checks then read. Override with the
     # pinned tag's version, kept in sync with flake.nix.
-    package =
-      hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-        version = "0.21.6";
-      };
+    package = hermesPkg;
 
     addToSystemPackages = true;
     stateDir = hermesHome;
@@ -118,8 +126,43 @@ in
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
 
+  # Third-party web UI (nesquena/hermes-webui): imports the agent in-process
+  # and reads HERMES_HOME directly, so it must be colocated with the agent —
+  # same host, same user, same state. Chat/session state stays in
+  # ~/.hermes/webui inside the agent home (already borg-backed). Secrets are
+  # not passed via systemd env: the agent activation mirrors hermes-env into
+  # $HERMES_HOME/.env, which run_agent loads at import time.
+  services.hermes-webui = {
+    enable = true;
+
+    # Run as the agent service user so both processes share HERMES_HOME
+    # (sessions, state.db, config.yaml); the module otherwise creates a
+    # separate hermes-webui user that cannot read the agent state.
+    user = "hermes";
+    group = "hermes";
+
+    # Non-loopback bind makes the WebUI enforce its password gate; the
+    # password is set via its settings UI (PBKDF2 hash in settings.json —
+    # do NOT add HERMES_WEBUI_PASSWORD to hermes-env, it would override).
+    host = "0.0.0.0";
+    port = 8787;
+
+    hermesHome = "${hermesHome}/.hermes";
+
+    agent = {
+      package = hermesPkg; # HERMES_WEBUI_PYTHON from passthru.hermesVenv
+      # The Nix package out has no run_agent.py; the venv site-packages is
+      # the importable "agent source root" the WebUI puts on sys.path.
+      dir =
+        "${hermesPkg.passthru.hermesVenv}/${hermesPkg.passthru.python.sitePackages}";
+    };
+  };
+
   services.borgbackup.jobs.hermes-data = {
-    paths = "${hermesHome}/.hermes";
+    paths = [
+      "${hermesHome}/.hermes" # agent home incl. webui sessions
+      "/var/lib/hermes-webui" # webui service state dir
+    ];
     repo = "/var/lib/borg/hermes-data";
     doInit = true;
     encryption.mode = "none";

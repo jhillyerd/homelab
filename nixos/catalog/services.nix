@@ -102,6 +102,19 @@
     # Note: external + auth handled by labels.
   };
 
+  hermes-webui = {
+    title = "Hermes WebUI";
+
+    dns.intCname = true;
+
+    dash.icon = "svg/hermes.svg";
+
+    # No lb.auth: the WebUI enforces its own password gate, and proxy
+    # basic-auth breaks its PWA service-worker updates. Do not expose
+    # externally.
+    lb.backendUrls = [ "http://hermes.home.arpa:8787" ];
+  };
+
   hindsight = {
     title = "Hindsight";
 

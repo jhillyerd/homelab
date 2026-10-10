@@ -18,6 +18,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Pinned to the experimental channel on purpose: the newest stable tag
+    # (v0.52.113, July 2026 code) predates hermes-agent's Sep 2026 module
+    # decomposition and imports names v0.21.6 removed — degrading silently
+    # (MCP tools, approval session keys). Only exp tags >= ~0.52.316 ship the
+    # agent_compat shim. Re-pin together with the hermes-agent tag: the webui
+    # is only tested against the agent release current at its release time.
+    hermes-webui = {
+      url = "github:nesquena/hermes-webui/exp-v0.52.458";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     homesite = {
       url = "github:jhillyerd/homesite/main";
       inputs.flake-utils.follows = "flake-utils";

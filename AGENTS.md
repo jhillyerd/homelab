@@ -19,6 +19,13 @@ Upstream's nix packaging never passes `version` (flake tag refs are not
 exposed to builds), so without the override the install stamp defaults to
 `0.0.0`, which the banner and plugin `requires_hermes` checks read.
 
+The `hermes-webui` input is pinned to an **experimental-channel** tag
+(`exp-*`). The stable line stopped in July 2026 and imports agent names that
+v0.21.6 removed in its Sep 2026 decomposition (silently degraded: MCP tools,
+approval session keys). When bumping `hermes-agent`, pick a webui `exp-*` tag
+from on/after the agent tag's release date — the webui is only tested against
+the agent release current at its own release time.
+
 # Service Catalog, DNS & Dashboard
 
 Web-facing services (DNS names, reverse proxy, dashboard entries) are driven

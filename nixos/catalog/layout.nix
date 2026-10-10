@@ -8,6 +8,7 @@
       "fluidd"
       "forgejo"
       "homeassistant"
+      "hermes-webui"
       "inbucket"
       "jellyfin"
       "kandev"
