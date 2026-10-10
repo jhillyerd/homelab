@@ -44,6 +44,20 @@
   # expose GPU to docker containers.
   hardware.nvidia-container-toolkit.enable = true;
 
+  # Cap the GPU (RTX 3090, 350W default) at 300W. The limit resets on every
+  # reboot, so apply it via a oneshot service once the driver is loaded.
+  systemd.services.nvidia-power-limit = {
+    description = "NVIDIA GPU power limit";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ]; # udev must load the nvidia modules first
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    path = [ config.hardware.nvidia.package.bin ];
+    script = "nvidia-smi -pl 300";
+  };
+
   fileSystems."/" = {
     device = "/dev/disk/by-label/root";
     fsType = "ext4";
