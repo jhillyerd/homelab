@@ -26,6 +26,7 @@ in
         cachix
         chezmoi
         docker-compose
+        forgejo-cli
         fzf
         gcc
         gh

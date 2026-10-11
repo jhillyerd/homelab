@@ -196,6 +196,7 @@ let
         procps
         which
         # agent CLIs + repo tooling
+        forgejo-cli
         nodejs
         python3
         # Toolchain so agents can build native npm modules (node-gyp)
