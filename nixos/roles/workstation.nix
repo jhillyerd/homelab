@@ -23,6 +23,7 @@ in
       in
       (with pkgs; [
         bashmount
+        bc
         cachix
         chezmoi
         docker-compose

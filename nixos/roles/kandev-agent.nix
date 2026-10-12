@@ -214,6 +214,7 @@ let
         cacert
         # Other tools
         bat
+        bc
         bzip2
         chezmoi
         cmake
