@@ -14,7 +14,10 @@
   roles.kandev-agent = {
     enable = true;
     bindAddress = self.ip.priv;
-    extraPackages = [ llm-agents.packages.${self.system}.pi ];
+    extraPackages = with llm-agents.packages.${self.system}; [
+      codex
+      pi
+    ];
   };
 
   networking.networkmanager.enable = true;
