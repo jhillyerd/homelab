@@ -44,6 +44,76 @@ let
     ]
   );
 
+  # Playwright: projects install their own pinned playwright npm package and
+  # `npx playwright install` drops prebuilt browsers into the persistent
+  # ~/.cache/ms-playwright. Those are upstream FHS ELFs (run through the
+  # nix-ld shim above), so expose the libraries they link/dlopen. The set
+  # mirrors what nixpkgs patches into the identical upstream binaries in
+  # pkgs/development/web/playwright/{chromium,firefox}.nix. Chromium and
+  # Firefox only: WebKit would drag in gstreamer and friends.
+  browserLibs = makeLibraryPath (
+    with pkgs;
+    [
+      # Chromium
+      alsa-lib
+      at-spi2-atk
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig.lib
+      freetype
+      glib
+      libGL
+      libgbm
+      libxkbcommon
+      nspr
+      nss
+      pango
+      pciutils
+      systemdMinimal # libudev (dlopened)
+      vulkan-loader
+      libx11
+      libxcb
+      libxcomposite
+      libxcursor
+      libxdamage
+      libxext
+      libxfixes
+      libxi
+      libxrandr
+      libxrender
+      libxscrnsaver
+      # Firefox (adds the GTK subtree)
+      dbus-glib
+      gdk-pixbuf
+      gtk3
+      libepoxy
+      libva
+      libxt
+      libxtst
+    ]
+  );
+
+  # Shared LD path for both NIX_LD_LIBRARY_PATH (consumed by the nix-ld
+  # shim when it execs downloaded ELFs) and plain LD_LIBRARY_PATH: the
+  # latter must match because Playwright's host validation shells out to
+  # ldd, which only sees the plain variable.
+  ldLibs = "${fhsLibs}:${browserLibs}";
+
+  # Fontconfig for headless browser rendering (screenshots, PDFs): the
+  # downloaded browsers resolve fonts through the store fontconfig, which
+  # reads this file. FONTCONFIG_FILE points here too for binaries that
+  # probe the conventional path instead.
+  fontsConf = pkgs.makeFontsConf {
+    fontDirectories = with pkgs; [
+      dejavu_fonts
+      liberation_ttf_v2
+      noto-fonts-color-emoji
+    ];
+  };
+
   # Publish spec: [<bindAddress>]:<port>:22, omitting the address publishes
   # on all interfaces.
   publishPort = concatStringsSep ":" (
@@ -79,7 +149,8 @@ let
     # bash -c, which never reads /etc/profile). Login shells get them from
     # /etc/profile instead. PATH/NPM_CONFIG_PREFIX mirror the profile so
     # npm/npx resolve the persistent ~/.npm-global prefix in both cases.
-    SetEnv PATH=/home/${agentUser}/.npm-global/bin:/bin:/sbin NPM_CONFIG_PREFIX=/home/${agentUser}/.npm-global NIX_LD=${realLoader} NIX_LD_LIBRARY_PATH=${fhsLibs} LD_LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+    SetEnv PATH=/home/${agentUser}/.npm-global/bin:/bin:/sbin NPM_CONFIG_PREFIX=/home/${agentUser}/.npm-global LD_LIBRARY_PATH=${ldLibs} SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt FONTCONFIG_FILE=/etc/fonts/fonts.conf
+    SetEnv NIX_LD=${realLoader} NIX_LD_LIBRARY_PATH=${ldLibs}
     ClientAliveInterval 300
     ClientAliveCountMax 3
     PrintMotd no
@@ -111,6 +182,7 @@ let
       Env = [
         "PATH=/bin:/sbin"
         "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+        "FONTCONFIG_FILE=/etc/fonts/fonts.conf"
       ];
     };
     fakeRootCommands = ''
@@ -146,6 +218,10 @@ let
       ln -s ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt etc/ssl/certs/ca-certificates.crt
       ln -s ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt etc/ssl/cert.pem
 
+      # Fontconfig config for the fonts above (see fontsConf).
+      mkdir -p etc/fonts
+      ln -s ${fontsConf} etc/fonts/fonts.conf
+
       # Login shells source this: runtime-installed tooling (npm -g, etc.)
       # persists in the mounted home and stays visible to Kandev sessions.
       # The interactive block is the skeleton equivalent (there is no
@@ -154,9 +230,10 @@ let
       export PATH="$HOME/.npm-global/bin:/bin:/sbin"
       export NPM_CONFIG_PREFIX="$HOME/.npm-global"
       export NIX_LD=${realLoader}
-      export NIX_LD_LIBRARY_PATH=${fhsLibs}
-      export LD_LIBRARY_PATH=${pkgs.stdenv.cc.cc.lib}/lib
+      export NIX_LD_LIBRARY_PATH=${ldLibs}
+      export LD_LIBRARY_PATH=${ldLibs}
       export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+      export FONTCONFIG_FILE=/etc/fonts/fonts.conf
 
       if [ -n "''${PS1:-}" ]; then
         PS1='\u@\h:\w\$ '
