@@ -222,6 +222,7 @@ let
         fd
         gzip
         jq
+        lazygit
         lf
         lsof
         neovim

@@ -15,7 +15,7 @@
     enable = true;
     bindAddress = self.ip.priv;
     extraPackages = with llm-agents.packages.${self.system}; [
-      codex
+      maki
       pi
     ];
   };
