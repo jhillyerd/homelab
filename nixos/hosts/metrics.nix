@@ -239,6 +239,19 @@ in
           }
         ];
       }
+      {
+        # llama.cpp server on fractal (podman, published 8000 -> container
+        # 8080, enabled via LLAMA_ARG_ENDPOINT_METRICS). Exported gauges are
+        # label-free, so the node label is added here. Slot ceiling for
+        # utilization math is 3 (LLAMA_ARG_N_PARALLEL on fractal).
+        job_name = "llama";
+        static_configs = [
+          {
+            targets = [ "${catalog.nodes.fractal.ip.priv}:8000" ];
+            labels.node = "fractal";
+          }
+        ];
+      }
     ];
   };
 

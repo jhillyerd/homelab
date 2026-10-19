@@ -48,6 +48,12 @@
             LLAMA_ARG_N_PARALLEL = "3";
             LLAMA_ARG_CTX_SIZE = "589824";
 
+            # Monitoring: expose Prometheus-format /metrics, scraped by the
+            # prometheus host (job "llama"). Concurrency gauges of interest:
+            # llamacpp:requests_processing / requests_deferred /
+            # n_busy_slots_per_decode (see tools/server/README.md).
+            LLAMA_ARG_ENDPOINT_METRICS = "1";
+
             # Sampling
             LLAMA_ARG_TEMP = "0.6";
             LLAMA_ARG_MIN_P = "0.0";
