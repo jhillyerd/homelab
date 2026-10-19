@@ -305,6 +305,7 @@ let
         neovim
         openssl
         patch
+        postgresql
         ripgrep
         tree
         uv

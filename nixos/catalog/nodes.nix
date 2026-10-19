@@ -16,6 +16,7 @@
   };
 
   carbon = {
+    ip.priv = "192.168.1.108";
     config = ../hosts/carbon.nix;
     hw = ../hw/tp-x1g3.nix;
     system = system.x86_64-linux;
