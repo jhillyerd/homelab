@@ -29,7 +29,7 @@
     oci-containers = {
       containers = {
         llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda-b10830";
+          image = "ghcr.io/ggml-org/llama.cpp:server-cuda-b11723";
           ports = [ "8000:8080" ]; # healthcheck runs against 8080.
           environment = {
             # Serving
