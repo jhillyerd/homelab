@@ -89,7 +89,7 @@ job "hindsight" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/vectorize-io/hindsight:0.10.3"
+        image = "ghcr.io/vectorize-io/hindsight:1.0.0"
         ports = ["api", "ui"]
       }
 
@@ -114,6 +114,7 @@ HINDSIGHT_API_WORKER_ID=hindsight-1
 # provider needs.
 HINDSIGHT_API_LLM_PROVIDER=openai
 HINDSIGHT_API_LLM_BASE_URL=https://bifrost.bytemonkey.org/v1
+HINDSIGHT_API_LLM_API_KEY=unused
 HINDSIGHT_API_LLM_MODEL=fast
 
 # `chat_template_kwargs`/`enable_thinking` does NOT survive Bifrost, but
@@ -139,8 +140,6 @@ HINDSIGHT_API_REFLECT_WALL_TIMEOUT=600
 # (docs' guidance for single-box self-hosting: keep the background refresh on
 # a fast no-think model).
 HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MODEL=fast
-
-HINDSIGHT_API_LLM_API_KEY=unused
 
 # Mental-model refresh runs the reflect pipeline in the background and has
 # its own timeout lane: it never inherits REFLECT_LLM_TIMEOUT (kept short
@@ -173,7 +172,7 @@ HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT=600
 # deadline. NOTE: the cap is per-process; during a Nomad rolling deploy the
 # old and new allocation's caps add up (observed 7 with 4+2 in flight), so
 # expect a brief overshoot on job updates.
-HINDSIGHT_API_LLM_MAX_CONCURRENT=3
+HINDSIGHT_API_LLM_MAX_CONCURRENT=2
 
 # Background mental-model refreshes run the reflect pipeline and can hog
 # every global slot for minutes (the inbucket backlog stacked 6 refresh
@@ -184,7 +183,7 @@ HINDSIGHT_API_LLM_MAX_CONCURRENT=3
 HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MAX_CONCURRENT=1
 
 # Consolidation prompt size. Default 50 memories per batch.
-HINDSIGHT_API_CONSOLIDATION_BATCH_SIZE=36
+HINDSIGHT_API_CONSOLIDATION_BATCH_SIZE=24
 
 # Control Plane -> API, server-side. Both processes share this container's
 # network namespace, so the API is on the task's own loopback at its `to`
