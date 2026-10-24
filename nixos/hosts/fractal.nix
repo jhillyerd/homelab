@@ -74,11 +74,14 @@
             LLAMA_ARG_ENDPOINT_METRICS = "1";
 
             # Sampling: LiquidAI-recommended (generation_config.json).
-            # Always-reasoning model; <think> handled by the chat template,
-            # so no --think-budget knob.
             LLAMA_ARG_TEMP = "0.1";
             LLAMA_ARG_TOP_K = "50";
             LLAMA_ARG_REPEAT_PENALTY = "1.05";
+
+            # --reasoning-budget (env name unchanged since the
+            # Qwen3.5 days) auto-detects the think tags from the rendered
+            # prompt and forces </think> once N thinking tokens are spent.
+            LLAMA_ARG_THINK_BUDGET = "1024";
           };
           cmd = [
             "-hf"
