@@ -28,73 +28,116 @@
 
     oci-containers = {
       containers = {
-        llama = {
-          image = "ghcr.io/ggml-org/llama.cpp:server-cuda-b11723";
-          ports = [ "8000:8080" ]; # healthcheck runs against 8080.
+        vllm = {
+          # JRamirez-UAB EXL3 4.00bpw of Qwen3.6-35B-A3B served on vLLM.
+          # Replaced llama.cpp (Oct 2026): aggregate decode collapsed under
+          # concurrency (66 t/s single-stream but 7 t/s total at c3 after long
+          # prefills), while this exact stack is validated by the model author
+          # on an RTX 3090 24GB: 118 t/s single / 204 t/s with 2 concurrent
+          # sessions, full 262k context, vision and MTP, ~1 GiB VRAM spare.
+          # EXL3 is not a native vLLM format, hence the custom image (pinned
+          # vLLM 0.31.0 + exllamav3 1.5.1 + OrcaSAQ2-kernel +
+          # qwen38_exl3_vision plugins) built by fractal-vllm-image.service
+          # from ./fractal-vllm/Containerfile. Bump nothing in isolation;
+          # re-validate against the HF model card's tested stack. The llama.cpp
+          # config this replaced is in git history (b11723 container, last
+          # touched fc06944 era) if it ever needs to come back.
+          image = "vllm-qwen36-exl3:v0.31.0";
+          ports = [ "8000:8000" ];
+
           environment = {
-            # Back on Qwen3.6-35B-A3B after the LFM2.5-24B-A2B experiment
-            # (Oct 19–25): LFM's pythonic tool-call format kept emitting
-            # malformed done-document args through llama.cpp — deterministically
-            # truncated pages, ID leakage, json_repair "fixing" stubs into place
-            # across every Hindsight bank. Qwen's JSON tool calls ride llama.cpp's
-            # mature Qwen parser, and this exact config is the known-good one from
-            # Sep 30 – Oct 19 (fc06944 + a7ae3d5); the quant blob is verified
-            # byte-current against unsloth main, so no re-download.
-
-            # Serving. Qwen3.6-35B-A3B is a hybrid-recurrent multimodal MoE
-            # (~6 KiB/token of KV; the mmproj vision encoder loads with -hf).
-            LLAMA_ARG_IMAGE_MIN_TOKENS = "1024"; # Improves small image results
-            LLAMA_ARG_GPU_LAYERS = "all";
-            LLAMA_ARG_UBATCH = "1024"; # Faster PP, but more VRAM usage
-
-            # Explicit parallelism so llama.cpp partitions the KV pool into
-            # fixed per-slot buffers. With n_parallel on auto it enables
-            # kv_unified, and 4 slots competing for contiguous ranges in the
-            # shared 3090-sized pool fragment it — requests well under the
-            # nominal capacity died with "Context size has been exceeded".
-            # 3 x 196608 = 192k per slot; ~3.45 GiB of KV at ~6 KiB/token,
-            # leaving ~1.4 GiB VRAM headroom over the 19.5 GiB of IQ4_NL_XL
-            # weights for the vision encoder and compute buffers.
-            LLAMA_ARG_N_PARALLEL = "3";
-            LLAMA_ARG_CTX_SIZE = "589824";
-
-            # NOTE: the LFM-era serving flags (FLASH_ATTN=on, q8_0 KV cache,
-            # ngram spec decoding) are deliberately NOT carried over — none of
-            # them ever ran on Qwen here, and this change is about returning to
-            # a known-good baseline. Re-add them one at a time with A/B if the
-            # slower decode hurts: ngram spec especially suits the verbatim-copy
-            # consolidation workload (and was proven unrelated to the LFM
-            # corruption via a no-spec container test on Oct 25).
-
-            # Monitoring: expose Prometheus-format /metrics, scraped by the
-            # prometheus host (job "llama"). Concurrency gauges of interest:
-            # llamacpp:requests_processing / requests_deferred /
-            # n_busy_slots_per_decode (see tools/server/README.md).
-            LLAMA_ARG_ENDPOINT_METRICS = "1";
-
-            # Sampling: Qwen-recommended (as per the pre-LFM config).
-            LLAMA_ARG_TEMP = "0.6";
-            LLAMA_ARG_MIN_P = "0.0";
-            LLAMA_ARG_TOP_P = "0.95";
-            LLAMA_ARG_TOP_K = "20";
-
-            # --reasoning-budget (env name unchanged since the
-            # Qwen3.5 days) auto-detects the think tags from the rendered
-            # prompt and forces </think> once N thinking tokens are spent.
-            LLAMA_ARG_THINK_BUDGET = "1024";
+            # Required by the fused EXL3 MoE kernel: it synchronises blocks
+            # through global counters and needs the whole GPU -- without this
+            # vLLM runs the shared expert on a side stream and decode hangs
+            # after a few seconds (the plugin sets it; kept belt-and-braces).
+            VLLM_DISABLE_SHARED_EXPERTS_STREAM = "1";
+            # Match the model card's validated quick start.
+            PYTORCH_CUDA_ALLOC_CONF = "expandable_segments:True";
+            VLLM_USE_FLASHINFER_SAMPLER = "0";
           };
+
+          # Flags follow the model card's Quick start (single RTX 3090):
+          #   - 2 sessions x full context; HINDSIGHT_API_LLM_MAX_CONCURRENT=2
+          #     in nomad/hindsight.nomad already matches.
+          #   - MTP-1 only: deeper speculation activates extra experts per
+          #     verified token and measured slower on MoE.
+          #   - cudagraph capture 16 = max-num-seqs 2 x (1 + MTP 1): every
+          #     decode step replays a graph. Raise both together for more
+          #     sessions (card's "many users" profile: 32 seqs / capture 64,
+          #     ~700 t/s aggregate at 16 concurrent).
+          #   - fp8 KV (storage-only on Ampere, still ~2x capacity); this
+          #     hybrid model's KV is tiny (~13 KiB/token fp8), so 262k context
+          #     fits next to the 17.6 GiB of weights.
+          #   - Vision stays on: the qwen38_exl3_vision plugin is required
+          #     for the MoE experts regardless, so dropping vision saves no
+          #     plugin complexity. max_pixels ~1MP; if tiny-image quality
+          #     regresses (llama.cpp forced >=1024 image tokens via
+          #     IMAGE_MIN_TOKENS), add min_pixels 802816 to mm-processor-kwargs.
+          #   - enable_thinking=false replaces llama.cpp's think-budget=1024
+          #     safety net: every lane routed here is a no-think lane
+          #     (HINDSIGHT_API_LLM_REASONING_EFFORT=none); callers can still
+          #     opt in per-request via chat_template_kwargs.
+          #   - Sampling defaults now come from the checkpoint's
+          #     generation_config (temp 1.0) instead of llama.cpp's 0.6. Lanes
+          #     that care pin temperature per request already; if un-pinned
+          #     document synthesis degrades, set an explicit temperature
+          #     override in nomad/hindsight.nomad.
           cmd = [
-            "-hf"
-            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL_XL"
+            "JRamirez-UAB/Qwen3.6-35B-A3B-EXL3-4.00bpw-24GB"
+            "--served-model-name" "qwen3.6-35b-a3b"
+            "--max-model-len" "262144"
+            "--kv-cache-dtype" "fp8_e4m3"
+            "--kv-cache-memory-bytes" "3500000000"
+            "--max-num-batched-tokens" "1024"
+            "--max-num-seqs" "2"
+            "--enable-prefix-caching"
+            "--speculative-config" ''{"method":"mtp","num_speculative_tokens":1}''
+            "--compilation-config" ''{"max_cudagraph_capture_size":16}''
+            "--limit-mm-per-prompt" ''{"image":1,"video":0}''
+            "--mm-processor-kwargs" ''{"max_pixels":1003520}''
+            "--reasoning-parser" "qwen3"
+            "--default-chat-template-kwargs" ''{"enable_thinking": false}''
+            "--enable-auto-tool-choice"
+            "--tool-call-parser" "qwen3_coder"
           ];
+          # First activation is slow: ~19 GB of weights download into the
+          # cache volume, plus torch.compile / flashinfer JIT warm-up.
           volumes = [
             "/data/llama/cache:/root/.cache"
           ];
           devices = [ "nvidia.com/gpu=all" ];
-          extraOptions = [ "--ipc=host" ];
+          extraOptions = [
+            "--ipc=host"
+            "--health-cmd=python3 -c \"import sys, urllib.request as u; sys.exit(0 if u.urlopen('http://localhost:8000/health', timeout=5).status == 200 else 1)\""
+            "--health-interval=30s"
+            "--health-timeout=10s"
+            "--health-retries=3"
+            "--health-start-period=15m"
+          ];
         };
       };
     };
+  };
+
+  # Build the vLLM/EXL3 image before the container starts. Idempotent
+  # (layer-cached after the first run) but the base image is ~10 GB, so the
+  # first activation on a fresh install takes a while; podman-vllm restarts
+  # until the image exists, so a slow build degrades to a late start, not a
+  # failure.
+  systemd.services.fractal-vllm-image = {
+    description = "Build vllm-qwen36-exl3 container image";
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    before = [ "podman-vllm.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    path = with pkgs; [ podman ];
+    script = ''
+      podman build -t vllm-qwen36-exl3:v0.31.0 ${./fractal-vllm}
+    '';
   };
 
   fileSystems."/data/llama" = {

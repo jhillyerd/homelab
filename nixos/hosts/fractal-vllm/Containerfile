@@ -1,0 +1,43 @@
+# vLLM + EXL3 serving stack for Qwen3.6-35B-A3B on fractal (RTX 3090 Ti,
+# 24 GB). Follows the validated Quick start of
+# https://huggingface.co/JRamirez-UAB/Qwen3.6-35B-A3B-EXL3-4.00bpw-24GB
+#
+# EXL3 is not a native vLLM format: the stack below is deliberately pinned
+# and version-coupled. Do not bump pieces independently -- re-validate
+# against the model card's "Tested setup" first.
+#   - vLLM 0.31.0 (official image; python 3.12, torch 2.13.0)
+#   - exllamav3 1.5.1 (1.6.x regressed tool-calls-without-reasoning on this
+#     checkpoint per the model card; wheel is cp312, so a python-version
+#     change in the base image breaks this install loudly)
+#   - OrcaSAQ2-kernel @ 7ddffb1 (EXL3 linear layers, INT8 embeddings)
+#   - qwen38_exl3_vision (EXL3 MoE experts + vision tower -- required for
+#     the MoE path even with vision disabled; shipped inside the model
+#     repository so plugin and checkpoint stay in sync)
+#
+# Built by systemd unit fractal-vllm-image.service (fractal.nix):
+#   podman build -t vllm-qwen36-exl3:v0.31.0 nixos/hosts/fractal-vllm
+#
+# If the official image ever stops matching (python != 3.12 or a torch/CUDA
+# mismatch with the exllamav3 wheel), fall back to the model card's
+# from-scratch venv recipe instead of guessing tags.
+
+FROM vllm/vllm-openai:v0.31.0
+
+# exllamav3 kernel wheel (cu132 / torch 2.13.0 / cp312; "+" must be %2B).
+RUN pip install --no-cache-dir \
+    "https://github.com/turboderp-org/exllamav3/releases/download/v1.5.1/exllamav3-1.5.1%2Bcu132.torch2.13.0-cp312-cp312-linux_x86_64.whl"
+
+# OrcaSAQ2-kernel plugin at the pinned commit (tarball, no git needed).
+# NB: the vllm image has python3 but no bare "python".
+RUN ORCA_SHA=7ddffb12c00c24b8bc6b1164723c04ac490a91bc \
+ && python3 -c "import tarfile, urllib.request; urllib.request.urlretrieve('https://github.com/Continuum-AI-Corp/OrcaSAQ2-kernel/archive/' + '$ORCA_SHA' + '.tar.gz', '/tmp/orca.tgz'); tarfile.open('/tmp/orca.tgz').extractall('/tmp')" \
+ && pip install --no-cache-dir /tmp/OrcaSAQ2-kernel-$ORCA_SHA \
+ && rm -rf /tmp/orca.tgz /tmp/OrcaSAQ2-kernel-$ORCA_SHA
+
+# qwen38_exl3_vision plugin (EXL3 MoE experts + vision tower), taken from
+# the model repository itself.
+RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download('JRamirez-UAB/Qwen3.6-35B-A3B-EXL3-4.00bpw-24GB', allow_patterns=['plugin/*'], local_dir='/opt/qwen38')" \
+ && pip install --no-cache-dir /opt/qwen38/plugin/qwen38_exl3_vision
+
+# Fail the build early if the kernel extension or plugin entry points broke.
+RUN python3 -c "import exllamav3; from exllamav3.ext import exllamav3_ext; print('exllamav3 kernel: OK')"

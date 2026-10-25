@@ -240,10 +240,11 @@ in
         ];
       }
       {
-        # llama.cpp server on fractal (podman, published 8000 -> container
-        # 8080, enabled via LLAMA_ARG_ENDPOINT_METRICS). Exported gauges are
-        # label-free, so the node label is added here. Slot ceiling for
-        # utilization math is 3 (LLAMA_ARG_N_PARALLEL on fractal).
+        # vLLM server on fractal (podman, host port 8000; vLLM exposes
+        # /metrics natively). Concurrency ceiling for utilization math is
+        # --max-num-seqs 2 on fractal. Metric names changed with the
+        # llama.cpp -> vLLM migration (llamacpp:* -> vllm:*), so any
+        # llamacpp-keyed dashboards need a follow-up pass.
         job_name = "llama";
         static_configs = [
           {
