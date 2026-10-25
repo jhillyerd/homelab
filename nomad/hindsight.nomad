@@ -123,6 +123,26 @@ HINDSIGHT_API_LLM_MODEL=fast
 # HINDSIGHT_API_*_LLM_REASONING_EFFORT.
 HINDSIGHT_API_LLM_REASONING_EFFORT=none
 
+# Reflect-lane sampling temperature. Upstream default is 0.9 ("reflect
+# thinking", tuned for cloud models) and is sent per-request, which OVERRIDES
+# the llama.cpp servers' own sampler settings — fractal's LiquidAI-validated
+# temp 0.1 / top_k 50 / repeat_penalty 1.05 are only server-side defaults.
+# At 0.9 the LFM2.5 refresh stopped mid-JSON inside the forced `done` tool
+# call that emits the mental-model document; Hindsight's json_repair then
+# closed the truncated payload so pages ended prematurely at varying lengths
+# (the "repaired malformed done" log lines; Bifrost showed reflect-lane calls
+# at temp 0.9 vs mechanical passes at 0 — first release where the temp is sent
+# at all is 1.0.0, upstream issue #3825). `none` is the omit sentinel: the
+# temperature parameter is dropped entirely and each llama.cpp server's tuned
+# defaults govern — 0.1 on fractal for refreshes, dgx1's own setting for
+# interactive reflect on `smart` (verify that host sets LLAMA_ARG_TEMP;
+# llama.cpp's built-in default is 0.8). It also resolves the mechanical
+# passes' pinned 0.0 to "omit", keeping the whole reflect lane consistent.
+# Still the knob on v1.1.0: its new
+# HINDSIGHT_API_LLM_TEMPERATURE_MENTAL_MODEL_REFRESH covers only delta-op
+# extraction; document synthesis keeps reading the reflect temperature.
+HINDSIGHT_API_LLM_TEMPERATURE_REFLECT=none
+
 # Reflect is the user-facing reasoning pass (a caller holds the request open
 # and answers come back through it), so it gets the smarter model behind the
 # `smart` alias. Provider/base URL still fall back to the globals above, so
