@@ -32,8 +32,18 @@
           image = "ghcr.io/ggml-org/llama.cpp:server-cuda-b11723";
           ports = [ "8000:8080" ]; # healthcheck runs against 8080.
           environment = {
-            # Serving. LFM2.5-24B-A2B is text-only (30 conv + 10 GQA
-            # layers, 8 KV heads, head_dim 64 → ~20 KiB/token of KV).
+            # Back on Qwen3.6-35B-A3B after the LFM2.5-24B-A2B experiment
+            # (Oct 19–25): LFM's pythonic tool-call format kept emitting
+            # malformed done-document args through llama.cpp — deterministically
+            # truncated pages, ID leakage, json_repair "fixing" stubs into place
+            # across every Hindsight bank. Qwen's JSON tool calls ride llama.cpp's
+            # mature Qwen parser, and this exact config is the known-good one from
+            # Sep 30 – Oct 19 (fc06944 + a7ae3d5); the quant blob is verified
+            # byte-current against unsloth main, so no re-download.
+
+            # Serving. Qwen3.6-35B-A3B is a hybrid-recurrent multimodal MoE
+            # (~6 KiB/token of KV; the mmproj vision encoder loads with -hf).
+            LLAMA_ARG_IMAGE_MIN_TOKENS = "1024"; # Improves small image results
             LLAMA_ARG_GPU_LAYERS = "all";
             LLAMA_ARG_UBATCH = "1024"; # Faster PP, but more VRAM usage
 
@@ -42,30 +52,19 @@
             # kv_unified, and 4 slots competing for contiguous ranges in the
             # shared 3090-sized pool fragment it — requests well under the
             # nominal capacity died with "Context size has been exceeded".
-            # 3 x 131072 = full native context per slot. LFM2.5-24B-A2B is
-            # text-only hybrid (30 conv + 10 GQA layers, 8 KV heads, head_dim
-            # 64 = 20 KiB/token fp16); the q8_0 KV cache below halves that
-            # to ~10 KiB/token, so the pool costs ~3.6 GiB and leaves ~3.5
-            # GiB VRAM headroom over the 14.9 GiB of Q4_K_XL weights for
-            # compute buffers.
+            # 3 x 196608 = 192k per slot; ~3.45 GiB of KV at ~6 KiB/token,
+            # leaving ~1.4 GiB VRAM headroom over the 19.5 GiB of IQ4_NL_XL
+            # weights for the vision encoder and compute buffers.
             LLAMA_ARG_N_PARALLEL = "3";
-            LLAMA_ARG_CTX_SIZE = "393216";
+            LLAMA_ARG_CTX_SIZE = "589824";
 
-            # Quantized KV cache (near-lossless at q8_0): halves the
-            # per-token KV cost so every slot gets full native context.
-            # Requires flash attention, so pin it on rather than auto.
-            LLAMA_ARG_FLASH_ATTN = "on";
-            LLAMA_ARG_CACHE_TYPE_K = "q8_0";
-            LLAMA_ARG_CACHE_TYPE_V = "q8_0";
-
-            # Self-speculative drafting from the request's own n-grams — no
-            # draft model, no extra VRAM, output distribution unchanged
-            # (rejected drafts are resampled by the target model). Chosen for
-            # the summarization / memory-consolidation workload, which copies
-            # verbatim from context, so acceptance should be high. A/B the
-            # ngram-map-k4v variant (longer repeated spans) if curious;
-            # acceptance rate shows up in llamacpp:spec_* on /metrics.
-            LLAMA_ARG_SPEC_TYPE = "ngram-map-k";
+            # NOTE: the LFM-era serving flags (FLASH_ATTN=on, q8_0 KV cache,
+            # ngram spec decoding) are deliberately NOT carried over — none of
+            # them ever ran on Qwen here, and this change is about returning to
+            # a known-good baseline. Re-add them one at a time with A/B if the
+            # slower decode hurts: ngram spec especially suits the verbatim-copy
+            # consolidation workload (and was proven unrelated to the LFM
+            # corruption via a no-spec container test on Oct 25).
 
             # Monitoring: expose Prometheus-format /metrics, scraped by the
             # prometheus host (job "llama"). Concurrency gauges of interest:
@@ -73,10 +72,11 @@
             # n_busy_slots_per_decode (see tools/server/README.md).
             LLAMA_ARG_ENDPOINT_METRICS = "1";
 
-            # Sampling: LiquidAI-recommended (generation_config.json).
-            LLAMA_ARG_TEMP = "0.1";
-            LLAMA_ARG_TOP_K = "50";
-            LLAMA_ARG_REPEAT_PENALTY = "1.05";
+            # Sampling: Qwen-recommended (as per the pre-LFM config).
+            LLAMA_ARG_TEMP = "0.6";
+            LLAMA_ARG_MIN_P = "0.0";
+            LLAMA_ARG_TOP_P = "0.95";
+            LLAMA_ARG_TOP_K = "20";
 
             # --reasoning-budget (env name unchanged since the
             # Qwen3.5 days) auto-detects the think tags from the rendered
@@ -85,7 +85,7 @@
           };
           cmd = [
             "-hf"
-            "unsloth/LFM2.5-24B-A2B-GGUF:UD-Q4_K_XL"
+            "unsloth/Qwen3.6-35B-A3B-GGUF:UD-IQ4_NL_XL"
           ];
           volumes = [
             "/data/llama/cache:/root/.cache"
