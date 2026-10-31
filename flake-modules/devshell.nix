@@ -18,7 +18,7 @@
             cfssl
             consul
             kubectl
-            nomad_1_10
+            nomad_1_11
             octodns
             octodns-providers.bind
             openssl
