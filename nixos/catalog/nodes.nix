@@ -8,10 +8,10 @@
   };
 
   boss = {
-    ip.priv = "192.168.1.30";
-    ip.tail = "100.115.100.34";
+    ip.priv = "192.168.131.12";
+    ip.tail = "100.99.120.2";
     config = ../hosts/boss.nix;
-    hw = ../hw/bosgame-m4.nix;
+    hw = ../hw/proxmox-vda.nix;
     system = system.x86_64-linux;
   };
 

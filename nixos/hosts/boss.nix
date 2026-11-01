@@ -1,4 +1,4 @@
-{ self, llm-agents, ... }:
+{ self, util, ... }:
 {
   imports = [
     ../common.nix
@@ -8,24 +8,16 @@
   roles.workstation.enable = true;
 
   roles.tailscale.enable = true;
-
-  # Kandev agent-execution container. The control plane runs on the Nomad
-  # cluster, so publish SSH on the LAN address only.
-  roles.kandev-agent = {
-    enable = true;
-    bindAddress = self.ip.priv;
-    extraPackages = with llm-agents.packages.${self.system}; [
-      maki
-      pi
-    ];
-  };
-
-  networking.networkmanager.enable = true;
+  systemd.network.networks = util.mkClusterNetworks self;
   networking.firewall.enable = false;
-  virtualisation.libvirtd.enable = true;
+
+  fileSystems."/home" = {
+    device = "/dev/disk/by-label/home";
+    fsType = "ext4";
+  };
 
   roles.upsmon = {
     enable = true;
-    wave = 2;
+    wave = 1;
   };
 }
