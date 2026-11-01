@@ -245,7 +245,7 @@ in
         # --max-num-seqs 2 on fractal. Metric names changed with the
         # llama.cpp -> vLLM migration (llamacpp:* -> vllm:*), so any
         # llamacpp-keyed dashboards need a follow-up pass.
-        job_name = "llama";
+        job_name = "vllm";
         static_configs = [
           {
             targets = [ "${catalog.nodes.fractal.ip.priv}:8000" ];
