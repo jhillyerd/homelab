@@ -98,7 +98,7 @@ job "kandev" {
       user = "3003:3003"
 
       config {
-        image = "ghcr.io/kdlbs/kandev:0.98.0"
+        image = "ghcr.io/jhillyerd/kandev:sha-deb38ec24"
         ports = ["http"]
 
         mount {
