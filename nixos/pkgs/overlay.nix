@@ -7,7 +7,6 @@ in
   # Package template: x = callPackage ./x { }
   cfdyndns = callPackage ./cfdyndns.nix { };
   nomad-usb-device-plugin = callPackage ./nomad-usb-device-plugin.nix { };
-  sesh = callPackage ./sesh.nix { };
 
   # forgejo-cli 0.6.0 prints a keys-file status line to stdout when running
   # `fj completion`, so it lands as line 1 of every generated completion
