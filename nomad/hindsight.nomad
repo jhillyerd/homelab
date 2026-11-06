@@ -141,7 +141,14 @@ HINDSIGHT_API_LLM_REASONING_EFFORT=none
 # Still the knob on v1.1.0: its new
 # HINDSIGHT_API_LLM_TEMPERATURE_MENTAL_MODEL_REFRESH covers only delta-op
 # extraction; document synthesis keeps reading the reflect temperature.
-HINDSIGHT_API_LLM_TEMPERATURE_REFLECT=none
+#
+# vLLM-era update (Nov 2026): `none` stopped being safe when fractal moved
+# from llama.cpp (whose servers pinned their own sampler defaults) to vLLM,
+# whose sampling defaults come from the checkpoint's generation_config
+# (temp 1.0). Synthesis at 1.0 produced malformed JSON / sections-as-dict
+# payloads (DocumentSectionsInvalidError, Nov 4-5 2026) and marathon
+# delta-op calls (500s+). Pinned to 0.2 until re-tuned.
+HINDSIGHT_API_LLM_TEMPERATURE_REFLECT=0.2
 
 # Reflect is the user-facing reasoning pass (a caller holds the request open
 # and answers come back through it), so it gets the smarter model behind the
@@ -153,7 +160,12 @@ HINDSIGHT_API_REFLECT_LLM_MODEL=smart
 # too tight for `smart` — solo reflects run 150-260s (4 agent iterations, the
 # final synthesis call alone 60-90s), so a concurrent reflect queues on the
 # single dgx1 llama.cpp slot and the slower one dies at the wall.
-HINDSIGHT_API_REFLECT_WALL_TIMEOUT=600
+# 1200 (Nov 2026): the wall also bounds background mental-model refreshes,
+# measured from task claim INCLUDING queue time — a 5-page burst serialized
+# behind the refresh semaphore (max 1) died at 600 with 4 of 5 still queued
+# (Nov 5 01:47 UTC), and a solo refresh's delta-ops call ran 500s+ by
+# itself, leaving zero retry headroom.
+HINDSIGHT_API_REFLECT_WALL_TIMEOUT=1200
 
 # Mental-model refresh inherits its model from reflect — pin it back to the
 # no-think lane so the background job doesn't follow reflect onto `smart`
@@ -165,8 +177,11 @@ HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MODEL=fast
 # its own timeout lane: it never inherits REFLECT_LLM_TIMEOUT (kept short
 # because interactive reflect has a caller waiting), it falls back to the
 # global 120s default — which is what those refresh_mental_model timeouts
-# were hitting.
-HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_TIMEOUT=600
+# were hitting. 900 (Nov 2026): delta-op synthesis calls on the vLLM fast
+# lane have run 500s+; this lane is background-only (no caller waits), so
+# let a slow call finish inside the 1200s wall instead of failing into a
+# retry the wall then kills.
+HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_TIMEOUT=900
 
 # Debounce for automatic mental-model refreshes: a triggered refresh arriving
 # within N seconds of the model's last rebuild is parked until the window
@@ -222,8 +237,7 @@ EOT
       resources {
         cpu        = 4000  # MHz
         memory     = 2048  # MB — soft limit; OOMed at 1024
-        memory_max = 3072  # MB — hard limit; lets the container burst between
-                            #       consolidation batches without being killed
+        memory_max = 3072  # MB — hard limit; lets the container burst
       }
 
       logs {
