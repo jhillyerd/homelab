@@ -251,7 +251,7 @@ job "homeassistant" {
       driver = "docker"
 
       config {
-        image = "zwavejs/zwave-js-ui:11.22.3"
+        image = "zwavejs/zwave-js-ui:11.25.2"
         ports = ["http", 3000]
 
         mount {
