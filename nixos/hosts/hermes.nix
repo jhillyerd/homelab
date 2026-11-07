@@ -6,7 +6,6 @@
   self,
   util,
   hermes-agent,
-  hermes-webui,
   ...
 }:
 let
@@ -15,17 +14,15 @@ let
   # Same overridden package for the gateway service and the WebUI (which
   # derives its agent python from passthru). Keep the version string in
   # sync with the hermes-agent tag pinned in flake.nix.
-  hermesPkg =
-    hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
-      version = "0.21.6";
-    };
+  hermesPkg = hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default.override {
+    version = "0.23.0";
+  };
 in
 {
   imports = [
     ../common.nix
     ../common/onprem.nix
     hermes-agent.nixosModules.default
-    hermes-webui.nixosModules.default
   ];
 
   systemd.network.networks = util.mkClusterNetworks self;
@@ -34,8 +31,8 @@ in
     enable = true;
     allowedTCPPorts = [
       8642 # hermes agent API
-      8787 # hermes webui
       9119 # hermes web dashboard
+      9120 # hermes webapp (Desktop in a browser)
     ];
   };
 
@@ -100,7 +97,7 @@ in
         # version-matched to the hermes-agent pin: bump together, see AGENTS.md.
         terminal = {
           backend = "docker";
-          docker_image = "nousresearch/hermes-sandbox:v0.21.6-desktop";
+          docker_image = "nousresearch/hermes-sandbox:v0.23.0-desktop";
         };
 
         model = bifrost_smart;
@@ -115,6 +112,16 @@ in
           skills_hub = bifrost_smart;
           vision = bifrost_smart;
           web_extract = bifrost_fast;
+        };
+
+        # v0.23 Webapp: the Desktop workspace in a browser tab, served by
+        # the gateway on its own listener (default port 9120). Off by
+        # default upstream. Like the module's backend option, a 0.0.0.0
+        # bind engages the dashboard auth gate, so the hermes-env
+        # basic-auth credentials apply here too.
+        webapp = {
+          enabled = true;
+          host = "0.0.0.0";
         };
       };
 
@@ -138,42 +145,6 @@ in
 
     environmentFiles = [ config.age.secrets."hermes-env".path ];
   };
-
-  # Third-party web UI (nesquena/hermes-webui): imports the agent in-process
-  # and reads HERMES_HOME directly, so it must be colocated with the agent —
-  # same host, same user, same state. Chat/session state stays in
-  # ~/.hermes/webui inside the agent home (already borg-backed). Secrets are
-  # not passed via systemd env: the agent activation mirrors hermes-env into
-  # $HERMES_HOME/.env, which run_agent loads at import time.
-  services.hermes-webui = {
-    enable = true;
-
-    # Run as the agent service user so both processes share HERMES_HOME
-    # (sessions, state.db, config.yaml); the module otherwise creates a
-    # separate hermes-webui user that cannot read the agent state.
-    user = "hermes";
-    group = "hermes";
-
-    # Non-loopback bind makes the WebUI enforce its password gate; the
-    # password is set via its settings UI (PBKDF2 hash in settings.json —
-    # do NOT add HERMES_WEBUI_PASSWORD to hermes-env, it would override).
-    host = "0.0.0.0";
-    port = 8787;
-
-    hermesHome = "${hermesHome}/.hermes";
-
-    agent = {
-      package = hermesPkg; # HERMES_WEBUI_PYTHON from passthru.hermesVenv
-      # The Nix package out has no run_agent.py; the venv site-packages is
-      # the importable "agent source root" the WebUI puts on sys.path.
-      dir =
-        "${hermesPkg.passthru.hermesVenv}/${hermesPkg.passthru.python.sitePackages}";
-    };
-  };
-
-  # The webui unit has no packages option; give its in-process agent the
-  # docker CLI the same way the agent module does for its own services.
-  systemd.services.hermes-webui.path = [ pkgs.docker-client ];
 
   services.borgbackup.jobs.hermes-data = {
     paths = [

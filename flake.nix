@@ -13,20 +13,12 @@
     agenix-template.url = "github:jhillyerd/agenix-template/main";
 
     hermes-agent = {
-      url = "github:NousResearch/hermes-agent/v0.21.6";
+      url = "github:NousResearch/hermes-agent/v0.23.0";
       inputs.flake-parts.follows = "flake-parts";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Pinned to the experimental channel on purpose: the newest stable tag
-    # (v0.52.113, July 2026 code) predates hermes-agent's Sep 2026 module
-    # decomposition and imports names v0.21.6 removed — degrading silently
-    # (MCP tools, approval session keys). Only exp tags >= ~0.52.316 ship the
-    # agent_compat shim. Re-pin together with the hermes-agent tag: the webui
-    # is only tested against the agent release current at its release time.
-    hermes-webui = {
-      url = "github:nesquena/hermes-webui/exp-v0.52.458";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Do NOT follow our nixpkgs: their pm-packages patch patchelf with an
+      # upstream 0.19.x-line fix, which fails to apply against nixos-26.05's
+      # patchelf 0.15.2 (stable downgraded it after the 0.19.2 corruption
+      # bug). Build against their own CI-tested nixpkgs pin instead.
     };
 
     homesite = {
