@@ -89,7 +89,7 @@ job "hindsight" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/vectorize-io/hindsight:1.0.0"
+        image = "ghcr.io/vectorize-io/hindsight:1.2.0"
         ports = ["api", "ui"]
       }
 
