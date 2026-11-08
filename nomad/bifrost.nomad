@@ -55,7 +55,7 @@ job "bifrost" {
       user = "3003"
 
       config {
-        image = "maximhq/bifrost:v2.1.0"
+        image = "maximhq/bifrost:v2.5.0"
         ports = ["http"]
 
         # Bifrost stores its config (config.db), request logs (logs.db) and
