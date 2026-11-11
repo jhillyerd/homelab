@@ -60,7 +60,6 @@
     enable = true;
     records = [ "home.bytemonkey.org" ];
 
-    email = catalog.cf-api.user;
     apiTokenFile = config.age.secrets.cloudflare-dns-api.path;
   };
 
