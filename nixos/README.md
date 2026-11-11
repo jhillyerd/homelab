@@ -39,13 +39,6 @@ nix flake update
 sudo nixos-rebuild --flake ".#$host" boot
 ```
 
-### Build SD card image for host
-
-```sh
-nix build ".#images.$host"
-sudo dd bs=4M conv=fsync if=result/sd-image/*-linux.img of=/dev/sdX
-```
-
 ### Build and restore Proxmox image for host
 
 ```sh
