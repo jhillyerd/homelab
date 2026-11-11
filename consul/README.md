@@ -71,8 +71,3 @@ key_prefix "" {
 
 `fabio.policy.hcl`: node read plus service write for the fabio load
 balancer.
-
-## `waypoint-ci-agent` policy
-
-`waypoint-ci-agent.policy.hcl`: default-namespace read with
-`submit-job`, for CI runners publishing Nomad jobs.
