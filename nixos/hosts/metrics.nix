@@ -239,6 +239,10 @@ in
         job_name = "vllm";
         static_configs = [
           {
+            targets = [ "dgx1.home.arpa:8000" ];
+            labels.node = "dgx1";
+          }
+          {
             targets = [ "${catalog.nodes.fractal.ip.priv}:8000" ];
             labels.node = "fractal";
           }
