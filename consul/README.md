@@ -1,3 +1,9 @@
+# Consul policies
+
+Policies for Consul ACL tokens used across the cluster.  Apply with
+`consul acl policy create -name <name> -rules @<file>` (see individual
+sections below).
+
 In additional to the token and policy created by `create-agent-poltok`,
 you'll need to have some nomad specific policies that can be applied to the
 tokens.  This is easier to do in the consul web UI for a small number of
@@ -60,3 +66,13 @@ key_prefix "" {
   policy = "read"
 }
 ```
+
+## `fabio` policy
+
+`fabio.policy.hcl`: node read plus service write for the fabio load
+balancer.
+
+## `waypoint-ci-agent` policy
+
+`waypoint-ci-agent.policy.hcl`: default-namespace read with
+`submit-job`, for CI runners publishing Nomad jobs.
