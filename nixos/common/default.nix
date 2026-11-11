@@ -14,7 +14,7 @@
     ./packages.nix
     ../roles
   ];
-  nixpkgs.overlays = [ (import ../pkgs/overlay.nix) ];
+  nixpkgs.overlays = [ (import ../../pkgs/overlay.nix) ];
   nixpkgs.config.allowUnfree = true;
 
   environment.shellAliases = {
