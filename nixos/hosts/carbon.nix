@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ ../common.nix ];
+  imports = [ ../common ];
 
   age.secrets.wifi-env.file = ../secrets/wifi-env.age;
 
