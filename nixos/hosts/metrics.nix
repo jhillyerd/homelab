@@ -21,6 +21,22 @@ let
     target_label = "node";
     replacement = name;
   }) probeNodes;
+
+  # static_configs entry: one or more address targets at a common port,
+  # plus labels.
+  mkStaticConfig = port: labels: targets: {
+    targets = map (addr: "${addr}:${toString port}") targets;
+    inherit labels;
+  };
+
+  # static_configs entries, one per named catalog node, each target
+  # derived from the catalog and labelled node=<name> so series line up
+  # with the node_* and consul_* ones.
+  mkNodeConfigs =
+    port: labels: names:
+    map (
+      name: mkStaticConfig port (labels // { node = name; }) [ catalog.nodes.${name}.ip.priv ]
+    ) names;
 in
 {
   imports = [
@@ -86,21 +102,15 @@ in
         };
 
         static_configs = [
-          {
-            targets = map (ip: "${ip}:8500") catalog.consul.servers;
-            labels.role = "server";
-          }
-          {
-            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:8500" ];
-            labels.role = "client";
-          }
+          (mkStaticConfig 8500 { role = "server"; } catalog.consul.servers)
+          (mkStaticConfig 8500 { role = "client"; } [ catalog.nodes.nc-virt-1.ip.priv ])
         ];
       }
       {
         # Per-check health metrics (see nomad/consul-exporter.nomad).
         job_name = "consul-exporter";
         static_configs = [
-          { targets = [ "consul-exporter.service.consul:9107" ]; }
+          (mkStaticConfig 9107 { } [ "consul-exporter.service.consul" ])
         ];
       }
       {
@@ -118,22 +128,16 @@ in
         tls_config.insecure_skip_verify = true;
 
         static_configs = [
-          {
-            targets = map (ip: "${ip}:4646") catalog.nomad.servers;
-            labels = {
-              role = "server";
-              # Nomad metrics carry no cluster label (datacenter is only on
-              # nomad_client_uptime); mrkaran dashboards 16923-5 filter on it.
-              cluster = "skynet";
-            };
-          }
-          {
-            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:4646" ];
-            labels = {
-              role = "client";
-              cluster = "skynet";
-            };
-          }
+          (mkStaticConfig 4646 {
+            role = "server";
+            # Nomad metrics carry no cluster label (datacenter is only on
+            # nomad_client_uptime); mrkaran dashboards 16923-5 filter on it.
+            cluster = "skynet";
+          } catalog.nomad.servers)
+          (mkStaticConfig 4646 {
+            role = "client";
+            cluster = "skynet";
+          } [ catalog.nodes.nc-virt-1.ip.priv ])
         ];
       }
       {
@@ -224,20 +228,7 @@ in
         # /proc/self/mountstats. Host module, not a nomad job, so it
         # survives a nomad outage.
         job_name = "node";
-        static_configs = [
-          {
-            targets = [ "${catalog.nodes.nc-virt-1.ip.priv}:9100" ];
-            labels.node = "nc-virt-1";
-          }
-          {
-            targets = [ "${catalog.nodes.nc-um350-1.ip.priv}:9100" ];
-            labels.node = "nc-um350-1";
-          }
-          {
-            targets = [ "${catalog.nodes.nc-um350-2.ip.priv}:9100" ];
-            labels.node = "nc-um350-2";
-          }
-        ];
+        static_configs = mkNodeConfigs 9100 { } probeNodes;
       }
       {
         # vLLM server on fractal (podman, host port 8000; vLLM exposes
