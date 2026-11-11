@@ -1,5 +1,5 @@
 {
-  description = "my nixos & ansible configuration";
+  description = "home lab: nixos hosts, nomad jobs & ops tooling";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
