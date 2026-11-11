@@ -6,5 +6,5 @@ let
   catalog = import ../nixos/catalog { inherit system; };
 in
 {
-  flake.nixosConfigurations = import ../nixos/nix/nixos-configurations.nix inputs catalog;
+  flake.nixosConfigurations = import ../nixos/lib/nixos-configurations.nix inputs catalog;
 }

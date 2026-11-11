@@ -1,12 +1,12 @@
-# nixos flake
+# nixos configs
 
 ## Terminology
 
 Knowing how I use these terms will better help you understand the layout
-of this flake:
+of these configs:
 
 - catalog: The high level configuration of my homelab:
-  - common: configuration that can be referenced by any part of this flake.
+  - common: configuration that can be referenced by any part of these configs.
   - nodes: combines _host_, _hw_, and network configuration into a deployable
     NixOS configuration.
   - services: defines how a particular service may be accessed, including
@@ -19,9 +19,11 @@ of this flake:
 - role: A nix module configuring one or more _services_ for one or more hosts.
 - service: Standard nix modules for configuring services.
 
-## Ways to use this flake
+## Working with hosts
 
-### Update NixOS channel
+All commands run from the repo root (the flake lives there).
+
+### Update flake inputs
 
 ```sh
 nix flake update
@@ -30,7 +32,7 @@ nix flake update
 ### Push to running bare-metal prod machine
 
 ```sh
-./deploy $host root@$hostIP
+bin/deploy $host root@$hostIP
 ```
 
 ### Rebuild localhost with specified host config

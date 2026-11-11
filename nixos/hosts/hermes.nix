@@ -20,7 +20,7 @@ let
 in
 {
   imports = [
-    ../common.nix
+    ../common
     ../common/onprem.nix
     hermes-agent.nixosModules.default
   ];

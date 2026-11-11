@@ -80,26 +80,6 @@ in
       description = "Client (worker) Nomad configuration";
       default = { };
     };
-
-    usb = mkOption {
-      type = submodule {
-        options = {
-          enable = mkEnableOption "Enable Nomad USB plugin";
-
-          includedVendorIds = mkOption {
-            type = listOf ints.unsigned;
-            default = [ ];
-          };
-
-          includedProductIds = mkOption {
-            type = listOf ints.unsigned;
-            default = [ ];
-          };
-        };
-      };
-      description = "USB plugin configuration";
-      default = { };
-    };
   };
 
   config = mkMerge [
@@ -311,15 +291,7 @@ in
               };
             };
           };
-
-          plugin.usb.config = mkIf cfg.usb.enable {
-            enabled = true;
-            included_vendor_ids = cfg.usb.includedVendorIds;
-            included_product_ids = cfg.usb.includedProductIds;
-          };
         };
-
-        extraSettingsPlugins = mkIf cfg.usb.enable [ pkgs.nomad-usb-device-plugin ];
       };
 
       systemd.services.nomad = {

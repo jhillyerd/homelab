@@ -8,8 +8,8 @@
 /nomad/*.snap
 
 # Certificates
-/nomad/etc/ca
-/nomad/etc/certs
+/nomad/certs/ca
+/nomad/certs/certs
 
 # Terraform
 /nixos/.terraform*
@@ -19,7 +19,7 @@
 /nixos/log.txt
 
 /.vim
-result
+result*
 *.qcow2
 
 /esphome/.device-builder*

@@ -11,10 +11,10 @@
   system.stateVersion = "25.11";
 
   imports = [
-    ./common/packages.nix
-    ./roles
+    ./packages.nix
+    ../roles
   ];
-  nixpkgs.overlays = [ (import ./pkgs/overlay.nix) ];
+  nixpkgs.overlays = [ (import ../../pkgs/overlay.nix) ];
   nixpkgs.config.allowUnfree = true;
 
   environment.shellAliases = {

@@ -1,7 +1,7 @@
 { self, util, ... }:
 {
   imports = [
-    ../common.nix
+    ../common
     ../common/onprem.nix
   ];
 

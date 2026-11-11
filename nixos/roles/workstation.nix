@@ -116,7 +116,7 @@ in
     # Users
     users.mutableUsers = true;
 
-    # Extend common.nix user configuration
+    # Extend common/default.nix user configuration
     users.users.james = {
       uid = 1026;
       isNormalUser = true;
