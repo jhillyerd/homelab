@@ -58,6 +58,7 @@ job "nix-cache" {
           proxy_cache_lock on;
           proxy_ssl_server_name on;
           proxy_ssl_verify on;
+          proxy_ssl_verify_depth 2;
           proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
 
           server {
