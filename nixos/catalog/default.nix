@@ -13,6 +13,14 @@ rec {
   syslog.port = 1514;
   tailscale.interface = "tailscale0";
 
+  # Kernel WireGuard mesh between infrastructure hosts (see
+  # homelab/plans/wireguard-mesh-plan.md). Members: nodes with ip.wg.
+  mesh = {
+    interface = "wg0";
+    port = 51820;
+    mtu = 1420;
+  };
+
   # Role/service specifc configuration.
   authelia = {
     host = nodes.web.ip.priv;

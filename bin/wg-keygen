@@ -1,0 +1,54 @@
+#!/usr/bin/env fish
+# wg-keygen <node> [--rotate]:
+#  Generate (or rotate) the mesh WireGuard keypair for <node>: the private
+#  key is encrypted to the recipients declared in nixos/secrets/secrets.nix
+#  and written to nixos/secrets/mesh-wg-key-<node>.age; the public key is
+#  printed for the node's catalog entry.
+#
+#  The secrets.nix rule must already exist — rules for mesh nodes are
+#  derived from the catalog, so it appears once the node has ip.wg.
+
+set -l node $argv[1]
+if test -z "$node"
+    echo "usage: wg-keygen <node> [--rotate]" >&2
+    exit 1
+end
+
+set -l file mesh-wg-key-$node.age
+set -l rules nixos/secrets/secrets.nix
+set -l out nixos/secrets/$file
+
+if not test -f $rules
+    echo "error: $rules not found — run from the repo root" >&2
+    exit 1
+end
+
+# Recipients come straight from the rules file; if the node has no rule
+# (usually: no ip.wg in the catalog) eval fails and this comes up empty.
+set -l recipients (nix eval --raw -f $rules \
+    --apply "r: builtins.concatStringsSep \"\\n\" r.\"$file\".publicKeys" \
+    | string split \n)
+if test (count $recipients) -eq 0
+    echo "error: no rule for $file in $rules — does '$node' have ip.wg in nixos/catalog/nodes.nix?" >&2
+    exit 1
+end
+
+if test -f $out; and not contains -- --rotate $argv
+    echo "error: $out already exists — pass --rotate to replace it" >&2
+    echo "(rotation also needs the node's wg.pub updated in the catalog and the mesh redeployed)" >&2
+    exit 1
+end
+
+set -l priv (wg genkey); or exit 1
+set -l pub (printf '%s' $priv | wg pubkey); or exit 1
+
+set -l rargs
+for r in $recipients
+    set -a rargs -r $r
+end
+printf '%s' $priv | age $rargs -o $out; or exit 1
+
+echo "wrote $out"
+echo
+echo "add/update in nixos/catalog/nodes.nix:"
+echo "  wg.pub = \"$pub\";"

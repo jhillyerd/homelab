@@ -13,6 +13,7 @@
       devShells.default = pkgs.mkShell {
         buildInputs =
           (with pkgs; [
+            age
             ansible
             cfssl
             consul
@@ -22,6 +23,7 @@
             octodns-providers.bind
             openssl
             sshpass
+            wireguard-tools
           ])
           ++ [
             inputs.agenix.packages.${system}.default

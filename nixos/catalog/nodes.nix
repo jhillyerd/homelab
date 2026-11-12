@@ -60,6 +60,8 @@
 
   metrics = {
     ip.priv = "192.168.128.41";
+    ip.wg = "10.99.128.41";
+    wg.pub = "tSEodiD+7Df78NzEukuBzpbsBB/nq8V+dZqQGix4z0o=";
     ip.tail = "100.108.135.101";
     config = ../hosts/metrics.nix;
     hw = ../hw/proxmox.nix;
@@ -68,6 +70,8 @@
 
   nc-um350-1 = {
     ip.priv = "192.168.128.36";
+    ip.wg = "10.99.128.36";
+    wg.pub = "xsbCbvDSkNjAFxSJMqQLl4aTOjhjktaoi1RhQWIMB1I=";
     config = ../hosts/nc-um350.nix;
     hw = ../hw/minis-um350.nix;
     system = system.x86_64-linux;
@@ -76,6 +80,8 @@
 
   nc-um350-2 = {
     ip.priv = "192.168.128.37";
+    ip.wg = "10.99.128.37";
+    wg.pub = "LDSIOTB261u3Z95UzrjtaO6sRzwYHwCBmpXMAxrToGE=";
     config = ../hosts/nc-um350.nix;
     hw = ../hw/minis-um350.nix;
     system = system.x86_64-linux;
@@ -83,6 +89,8 @@
 
   nc-virt-1 = {
     ip.priv = "192.168.133.1";
+    ip.wg = "10.99.133.1";
+    wg.pub = "8XEVbWXNKpmlEaxDvLTZTiiAbQ5yb+3RwFEgb2yH3Xc=";
     config = ../hosts/nc-virt.nix;
     hw = ../hw/proxmox.nix;
     system = system.x86_64-linux;
@@ -105,6 +113,8 @@
 
   web = {
     ip.priv = "192.168.128.11";
+    ip.wg = "10.99.128.11";
+    wg.pub = "TMb4xzFK7Q0LmQmCCnnP7IemonrhfWkDJfCpxAMyMgg=";
     ip.tail = "100.90.124.31";
     config = ../hosts/web.nix;
     hw = ../hw/proxmox.nix;
@@ -113,6 +123,8 @@
 
   witness = {
     ip.priv = "192.168.131.3";
+    ip.wg = "10.99.131.3";
+    wg.pub = "GMWPzXyEtVppxG023OjHbC4B3Q2fbK4lEW4JM+sJLVk=";
     config = ../hosts/witness.nix;
     hw = ../hw/proxmox.nix;
     system = system.x86_64-linux;

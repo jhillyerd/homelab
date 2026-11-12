@@ -11,51 +11,51 @@ let
     james-nix-ryzen
   ];
 
-  # Nodes
-  agent-zero = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOeMONJSXhs+Ydp9wx7fbBnacM9V30HwgRWhHHg09VeN";
-  boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO1L6/RnWa8jBLfre3EQm4pCQ4fpObmj4GrqMarpuDNM";
-  carbon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUT6FrpCKiRIGuzQQnl28ohDYfrt+SxvPMmSfWm15I0";
-  fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
-  fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
-  game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
-  hermes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ01PSNkesday4JTlDOcOFQLQVI7P9ePZ5OlZGItG+Wz";
-  metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
-  nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
-  scratch = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
-  web = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
-  home-nodes = [
-    agent-zero
-    boss
-    carbon
-    fastd
-    fractal
-    game
-    hermes
-    metrics
-    nix-ryzen
-    scratch
-    web
+  # Node host keys, indexed by catalog node name (see catalog/nodes.nix).
+  hostKeys = {
+    agent-zero = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOeMONJSXhs+Ydp9wx7fbBnacM9V30HwgRWhHHg09VeN";
+    boss = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO1L6/RnWa8jBLfre3EQm4pCQ4fpObmj4GrqMarpuDNM";
+    carbon = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUT6FrpCKiRIGuzQQnl28ohDYfrt+SxvPMmSfWm15I0";
+    ci-runner1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnOeW75UezreS51pqSHleYjx7tNg67Nv34rh5/dJLiZ";
+    fastd = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEhFOgRRiQp/P/amORoCK7woLM8koTmDCCNA+9+/ThrY";
+    fractal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiazL5O3J6rnNk9zX484FCKnVGWsRDJIwhKub2dUp38";
+    game = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwJjb9823qVwZPp95MrfTekFoMtHPeybTRbogwi6B24";
+    hermes = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ01PSNkesday4JTlDOcOFQLQVI7P9ePZ5OlZGItG+Wz";
+    metrics = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAthVAxIOvyRWkUlxH19erBZGNC6LCW1IAFE+1T4AxGL";
+    nix-ryzen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPO18qRQvPfbyWYkG5J5K1T1NbCw4Y7QeeRhdQG8CzI5";
+    scratch = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO9E9qftUIsznkjQXN9Bwov9bme0ZPD9fd704XwChrtV";
+    web = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICHzyS01Xs/BFkkwlIa+F3K/23yw/9GE/NFcachriRgl";
+    witness = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAXoEYcViLYLHXZRThjTh61ZA43DS2lCCbJa5EXbFAwc";
+    nc-um350-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
+    nc-um350-2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmHTTSRM1PuZ45KXJACZhJc1GAgcT9i+QCClo6sV88R";
+    nc-virt-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHY+llyPw11hCagbnJiXTmzO/FfHydVRIFmDRseGLTOd";
+  };
+
+  home-nodes = map (n: hostKeys.${n}) [
+    "agent-zero"
+    "boss"
+    "carbon"
+    "fastd"
+    "fractal"
+    "game"
+    "hermes"
+    "metrics"
+    "nix-ryzen"
+    "scratch"
+    "web"
   ];
 
-  # Runners
-  ci-runner1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJnOeW75UezreS51pqSHleYjx7tNg67Nv34rh5/dJLiZ";
-  runner-nodes = [
-    ci-runner1
-    scratch
+  runner-nodes = map (n: hostKeys.${n}) [
+    "ci-runner1"
+    "scratch"
   ];
 
-  # Cluster nodes
-  witness = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAXoEYcViLYLHXZRThjTh61ZA43DS2lCCbJa5EXbFAwc";
-
-  nc-um350-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMY7Sz0qZCTg2rJNZ1SX61eMosZwPyh0Mq8+kxp5AB31";
-  nc-um350-2 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKmHTTSRM1PuZ45KXJACZhJc1GAgcT9i+QCClo6sV88R";
-  nc-virt-1 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHY+llyPw11hCagbnJiXTmzO/FfHydVRIFmDRseGLTOd";
-  nomad-cluster = [
-    nc-um350-1
-    nc-um350-2
-    nc-virt-1
-    web
-    witness
+  nomad-cluster = map (n: hostKeys.${n}) [
+    "nc-um350-1"
+    "nc-um350-2"
+    "nc-virt-1"
+    "web"
+    "witness"
   ];
 
   group = {
@@ -64,6 +64,22 @@ let
     nomad = users ++ nomad-cluster;
     runners = users ++ runner-nodes;
   };
+
+  # Mesh membership comes from the node catalog: every node with ip.wg gets
+  # a per-host secret rule. Dummy system arg — nodes.nix only reads
+  # system.x86_64-linux.
+  catalog = import ../catalog/nodes.nix { system = { x86_64-linux = "x86_64-linux"; }; };
+  meshNodes = builtins.concatLists (builtins.attrValues (builtins.mapAttrs
+    (name: node: if node ? ip.wg then [ name ] else [ ])
+    catalog));
+
+  # Per-host secret rules: <prefix>-<node>.age, decryptable only by that
+  # node and the user keys.
+  perHostSecrets = prefix: names:
+    builtins.listToAttrs (map (name: {
+      name = "${prefix}-${name}.age";
+      value.publicKeys = users ++ [ hostKeys.${name} ];
+    }) names);
 in
 {
   # Common
@@ -96,5 +112,5 @@ in
   "gitea-runner-token.age".publicKeys = group.runners;
 
   # Specific hosts.
-  "syncoid-ssh-key.age".publicKeys = users ++ [ fastd ];
-}
+  "syncoid-ssh-key.age".publicKeys = users ++ [ hostKeys.fastd ];
+} // perHostSecrets "mesh-wg-key" meshNodes
