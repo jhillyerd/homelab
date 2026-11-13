@@ -15,6 +15,12 @@ let
   members = filterAttrs (_: node: node ? ip.wg) catalog.nodes;
 
   peers = removeAttrs members [ hostName ];
+
+  # Jobs bind mesh-only ports (Nomad host_network "mesh") and agents
+  # advertise mesh IPs (roles/nomad.nix), so wg0 must exist before the
+  # nomad and traefik daemons start; traefik dials backends over the mesh
+  # from phase 3.
+  wgUnit = "wireguard-${catalog.mesh.interface}.service";
 in
 {
   options.roles.mesh = {
@@ -60,5 +66,26 @@ in
       # Peers dial our LAN address to reach us.
       allowedUDPPorts = [ catalog.mesh.port ];
     };
+
+    # No explicit NAT for alloc egress is needed: Nomad's default CNI
+    # config (bridge + firewall plugins) installs per-alloc FORWARD accept
+    # and MASQUERADE rules that are interface-agnostic, so bridge-mode
+    # allocations already reach wg0 peers with the host's ip_forward on
+    # (verified from a running alloc, wireguard-mesh-plan phase 2).
+
+    systemd.services = mkMerge [
+      (mkIf config.services.nomad.enable {
+        nomad = {
+          after = [ wgUnit ];
+          wants = [ wgUnit ];
+        };
+      })
+      (mkIf config.services.traefik.enable {
+        traefik = {
+          after = [ wgUnit ];
+          wants = [ wgUnit ];
+        };
+      })
+    ];
   };
 }

@@ -1,10 +1,14 @@
 #!/bin/sh
 
+# Defaults to the LAN debugging endpoint (see env-prod.fish); honors
+# NOMAD_ADDR when set.
+NOMAD_ADDR=${NOMAD_ADDR:-https://witness.home.arpa:4646}
+
 curl -G -s -N \
   --header "X-Nomad-Token: $NOMAD_TOKEN" \
   --cacert ~/secrets/nomad/ca/nomad-ca.pem \
   --data-urlencode "topic=Allocation" \
-  https://nomad.service.consul:4646/v1/event/stream \
+  "$NOMAD_ADDR/v1/event/stream" \
   | jq '.Events[]? | {
     "topic": .Topic,
     "type": .Type,

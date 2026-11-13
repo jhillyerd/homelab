@@ -137,6 +137,15 @@ in
           data_dir = cfg.dataDir;
           bind_addr = "0.0.0.0";
 
+          # Advertise mesh IPs on members (wireguard-mesh-plan phase 2):
+          # the control plane rides wg0. Agents still bind 0.0.0.0, so the
+          # LAN API keeps working until the phase 5 lockdown.
+          advertise = mkIf (self ? ip.wg) {
+            http = self.ip.wg;
+            rpc = self.ip.wg;
+            serf = self.ip.wg;
+          };
+
           acl.enabled = true;
 
           # Serve /v1/metrics?format=prometheus from every agent, including
@@ -233,6 +242,12 @@ in
             enabled = true;
             alloc_dir = mkIf (cfg.client.allocDir != null) cfg.client.allocDir;
             cni_path = "${pkgs.cni-plugins}/bin";
+
+            # Ports whose network stanza sets host_network = "mesh" bind
+            # on wg0 only (wireguard-mesh-plan phase 2).
+            host_network = mkIf (self ? ip.wg) {
+              mesh = { interface = catalog.mesh.interface; };
+            };
 
             host_volume = mkIf (cfg.client.hostVolumes != { }) (
               mapAttrs (name: entry: {
