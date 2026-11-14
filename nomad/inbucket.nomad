@@ -15,13 +15,25 @@ job "inbucket" {
     }
 
     network {
-      port "http" { to = 9000 }
-      port "smtp" { to = 2500 }
+      # Bind on wg0 only: registers mesh addresses, and traefik
+      # (nomad provider) dials backends over the encrypted mesh
+      # (wireguard-mesh-plan phase 3).
+      port "http" {
+        to          = 9000
+        host_network = "mesh"
+      }
+      port "smtp" {
+        to          = 2500
+        host_network = "mesh"
+      }
     }
 
+    # First service migrated to nomad-native registration for the
+    # traefik nomad provider (wireguard-mesh-plan phase 3 guinea pig).
     service {
       name = "inbucket-http"
       port = "http"
+      provider = "nomad"
 
       tags = [
         "http",
@@ -43,6 +55,7 @@ job "inbucket" {
     service {
       name = "inbucket-smtp"
       port = "smtp"
+      provider = "nomad"
 
       tags = [
         "smtp",

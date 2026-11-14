@@ -107,6 +107,7 @@ in
   "nomad-server-client-key.age".publicKeys = group.nomad;
   "skynet-server-consul-0-key.pem.age".publicKeys = group.nomad;
   "traefik-consul-token.age".publicKeys = group.nomad;
+  "traefik-nomad-token.age".publicKeys = group.nomad;
 
   # Runners.
   "gitea-runner-token.age".publicKeys = group.runners;

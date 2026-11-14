@@ -118,6 +118,30 @@ in
           };
         };
 
+        # Nomad-native service discovery (wireguard-mesh-plan phase 3).
+        # Services opt in per-service with `provider = "nomad"` in their
+        # job specs; consulCatalog above is removed once all traefik-tagged
+        # services have migrated.
+        #
+        # The API is TLS-only and the server cert carries no mesh-IP SANs,
+        # so we dial witness's mesh address with verification disabled:
+        # the connection still rides encrypted wg0, and only mesh members
+        # can route to 10.99.x.y, so the cert's identity is anchored by the
+        # mesh itself. Token arrives via NOMAD_TOKEN in traefik.env
+        # (Traefik's env parsing does not map
+        # TRAEFIK_PROVIDERS_NOMAD_ENDPOINT_TOKEN to endpoint.token, but the
+        # provider defaults its token from the NOMAD_TOKEN env var, the
+        # same mechanism consulCatalog uses with CONSUL_HTTP_TOKEN).
+        providers.nomad = {
+          prefix = "traefik";
+          exposedByDefault = false;
+
+          endpoint = {
+            address = "https://${catalog.nodes.witness.ip.wg}:4646";
+            tls.insecureSkipVerify = true;
+          };
+        };
+
         accessLog = { }; # enabled
         log.level = "info";
       };
@@ -190,16 +214,19 @@ in
     # Setup secrets.
     age.secrets = {
       traefik-consul-token.file = ../secrets/traefik-consul-token.age;
+      traefik-nomad-token.file = ../secrets/traefik-nomad-token.age;
     };
 
     age-template.files."traefik.env" = {
       vars = {
         cfDnsToken = cfg.cloudflareDnsApiTokenFile;
         consulToken = config.age.secrets.traefik-consul-token.path;
+        nomadToken = config.age.secrets.traefik-nomad-token.path;
       };
       content = ''
         CF_DNS_API_TOKEN=$cfDnsToken
         CONSUL_HTTP_TOKEN=$consulToken
+        NOMAD_TOKEN=$nomadToken
       '';
     };
 
