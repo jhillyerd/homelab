@@ -16,13 +16,24 @@ job "forgejo" {
     }
 
     network {
-      port "http" { to = 3000 }
-      port "ssh" { to = 22 }
+      # Both ports bind wg0 only: traefik dials them over the encrypted
+      # mesh (phase 3), including git-over-ssh via the tcp router. CI
+      # runners reach forgejo through https://forgejo.bytemonkey.org
+      # (traefik), so mesh-only binding loses them nothing.
+      port "http" {
+        to          = 3000
+        host_network = "mesh"
+      }
+      port "ssh" {
+        to          = 22
+        host_network = "mesh"
+      }
     }
 
     service {
-      name = "forgejo-http"
-      port = "http"
+      name     = "forgejo-http"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
@@ -45,8 +56,9 @@ job "forgejo" {
     }
 
     service {
-      name = "forgejo-ssh"
-      port = "ssh"
+      name     = "forgejo-ssh"
+      port     = "ssh"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "ssh",
