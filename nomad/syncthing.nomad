@@ -15,14 +15,21 @@ job "syncthing" {
 
     network {
       mode = "bridge"
-      port "http" { to = 8384 }
+      # GUI rides the mesh for traefik (phase 3); discovery + sync stay on
+      # the default (LAN) network -- peers dial 22000 directly and local
+      # discovery broadcasts, and they are not mesh members.
+      port "http" {
+        to          = 8384
+        host_network = "mesh"
+      }
       port "discovery" { static = 21027 }
       port "sync" { static = 22000 }
     }
 
     service {
-      name = "syncthing-http"
-      port = "http"
+      name     = "syncthing-http"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
