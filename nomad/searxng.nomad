@@ -14,12 +14,16 @@ job "searxng" {
     }
 
     network {
-      port "http" { to = 8080 }
+      port "http" {
+        to          = 8080
+        host_network = "mesh" # register + bind wg0 (phase 3)
+      }
     }
 
     service {
-      name = "searxng"
-      port = "http"
+      name     = "searxng"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",

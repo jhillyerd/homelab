@@ -13,7 +13,8 @@ job "grafana" {
     network {
       mode = "host"
       port "http" {
-        to = 3000
+        to          = 3000
+        host_network = "mesh" # register + bind wg0 (phase 3)
       }
     }
 
@@ -22,8 +23,9 @@ job "grafana" {
     }
 
     service {
-      name = "grafana"
-      port = "http"
+      name     = "grafana"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
@@ -82,7 +84,9 @@ job "grafana" {
         GF_AUTH_PROXY_ENABLED = "true"
         GF_AUTH_PROXY_HEADER_NAME = "Remote-User"
         GF_AUTH_PROXY_HEADERS = "Email:Remote-Email,Name:Remote-Name"
-        GF_AUTH_PROXY_WHITELIST = "192.168.128.11"
+        # LAN + mesh source IPs of traefik on web: auth-proxy headers are
+        # only honored from these (mesh is the post-phase-3 dial path).
+        GF_AUTH_PROXY_WHITELIST = "192.168.128.11,10.99.128.11"
       }
 
       template {

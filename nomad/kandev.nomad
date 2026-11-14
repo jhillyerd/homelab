@@ -53,12 +53,16 @@ job "kandev" {
     # Bridge (not host): the image command pins the listener to 38429, so the
     # dynamic host port only lines up via a docker port mapping.
     network {
-      port "http" { to = 38429 }
+      port "http" {
+        to          = 38429
+        host_network = "mesh" # register + bind wg0 (phase 3)
+      }
     }
 
     service {
-      name = "kandev"
-      port = "http"
+      name     = "kandev"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
@@ -73,15 +77,16 @@ job "kandev" {
       # to 503 (reason "persistence") when the postgres store probe fails, so
       # a dead fastd now fails checks (same tradeoff as hindsight). Git/FS
       # work still rides NFS, which has flapped checks on this cluster before
-      # (bifrost), so keep the debounce.
+      # (bifrost); the old failures_before_critical debounce was Consul-only
+      # and nomad-native checks have no equivalent -- acceptable since the
+      # traefik nomad provider ignores check status, so a transient critical
+      # only shows in the nomad UI.
       check {
         name     = "Kandev HTTP Check"
         type     = "http"
         path     = "/ready"
         interval = "30s"
         timeout  = "10s"
-
-        failures_before_critical = 4
       }
     }
 
@@ -144,11 +149,12 @@ KANDEV_DATABASE_DBNAME=kandev
 KANDEV_DATABASE_SSLMODE=disable
 KANDEV_DATABASE_PASSWORD={{ with nomadVar "nomad/jobs/kandev" }}{{ .database_password }}{{ end }}
 
-# Traefik on web (192.168.128.11, static): accept its X-Forwarded-For /
-# X-Forwarded-Host so the port-scoped session cookie resolves the browser's
-# original host (kandev.bytemonkey.org) instead of the bridge peer. Exact IP,
-# not a CIDR — default (unset) ignores all forwarded headers.
-KANDEV_TRUSTED_PROXIES=192.168.128.11
+# Traefik on web, dialing over the mesh (10.99.128.11): accept its
+# X-Forwarded-For / X-Forwarded-Host so the port-scoped session cookie
+# resolves the browser's original host (kandev.bytemonkey.org) instead of
+# the bridge peer. Exact IP, not a CIDR — default (unset) ignores all
+# forwarded headers.
+KANDEV_TRUSTED_PROXIES=10.99.128.11
 
 # Must be HTTPS for remote executors.
 KANDEV_GITHUB_CREDENTIAL_BROKER_PUBLIC_BASE_URL=https://kandev.bytemonkey.org
