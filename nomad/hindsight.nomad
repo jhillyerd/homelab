@@ -29,9 +29,18 @@ job "hindsight" {
       mode = "host"
 
       # 8888: API (also serves /mcp/{bank} for MCP clients)
-      # 9999: Control Plane (web UI)
-      port "api" { to = 8888 }
-      port "ui"  { to = 9999 }
+      # 9999: Control Plane (web UI). Both bind wg0 only (phase 3):
+      # traefik dials them over the mesh; workstation plugins and MCP
+      # clients reach the API via hindsight-api.bytemonkey.org, and the
+      # CP reaches the dataplane on the shared host-net loopback.
+      port "api" {
+        to          = 8888
+        host_network = "mesh"
+      }
+      port "ui" {
+        to          = 9999
+        host_network = "mesh"
+      }
     }
 
     # The API authenticates nothing unless the built-in API-key tenant
@@ -39,8 +48,9 @@ job "hindsight" {
     # the endpoint reachable at hindsight-api.bytemonkey.org like any other
     # web service, and the key is what keeps strangers out of your banks.
     service {
-      name = "hindsight-api"
-      port = "api"
+      name     = "hindsight-api"
+      port     = "api"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
@@ -65,8 +75,9 @@ job "hindsight" {
     # The Control Plane talks to the API server-side via HINDSIGHT_CP_DATAPLANE_API_URL
     # (below), so the browser only ever needs 9999.
     service {
-      name = "hindsight"
-      port = "ui"
+      name     = "hindsight"
+      port     = "ui"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",

@@ -15,12 +15,16 @@ job "bifrost" {
 
     network {
       mode = "host"
-      port "http" { to = 8080 }
+      port "http" {
+        to          = 8080
+        host_network = "mesh" # register + bind wg0 (phase 3)
+      }
     }
 
     service {
-      name = "bifrost"
-      port = "http"
+      name     = "bifrost"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
 
       tags = [
         "http",
@@ -32,18 +36,18 @@ job "bifrost" {
 
       # NOTE: /health pings bifrost's SQLite DBs, which live on the NFS
       # export from mininas. NAS-side periodic tasks can stall those pings for
-      # tens of seconds while the app itself keeps serving traffic. A single
-      # failed probe flips the Consul check critical, and Traefik's
-      # consul-catalog provider then drops the whole router (hard 404s).
-      # Debounce with failures_before_critical + a generous probe timeout.
+      # tens of seconds while the app itself keeps serving traffic. Under the
+      # old consul-catalog provider a single failed probe flipped the Consul
+      # check critical and Traefik dropped the whole router (hard 404s); the
+      # nomad provider ignores check status, so a stall now only shows in the
+      # nomad UI. failures_before_critical was dropped along the way --
+      # nomad-native checks reject that Consul-only field.
       check {
         name     = "Bifrost HTTP Check"
         type     = "http"
         path     = "/health"
         interval = "30s"
         timeout  = "10s"
-
-        failures_before_critical = 4
       }
     }
 
