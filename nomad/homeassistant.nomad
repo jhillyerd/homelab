@@ -15,9 +15,28 @@ job "homeassistant" {
   group "homeassistant" {
     count = 1
 
+    # Pinned to the zwave host: configuration.yaml's sonos advertise_addr
+    # names nc-um350-1.home.arpa (LAN speakers call back to the static
+    # sonos port on this node), and a reschedule would silently break
+    # Sonos. Keep in sync with advertise_addr if this ever moves.
+    constraint {
+      attribute = "${attr.unique.hostname}"
+      value     = "nc-um350-1"
+    }
+
     network {
       mode = "bridge"
-      port "http" { to = "8123" }
+      # http binds wg0 only (phase 3): traefik dials the UI over the
+      # encrypted mesh. The api service (connect, address_mode = "alloc")
+      # is unaffected -- its Consul registration and sidecar path live
+      # inside the bridge netns until phase 4.
+      port "http" {
+        to          = "8123"
+        host_network = "mesh"
+      }
+      # sonos stays on the default (LAN) network: speakers are not mesh
+      # members and call back to this port (advertise_addr in
+      # configuration.yaml points them at nc-um350-1.home.arpa).
       port "sonos" { static = "1400" }
     }
 
@@ -50,6 +69,11 @@ job "homeassistant" {
     service {
       name = "homeassistant-ui"
       port = "http"
+      # Stays on consul until phase 4: task-group services must share one
+      # provider, and homeassistant-api needs consul for its connect
+      # sidecars. The mesh dial goal is still met -- the port's
+      # host_network = "mesh" makes the consul registration carry the
+      # wg0 address, so traefik dials it over the mesh via consulCatalog.
       tags = [
         "traefik",
         "traefik.enable=true",
