@@ -9,6 +9,7 @@
 
   roles.gui-sway.enable = true;
   roles.workstation.enable = true;
+  roles.gaming.enable = true;
   roles.microvm-host.enable = true;
 
   # For Raspberry Pi builds.
