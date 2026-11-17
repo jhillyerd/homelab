@@ -177,6 +177,15 @@
     dash.host = "mininas.bytemonkey.org";
   };
 
+  nix-cache = {
+    title = "Nix Cache";
+
+    dns.intCname = true;
+
+    # Internal-only substituter proxy; routing handled by traefik tags in
+    # nomad/nix-cache.nomad. Not on the dashboard.
+  };
+
   nodered = {
     title = "Node-RED";
     dns.intCname = true;

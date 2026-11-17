@@ -6,13 +6,26 @@ job "nix-cache" {
     count = 1
 
     network {
-      port "http" {}
+      # Bind on wg0 only: registers mesh addresses, and traefik
+      # (nomad provider) dials backends over the encrypted mesh
+      # (wireguard-mesh-plan phase 3).
+      port "http" {
+        host_network = "mesh"
+      }
     }
 
     service {
-      name = "nix-cache"
-      tags = [ "urlprefix-nix-cache.service.${node.datacenter}.consul/" ]
-      port = "http"
+      name     = "nix-cache"
+      port     = "http"
+      provider = "nomad" # phase 3: nomad-native registration for traefik
+
+      tags = [
+        "http",
+        "traefik.enable=true",
+        "traefik.http.routers.nix-cache.entrypoints=websecure",
+        "traefik.http.routers.nix-cache.rule=Host(`nix-cache.bytemonkey.org`)",
+        "traefik.http.routers.nix-cache.tls.certresolver=letsencrypt",
+      ]
 
       check {
         type     = "tcp"
@@ -63,7 +76,7 @@ job "nix-cache" {
 
           server {
             listen {{env "NOMAD_PORT_http"}};
-            server_name nix-cache.service.{{ env "NOMAD_DC" }}.consul;
+            server_name nix-cache.bytemonkey.org;
             location / {
               proxy_set_header Host $proxy_host;
               proxy_pass https://cache.nixos.org;

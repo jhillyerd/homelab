@@ -35,11 +35,11 @@
       download-buffer-size = 201326592;
       max-jobs = lib.mkDefault 4;
 
-      # Local cache.nixos.org proxy (nomad/nix-cache.nomad, fronted by fabio).
+      # Local cache.nixos.org proxy (nomad/nix-cache.nomad, fronted by traefik).
       # Safe since nix 2.34 falls back to public caches when it is
       # unreachable (NixOS/nix#13301).
       substituters = [
-        "http://nix-cache.service.skynet.consul?priority=10"
+        "https://nix-cache.bytemonkey.org?priority=10"
         "https://cache.nixos.org"
       ];
     };
