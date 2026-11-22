@@ -41,6 +41,7 @@ in
       # gamemoded daemon.
       mangohud
       gamemode
+      protonplus
 
       heroic # Epic Games / GOG launcher
     ];
