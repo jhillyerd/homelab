@@ -96,18 +96,18 @@
     system = system.x86_64-linux;
   };
 
-  ryzen = {
-    ip.priv = "192.168.1.50";
-    ip.tail = "100.112.232.73";
-    config = ../hosts/ryzen.nix;
-    hw = ../hw/asus-x570p.nix;
-    system = system.x86_64-linux;
-  };
-
   scratch = {
     ip.priv = "192.168.131.2";
     config = ../hosts/scratch.nix;
     hw = ../hw/proxmox.nix;
+    system = system.x86_64-linux;
+  };
+
+  summit = {
+    ip.priv = "192.168.1.32";
+    ip.tail = "100.112.232.73";
+    config = ../hosts/summit.nix;
+    hw = ../hw/aorus-x870e.nix;
     system = system.x86_64-linux;
   };
 
